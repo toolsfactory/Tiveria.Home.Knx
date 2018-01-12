@@ -1,0 +1,45 @@
+﻿
+
+        [Test]
+        public void HexStringToBytes()
+        {
+            var sample = "0801c0a80278e1f6";
+            var result = sample.ToByteArray();
+
+            var expected = new byte[8] { 0x08, 0x01, 0xc0, 0xa8, 0x02, 0x78, 0xe1, 0xf6 };
+            Assert.AreEqual(result, expected);
+        }
+
+        [Test]
+        public void Demo()
+        {
+            var hpai = new Tiveria.Knx.Structures.HPAI(Tiveria.Knx.HPAIEndpointType.IPV4_UDP, IPAddress.Parse("192.168.2.120"), 57846);
+            var expected = new byte[8] { 0x08, 0x01, 0xc0, 0xa8, 0x02, 0x78, 0xe1, 0xf6 };
+
+            var result = hpai.ToBytes();
+            Assert.AreEqual(result, expected);
+        }
+
+
+		        public void CreateHeaderBodyNull()
+        {
+            Assert.Catch(typeof(ArgumentNullException), () => new Header(ServiceTypeIdentifier.CONNECT_REQUEST, null));
+        }
+
+        [Test]
+        public void CreateHeaderBodyTooSmall()
+        {
+            // body with zero length
+            var body = new byte[0];
+            Assert.Catch(typeof(ArgumentException), () => new KnxNetIPFrame(ServiceTypeIdentifier.CONNECT_REQUEST, body));
+        }
+
+        [Test]
+        public void CreateHeaderBodyTooBig()
+        {
+            // body with length of 27 (limit is 26
+            var body = new byte[27];
+            Assert.Catch(typeof(ArgumentException), () => new KnxNetIPFrame(ServiceTypeIdentifier.CONNECT_REQUEST, body));
+        }
+
+

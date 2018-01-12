@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiveria.Knx.SampleApp", "src\Tiveria.Knx.SampleApp\Tiveria.Knx.SampleApp.csproj", "{88D14116-4455-4374-9FA2-5AE3556CDF2F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiveria.Knx", "src\Tiveria.KNX\Tiveria.Knx.csproj", "{CBB4C5D9-3D25-493E-AB99-843957C785E0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiveria.Knx.Tests", "tests\Tiveria.Knx.Tests\Tiveria.Knx.Tests.csproj", "{EAC40ED3-1E4C-4ADE-BAE3-07543571B15C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiveria.Common", "..\Tiveria.Common.Standard\Tiveria.Common.csproj", "{F3B74D99-37CF-4B6F-9C7B-6822F45D304D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{88D14116-4455-4374-9FA2-5AE3556CDF2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88D14116-4455-4374-9FA2-5AE3556CDF2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88D14116-4455-4374-9FA2-5AE3556CDF2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88D14116-4455-4374-9FA2-5AE3556CDF2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBB4C5D9-3D25-493E-AB99-843957C785E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBB4C5D9-3D25-493E-AB99-843957C785E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBB4C5D9-3D25-493E-AB99-843957C785E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBB4C5D9-3D25-493E-AB99-843957C785E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAC40ED3-1E4C-4ADE-BAE3-07543571B15C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAC40ED3-1E4C-4ADE-BAE3-07543571B15C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAC40ED3-1E4C-4ADE-BAE3-07543571B15C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAC40ED3-1E4C-4ADE-BAE3-07543571B15C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3B74D99-37CF-4B6F-9C7B-6822F45D304D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3B74D99-37CF-4B6F-9C7B-6822F45D304D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3B74D99-37CF-4B6F-9C7B-6822F45D304D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3B74D99-37CF-4B6F-9C7B-6822F45D304D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {84BA5D2F-7CE3-451C-9F74-5CFA244C810E}
+	EndGlobalSection
+EndGlobal
