@@ -28,7 +28,7 @@ namespace Tiveria.Knx.IP.Utils
     /// Enum with all KNXnet/IP Servicetype Identifiers and their correct hex codes
     /// <seealso cref="EnumExtensions"/>
     /// </summary>
-    public enum ServiceTypeIdentifier
+    public enum ServiceTypeIdentifier : ushort
     {
         CONNECT_REQUEST = 0x0205,
         CONNECT_RESPONSE = 0x0206,

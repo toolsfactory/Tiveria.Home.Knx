@@ -28,7 +28,7 @@ namespace Tiveria.Knx.IP.Utils
     /// Enum with all KNXnet/IP Host Protocol Address Information (HPAI) Endpoit Types.
     /// <seealso cref="EnumExtensions"/>
     /// </summary>
-    public enum HPAIEndpointType
+    public enum HPAIEndpointType : byte
     {
         IPV4_UDP = 0x01,
         IPV4_TCP = 0x02

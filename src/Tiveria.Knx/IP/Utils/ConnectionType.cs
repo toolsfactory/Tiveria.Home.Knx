@@ -28,7 +28,7 @@ namespace Tiveria.Knx.IP.Utils
     /// Enumeration with all available connection types mapped to the correct byte encoding. 
     /// <seealso cref="EnumExtensions"/>
     /// </summary>
-    public enum ConnectionType
+    public enum ConnectionType : byte
     {
         DEVICE_MGMT_CONNECTION = 0x03,
         TUNNEL_CONNECTION = 0x04,

@@ -110,7 +110,7 @@ namespace Tiveria.Knx.IP.Structures
                 throw new ArgumentException("data length and header totallength do not match");
 
             int sti = (buffer[offset + 2] << 8) + buffer[offset + 3];
-            if (!Enum.IsDefined(typeof(ServiceTypeIdentifier), sti))
+            if (!Enum.IsDefined(typeof(ServiceTypeIdentifier), (ushort)sti))
                 throw new ArgumentException($"Unknown Servicetypeidentifier {sti:x}");
 
             return new Header((ServiceTypeIdentifier)sti, (ushort) (totalLength - HEADER_SIZE_10));

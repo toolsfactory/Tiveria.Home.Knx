@@ -24,6 +24,7 @@
 
 using System;
 using Tiveria.Knx.IP.Utils;
+using Tiveria.Knx.Exceptions;
 using Tiveria.Common.Extensions;
 
 namespace Tiveria.Knx.IP.Structures
@@ -81,7 +82,7 @@ namespace Tiveria.Knx.IP.Structures
 
             var contype = buffer[offset + 1];
             if (!Enum.IsDefined(typeof(ConnectionType), contype))
-                throw new ArgumentException("Unknown connection type");
+                ValueInterpretationException.TypeUnknown("CRI", contype);
 
             switch (contype) {
                 case (byte)ConnectionType.TUNNEL_CONNECTION:

@@ -5,7 +5,7 @@ using Tiveria.Knx.IP.Structures;
 using Tiveria.Knx.IP.Utils;
 using Tiveria.Common.Extensions;
 
-namespace Tiverias.Knx.Tests.IP
+namespace Tiveria.Knx.Tests.IP
 {
     [TestFixture]
     public class HeaderTests

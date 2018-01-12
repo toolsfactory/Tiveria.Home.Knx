@@ -1,4 +1,28 @@
-﻿using System;
+﻿/*
+    Tiveria.Knx - a .Net Core base KNX library
+    Copyright (c) 2018 M. Geissler
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation; either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    Linking this library statically or dynamically with other modules is
+    making a combined work based on this library. Thus, the terms and
+    conditions of the GNU General Public License cover the whole
+    combination.
+*/
+    
+using System;
 using System.Net;
 using Tiveria.Knx.IP.Utils;
 using Tiveria.Knx.Exceptions;
@@ -6,15 +30,40 @@ using Tiveria.Common.Extensions;
 
 namespace Tiveria.Knx.IP.Structures
 {
-
+    /// <summary>
+    /// Represents the Host Protocol Address information block of the KnxNetIP specification.
+    /// </summary>
+    /// <code>
+    /// +--------+--------+--------+--------+--------+--------+--------+--------+
+    /// | byte 1 | byte 2 | byte 3 | byte 4 | byte 5 | byte 6 | byte 7 | byte 8 |
+    /// +--------+--------+--------+--------+--------+--------+--------+--------+
+    /// |  Size  |Endpoint|        Endpoint IP Address        |  Endpoint Port  |
+    /// |  (8)   | Type   |                                   |                 |
+    /// +--------+--------+--------+--------+--------+--------+--------+--------+
+    /// </code>
     public class HPAI : StructureBase
     {
+        #region private fields
         private static byte HPAI_SIZE = 8;
         private IPAddress _ip;
         private ushort _port;
         private HPAIEndpointType _endpointType;
+        #endregion
 
-        public HPAI(HPAIEndpointType ept, IPAddress address, ushort port)
+        #region properties
+        public IPAddress Ip { get => _ip; }
+        public ushort Port { get => _port; }
+        public HPAIEndpointType EndpointType { get => _endpointType; }
+        #endregion
+
+        #region constructors
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="endpointType"></param>
+        /// <param name="address"></param>
+        /// <param name="port"></param>
+        public HPAI(HPAIEndpointType endpointType, IPAddress address, ushort port)
         {
             if (address != null)
             {
@@ -26,20 +75,21 @@ namespace Tiveria.Knx.IP.Structures
                 address = IPAddress.Parse("0.0.0.0");
                 port = 0;
             }
-            _endpointType = ept;
+            _endpointType = endpointType;
             _ip = address;
             _port = port;
             _structureLength = HPAI_SIZE;
         }
+        #endregion
 
-        public override void WriteToByteArray(ref byte[] buffer, int offset)
+        public override void WriteToByteArray(ref byte[] buffer, int offset = 0)
         {
             base.WriteToByteArray(ref buffer, offset);
             buffer[offset + 0] = HPAI.HPAI_SIZE;
-            buffer[offset + 1] = (byte)_endpointType;
-            _ip.GetAddressBytes().CopyTo(buffer, offset + 2);
-            buffer[offset + 6] = (byte)(_port >> 8);
-            buffer[offset + 7] = (byte)_port;
+            buffer[offset + 1] = (byte)EndpointType;
+            Ip.GetAddressBytes().CopyTo(buffer, offset + 2);
+            buffer[offset + 6] = (byte)(Port >> 8);
+            buffer[offset + 7] = (byte)Port;
         }
 
         public static HPAI FromBuffer(ref byte[] buffer, int offset =  0)
@@ -60,7 +110,7 @@ namespace Tiveria.Knx.IP.Structures
 
             var ipbytes = new byte[4];
             buffer.Slice(ipbytes, offset + 2, 0, 4);
-            var port = buffer[offset + 6] << 8 + buffer[offset + 7];
+            var port = (buffer[offset + 6] << 8) + buffer[offset + 7];
 
             return new HPAI((HPAIEndpointType)endpointType, new IPAddress(ipbytes), (ushort)port);
         }

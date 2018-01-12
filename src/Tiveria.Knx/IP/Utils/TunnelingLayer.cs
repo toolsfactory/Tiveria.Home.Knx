@@ -28,7 +28,7 @@ namespace Tiveria.Knx.IP.Utils
     /// Enum with all KNXnet/IP Tunneling Layer Types.
     /// <seealso cref="EnumExtensions"/>
     /// </summary>
-    public enum TunnelingLayer
+    public enum TunnelingLayer : byte
     {
         TUNNEL_LINKLAYER = 0x02,
         TUNNEL_RAW = 0x04,
