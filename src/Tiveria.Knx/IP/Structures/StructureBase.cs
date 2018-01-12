@@ -14,11 +14,11 @@ namespace Tiveria.Knx.IP.Structures
             return data;
         }
 
-        public virtual void WriteToByteArray(ref byte[] buffer, ushort start)
+        public virtual void WriteToByteArray(ref byte[] buffer, int offset = 0)
         {
             if (buffer == null)
                 throw new ArgumentNullException("buffer is null");
-            if (start + _structureLength > buffer.Length)
+            if (offset + _structureLength > buffer.Length)
                 throw new ArgumentOutOfRangeException("buffer too small");
         }
     }

@@ -22,15 +22,22 @@
     combination.
 */
 
-namespace Tiveria.Knx.IP.Utils
+using System;
+using Tiveria.Common.Logging;
+
+namespace Tiveria.Knx.Utils
 {
-    /// <summary>
-    /// Enum with all KNXnet/IP Host Protocol Address Information (HPAI) Endpoit Types.
-    /// <seealso cref="EnumExtensions"/>
-    /// </summary>
-    public enum HPAIEndpointType
+    public class LogManager :ILogManager
     {
-        IPV4_UDP = 0x01,
-        IPV4_TCP = 0x02
+
+        public ILogger GetLogger(string name)
+        {
+            return new DummyLogger();
+        }
+
+        public ILogger GetLogger(Type type)
+        {
+            return new DummyLogger();
+        }
     }
 }

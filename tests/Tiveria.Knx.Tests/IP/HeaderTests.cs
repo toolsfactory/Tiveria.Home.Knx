@@ -15,7 +15,7 @@ namespace Tiverias.Knx.Tests.IP
         {
             var data = "0610020500180801c0a80278e1f60801c0a80278e1f70203".ToByteArray(); //Standard body for Connection_Request
 
-            var result = Header.Parse(ref data);
+            var result = Header.FromBuffer(ref data, 0);
             Assert.AreEqual(result.Size, Header.HEADER_SIZE_10);
             Assert.AreEqual(result.Version, Header.KNXNETIP_VERSION_10);
             Assert.AreEqual(result.ServiceTypeIdentifier, ServiceTypeIdentifier.CONNECT_REQUEST);
@@ -27,7 +27,7 @@ namespace Tiverias.Knx.Tests.IP
         {
             //Standard body for Connection_Request but length set to 8
             var data = "0810020500180801c0a80278e1f60801c0a80278e1f70203".ToByteArray(); 
-            Assert.Catch(typeof(ArgumentException), () => Header.Parse(ref data));
+            Assert.Catch(typeof(ArgumentException), () => Header.FromBuffer(ref data, 0));
         }
 
         [Test]
@@ -35,7 +35,7 @@ namespace Tiverias.Knx.Tests.IP
         {
             //Standard body for Connection_Request but Version changed from 0x10 to 0x20
             var data = "0820020500180801c0a80278e1f60801c0a80278e1f70203".ToByteArray(); 
-            Assert.Catch(typeof(ArgumentException), () => Header.Parse(ref data));
+            Assert.Catch(typeof(ArgumentException), () => Header.FromBuffer(ref data, 0));
         }
 
         [Test]
@@ -43,7 +43,7 @@ namespace Tiverias.Knx.Tests.IP
         {
             //Standard body for Connection_Request but totallength set wrong 0x20 instead of 0x18
             var data = "0610020500200801c0a80278e1f60801c0a80278e1f70203".ToByteArray(); 
-            Assert.Catch(typeof(ArgumentException), () => Header.Parse(ref data));
+            Assert.Catch(typeof(ArgumentException), () => Header.FromBuffer(ref data, 0));
         }
 
         [Test]
@@ -51,7 +51,7 @@ namespace Tiverias.Knx.Tests.IP
         {
             //Standard body for Connection_Request but ServiceTypeIdentifier set to 0x00ff
             var data = "061000ff00200801c0a80278e1f60801c0a80278e1f70203".ToByteArray();
-            Assert.Catch(typeof(ArgumentException), () => Header.Parse(ref data));
+            Assert.Catch(typeof(ArgumentException), () => Header.FromBuffer(ref data, 0));
         }
 
         [Test]

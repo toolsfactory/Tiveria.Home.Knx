@@ -23,14 +23,11 @@ namespace Tiveria.Knx.IP
         #region private fields
         private byte[] _body;
         private Header _header;
-        private IServiceType _serviceType;
         #endregion
 
         #region public properties
         public byte[] Body { get => _body; }
         public Header Header { get => _header; }
-
-        public IServiceType ServiceType { get => _serviceType; }
         #endregion
 
         #region Constructors
@@ -76,7 +73,7 @@ namespace Tiveria.Knx.IP
             if (data.Length < 6)
                 throw new ArgumentException("data too small");
 
-            var header = Header.Parse(ref data);
+            var header = Header.FromBuffer(ref data, 0);
             var body = new byte[header.TotalLength - header.Size];
 
             data.Slice(body, header.Size, 0, body.Length);
@@ -98,8 +95,8 @@ namespace Tiveria.Knx.IP
                 return null;
             switch (Header.ServiceTypeIdentifier)
             {
-                case ServiceTypeIdentifier.CONNECT_REQUEST:
-                    return TunnelingConnectionRequest.Parse(ref _body, 0);
+//                case ServiceTypeIdentifier.CONNECT_REQUEST:
+//                    return TunnelingConnectionRequest.Parse(ref _body, 0);
                 default:
                     return null;
             }

@@ -22,15 +22,18 @@
     combination.
 */
 
-namespace Tiveria.Knx.IP.Utils
+namespace Tiveria.Knx.Exceptions
 {
     /// <summary>
-    /// Enum with all KNXnet/IP Host Protocol Address Information (HPAI) Endpoit Types.
-    /// <seealso cref="EnumExtensions"/>
+    /// Exception raised when the raw buffer provided to create a structure from doesn't fit in size
     /// </summary>
-    public enum HPAIEndpointType
+    public class StructureBufferSizeException : KnxBaseException
     {
-        IPV4_UDP = 0x01,
-        IPV4_TCP = 0x02
+        public StructureBufferSizeException(string message) : base(message)
+        { }
+
+        public static void TooSmall(string structure) => throw new StructureBufferSizeException($"Buffer too small for structure '{structure}'");
+        public static void TooBig(string structure) => throw new StructureBufferSizeException($"Buffer too big for structure '{structure}'");
+        public static void WrongSize(string structure, int expected, int actual) => throw new StructureBufferSizeException($"Buffer for structure '{structure}' has wrong size {actual}. Expected: {expected}");
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Net;
 using Tiveria.Knx.IP.Utils;
+using Tiveria.Knx.Exceptions;
+using Tiveria.Common.Extensions;
 
 namespace Tiveria.Knx.IP.Structures
 {
@@ -30,19 +32,37 @@ namespace Tiveria.Knx.IP.Structures
             _structureLength = HPAI_SIZE;
         }
 
-        public override void WriteToByteArray(ref byte[] buffer, ushort start)
+        public override void WriteToByteArray(ref byte[] buffer, int offset)
         {
-            base.WriteToByteArray(ref buffer, start);
-            buffer[start + 0] = HPAI.HPAI_SIZE;
-            buffer[start + 1] = (byte)_endpointType;
-            _ip.GetAddressBytes().CopyTo(buffer, start + 2);
-            buffer[start + 6] = (byte)(_port >> 8);
-            buffer[start + 7] = (byte)_port;
+            base.WriteToByteArray(ref buffer, offset);
+            buffer[offset + 0] = HPAI.HPAI_SIZE;
+            buffer[offset + 1] = (byte)_endpointType;
+            _ip.GetAddressBytes().CopyTo(buffer, offset + 2);
+            buffer[offset + 6] = (byte)(_port >> 8);
+            buffer[offset + 7] = (byte)_port;
         }
 
-        public static HPAI Parse(ref byte[] buffer, ushort start)
+        public static HPAI FromBuffer(ref byte[] buffer, int offset =  0)
         {
-            return null;
+            if (buffer == null)
+                throw new ArgumentNullException("buffer is null");
+
+            if (buffer.Length - offset < HPAI.HPAI_SIZE)
+                StructureBufferSizeException.TooSmall("HPAI");
+
+            var structlen = buffer[offset];
+            if (structlen != HPAI.HPAI_SIZE)
+                ValueInterpretationException.WrongValue("HPAI.Size", HPAI.HPAI_SIZE, structlen);
+
+            var endpointType = buffer[offset + 1];
+            if (!Enum.IsDefined(typeof(HPAIEndpointType), endpointType))
+                ValueInterpretationException.TypeUnknown("EndpointType", endpointType);
+
+            var ipbytes = new byte[4];
+            buffer.Slice(ipbytes, offset + 2, 0, 4);
+            var port = buffer[offset + 6] << 8 + buffer[offset + 7];
+
+            return new HPAI((HPAIEndpointType)endpointType, new IPAddress(ipbytes), (ushort)port);
         }
     }
 }

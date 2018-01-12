@@ -1,10 +1,41 @@
-﻿using System;
+﻿/*
+    Tiveria.Knx - a .Net Core base KNX library
+    Copyright (c) 2018 M. Geissler
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation; either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    Linking this library statically or dynamically with other modules is
+    making a combined work based on this library. Thus, the terms and
+    conditions of the GNU General Public License cover the whole
+    combination.
+*/
+
+using System;
 
 namespace Tiveria.Knx.IP.Utils
 {
+    /// <summary>
+    /// Extension methods used to translate the KNXet/IP specific enums to readable strings
+    /// </summary>
     public static class EnumExtensions 
     {
-        public static String  ToString(this HPAIEndpointType hpaiEndpointType)
+        /// <summary>
+        /// translate <see cref="HPAIEndpointType"/> to a readable string
+        /// </summary>
+        /// <returns>the string representation of the enum value</returns>
+        public static String ToDescription(this HPAIEndpointType hpaiEndpointType)
         {
             switch(hpaiEndpointType)
             {
@@ -17,7 +48,30 @@ namespace Tiveria.Knx.IP.Utils
             }
         }
 
-        public static String ToString(this ConnectionType connectionType)
+        /// <summary>
+        /// translate <see cref="TunnelingLayer"/> to a readable string
+        /// </summary>
+        /// <returns>the string representation of the enum value</returns>
+        public static String ToDescription(this TunnelingLayer tunnelingLayer)
+        {
+            switch (tunnelingLayer)
+            {
+                case TunnelingLayer.TUNNEL_BUSMONITOR:
+                    return "Busmonitor";
+                case TunnelingLayer.TUNNEL_LINKLAYER:
+                    return "Linklayer";
+                case TunnelingLayer.TUNNEL_RAW:
+                    return "RAW";
+                default:
+                    return "Unknown";
+            }
+        }
+
+        /// <summary>
+        /// translate <see cref="ConnectionType"/> to a readable string
+        /// </summary>
+        /// <returns>the string representation of the enum value</returns>
+        public static String ToDescription(this ConnectionType connectionType)
         {
             switch (connectionType)
             {
@@ -36,46 +90,50 @@ namespace Tiveria.Knx.IP.Utils
             }
         }
 
-        public static String ToString(this ServiceTypeIdentifier serviceTypeIdentifier)
+        /// <summary>
+        /// translate <see cref="ServiceTypeIdentifier"/> to a readable string
+        /// </summary>
+        /// <returns>the string representation of the enum value</returns>
+        public static String ToDescription(this ServiceTypeIdentifier serviceTypeIdentifier)
         {
             switch (serviceTypeIdentifier)
             {
                 case ServiceTypeIdentifier.CONNECT_REQUEST:
-                    return "connect.req";
+                    return "Connect.req";
                 case ServiceTypeIdentifier.CONNECT_RESPONSE:
-                    return "connect.res";
+                    return "Connect.res";
                 case ServiceTypeIdentifier.CONNECTIONSTATE_REQUEST:
-                    return "connectionstate.req";
+                    return "Connectionstate.req";
                 case ServiceTypeIdentifier.CONNECTIONSTATE_RESPONSE:
-                    return "connectionstate.res";
+                    return "Connectionstate.res";
                 case ServiceTypeIdentifier.DISCONNECT_REQ:
-                    return "disconnect.req";
+                    return "Disconnect.req";
                 case ServiceTypeIdentifier.DISCONNECT_RES:
-                    return "disconnect.res";
+                    return "Disconnect.res";
                 case ServiceTypeIdentifier.DESCRIPTION_REQ:
-                    return "description.req";
+                    return "Description.req";
                 case ServiceTypeIdentifier.DESCRIPTION_RES:
-                    return "description.res";
+                    return "Description.res";
                 case ServiceTypeIdentifier.SEARCH_REQ:
-                    return "search.req";
+                    return "Search.req";
                 case ServiceTypeIdentifier.SEARCH_RES:
-                    return "search.res";
+                    return "Search.res";
                 case ServiceTypeIdentifier.DEVICE_CONFIGURATION_REQ:
-                    return "device-configuration.req";
+                    return "DeviceConfiguration.req";
                 case ServiceTypeIdentifier.DEVICE_CONFIGURATION_ACK:
-                    return "device-configuration.ack";
+                    return "DeviceConfiguration.ack";
                 case ServiceTypeIdentifier.TUNNELING_REQ:
-                    return "tunneling.req";
+                    return "Tunneling.req";
                 case ServiceTypeIdentifier.TUNNELING_ACK:
-                    return "tunneling.ack";
+                    return "Tunneling.ack";
                 case ServiceTypeIdentifier.ROUTING_IND:
-                    return "routing.ind";
+                    return "Routing.ind";
                 case ServiceTypeIdentifier.ROUTING_LOST_MSG:
-                    return "routing-lost.msg";
+                    return "RoutingLost.msg";
                 case ServiceTypeIdentifier.ROUTING_BUSY:
-                    return "routing-busy.ind";
+                    return "RoutingBusy.ind";
                 default:
-                    return "unknown service";
+                    return "Unknown";
             }
         }
     }

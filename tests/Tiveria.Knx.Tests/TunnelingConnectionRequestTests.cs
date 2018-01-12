@@ -14,6 +14,7 @@ namespace Tiveria.Knx.Tests
     [TestFixture]
     public class TunnelingConnectionRequestTests
     {
+        /*
         [Test]
         public void TestTunnelingRequestBody()
         {
@@ -32,5 +33,6 @@ namespace Tiveria.Knx.Tests
             var data = ipframe.ToBytes();
             Assert.AreEqual(data, reference);
         }
+        */
     }
 }

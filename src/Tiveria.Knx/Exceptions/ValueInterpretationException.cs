@@ -22,15 +22,18 @@
     combination.
 */
 
-namespace Tiveria.Knx.IP.Utils
+namespace Tiveria.Knx.Exceptions
 {
     /// <summary>
-    /// Enum with all KNXnet/IP Host Protocol Address Information (HPAI) Endpoit Types.
-    /// <seealso cref="EnumExtensions"/>
+    /// Exception raised whenever a value for a field with predefined correct values is found that is not matching.
     /// </summary>
-    public enum HPAIEndpointType
+    public class ValueInterpretationException : KnxBaseException
     {
-        IPV4_UDP = 0x01,
-        IPV4_TCP = 0x02
+        public ValueInterpretationException(string message) : base(message)
+        { }
+
+        public static void TypeUnknown(string structure, int value) => throw new ValueInterpretationException($"Value 0x{value:x}/{value} not know for structure '{structure}'.");
+        public static void WrongValue(string structure, int expected, int actual) => throw new ValueInterpretationException($"For '{structure}' value '{expected}' expected but '{actual}' provided.");
+        public static void WrongValue(string structure, string expected, string actual) => throw new ValueInterpretationException($"For '{structure}' value '{expected}' expected but '{actual}' provided.");
     }
 }

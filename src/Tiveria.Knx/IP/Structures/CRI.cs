@@ -1,32 +1,96 @@
-﻿using Tiveria.Knx.IP.Utils;
+﻿/*, ushort start
+    Tiveria.Knx - a .Net Core base KNX library
+    Copyright (c) 2018 M. Geissler
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation; either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    Linking this library statically or dynamically with other modules is
+    making a combined work based on this library. Thus, the terms and
+    conditions of the GNU General Public License cover the whole
+    combination.
+*/
+
+using System;
+using Tiveria.Knx.IP.Utils;
+using Tiveria.Common.Extensions;
 
 namespace Tiveria.Knx.IP.Structures
 {
-    // Connection Request Information
+    /// <summary>
+    /// Immutable container for a connection request information (CRI).
+    /// The CRI structure is used for the additional information in a connection request.<br>
+    /// </summary>
     public class CRI: StructureBase
     {
-        public const int CRISize = 4;
+        protected byte[] _optionalData;
 
         private ConnectionType _connectionType;
-        private byte _layer;
-
         public ConnectionType ConnectionType { get => _connectionType; }
-        public byte Layer { get => _layer; }
 
-        public CRI(ConnectionType connectiontype, byte layer)
+        public CRI(ConnectionType connectionType)
+            : this(connectionType, null)
+        { }
+
+        public CRI(ConnectionType connectionType, byte[] optionalData) 
         {
-            _structureLength = CRISize;
-            _layer = layer;
-            _connectionType = connectiontype;
+            _connectionType = connectionType;
+            _optionalData = optionalData ?? (new byte[0]);
+            _structureLength = 2 + _optionalData.Length;
         }
 
-        public override void WriteToByteArray(ref byte[] buffer, ushort start)
+        /// <summary>
+        /// Returns a cloned version of the optional data to ensure that the data is not modified directly
+        /// </summary>
+        /// <returns></returns>
+        public byte[] GetOptionalData()
         {
-            base.WriteToByteArray(ref buffer, start);
-            buffer[start + 0] = (byte)CRISize;
-            buffer[start + 1] = (byte)_connectionType;
-            buffer[start + 2] = (byte)_layer;
-            buffer[start + 3] = 0x00; // reserved
+            return (byte[])_optionalData.Clone();
+        }
+
+        public override void WriteToByteArray(ref byte[] buffer, int offset)
+        {
+            base.WriteToByteArray(ref buffer, offset);
+            buffer[offset + 0] = (byte) (2 + _optionalData.Length);
+            buffer[offset + 1] = (byte)_connectionType;
+            if (_optionalData.Length > 0)
+                _optionalData.CopyTo(buffer, offset+2);
+        }
+
+        public static CRI FromBuffer(ref byte[] buffer, int offset = 0)
+        {
+            if (buffer == null)
+                throw new ArgumentNullException("buffer is null");
+
+            var structlen = buffer[offset];
+            if (structlen < 2)
+                throw new ArgumentException("invalid structure size(<2)");
+            if (buffer.Length - offset != structlen)
+                throw new ArgumentException("buffer has not the correct size");
+
+            var contype = buffer[offset + 1];
+            if (!Enum.IsDefined(typeof(ConnectionType), contype))
+                throw new ArgumentException("Unknown connection type");
+
+            switch (contype) {
+                case (byte)ConnectionType.TUNNEL_CONNECTION:
+                    return CRITunnel.FromBuffer(ref buffer, offset);
+                default:
+                    var optional = new byte[structlen - 2];
+                    buffer.Slice(optional, offset + 2, 0, structlen - 2);
+                    return new CRI((ConnectionType)contype, optional);
+            }
         }
     }
 }

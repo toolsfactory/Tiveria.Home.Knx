@@ -22,15 +22,30 @@
     combination.
 */
 
-namespace Tiveria.Knx.IP.Utils
+using System;
+using System.Runtime.Serialization;
+
+namespace Tiveria.Knx.Exceptions
 {
     /// <summary>
-    /// Enum with all KNXnet/IP Host Protocol Address Information (HPAI) Endpoit Types.
-    /// <seealso cref="EnumExtensions"/>
+    /// Base class for all Knx specific Exceptions
     /// </summary>
-    public enum HPAIEndpointType
+    public abstract class KnxBaseException : Exception
     {
-        IPV4_UDP = 0x01,
-        IPV4_TCP = 0x02
+        public KnxBaseException()
+        {
+        }
+
+        public KnxBaseException(string message) : base(message)
+        {
+        }
+
+        public KnxBaseException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
+
+        protected KnxBaseException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
     }
 }
