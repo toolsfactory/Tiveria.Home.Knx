@@ -30,6 +30,6 @@ namespace Tiveria.Knx.IP.ServiceTypes
     {
         ServiceTypeIdentifier ServiceTypeIdentifier { get; }
         byte[] ToBytes();
-        void WriteToByteArray(ref byte[] buffer, int offset = 0);
+        void WriteToByteArray(byte[] buffer, int offset = 0);
     }
 }

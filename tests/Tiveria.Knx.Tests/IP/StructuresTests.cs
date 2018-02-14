@@ -14,7 +14,7 @@ namespace Tiveria.Knx.Tests.IP
         public void HPAI_Constructor_Ok()
         {
             var expected = "0801c0a80278e1f6".ToByteArray(); // Type: IPV4 UDP, IP: 192.168.2.120, Port: 57846
-            var hpai = new HPAI(HPAIEndpointType.IPV4_UDP, IPAddress.Parse("192.168.2.120"), 57846);
+            var hpai = new Hpai(HPAIEndpointType.IPV4_UDP, IPAddress.Parse("192.168.2.120"), 57846);
             Assert.AreEqual(expected, hpai.ToBytes());
         }
 
@@ -22,7 +22,7 @@ namespace Tiveria.Knx.Tests.IP
         public void HPAI_FromBytes_Ok()
         {
             var buffer = "0801c0a80278e1f6".ToByteArray(); // Type: IPV4 UDP, IP: 192.168.2.120, Port: 57846
-            var hpai = HPAI.FromBuffer(ref buffer, 0);
+            var hpai = Hpai.FromBuffer(buffer, 0);
             Assert.AreEqual(hpai.Ip.ToString(), "192.168.2.120");
             Assert.IsTrue(hpai.Port == 57846);
             Assert.IsTrue(hpai.EndpointType == HPAIEndpointType.IPV4_UDP);
@@ -32,21 +32,21 @@ namespace Tiveria.Knx.Tests.IP
         public void HPAI_FromBytes_WrongEndpointTypeByte()
         {
             var buffer = "0822c0a80278e1f6".ToByteArray(); // EnpointType byte set to 0x22
-            Assert.Catch<ValueInterpretationException>(() => HPAI.FromBuffer(ref buffer, 0));
+            Assert.Catch<BufferFieldException>(() => Hpai.FromBuffer(buffer, 0));
         }
 
         [Test]
         public void HPAI_FromBytes_WrongSizeByte()
         {
             var buffer = "0701c0a80278e1f6".ToByteArray(); // Size set to 0x07 (first byte)
-            Assert.Catch<ValueInterpretationException>(() => HPAI.FromBuffer(ref buffer, 0));
+            Assert.Catch<BufferFieldException>(() => Hpai.FromBuffer(buffer, 0));
         }
 
         [Test]
         public void HPAI_FromBytes_WrongBufferSize()
         {
             var buffer = "0801c0a80278e1".ToByteArray(); // Buffer one byte too short
-            Assert.Catch<StructureBufferSizeException>(() => HPAI.FromBuffer(ref buffer, 0));
+            Assert.Catch<BufferException>(() => Hpai.FromBuffer(buffer, 0));
         }
 
         [Test]
@@ -82,7 +82,7 @@ namespace Tiveria.Knx.Tests.IP
         public void CRI_FromBytes_Ok()
         {
             var buffer = "04060200".ToByteArray(); // Size: 4, Type: Remlog Connection, Layer: Link
-            var cri = CRI.FromBuffer(ref buffer, 0);
+            var cri = CRI.FromBuffer(buffer, 0);
             Assert.IsTrue(cri.StructureLength == 4);
             Assert.IsTrue(cri.ConnectionType == ConnectionType.REMLOG_CONNECTION);
             var data = cri.ToBytes();
@@ -97,7 +97,7 @@ namespace Tiveria.Knx.Tests.IP
         public void CRI_FromBytes_WrongConnectionTypeByte()
         {
             var buffer = "04ff0200".ToByteArray(); // Size: 4, Type byte set to 0xff
-            Assert.Catch<ValueInterpretationException>(() => CRI.FromBuffer(ref buffer, 0));
+            Assert.Catch<BufferFieldException>(() => CRI.FromBuffer(buffer, 0));
         }
     }
 }

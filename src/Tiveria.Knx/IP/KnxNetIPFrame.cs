@@ -1,33 +1,50 @@
-﻿using System;
+﻿/*
+    Tiveria.Knx - a .Net Core base KNX library
+    Copyright (c) 2018 M. Geissler
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation; either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    Linking this library statically or dynamically with other modules is
+    making a combined work based on this library. Thus, the terms and
+    conditions of the GNU General Public License cover the whole
+    combination.
+*/
+    
+using System;
 using Tiveria.Knx.IP.ServiceTypes;
 using Tiveria.Knx.IP.Structures;
 using Tiveria.Knx.IP.Utils;
+using Tiveria.Knx.Exceptions;
 using Tiveria.Common.Extensions;
 
 namespace Tiveria.Knx.IP
 {
-    /*
-     * +-7-+-6-+-5-+-4-+-3-+-2-+-1-+-0-+-7-+-6-+-5-+-4-+-3-+-2-+-1-+-0-+
-     * | Header Length                 | Protocol Version              |
-     * | (1 Octet)                     | (1 Octet)                     |
-     * +-7-+-6-+-5-+-4-+-3-+-2-+-1-+-0-+-7-+-6-+-5-+-4-+-3-+-2-+-1-+-0-+
-     * | Service Type Identifier                                       |
-     * | (2 Octet)                                                     |
-     * +-7-+-6-+-5-+-4-+-3-+-2-+-1-+-0-+-7-+-6-+-5-+-4-+-3-+-2-+-1-+-0-+
-     * | Total Length                                                  |
-     * | (2 Octet)                                                     |
-     * +-7-+-6-+-5-+-4-+-3-+-2-+-1-+-0-+-7-+-6-+-5-+-4-+-3-+-2-+-1-+-0-+
-     */
     public class KnxNetIPFrame
     {
+        public static readonly KnxNetIPVersion[] SupportedKnxNEtIPVersions = new KnxNetIPVersion[1] { new KnxNetIPVersion("KnxNetIP Version 1.0", 0x10, 0x06) };
+
         #region private fields
         private byte[] _body;
-        private Header _header;
+        private FrameHeader _header;
+        private IServiceType _serviceType;
         #endregion
 
         #region public properties
         public byte[] Body { get => _body; }
-        public Header Header { get => _header; }
+        public FrameHeader Header { get => _header; }
+        public IServiceType ServiceType { get => _serviceType; }
         #endregion
 
         #region Constructors
@@ -36,15 +53,16 @@ namespace Tiveria.Knx.IP
             if (body == null)
                 throw new ArgumentNullException("body is null");
             if (body.Length < 1)
-                throw new ArgumentException("body too small");
+                throw BufferFieldException.TooSmall("ServiceType/Body", 1, 0);
             if (body.Length > 26)
                 throw new ArgumentException("body too big");
 
-            _header = new Header(servicetypeidentifier, (ushort)body.Length);
+            _header = new FrameHeader(servicetypeidentifier, (ushort)body.Length);
             _body = body;
+            _serviceType = GetServiceTypeFromBody();
         }
 
-        public KnxNetIPFrame(Header header, byte[] body)
+        protected KnxNetIPFrame(FrameHeader header, byte[] body)
         {
             if (body == null)
                 throw new ArgumentNullException("body is null");
@@ -53,6 +71,7 @@ namespace Tiveria.Knx.IP
 
             _header = header;
             _body = body;
+            _serviceType = GetServiceTypeFromBody();
         }
 
         public KnxNetIPFrame(ServiceTypeIdentifier servicetypeidentifier, IServiceType serviceType)
@@ -61,30 +80,15 @@ namespace Tiveria.Knx.IP
                 throw new ArgumentNullException("serviceType is null");
 
             _body = serviceType.ToBytes();
-            _header = new Header(servicetypeidentifier, (ushort)_body.Length);
-        }
-        #endregion
-
-        #region Static Parsing
-        public static KnxNetIPFrame Parse(byte[] data)
-        {
-            if (data == null)
-                throw new ArgumentNullException("data is empty");
-            if (data.Length < 6)
-                throw new ArgumentException("data too small");
-
-            var header = Header.FromBuffer(ref data, 0);
-            var body = new byte[header.TotalLength - header.Size];
-
-            data.Slice(body, header.Size, 0, body.Length);
-            return new KnxNetIPFrame(header, body);
+            _header = new FrameHeader(servicetypeidentifier, (ushort)_body.Length);
+            _serviceType = serviceType;
         }
         #endregion
 
         public byte[] ToBytes()
         {
             var data = new byte[_header.TotalLength];
-            _header.WriteToByteArray(ref data, 0);
+            _header.WriteToByteArray(data, 0);
             _body.CopyTo(data, _header.Size);
             return data;
         }
@@ -95,11 +99,31 @@ namespace Tiveria.Knx.IP
                 return null;
             switch (Header.ServiceTypeIdentifier)
             {
-//                case ServiceTypeIdentifier.CONNECT_REQUEST:
-//                    return TunnelingConnectionRequest.Parse(ref _body, 0);
+                case ServiceTypeIdentifier.CONNECT_REQUEST:
+                    return ConnectionRequest.FromBuffer(_body, 0);
+                case ServiceTypeIdentifier.CONNECT_RESPONSE:
+                    return ConnectionResponse.FromBuffer(_body, 0);
+                case ServiceTypeIdentifier.TUNNELING_REQ:
+                    return TunnelingRequest.Parse(_body, 0, _body.Length);
                 default:
-                    return null;
+                    return UnknownService.Parse(new Common.IO.BinaryReaderEx(_body), Header.ServiceTypeRaw, _body.Length);
             }
         }
+
+        #region Static Parsing
+        public static KnxNetIPFrame Parse(byte[] data)
+        {
+            if (data == null)
+                throw new ArgumentNullException("data is empty");
+            if (data.Length < 6)
+                throw BufferSizeException.TooSmall("KNXNetIP Frame");
+
+            var header = FrameHeader.Parse(data, 0);
+            var body = new byte[header.TotalLength - header.Size];
+
+            data.Slice(body, header.Size, 0, body.Length);
+            return new KnxNetIPFrame(header, body);
+        }
+        #endregion
     }
 }

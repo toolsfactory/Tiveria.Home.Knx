@@ -21,9 +21,10 @@
     conditions of the GNU General Public License cover the whole
     combination.
 */
-    
+
 using System;
 using System.Net;
+using Tiveria.Knx.Structures;
 using Tiveria.Knx.IP.Utils;
 using Tiveria.Knx.Exceptions;
 using Tiveria.Common.Extensions;
@@ -41,7 +42,7 @@ namespace Tiveria.Knx.IP.Structures
     /// |  (8)   | Type   |                                   |                 |
     /// +--------+--------+--------+--------+--------+--------+--------+--------+
     /// </code>
-    public class HPAI : StructureBase
+    public class Hpai : StructureBase
     {
         #region private fields
         private static byte HPAI_SIZE = 8;
@@ -63,7 +64,7 @@ namespace Tiveria.Knx.IP.Structures
         /// <param name="endpointType"></param>
         /// <param name="address"></param>
         /// <param name="port"></param>
-        public HPAI(HPAIEndpointType endpointType, IPAddress address, ushort port)
+        public Hpai(HPAIEndpointType endpointType, IPAddress address, ushort port)
         {
             if (address != null)
             {
@@ -82,37 +83,42 @@ namespace Tiveria.Knx.IP.Structures
         }
         #endregion
 
-        public override void WriteToByteArray(ref byte[] buffer, int offset = 0)
+        public override void WriteToByteArray(byte[] buffer, int offset = 0)
         {
-            base.WriteToByteArray(ref buffer, offset);
-            buffer[offset + 0] = HPAI.HPAI_SIZE;
+            base.WriteToByteArray(buffer, offset);
+            buffer[offset + 0] = Hpai.HPAI_SIZE;
             buffer[offset + 1] = (byte)EndpointType;
             Ip.GetAddressBytes().CopyTo(buffer, offset + 2);
             buffer[offset + 6] = (byte)(Port >> 8);
             buffer[offset + 7] = (byte)Port;
         }
 
-        public static HPAI FromBuffer(ref byte[] buffer, int offset =  0)
+        public override string ToString()
+        {
+            return $"";
+        }
+
+        public static Hpai FromBuffer(byte[] buffer, int offset =  0)
         {
             if (buffer == null)
                 throw new ArgumentNullException("buffer is null");
 
-            if (buffer.Length - offset < HPAI.HPAI_SIZE)
-                StructureBufferSizeException.TooSmall("HPAI");
+            if (buffer.Length - offset < Hpai.HPAI_SIZE)
+                throw BufferSizeException.TooSmall("HPAI");
 
             var structlen = buffer[offset];
-            if (structlen != HPAI.HPAI_SIZE)
-                ValueInterpretationException.WrongValue("HPAI.Size", HPAI.HPAI_SIZE, structlen);
+            if (structlen != Hpai.HPAI_SIZE)
+                throw BufferFieldException.WrongValue("HPAI.Size", Hpai.HPAI_SIZE, structlen);
 
             var endpointType = buffer[offset + 1];
             if (!Enum.IsDefined(typeof(HPAIEndpointType), endpointType))
-                ValueInterpretationException.TypeUnknown("EndpointType", endpointType);
+                throw BufferFieldException.TypeUnknown("EndpointType", endpointType);
 
             var ipbytes = new byte[4];
             buffer.Slice(ipbytes, offset + 2, 0, 4);
             var port = (buffer[offset + 6] << 8) + buffer[offset + 7];
 
-            return new HPAI((HPAIEndpointType)endpointType, new IPAddress(ipbytes), (ushort)port);
+            return new Hpai((HPAIEndpointType)endpointType, new IPAddress(ipbytes), (ushort)port);
         }
     }
 }

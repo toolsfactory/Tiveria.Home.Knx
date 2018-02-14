@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Tiveria.Knx.IP.Structures
+namespace Tiveria.Knx.Structures
 {
-    public abstract class StructureBase
+    public abstract class StructureBase : IStructure
     {
         protected int _structureLength;
         public int StructureLength { get => _structureLength; }
@@ -10,11 +10,11 @@ namespace Tiveria.Knx.IP.Structures
         public byte[] ToBytes()
         {
             var data = new byte[StructureLength];
-            WriteToByteArray(ref data, 0);
+            WriteToByteArray(data, 0);
             return data;
         }
 
-        public virtual void WriteToByteArray(ref byte[] buffer, int offset = 0)
+        public virtual void WriteToByteArray(byte[] buffer, int offset = 0)
         {
             if (buffer == null)
                 throw new ArgumentNullException("buffer is null");

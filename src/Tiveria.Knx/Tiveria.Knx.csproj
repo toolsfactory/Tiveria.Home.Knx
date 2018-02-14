@@ -9,10 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="IP\Structures\Builders\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\..\Tiveria.Common.Standard\Tiveria.Common.csproj" />
   </ItemGroup>
 

@@ -21,19 +21,24 @@
     conditions of the GNU General Public License cover the whole
     combination.
 */
-
-namespace Tiveria.Knx.Exceptions
+    
+namespace Tiveria.Knx.IP.Utils
 {
-    /// <summary>
-    /// Exception raised whenever a value for a field with predefined correct values is found that is not matching.
-    /// </summary>
-    public class ValueInterpretationException : KnxBaseException
+    public struct KnxNetIPVersion
     {
-        public ValueInterpretationException(string message) : base(message)
-        { }
+        private readonly string _name;
+        private readonly byte _identifier;
+        private readonly byte _length;
 
-        public static void TypeUnknown(string structure, int value) => throw new ValueInterpretationException($"Value 0x{value:x}/{value} not know for structure '{structure}'.");
-        public static void WrongValue(string structure, int expected, int actual) => throw new ValueInterpretationException($"For '{structure}' value '{expected}' expected but '{actual}' provided.");
-        public static void WrongValue(string structure, string expected, string actual) => throw new ValueInterpretationException($"For '{structure}' value '{expected}' expected but '{actual}' provided.");
+        public string Name { get => _name; }
+        public byte Identifier { get => _identifier; }
+        public byte HeaderLength { get => _length; }
+
+        public KnxNetIPVersion(string name, byte identifier, byte headerlength)
+        {
+            _name = name;
+            _identifier = identifier;
+            _length = headerlength;
+        }
     }
 }

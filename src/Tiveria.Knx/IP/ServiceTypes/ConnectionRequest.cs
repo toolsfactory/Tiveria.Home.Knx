@@ -28,18 +28,19 @@ using Tiveria.Knx.IP.Utils;
 
 namespace Tiveria.Knx.IP.ServiceTypes
 {
+
     /// <summary>
     /// Represents a KnxNetIP connection request message
     /// </summary>
     public class ConnectionRequest : ServiceTypeBase, IServiceType
     {
-        private HPAI _discoveryHPAI;
-        private HPAI _dataHPAI;
+        private Hpai _discoveryHPAI;
+        private Hpai _dataHPAI;
         private CRI _cri;
 
-        public HPAI DiscoveryHPAI { get => _discoveryHPAI; }
-        public HPAI DataHPAI { get => _dataHPAI; }
-        public CRI Cri { get => _cri; }
+        public Hpai DiscoveryHPAI => _discoveryHPAI; 
+        public Hpai DataHPAI => _dataHPAI; 
+        public CRI Cri => _cri; 
 
         protected ConnectionRequest()
             : base(ServiceTypeIdentifier.CONNECT_REQUEST)
@@ -51,7 +52,7 @@ namespace Tiveria.Knx.IP.ServiceTypes
         /// <param name="discoverEndpoint">address of the udp endpoint taking care of discovery and control messages</param>
         /// <param name="dataEndpoint">address of the udp endpoint taking care of data messages</param>
         /// <remarks>Both the discoveryEndpoint and the dataEndpoint can be equal or even the same object. This results in one udpclient handling both parts.</remarks>
-        public ConnectionRequest(CRI requestInfo, HPAI discoveryEndpoint, HPAI dataEndpoint)
+        public ConnectionRequest(CRI requestInfo, Hpai discoveryEndpoint, Hpai dataEndpoint)
             : this()
         {
             _cri = requestInfo;
@@ -60,20 +61,21 @@ namespace Tiveria.Knx.IP.ServiceTypes
             _structureLength = _cri.StructureLength + _discoveryHPAI.StructureLength + _dataHPAI.StructureLength;
         }
 
-        public override void WriteToByteArray(ref byte[] buffer, int offset = 0)
+        public override void WriteToByteArray(byte[] buffer, int offset = 0)
         {
-            base.WriteToByteArray(ref buffer, offset);
-            _cri.WriteToByteArray(ref buffer, offset);
-            _discoveryHPAI.WriteToByteArray(ref buffer, offset += _cri.StructureLength);
-            _dataHPAI.WriteToByteArray(ref buffer, offset += _discoveryHPAI.StructureLength);
+            base.WriteToByteArray(buffer, offset);
+            _discoveryHPAI.WriteToByteArray(buffer, offset);
+            _dataHPAI.WriteToByteArray(buffer, offset += _discoveryHPAI.StructureLength);
+            _cri.WriteToByteArray(buffer, offset += _dataHPAI.StructureLength);
         }
 
-        public static ConnectionRequest FromBuffer(ref byte[] buffer, int offset = 0)
+        public static ConnectionRequest FromBuffer(byte[] buffer, int offset = 0)
         {
-            var disEP = HPAI.FromBuffer(ref buffer, offset);
-            var datEP = HPAI.FromBuffer(ref buffer, offset += disEP.StructureLength);
-            var cri = CRI.FromBuffer(ref buffer, offset+= datEP.StructureLength);
+            var disEP = Hpai.FromBuffer(buffer, offset);
+            var datEP = Hpai.FromBuffer(buffer, offset += disEP.StructureLength);
+            var cri = CRI.FromBuffer(buffer, offset+= datEP.StructureLength);
             return new ConnectionRequest(cri, disEP, datEP);
         }
     }
+
 }

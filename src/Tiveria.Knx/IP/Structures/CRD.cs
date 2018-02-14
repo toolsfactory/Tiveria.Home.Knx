@@ -31,21 +31,21 @@ using Tiveria.Common.Extensions;
 namespace Tiveria.Knx.IP.Structures
 {
     /// <summary>
-    /// Immutable container for a connection request information (CRI).
-    /// The CRI structure is used for the additional information in a connection request.<br>
+    /// Immutable container for a connection response data (CRD).
+    /// The CRI structure is used for the additional information in a connection response.<br>
     /// </summary>
-    public class CRI: StructureBase
+    public class CRD : StructureBase
     {
         protected byte[] _optionalData;
 
         private ConnectionType _connectionType;
         public ConnectionType ConnectionType { get => _connectionType; }
 
-        public CRI(ConnectionType connectionType)
+        public CRD(ConnectionType connectionType)
             : this(connectionType, null)
         { }
 
-        public CRI(ConnectionType connectionType, byte[] optionalData) 
+        public CRD(ConnectionType connectionType, byte[] optionalData)
         {
             _connectionType = connectionType;
             _optionalData = optionalData ?? (new byte[0]);
@@ -64,34 +64,35 @@ namespace Tiveria.Knx.IP.Structures
         public override void WriteToByteArray(byte[] buffer, int offset)
         {
             base.WriteToByteArray(buffer, offset);
-            buffer[offset + 0] = (byte) (2 + _optionalData.Length);
+            buffer[offset + 0] = (byte)(2 + _optionalData.Length);
             buffer[offset + 1] = (byte)_connectionType;
             if (_optionalData.Length > 0)
-                _optionalData.CopyTo(buffer, offset+2);
+                _optionalData.CopyTo(buffer, offset + 2);
         }
 
-        public static CRI FromBuffer(byte[] buffer, int offset = 0)
+        public static CRD FromBuffer(byte[] buffer, int offset = 0)
         {
             if (buffer == null)
                 throw new ArgumentNullException("buffer is null");
 
             var structlen = buffer[offset];
             if (structlen < 2)
-                throw new ArgumentException("invalid structure size(<2)");
+                throw BufferFieldException.WrongValueAt("CRD", "StructureLength", offset);
             if (buffer.Length - offset != structlen)
-                throw new ArgumentException("buffer has not the correct size");
+                throw BufferSizeException.WrongSize("CRD", structlen, buffer.Length - offset);
 
             var contype = buffer[offset + 1];
             if (!Enum.IsDefined(typeof(ConnectionType), contype))
                 throw BufferFieldException.TypeUnknown("CRI", contype);
 
-            switch (contype) {
+            switch (contype)
+            {
                 case (byte)ConnectionType.TUNNEL_CONNECTION:
-                    return CRITunnel.FromBuffer(buffer, offset);
+                    return CRDTunnel.FromBuffer(buffer, offset);
                 default:
                     var optional = new byte[structlen - 2];
                     buffer.Slice(optional, offset + 2, 0, structlen - 2);
-                    return new CRI((ConnectionType)contype, optional);
+                    return new CRD((ConnectionType)contype, optional);
             }
         }
     }

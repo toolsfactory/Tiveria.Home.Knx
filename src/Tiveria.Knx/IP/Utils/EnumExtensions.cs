@@ -136,5 +136,38 @@ namespace Tiveria.Knx.IP.Utils
                     return "Unknown";
             }
         }
+
+        public static string ToDescription(this ErrorCodes ec)
+        {
+            switch (ec)
+            {
+                case ErrorCodes.NO_ERROR: return "Success";
+                // common error codes
+                case ErrorCodes.HOST_PROTOCOL_TYPE:
+                    return "Host protocol not supported";
+                case ErrorCodes.VERSION_NOT_SUPPORTED:
+                    return "Protocol version not supported";
+                case ErrorCodes.SEQUENCE_NUMBER:
+                    return "Sequence number out of order";
+                // connect response error codes
+                case ErrorCodes.CONNECTION_TYPE:
+                    return "Connection type not supported by server";
+                case ErrorCodes.CONNECTION_OPTION:
+                    return "One or more connection options not supported by server";
+                case ErrorCodes.NO_MORE_CONNECTIONS:
+                    return "Server cannot accept new connections. Concurrency maximum reached.";
+                case ErrorCodes.TUNNELING_LAYER:
+                    return "Requested tunneling layer not supported by server";
+                // connection state response error codes
+                case ErrorCodes.CONNECTION_ID:
+                    return "No active connection with specified ID found by server";
+                case ErrorCodes.DATA_CONNECTION:
+                    return "Error in data connection";
+                case ErrorCodes.KNX_CONNECTION:
+                    return "Error in KNX connection";
+                default:
+                    return "Unknown";
+            }
+        }
     }
 }

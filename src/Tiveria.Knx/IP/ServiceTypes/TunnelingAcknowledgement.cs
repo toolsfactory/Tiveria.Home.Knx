@@ -22,18 +22,22 @@
     combination.
 */
 
-namespace Tiveria.Knx.Exceptions
+using Tiveria.Knx.IP.Utils;
+
+namespace Tiveria.Knx.IP.ServiceTypes
 {
-    /// <summary>
-    /// Exception raised when the raw buffer provided to create a structure from doesn't fit in size
-    /// </summary>
-    public class StructureBufferSizeException : KnxBaseException
+    public class TunnelingAcknowledgement : ServiceAcknowledgement
     {
-        public StructureBufferSizeException(string message) : base(message)
+        public TunnelingAcknowledgement(byte channelId, byte sequenceCounter, ErrorCodes statusCode)
+            : base(ServiceTypeIdentifier.TUNNELING_ACK, channelId, sequenceCounter, statusCode)
         { }
 
-        public static void TooSmall(string structure) => throw new StructureBufferSizeException($"Buffer too small for structure '{structure}'");
-        public static void TooBig(string structure) => throw new StructureBufferSizeException($"Buffer too big for structure '{structure}'");
-        public static void WrongSize(string structure, int expected, int actual) => throw new StructureBufferSizeException($"Buffer for structure '{structure}' has wrong size {actual}. Expected: {expected}");
+        public static TunnelingAcknowledgement FromBuffer(byte[] buffer, int offset = 0)
+        {
+            var channelId = buffer[offset + 1];
+            var sequenceCounter = buffer[offset + 2];
+            var statusCode = buffer[offset + 3];
+            return new TunnelingAcknowledgement(channelId, sequenceCounter, (ErrorCodes) statusCode);
+        }
     }
 }

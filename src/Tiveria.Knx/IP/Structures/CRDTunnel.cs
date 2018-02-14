@@ -30,59 +30,57 @@ using Tiveria.Knx.Exceptions;
 namespace Tiveria.Knx.IP.Structures
 {
     /// <summary>
-    /// Immutable representation of the connection request information block (CRI) for a tunneling connection.
-    /// Official KNX Documentation: "03_04_08 Tunneling v01.05.03 AS.pdf" -> 4.4.4.3
+    /// Immutable representation of the connection response data block (CRD) for a tunneling connection.
+    /// Official KNX Documentation: "03_04_08 Tunneling v01.05.03 AS.pdf" -> 4.4.4.4
     /// </summary>
     /// <code>
     /// +--------+--------+--------+--------+
     /// | byte 1 | byte 2 | byte 3 | byte 4 |
     /// +--------+--------+--------+--------+
-    /// |  Size  |Con_Type| Layer  |Reserved|
-    /// |  0x04  | 0x04   |        |  0x00  |
+    /// |  Size  |Con_Type| Assigned Address|
+    /// |  0x04  | 0x04   | KNX Individual A|
     /// +--------+--------+--------+--------+
     /// </code>
-    public class CRITunnel : CRI
+    public class CRDTunnel : CRD
     {
-        public static int CRITUNNELSIZE = 4;
+        public static int CRDTUNNELSIZE = 4;
 
         #region properties
-        private TunnelingLayer _layer;
-        public TunnelingLayer Layer { get => _layer; }
+        private IndividualAddress _assignedAddress;
+        public IndividualAddress AssignedAddress { get => _assignedAddress; }
         #endregion
 
         #region constructors
         /// <summary>
-        /// Creates a new structure and initializes is with the layer
+        /// Create a new CRDTunnel and initialize it with a specific individual address
         /// </summary>
-        /// <param name="layer">KNX tunnel connection link layer</param>
-        public CRITunnel(TunnelingLayer layer) 
-            : base (ConnectionType.TUNNEL_CONNECTION, new byte[2] { (byte)layer, 0x00 })
+        /// <param name="assignedAddress">The knx individual address assigned to the connection</param>
+        public CRDTunnel(IndividualAddress assignedAddress)
+            : base(ConnectionType.TUNNEL_CONNECTION, 
+                   new byte[2] { (byte)(assignedAddress.RawAddress >> 8), (byte)assignedAddress.RawAddress } )
         {
-            _layer = layer;
+            _assignedAddress = assignedAddress;   
         }
         #endregion
 
         #region static methods
         /// <summary>
-        /// Parses the referenced buffer and creates a new CRITunnel Structure from the information.
+        /// Parses the referenced buffer and creates a new CRDTunnel Structure from the information.
         /// </summary>
         /// <param name="buffer">THe buffer to be parsed</param>
         /// <param name="offset">THe offset the new structure begins in the buffer</param>
-        /// <returns>New instance of CRITunnel</returns>
-        public static new CRITunnel FromBuffer(byte[] buffer, int offset)
+        /// <returns>New instance of CRDTunnel</returns>
+        public static new CRDTunnel FromBuffer(byte[] buffer, int offset)
         {
             if (buffer == null)
                 throw new ArgumentNullException("buffer is null");
             var len = buffer.Length - offset;
-            if (len != CRITUNNELSIZE)
-                throw BufferSizeException.WrongSize("CRITunnel", CRITUNNELSIZE, len);
+            if (len != CRDTUNNELSIZE)
+                throw BufferSizeException.WrongSize("CRDTunnel", CRDTUNNELSIZE, len);
             if (buffer[offset + 1] != (byte)ConnectionType.TUNNEL_CONNECTION)
-                throw new ArgumentException("buffer is not of connectiontype tunnel_connection");
-
-            var layer = buffer[offset + 2];
-            if (!Enum.IsDefined(typeof(TunnelingLayer), layer))
-                throw BufferFieldException.TypeUnknown("TunnelingLayer", layer);
-            return new CRITunnel((TunnelingLayer) layer);
+                throw BufferFieldException.WrongValueAt("CRDTunnel", "ConnectionType", offset + 1);
+            var assignedAddress = IndividualAddress.FromBuffer(buffer, offset + 2);
+            return new CRDTunnel(assignedAddress);
         }
         #endregion
     }

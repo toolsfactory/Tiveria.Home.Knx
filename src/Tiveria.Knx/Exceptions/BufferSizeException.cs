@@ -21,32 +21,22 @@
     conditions of the GNU General Public License cover the whole
     combination.
 */
-    
-namespace Tiveria.Knx.IP.Utils
+
+
+namespace Tiveria.Knx.Exceptions
 {
     /// <summary>
-    /// Enum with all KNXnet/IP Servicetype Identifiers and their correct hex codes
-    /// <seealso cref="EnumExtensions"/>
+    /// Exception raised when the raw buffer provided to create a structure from doesn't fit in size
     /// </summary>
-    public enum ServiceTypeIdentifier : ushort
+    public class BufferSizeException : BufferException
     {
-        CONNECT_REQUEST = 0x0205,
-        CONNECT_RESPONSE = 0x0206,
-        CONNECTIONSTATE_REQUEST = 0x0207,
-        CONNECTIONSTATE_RESPONSE = 0x0208,
-        DISCONNECT_REQ = 0x0209,
-        DISCONNECT_RES = 0x020A,
-        DESCRIPTION_REQ = 0x0203,
-        DESCRIPTION_RES = 0x204,
-        SEARCH_REQ = 0x201,
-        SEARCH_RES = 0x202,
-        DEVICE_CONFIGURATION_REQ = 0x0310,
-        DEVICE_CONFIGURATION_ACK = 0x0311,
-        TUNNELING_REQ = 0x0420,
-        TUNNELING_ACK = 0x0421,
-        ROUTING_IND = 0x0530,
-        ROUTING_LOST_MSG = 0x0531,
-        ROUTING_BUSY = 0x0532,
-        UNKNOWN = 0xFFFF
+        public BufferSizeException(string message) : base(message)
+        { }
+
+        public static BufferSizeException TooSmall(string structure) => new BufferSizeException($"Buffer too small for structure '{structure}'");
+        public static BufferSizeException TooBig(string structure) => new BufferSizeException($"Buffer too big for structure '{structure}'");
+        public static BufferSizeException WrongSize(string structure, int expected, int actual) => new BufferSizeException($"Buffer for structure '{structure}' has wrong size {actual}. Expected: {expected}");
     }
+
+
 }

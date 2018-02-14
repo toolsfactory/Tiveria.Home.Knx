@@ -32,15 +32,15 @@ namespace Tiveria.Knx.Exceptions
     /// </summary>
     public abstract class KnxBaseException : Exception
     {
-        public KnxBaseException()
+        protected KnxBaseException()
         {
         }
 
-        public KnxBaseException(string message) : base(message)
+        protected KnxBaseException(string message) : base(message)
         {
         }
 
-        public KnxBaseException(string message, Exception innerException) : base(message, innerException)
+        protected KnxBaseException(string message, Exception innerException) : base(message, innerException)
         {
         }
 
