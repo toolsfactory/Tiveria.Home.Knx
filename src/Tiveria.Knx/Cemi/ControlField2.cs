@@ -50,14 +50,14 @@ namespace Tiveria.Knx.Cemi
     {
         #region private fields
         private byte _rawData;
-        private bool _destinationAddressGroup;
+        private KnxAddressType _destinationAddressType;
         private byte _hopCount;
         private byte _extendedFrameFormat;
         #endregion
 
         #region public properties
         public byte RawData => _rawData;
-        public bool DestinationAddressGroup => _destinationAddressGroup;
+        public KnxAddressType DestinationAddressType => _destinationAddressType;
         public byte HopCount => _hopCount;
         public byte ExtendedFrameFormat => _extendedFrameFormat;
         #endregion
@@ -86,7 +86,7 @@ namespace Tiveria.Knx.Cemi
             if (extendedFrameFormat < 0 || extendedFrameFormat > 0b0111)
                 throw new ArgumentOutOfRangeException("extended frame format out of range 0..7");
             _hopCount = (byte)hopCount;
-            _destinationAddressGroup = groupAddress;
+            _destinationAddressType = groupAddress ? KnxAddressType.GroupAddress : KnxAddressType.IndividualAddress;
             _extendedFrameFormat = (byte)extendedFrameFormat;
             ToByte();
         }
@@ -100,16 +100,24 @@ namespace Tiveria.Knx.Cemi
 
             _rawData |= _extendedFrameFormat;
 
-            if (_destinationAddressGroup)
+            if (_destinationAddressType == KnxAddressType.GroupAddress)
                 _rawData |= 0b1000_0000;
         }
 
         private void ParseData()
         {
             _hopCount = (byte)((_rawData & 0b0111_0000) >> 4);
-            _destinationAddressGroup = ((_rawData & 0b1000_0000) != 0);
+            _destinationAddressType = ((_rawData & 0b1000_0000) == 0) ? KnxAddressType.IndividualAddress : KnxAddressType.GroupAddress;
             _extendedFrameFormat = (byte) (_rawData & 0b0000_1111);
         }
         #endregion
+
+        public string ToDescription(int padding)
+        {
+            var effbin = ("0000" + Convert.ToString(ExtendedFrameFormat, 2));
+            effbin = effbin.Substring(effbin.Length - 5);
+            var spaces = new String(' ', padding);
+            return $"{spaces}Ctrl2: DestinationAddressType = {DestinationAddressType}, HopCount = {HopCount}, ExtendedFrameFormat = {effbin}";
+        }
     }
 }

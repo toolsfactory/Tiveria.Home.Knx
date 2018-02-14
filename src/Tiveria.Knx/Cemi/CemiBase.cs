@@ -86,8 +86,7 @@ namespace Tiveria.Knx.Cemi
             ParseBuffer(br);
         }
         #endregion
-
-
+        
         #region verifying elements
         protected abstract bool VerifyBufferSize(BinaryReaderEx br);
 

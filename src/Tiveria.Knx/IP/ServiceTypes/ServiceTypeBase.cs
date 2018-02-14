@@ -26,6 +26,7 @@ using System;
 using Tiveria.Knx.Utils;
 using Tiveria.Knx.IP.Utils;
 using Tiveria.Common.Logging;
+using Tiveria.Common.IO;
 
 namespace Tiveria.Knx.IP.ServiceTypes
 {
@@ -42,6 +43,16 @@ namespace Tiveria.Knx.IP.ServiceTypes
         protected ServiceTypeBase(ServiceTypeIdentifier serviceTypeIdentifier)
         {
             _serviceTypeIdentifier = serviceTypeIdentifier;
+        }
+
+        protected void SkipReserved(BinaryReaderEx br)
+        {
+            br.ReadByte();
+        }
+
+        protected void SkipReserved(BinaryReaderEx br, byte count)
+        {
+            br.ReadBytes(count);
         }
 
         public byte[] ToBytes()

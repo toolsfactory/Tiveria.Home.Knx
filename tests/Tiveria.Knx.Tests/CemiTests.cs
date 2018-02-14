@@ -66,7 +66,7 @@ namespace Tiveria.Knx.Tests
             Assert.AreEqual(result.ControlField1.Confirm, ConfirmType.NoError);
 
             Assert.AreEqual(result.ControlField2.HopCount, 5);
-            Assert.AreEqual(result.ControlField2.DestinationAddressGroup, true);
+            Assert.AreEqual(result.ControlField2.DestinationAddressType, true);
             Assert.AreEqual(result.ControlField2.ExtendedFrameFormat, 0);
 
             Assert.AreEqual(result.SourceAddress.ToString(), "1.1.205");
@@ -96,7 +96,7 @@ namespace Tiveria.Knx.Tests
             Assert.AreEqual(result.ControlField1.Confirm, ConfirmType.NoError);
 
             Assert.AreEqual(result.ControlField2.HopCount, 5);
-            Assert.AreEqual(result.ControlField2.DestinationAddressGroup, true);
+            Assert.AreEqual(result.ControlField2.DestinationAddressType, true);
             Assert.AreEqual(result.ControlField2.ExtendedFrameFormat, 0);
 
             Assert.AreEqual(result.SourceAddress.ToString(), "1.1.205");

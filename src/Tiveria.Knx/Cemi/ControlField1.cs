@@ -21,7 +21,7 @@
     conditions of the GNU General Public License cover the whole
     combination.
 */
-
+using System;
 
 namespace Tiveria.Knx.Cemi
 {
@@ -153,5 +153,12 @@ namespace Tiveria.Knx.Cemi
             _priority = (Priority)bits;
         }
         #endregion
+
+        public string ToDescription(int padding)
+        {
+            var spaces = new String(' ', padding);
+            return $"{spaces}Ctrl1: ExtendedFrame = {ExtendedFrame}, Repeat = {Repeat}, Broadcast = {Broadcast}, Priority = {Priority}, Acknowledge = {AcknowledgeRequest}, Confirm = {Confirm}";
+        }
+
     }
 }

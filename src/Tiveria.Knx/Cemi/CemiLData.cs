@@ -25,6 +25,7 @@
 using System;
 using Tiveria.Knx.Exceptions;
 using Tiveria.Common.IO;
+using Tiveria.Common.Extensions;
 
 namespace Tiveria.Knx.Cemi
 {
@@ -167,7 +168,7 @@ namespace Tiveria.Knx.Cemi
         protected void ParseDestinationAddress(BinaryReaderEx br)
         {
             var dst = br.ReadU2be();
-            if (_controlField2.DestinationAddressGroup)
+            if (_controlField2.DestinationAddressType == KnxAddressType.GroupAddress)
                 _destinationAddress = new GroupAddress(dst);
             else
                 _destinationAddress = new IndividualAddress(dst);
@@ -198,6 +199,18 @@ namespace Tiveria.Knx.Cemi
         }
         #endregion
         #endregion
+
+        public string ToDescription(int padding)
+        {
+            var addinfos = "";
+            foreach (var info in AdditionalInfoFields)
+                addinfos += info.ToDescription(padding + 4) + Environment.NewLine;
+
+            return $"CemiLData: AdditionalInfoLength = {AdditionalInfoLength}, Source = {SourceAddress}, Destination = {DestinationAddress}, TPDU = ".AddPrefixSpaces(padding) + _payload.ToHexString() + Environment.NewLine+
+                addinfos+
+                ControlField1.ToDescription(padding + 4) + Environment.NewLine +
+                ControlField2.ToDescription(padding + 4);
+        }
 
         #region static methods
         /// <summary>

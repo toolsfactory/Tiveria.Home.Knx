@@ -24,6 +24,7 @@
 
 using System;
 using System.Collections.Generic;
+using Tiveria.Common.Extensions;
 using Tiveria.Common.IO;
 using Tiveria.Knx.Structures;
 using Tiveria.Knx.Exceptions;
@@ -174,6 +175,11 @@ namespace Tiveria.Knx.Cemi
             Array.Copy(_information, 0, buffer, offset + 2, _infoLength);
         }
         #endregion
+
+        public string ToDescription(int padding)
+        {
+            return ($"AdditionalInfo : Type = {InfoType}, Length = {InfoLength}, Data = " + Information.ToHexString()).AddPrefixSpaces(padding);
+        }
 
         #region Static parsing function
         public static AdditionalInformationField Parse(BinaryReaderEx br)

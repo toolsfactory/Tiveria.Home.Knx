@@ -85,7 +85,7 @@ namespace Tiveria.Knx.IP.ServiceTypes
                 throw BufferFieldException.TypeUnknown("ConnectionResponse", status);
             if(status == (byte) ErrorCodes.NO_ERROR)
             {
-                var endpoint = Hpai.FromBuffer(buffer, offset + 2);
+                var endpoint = Hpai.Parse(buffer, offset + 2);
                 var crd = CRD.FromBuffer(buffer, offset + 2 + endpoint.StructureLength);
                 return new ConnectionResponse(channelid, (ErrorCodes)status, endpoint, crd);
             } else
