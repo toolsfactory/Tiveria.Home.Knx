@@ -58,7 +58,7 @@ namespace Tiveria.Knx.IP.ServiceTypes
             Array.Copy(_frameRaw, 0, buffer, offset, _frameRaw.Length);
         }
 
-        public static UnknownService Parse(BinaryReaderEx br, ushort serviceTypeRaw, int length)
+        public static UnknownService Parse(EndianessAwareBinaryReader br, ushort serviceTypeRaw, int length)
         {
             return new UnknownService(serviceTypeRaw, br.ReadBytes(length));
         }
