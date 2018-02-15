@@ -72,7 +72,7 @@ namespace Tiveria.Knx.IP.Structures
         #endregion
 
         #region Constructors
-        public FrameHeader(EndianessAwareBinaryReader br)
+        public FrameHeader(IndividualEndianessBinaryReader br)
         {
             if (br == null)
                 throw new ArgumentNullException("buffer is null");
@@ -97,7 +97,7 @@ namespace Tiveria.Knx.IP.Structures
         #endregion
 
         #region private parsing and verification methods
-        private void ParseTotalSize(EndianessAwareBinaryReader br)
+        private void ParseTotalSize(IndividualEndianessBinaryReader br)
         {
             var hi = br.ReadByte();
             var lo = br.ReadByte();
@@ -106,14 +106,14 @@ namespace Tiveria.Knx.IP.Structures
                 throw BufferSizeException.TooSmall("Buffer<Header|TotalLength");
         }
 
-        private void ParseHeaderSizeAndVersion(EndianessAwareBinaryReader br)
+        private void ParseHeaderSizeAndVersion(IndividualEndianessBinaryReader br)
         {
             _size = br.ReadByte();
             _version = br.ReadByte();
             ValidateVersionAndSize(_version, _size);
         }
 
-        private void ParseServiceType(EndianessAwareBinaryReader br)
+        private void ParseServiceType(IndividualEndianessBinaryReader br)
         {
             var hi = br.ReadByte();
             var lo = br.ReadByte();
@@ -155,17 +155,17 @@ namespace Tiveria.Knx.IP.Structures
         #endregion
 
         #region Static Parsing
-        public static FrameHeader Parse(EndianessAwareBinaryReader br)
+        public static FrameHeader Parse(IndividualEndianessBinaryReader br)
         {
             return new FrameHeader(br);
         }
 
         public static FrameHeader Parse(byte[] buffer, int offset)
         {
-            return Parse(new EndianessAwareBinaryReader(buffer, offset));
+            return Parse(new IndividualEndianessBinaryReader(buffer, offset));
         }
 
-        public static bool TryParse(EndianessAwareBinaryReader br, out FrameHeader header)
+        public static bool TryParse(IndividualEndianessBinaryReader br, out FrameHeader header)
         {
             try
             {

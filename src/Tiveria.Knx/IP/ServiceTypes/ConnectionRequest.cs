@@ -22,9 +22,7 @@
     combination.
 */
 
-using System;
 using Tiveria.Common.Extensions;
-using Tiveria.Common.IO;
 using Tiveria.Knx.IP.Structures;
 using Tiveria.Knx.IP.Utils;
 
@@ -34,15 +32,15 @@ namespace Tiveria.Knx.IP.ServiceTypes
     /// <summary>
     /// Represents a KnxNetIP connection request message
     /// </summary>
-    public class ConnectionRequest : ServiceTypeBase, IServiceType
+    public class ConnectionRequest : ServiceTypeBase
     {
         private Hpai _controlHPAI;
         private Hpai _dataHPAI;
         private CRI _cri;
 
-        public Hpai ControlHPAI => _controlHPAI; 
-        public Hpai DataHPAI => _dataHPAI; 
-        public CRI Cri => _cri; 
+        public Hpai ControlHPAI => _controlHPAI;
+        public Hpai DataHPAI => _dataHPAI;
+        public CRI Cri => _cri;
 
         protected ConnectionRequest()
             : base(ServiceTypeIdentifier.CONNECT_REQUEST)
@@ -78,68 +76,6 @@ namespace Tiveria.Knx.IP.ServiceTypes
             var cri = CRI.FromBuffer(buffer, offset+= datEP.StructureLength);
             return new ConnectionRequest(cri, disEP, datEP);
         }
-    }
-
-    /// <summary>
-    /// <code>
-    /// +--------+--------+--------+--------+
-    /// | byte 1 | byte 2 | byte 3 | byte 4 |
-    /// +--------+--------+--------+--------+
-    /// | Channel|Reserved| HPAI            |
-    /// | ID     | 0x00   | Control Endpoint|
-    /// +--------+--------+-----------------+
-    /// </code>
-    /// </summary>
-    public class DisconnectRequest : ServiceTypeBase, IServiceType
-    {
-        #region private fields
-        private Hpai _controlEndpoint;
-        private byte _channelId;
-        #endregion
-
-        #region public properties
-        public Hpai ControlEndpoint => _controlEndpoint;
-        public byte ChannelId => _channelId;
-        #endregion
-
-        #region constructors
-        protected DisconnectRequest() : base(ServiceTypeIdentifier.DISCONNECT_REQ)
-        { }
-
-        public DisconnectRequest(byte channelId, Hpai controlEndpoint)
-            : this()
-        {
-            if (controlEndpoint == null)
-                throw new ArgumentNullException("Controlendpoint");
-            _controlEndpoint = controlEndpoint;
-            _channelId = channelId;
-        }
-
-        protected DisconnectRequest(BinaryReaderEx br) 
-            : this()
-        {
-            ParseChannelId(br);
-            SkipReserved(br);
-            ParseHpai(br);
-        }
-
-        private void ParseChannelId(BinaryReaderEx br)
-        {
-            _channelId = br.ReadByte();
-        }
-
-        private void ParseHpai(BinaryReaderEx br)
-        {
-            _controlEndpoint = Hpai.Parse(br);
-        }
-        #endregion
-
-        public override void WriteToByteArray(byte[] buffer, int offset = 0)
-        {
-            base.WriteToByteArray(buffer, offset);
-        }
-
-
     }
 
 }

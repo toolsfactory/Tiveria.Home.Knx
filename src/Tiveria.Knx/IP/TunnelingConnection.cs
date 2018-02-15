@@ -38,6 +38,9 @@ namespace Tiveria.Knx.IP
     {
         public static bool ResyncOnSkippedRcvSeq = true;
 
+        private readonly object _lock = new object();
+        private readonly AutoResetEvent _closeEvent = new AutoResetEvent(false);
+
         private readonly IPEndPoint _localEndpoint;
         private readonly IPEndPoint _remoteControlEndpoint;
         private readonly IPAddress _remoteAddress;
@@ -47,7 +50,7 @@ namespace Tiveria.Knx.IP
 
         public override ConnectionType ConnectionType { get => ConnectionType.TUNNEL_CONNECTION; }
 
-        public override IPAddress RemoteAddress { get => _remoteAddress;}
+        public override IPAddress RemoteAddress => _remoteAddress;
 
         private readonly bool _natAware = false;
         public bool NatAware { get => _natAware; }
@@ -89,6 +92,7 @@ namespace Tiveria.Knx.IP
             }
         }
 
+        #region closing connection
         public override Task CloseAsync()
         {
             return new Task(() =>
@@ -99,11 +103,43 @@ namespace Tiveria.Knx.IP
 
         public void Stop()
         {
+            SendDisconnectRequestAsync().Wait();
             if (_packetReceiver.Running)
             {
                 _packetReceiver.Stop();
             }
         }
+
+        private byte[] CreateDisconnectFrame()
+        {
+            var hpai = new Structures.Hpai(Utils.HPAIEndpointType.IPV4_UDP, _localEndpoint.Address, (ushort)_localEndpoint.Port);
+            var req = new DisconnectRequest(_channelId, hpai);
+            return new KnxNetIPFrame(req).ToBytes();
+        }
+
+
+        private Task SendDisconnectRequestAsync()
+        {
+            return new Task(() =>
+            {
+                lock (_lock)
+                {
+                    if (ConnectionState == ConnectionState.Closed)
+                        return;
+                    var frame = CreateDisconnectFrame();
+                    _udpClient.Send(frame, frame.Length);
+                    var remaining = 1000 * 10;
+                    while (remaining > 0)
+                    {
+                        if (_closeEvent.WaitOne(500))
+                            break;
+                        remaining -= 500;
+                    }
+                    ConnectionState = ConnectionState.Closed;
+                }
+            });
+        }
+        #endregion
 
         #region sending connection request
         public override async Task<bool> ConnectAsync()
@@ -113,7 +149,7 @@ namespace Tiveria.Knx.IP
             try
             {
                 _packetReceiver.Start();
-                var bytessent = await _udpClient.SendAsync(data, data.Length, _remoteControlEndpoint);
+                var bytessent = await _udpClient.SendAsync(data, data.Length, _remoteControlEndpoint).ConfigureAwait(false);
                 if (bytessent == 0)
                 {
                     _logger.Error("ConnectAsync: Zero bytes sent");
@@ -136,7 +172,7 @@ namespace Tiveria.Knx.IP
             var cri = new Structures.CRITunnel(Utils.TunnelingLayer.TUNNEL_LINKLAYER);
             var hpai = new Structures.Hpai(Utils.HPAIEndpointType.IPV4_UDP, _localEndpoint.Address, (ushort)_localEndpoint.Port);
             var req = new ServiceTypes.ConnectionRequest(cri, hpai, hpai);
-            return new KnxNetIPFrame(Utils.ServiceTypeIdentifier.CONNECT_REQUEST, req).ToBytes();
+            return new KnxNetIPFrame(req).ToBytes();
         }
         #endregion
 
@@ -163,6 +199,7 @@ namespace Tiveria.Knx.IP
                     var ep = connectionResponse.EndpointHPAI;
                     VerifyRemoteDataEndpointforNAT(ep, remoteEndpoint);
                     _channelId = connectionResponse.ChannelId;
+                    ConnectionState = ConnectionState.Open;
                     return true;
                 }
                 else
@@ -194,6 +231,17 @@ namespace Tiveria.Knx.IP
         }
         #endregion
 
+        #region handling disconnect response
+        private void HandleDisconnectResponse(KnxNetIPFrame frame)
+        {
+            var response = (DisconnectResponse)frame.ServiceType;
+            if (response.Status != ErrorCodes.NO_ERROR)
+                _logger.Warn($"Connection closed with status code 0x{response.Status:x2} - " + response.Status.ToDescription());
+            _closeEvent.Set();
+            ConnectionState = ConnectionState.Closed;
+        }
+        #endregion
+
         #region handling tunneling requests
         private void HandleTunnelingRequest(KnxNetIPFrame frame)
         {
@@ -203,7 +251,7 @@ namespace Tiveria.Knx.IP
                 return;
 
             var ack = new TunnelingAcknowledgement(_channelId, seq, ErrorCodes.NO_ERROR);
-            var data = (new KnxNetIPFrame(ServiceTypeIdentifier.TUNNELING_ACK, ack)).ToBytes();
+            var data = (new KnxNetIPFrame(ack)).ToBytes();
             _udpClient.Send(data, data.Length, _remoteDataEndpoint);
         }
 
@@ -235,15 +283,20 @@ namespace Tiveria.Knx.IP
 
         private void KnxFrameReceivedDelegate(DateTime timestamp, IPEndPoint source, KnxNetIPFrame frame)
         {
-            if (frame.ServiceType.ServiceTypeIdentifier == ServiceTypeIdentifier.CONNECT_RESPONSE)
-                HandleConnectResponse(frame, source);
-            if (frame.ServiceType.ServiceTypeIdentifier == ServiceTypeIdentifier.TUNNELING_REQ)
-                HandleTunnelingRequest(frame);
-            
+            switch (frame.ServiceType.ServiceTypeIdentifier)
+            {
+                case ServiceTypeIdentifier.CONNECT_RESPONSE:
+                    HandleConnectResponse(frame, source);
+                    break;
+                case ServiceTypeIdentifier.DISCONNECT_RES:
+                    HandleDisconnectResponse(frame);
+                    break;
+                case ServiceTypeIdentifier.TUNNELING_REQ:
+                    HandleTunnelingRequest(frame);
+                    break;
+            }
             OnFrameReceived(timestamp, frame, true);
         }
-
-
         #endregion
 
         protected override string GetConnectionName()

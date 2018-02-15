@@ -30,7 +30,7 @@ namespace Tiveria.Knx.Utils
     {
         public static ILogger GetLogger(string name)
         {
-            return new DummyLogger();
+            return new ConsoleLogger();
         }
     }
 }

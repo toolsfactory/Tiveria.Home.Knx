@@ -45,12 +45,12 @@ namespace Tiveria.Knx.IP.ServiceTypes
             _serviceTypeIdentifier = serviceTypeIdentifier;
         }
 
-        protected void SkipReserved(BinaryReaderEx br)
+        protected void SkipReserved(IndividualEndianessBinaryReader br)
         {
             br.ReadByte();
         }
 
-        protected void SkipReserved(BinaryReaderEx br, byte count)
+        protected void SkipReserved(IndividualEndianessBinaryReader br, byte count)
         {
             br.ReadBytes(count);
         }

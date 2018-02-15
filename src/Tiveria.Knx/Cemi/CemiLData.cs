@@ -79,8 +79,8 @@ namespace Tiveria.Knx.Cemi
         /// <summary>
         /// Creates a new cEMI L_Data Frame
         /// </summary>
-        /// <param name="br">BinaryReaderEx with the underlying buffer the frame is parsed from</param>
-        protected CemiLData(EndianessAwareBinaryReader br)
+        /// <param name="br">IndividualEndianessBinaryReader with the underlying buffer the frame is parsed from</param>
+        protected CemiLData(IndividualEndianessBinaryReader br)
             : base(br)
         { }
 
@@ -125,7 +125,7 @@ namespace Tiveria.Knx.Cemi
         }
 
 
-        protected override bool VerifyBufferSize(EndianessAwareBinaryReader br)
+        protected override bool VerifyBufferSize(IndividualEndianessBinaryReader br)
         {
             return br.Size - br.Position >= MESSAGEMINLENGTH;
         }
@@ -138,7 +138,7 @@ namespace Tiveria.Knx.Cemi
         }
 
         #region parsing the buffer
-        protected override void ParseServiceInformation(EndianessAwareBinaryReader br)
+        protected override void ParseServiceInformation(IndividualEndianessBinaryReader br)
         {
             ParseControlField1(br);
             ParseControlField2(br);
@@ -147,25 +147,25 @@ namespace Tiveria.Knx.Cemi
             ParseAPDU(br);
         }
 
-        protected void ParseControlField1(EndianessAwareBinaryReader br)
+        protected void ParseControlField1(IndividualEndianessBinaryReader br)
         {
             var ctrl1 = br.ReadByte();
             _controlField1 = new ControlField1(_messageCode, ctrl1);
         }
 
-        protected void ParseControlField2(EndianessAwareBinaryReader br)
+        protected void ParseControlField2(IndividualEndianessBinaryReader br)
         {
             var ctrl = br.ReadByte();
             _controlField2 = new ControlField2(ctrl);
         }
 
-        protected void ParseSourceAddress(EndianessAwareBinaryReader br)
+        protected void ParseSourceAddress(IndividualEndianessBinaryReader br)
         {
             var src = br.ReadU2be();
             _sourceAddress = new IndividualAddress(src);
         }
 
-        protected void ParseDestinationAddress(EndianessAwareBinaryReader br)
+        protected void ParseDestinationAddress(IndividualEndianessBinaryReader br)
         {
             var dst = br.ReadU2be();
             if (_controlField2.DestinationAddressType == KnxAddressType.GroupAddress)
@@ -174,7 +174,7 @@ namespace Tiveria.Knx.Cemi
                 _destinationAddress = new IndividualAddress(dst);
         }
 
-        protected void ParseAPDU(EndianessAwareBinaryReader br)
+        protected void ParseAPDU(IndividualEndianessBinaryReader br)
         {
             // read length information and increase lenght by one due to TPCI/APCI encoding
             var len = br.ReadByte() + 1;
@@ -222,10 +222,10 @@ namespace Tiveria.Knx.Cemi
         /// <returns></returns>
         public static CemiLData Parse(byte[] buffer, int offset, int length)
         {
-            return new CemiLData(new EndianessAwareBinaryReader(buffer, offset, length));
+            return new CemiLData(new IndividualEndianessBinaryReader(buffer, offset, length));
         }
 
-        public static CemiLData Parse(EndianessAwareBinaryReader br)
+        public static CemiLData Parse(IndividualEndianessBinaryReader br)
         {
             return new CemiLData(br);
         }
@@ -235,7 +235,7 @@ namespace Tiveria.Knx.Cemi
             bool result = false;
             try
             {
-                cemildata = new CemiLData(new EndianessAwareBinaryReader(buffer, offset, length));
+                cemildata = new CemiLData(new IndividualEndianessBinaryReader(buffer, offset, length));
                 result = true;
             }
             catch
@@ -246,7 +246,7 @@ namespace Tiveria.Knx.Cemi
             return result;
         }
 
-        public static bool TryParse(out CemiLData cemildata, EndianessAwareBinaryReader br)
+        public static bool TryParse(out CemiLData cemildata, IndividualEndianessBinaryReader br)
         {
             bool result = false;
             try

@@ -83,7 +83,7 @@ namespace Tiveria.Knx.IP.Structures
             _structureLength = HPAI_SIZE;
         }
 
-        protected Hpai(BinaryReaderEx br)
+        protected Hpai(IndividualEndianessBinaryReader br)
         {
             if (br.Available < Hpai.HPAI_SIZE)
                 throw BufferSizeException.TooSmall("HPAI");
@@ -95,14 +95,14 @@ namespace Tiveria.Knx.IP.Structures
         #endregion
 
         #region parsing
-        private void ParseStructureSize(BinaryReaderEx br)
+        private void ParseStructureSize(IndividualEndianessBinaryReader br)
         {
             _structureLength = br.ReadByte();
             if (_structureLength != Hpai.HPAI_SIZE)
                 throw BufferFieldException.WrongValue("HPAI.Size", Hpai.HPAI_SIZE, _structureLength);
         }
 
-        private void ParseEndpointType(BinaryReaderEx br)
+        private void ParseEndpointType(IndividualEndianessBinaryReader br)
         {
             var endpointType = br.ReadByte();
             if (!Enum.IsDefined(typeof(HPAIEndpointType), endpointType))
@@ -110,13 +110,13 @@ namespace Tiveria.Knx.IP.Structures
             _endpointType = (HPAIEndpointType)endpointType;
         }
 
-        private void ParseIPAddress(BinaryReaderEx br)
+        private void ParseIPAddress(IndividualEndianessBinaryReader br)
         {
             var ipbytes = br.ReadBytes(4);
             _ip = new IPAddress(ipbytes);
         }
 
-        private void ParsePort(BinaryReaderEx br)
+        private void ParsePort(IndividualEndianessBinaryReader br)
         {
             _port = br.ReadU2be();
         }
@@ -137,14 +137,14 @@ namespace Tiveria.Knx.IP.Structures
             return $"";
         }
 
-        public static Hpai Parse(BinaryReaderEx br)
+        public static Hpai Parse(IndividualEndianessBinaryReader br)
         {
             return new Hpai(br);
         }
 
         public static Hpai Parse(byte[] buffer, int offset)
         {
-            return new Hpai(new BinaryReaderEx(buffer, offset));
+            return new Hpai(new IndividualEndianessBinaryReader(buffer, offset));
         }
     }
 }

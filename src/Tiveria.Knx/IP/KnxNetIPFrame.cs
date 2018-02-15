@@ -74,13 +74,13 @@ namespace Tiveria.Knx.IP
             _serviceType = GetServiceTypeFromBody();
         }
 
-        public KnxNetIPFrame(ServiceTypeIdentifier servicetypeidentifier, IServiceType serviceType)
+        public KnxNetIPFrame(IServiceType serviceType)
         {
             if (serviceType == null)
                 throw new ArgumentNullException("serviceType is null");
 
             _body = serviceType.ToBytes();
-            _header = new FrameHeader(servicetypeidentifier, (ushort)_body.Length);
+            _header = new FrameHeader(serviceType.ServiceTypeIdentifier, (ushort)_body.Length);
             _serviceType = serviceType;
         }
         #endregion
@@ -106,7 +106,7 @@ namespace Tiveria.Knx.IP
                 case ServiceTypeIdentifier.TUNNELING_REQ:
                     return TunnelingRequest.Parse(_body, 0, _body.Length);
                 default:
-                    return UnknownService.Parse(new Common.IO.EndianessAwareBinaryReader(_body), Header.ServiceTypeRaw, _body.Length);
+                    return UnknownService.Parse(new Common.IO.IndividualEndianessBinaryReader(_body), Header.ServiceTypeRaw, _body.Length);
             }
         }
 

@@ -6,6 +6,7 @@ using Tiveria.Common.Extensions;
 using Tiveria.Knx.IP.Utils;
 using Tiveria.Knx.IP.ServiceTypes;
 using System.Net.Sockets;
+using Tiveria.Common.Logging;
 
 namespace ConsoleApp1
 {
@@ -13,17 +14,25 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
+            ConsoleLogger.UseErrorOutputStream = false;
+
             var remoteip = IPAddress.Parse("192.168.2.101"); // 230
             ushort port = 3671;
 
             var con = new Tiveria.Knx.IP.TunnelingConnection(remoteip, port, GetLocalIPAddress(), 3671);
             con.DataReceived += Con_DataReceived;
             con.FrameReceived += Con_FrameReceived;
+            con.StateChanged += Con_StateChanged;
             Console.WriteLine("Hello World!");
 
             con.ConnectAsync().Wait();
             Console.ReadLine();
             con.Stop();
+        }
+
+        private static void Con_StateChanged(object sender, StateChangedEventArgs e)
+        {
+            Console.WriteLine(" == Connection state changed == " + e.ConnectionState.ToString());
         }
 
         private static void Con_FrameReceived(object sender, FrameReceivedEventArgs e)

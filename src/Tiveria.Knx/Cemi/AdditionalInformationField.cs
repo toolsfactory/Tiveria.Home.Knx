@@ -112,7 +112,7 @@ namespace Tiveria.Knx.Cemi
         /// Create an <c>AdditionalInformationField</c> class by parsing raw data
         /// </summary>
         /// <param name="br">Reader with the associated byte array</param>
-        protected AdditionalInformationField(EndianessAwareBinaryReader br)
+        protected AdditionalInformationField(IndividualEndianessBinaryReader br)
         {
             ParseType(br);
             ParseLength(br);
@@ -123,7 +123,7 @@ namespace Tiveria.Knx.Cemi
             _structureLength = 2 + _infoLength;
         }
 
-        private void ParseType(EndianessAwareBinaryReader br)
+        private void ParseType(IndividualEndianessBinaryReader br)
         {
             var infotype = br.ReadByte();
             if (Enum.IsDefined(typeof(AdditionalInfoType), infotype))
@@ -134,14 +134,14 @@ namespace Tiveria.Knx.Cemi
                 throw BufferFieldException.TypeUnknown("AdditionalInfoType", infotype);
         }
 
-        private void ParseLength(EndianessAwareBinaryReader br)
+        private void ParseLength(IndividualEndianessBinaryReader br)
         {
             _infoLength = br.ReadByte();
             if (br.Available <_infoLength)
                 throw BufferSizeException.TooSmall("AdditionalFieldInfo");
         }
 
-        private void ParseInfo(EndianessAwareBinaryReader br)
+        private void ParseInfo(IndividualEndianessBinaryReader br)
         {
             if (_infoLength > 0)
                 _information = br.ReadBytes(_infoLength);
@@ -182,7 +182,7 @@ namespace Tiveria.Knx.Cemi
         }
 
         #region Static parsing function
-        public static AdditionalInformationField Parse(EndianessAwareBinaryReader br)
+        public static AdditionalInformationField Parse(IndividualEndianessBinaryReader br)
         {
             if (br.Available < 2)
                 throw BufferSizeException.TooSmall("AdditionalInformationField");

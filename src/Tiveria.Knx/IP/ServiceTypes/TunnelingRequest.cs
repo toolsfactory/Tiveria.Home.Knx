@@ -43,7 +43,7 @@ namespace Tiveria.Knx.IP.ServiceTypes
             : base(ServiceTypeIdentifier.TUNNELING_REQ)
         { }
 
-        protected TunnelingRequest(EndianessAwareBinaryReader br)
+        protected TunnelingRequest(IndividualEndianessBinaryReader br)
             : this()
         {
             _connectionHeader = ConnectionHeader.Parse(br);
@@ -60,7 +60,7 @@ namespace Tiveria.Knx.IP.ServiceTypes
         /// <returns></returns>
         public static TunnelingRequest Parse(byte[] buffer, int offset, int length)
         {
-            return new TunnelingRequest(new EndianessAwareBinaryReader(buffer, offset, length));
+            return new TunnelingRequest(new IndividualEndianessBinaryReader(buffer, offset, length));
         }
 
         public static bool TryParse(out TunnelingRequest tunnelRequest, byte[] buffer, int offset, int length)
@@ -68,7 +68,7 @@ namespace Tiveria.Knx.IP.ServiceTypes
             bool result = false;
             try
             {
-                tunnelRequest = new TunnelingRequest(new EndianessAwareBinaryReader(buffer, offset, length));
+                tunnelRequest = new TunnelingRequest(new IndividualEndianessBinaryReader(buffer, offset, length));
                 result = true;
             }
             catch

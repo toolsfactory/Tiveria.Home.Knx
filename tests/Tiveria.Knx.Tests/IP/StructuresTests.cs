@@ -22,7 +22,7 @@ namespace Tiveria.Knx.Tests.IP
         public void HPAI_FromBytes_Ok()
         {
             var buffer = "0801c0a80278e1f6".ToByteArray(); // Type: IPV4 UDP, IP: 192.168.2.120, Port: 57846
-            var hpai = Hpai.FromBuffer(buffer, 0);
+            var hpai = Hpai.Parse(buffer, 0);
             Assert.AreEqual(hpai.Ip.ToString(), "192.168.2.120");
             Assert.IsTrue(hpai.Port == 57846);
             Assert.IsTrue(hpai.EndpointType == HPAIEndpointType.IPV4_UDP);
@@ -32,21 +32,21 @@ namespace Tiveria.Knx.Tests.IP
         public void HPAI_FromBytes_WrongEndpointTypeByte()
         {
             var buffer = "0822c0a80278e1f6".ToByteArray(); // EnpointType byte set to 0x22
-            Assert.Catch<BufferFieldException>(() => Hpai.FromBuffer(buffer, 0));
+            Assert.Catch<BufferFieldException>(() => Hpai.Parse(buffer, 0));
         }
 
         [Test]
         public void HPAI_FromBytes_WrongSizeByte()
         {
             var buffer = "0701c0a80278e1f6".ToByteArray(); // Size set to 0x07 (first byte)
-            Assert.Catch<BufferFieldException>(() => Hpai.FromBuffer(buffer, 0));
+            Assert.Catch<BufferFieldException>(() => Hpai.Parse(buffer, 0));
         }
 
         [Test]
         public void HPAI_FromBytes_WrongBufferSize()
         {
             var buffer = "0801c0a80278e1".ToByteArray(); // Buffer one byte too short
-            Assert.Catch<BufferException>(() => Hpai.FromBuffer(buffer, 0));
+            Assert.Catch<BufferException>(() => Hpai.Parse(buffer, 0));
         }
 
         [Test]
