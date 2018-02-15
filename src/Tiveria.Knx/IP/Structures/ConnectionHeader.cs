@@ -61,7 +61,7 @@ namespace Tiveria.Knx.IP.Structures
         #endregion
 
         #region Constructors
-        public ConnectionHeader(BinaryReaderEx br)
+        public ConnectionHeader(EndianessAwareBinaryReader br)
         {
             if (br == null)
                 throw new ArgumentNullException("buffer is null");
@@ -81,19 +81,19 @@ namespace Tiveria.Knx.IP.Structures
         #endregion
 
         #region private parsing and verification methods
-        private void ParseHeaderSize(BinaryReaderEx br)
+        private void ParseHeaderSize(EndianessAwareBinaryReader br)
         {
             var len = br.ReadByte();
             ValidateSize(len);
             _structureLength = len;
         }
 
-        private void ParseChannelId(BinaryReaderEx br)
+        private void ParseChannelId(EndianessAwareBinaryReader br)
         {
             _channelId = br.ReadByte();
         }
 
-        private void ParseSequenceCounter(BinaryReaderEx br)
+        private void ParseSequenceCounter(EndianessAwareBinaryReader br)
         {
             _sequenceCounter = br.ReadByte();
         }        
@@ -122,17 +122,17 @@ namespace Tiveria.Knx.IP.Structures
         #endregion
 
         #region Static Parsing
-        public static ConnectionHeader Parse(BinaryReaderEx br)
+        public static ConnectionHeader Parse(EndianessAwareBinaryReader br)
         {
             return new ConnectionHeader(br);
         }
 
         public static ConnectionHeader Parse(byte[] buffer, int offset)
         {
-            return Parse(new BinaryReaderEx(buffer, offset));
+            return Parse(new EndianessAwareBinaryReader(buffer, offset));
         }
 
-        public static bool TryParse(BinaryReaderEx br, out ConnectionHeader header)
+        public static bool TryParse(EndianessAwareBinaryReader br, out ConnectionHeader header)
         {
             try
             {

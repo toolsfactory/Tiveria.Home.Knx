@@ -106,7 +106,7 @@ namespace Tiveria.Knx.IP
                 case ServiceTypeIdentifier.TUNNELING_REQ:
                     return TunnelingRequest.Parse(_body, 0, _body.Length);
                 default:
-                    return UnknownService.Parse(new Common.IO.BinaryReaderEx(_body), Header.ServiceTypeRaw, _body.Length);
+                    return UnknownService.Parse(new Common.IO.EndianessAwareBinaryReader(_body), Header.ServiceTypeRaw, _body.Length);
             }
         }
 

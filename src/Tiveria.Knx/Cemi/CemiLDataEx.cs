@@ -35,7 +35,7 @@ namespace Tiveria.Knx.Cemi
         /// Creates a new cEMI L_Data Frame
         /// </summary>
         /// <param name="br">BinaryReaderEx with the underlying buffer the frame is parsed from</param>
-        protected CemiLDataEx(BinaryReaderEx br)
+        protected CemiLDataEx(EndianessAwareBinaryReader br)
             : base(br)
         { }
 
@@ -67,15 +67,15 @@ namespace Tiveria.Knx.Cemi
         /// <returns></returns>
         public new static CemiLDataEx Parse(byte[] buffer, int offset, int length)
         {
-            return new CemiLDataEx(new BinaryReaderEx(buffer, offset, length));
+            return new CemiLDataEx(new EndianessAwareBinaryReader(buffer, offset, length));
         }
 
-        public new static CemiLDataEx Parse(BinaryReaderEx br)
+        public new static CemiLDataEx Parse(EndianessAwareBinaryReader br)
         {
             return new CemiLDataEx(br);
         }
         
-        public static bool TryParse(out CemiLDataEx cemildata, BinaryReaderEx br)
+        public static bool TryParse(out CemiLDataEx cemildata, EndianessAwareBinaryReader br)
         {
             bool result = false;
             try

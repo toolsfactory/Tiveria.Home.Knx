@@ -112,18 +112,18 @@ namespace Tiveria.Knx.Cemi
         /// Create an <c>AdditionalInformationField</c> class by parsing raw data
         /// </summary>
         /// <param name="br">Reader with the associated byte array</param>
-        protected AdditionalInformationField(BinaryReaderEx br)
+        protected AdditionalInformationField(EndianessAwareBinaryReader br)
         {
             ParseType(br);
             ParseLength(br);
-            if (!br.AreAvailable(_infoLength))
+            if (br.Available < _infoLength)
                 throw BufferSizeException.TooSmall("AdditionalInformationField");
             ParseInfo(br);
             VerifyLength(_infoType, _infoLength);
             _structureLength = 2 + _infoLength;
         }
 
-        private void ParseType(BinaryReaderEx br)
+        private void ParseType(EndianessAwareBinaryReader br)
         {
             var infotype = br.ReadByte();
             if (Enum.IsDefined(typeof(AdditionalInfoType), infotype))
@@ -134,14 +134,14 @@ namespace Tiveria.Knx.Cemi
                 throw BufferFieldException.TypeUnknown("AdditionalInfoType", infotype);
         }
 
-        private void ParseLength(BinaryReaderEx br)
+        private void ParseLength(EndianessAwareBinaryReader br)
         {
             _infoLength = br.ReadByte();
-            if (!br.AreAvailable(_infoLength))
+            if (br.Available <_infoLength)
                 throw BufferSizeException.TooSmall("AdditionalFieldInfo");
         }
 
-        private void ParseInfo(BinaryReaderEx br)
+        private void ParseInfo(EndianessAwareBinaryReader br)
         {
             if (_infoLength > 0)
                 _information = br.ReadBytes(_infoLength);
@@ -182,9 +182,9 @@ namespace Tiveria.Knx.Cemi
         }
 
         #region Static parsing function
-        public static AdditionalInformationField Parse(BinaryReaderEx br)
+        public static AdditionalInformationField Parse(EndianessAwareBinaryReader br)
         {
-            if (!br.AreAvailable(2))
+            if (br.Available < 2)
                 throw BufferSizeException.TooSmall("AdditionalInformationField");
             return new AdditionalInformationField(br);
         }

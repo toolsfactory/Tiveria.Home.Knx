@@ -79,7 +79,7 @@ namespace Tiveria.Knx.Cemi
         /// Creates a new cEMI Frame
         /// </summary>
         /// <param name="br">BinaryReaderEx with the underlying buffer the frame is parsed from</param>
-        protected CemiBase(BinaryReaderEx br)
+        protected CemiBase(EndianessAwareBinaryReader br)
         {
             if (!VerifyBufferSize(br))
                 throw BufferSizeException.TooSmall("buffer too short for cEMI frame");
@@ -88,7 +88,7 @@ namespace Tiveria.Knx.Cemi
         #endregion
         
         #region verifying elements
-        protected abstract bool VerifyBufferSize(BinaryReaderEx br);
+        protected abstract bool VerifyBufferSize(EndianessAwareBinaryReader br);
 
         protected abstract void VerifyMessageCode(CemiMessageCode messageCode);
 
@@ -96,7 +96,7 @@ namespace Tiveria.Knx.Cemi
         #endregion
 
         #region parsing the buffer
-        protected virtual void ParseBuffer(BinaryReaderEx br)
+        protected virtual void ParseBuffer(EndianessAwareBinaryReader br)
         {
             ParseMessageCode(br);
             ParseAdditinalInfoLength(br);
@@ -104,7 +104,7 @@ namespace Tiveria.Knx.Cemi
             ParseServiceInformation(br);
         }
 
-        protected void ParseMessageCode(BinaryReaderEx br)
+        protected void ParseMessageCode(EndianessAwareBinaryReader br)
         {
             var messageCode = br.ReadByte();
             if (Enum.IsDefined(typeof(CemiMessageCode), messageCode))
@@ -118,13 +118,13 @@ namespace Tiveria.Knx.Cemi
             }
         }
 
-        protected void ParseAdditinalInfoLength(BinaryReaderEx br)
+        protected void ParseAdditinalInfoLength(EndianessAwareBinaryReader br)
         {
             _additionalInfoLength = br.ReadByte();
             VerifyAdditionalLengthInfo(_additionalInfoLength);
         }
 
-        protected void ParseAdditionalInfo(BinaryReaderEx br)
+        protected void ParseAdditionalInfo(EndianessAwareBinaryReader br)
         {
             if (_additionalInfoLength == 0)
                 return;
@@ -139,7 +139,7 @@ namespace Tiveria.Knx.Cemi
             _additionalInfoFields = items.ToArray();
         }
 
-        protected abstract void ParseServiceInformation(BinaryReaderEx br);
+        protected abstract void ParseServiceInformation(EndianessAwareBinaryReader br);
         #endregion
 
         public override void WriteToByteArray(byte[] buffer, int offset = 0)
