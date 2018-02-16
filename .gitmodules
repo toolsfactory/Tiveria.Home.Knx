@@ -1,0 +1,3 @@
+[submodule "src/Tiveria.Common.Standard"]
+	path = src/Tiveria.Common.Standard
+	url = https://github.com/toolsfactory/Tiveria.Common.Standard
