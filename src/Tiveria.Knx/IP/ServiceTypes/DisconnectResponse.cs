@@ -24,8 +24,8 @@
 
 using System;
 using Tiveria.Common.IO;
-using Tiveria.Knx.IP.Structures;
 using Tiveria.Knx.IP.Utils;
+using Tiveria.Knx.Exceptions;
 
 namespace Tiveria.Knx.IP.ServiceTypes
 {
@@ -39,40 +39,36 @@ namespace Tiveria.Knx.IP.ServiceTypes
     /// +--------+--------+-----------------+
     /// </code>
     /// </summary>
-    public class DisconnectRequest : ServiceTypeBase
+    public class DisconnectResponse : ServiceTypeBase, IServiceType
     {
         #region private fields
-        private Hpai _controlEndpoint;
+        private ErrorCodes _status;
         private byte _channelId;
         #endregion
 
         #region public properties
-        public Hpai ControlEndpoint => _controlEndpoint;
+        public ErrorCodes Status => _status;
         public byte ChannelId => _channelId;
         #endregion
 
         #region constructors
-        protected DisconnectRequest() :
-            base (ServiceTypeIdentifier.DISCONNECT_REQ)
-        { }
-
-        public DisconnectRequest(byte channelId, Hpai controlEndpoint)
-            : this()
+        protected DisconnectResponse() : base(ServiceTypeIdentifier.DISCONNECT_RES)
         {
-            if (controlEndpoint == null)
-                throw new ArgumentNullException("Controlendpoint");
-            _controlEndpoint = controlEndpoint;
-            _channelId = channelId;
-            _structureLength = 2 + _controlEndpoint.StructureLength;
+            _structureLength = 2;
         }
 
-        protected DisconnectRequest(IndividualEndianessBinaryReader br)
+        public DisconnectResponse(byte channelId, ErrorCodes status)
+            : this()
+        {
+            _status = status;
+            _channelId = channelId;
+        }
+
+        protected DisconnectResponse(IndividualEndianessBinaryReader br)
             : this()
         {
             ParseChannelId(br);
-            SkipReserved(br);
-            ParseHpai(br);
-            _structureLength = 2 + _controlEndpoint.StructureLength;
+            ParseStatus(br);
         }
         #endregion
 
@@ -82,9 +78,12 @@ namespace Tiveria.Knx.IP.ServiceTypes
             _channelId = br.ReadByte();
         }
 
-        private void ParseHpai(IndividualEndianessBinaryReader br)
+        private void ParseStatus(IndividualEndianessBinaryReader br)
         {
-            _controlEndpoint = Hpai.Parse(br);
+            var status = br.ReadByte();
+            if (!Enum.IsDefined(typeof(ErrorCodes), status))
+                throw BufferFieldException.TypeUnknown("Status", status);
+            _status = (ErrorCodes)status;
         }
         #endregion
 
@@ -92,8 +91,12 @@ namespace Tiveria.Knx.IP.ServiceTypes
         {
             base.WriteToByteArray(buffer, offset);
             buffer[offset] = ChannelId;
-            buffer[offset + 1] = 0x00; //Reserved;
-            _controlEndpoint.WriteToByteArray(buffer, offset + 2);
+            buffer[offset + 1] = (byte)_status;
+        }
+
+        public static DisconnectResponse Parse(byte[] buffer, int offset)
+        {
+            return new DisconnectResponse(new IndividualEndianessBinaryReader(buffer, offset, buffer.Length-offset));
         }
     }
 }

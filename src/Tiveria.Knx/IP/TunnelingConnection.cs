@@ -120,14 +120,14 @@ namespace Tiveria.Knx.IP
 
         private Task SendDisconnectRequestAsync()
         {
-            return new Task(() =>
+            return Task.Run(() =>
             {
                 lock (_lock)
                 {
                     if (ConnectionState == ConnectionState.Closed)
                         return;
                     var frame = CreateDisconnectFrame();
-                    _udpClient.Send(frame, frame.Length);
+                    _udpClient.Send(frame, frame.Length, _remoteControlEndpoint);
                     var remaining = 1000 * 10;
                     while (remaining > 0)
                     {

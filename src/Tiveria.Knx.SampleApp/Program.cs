@@ -28,6 +28,7 @@ namespace ConsoleApp1
             con.ConnectAsync().Wait();
             Console.ReadLine();
             con.Stop();
+            Console.ReadLine();
         }
 
         private static void Con_StateChanged(object sender, StateChangedEventArgs e)
