@@ -34,27 +34,33 @@ using Tiveria.Knx.IP.ServiceTypes;
 
 namespace Tiveria.Knx.IP
 {
-    public class TunnelingConnection : IPConnectionBase, IIPConnection
+    /// <summary>
+    /// CLass allowing to connect to a KNX IP Router or Interface using Tunneling.
+    /// </summary>
+    public class TunnelingConnection : IPConnectionBase
     {
         public static bool ResyncOnSkippedRcvSeq = true;
 
+        #region private fields
         private readonly object _lock = new object();
         private readonly AutoResetEvent _closeEvent = new AutoResetEvent(false);
-
         private readonly IPEndPoint _localEndpoint;
         private readonly IPEndPoint _remoteControlEndpoint;
         private readonly IPAddress _remoteAddress;
         private readonly UdpClient _udpClient;
+        private readonly bool _natAware = false;
         private IPEndPoint _remoteDataEndpoint;
         private UdpPacketReceiver _packetReceiver;
+        #endregion
 
-        public override ConnectionType ConnectionType { get => ConnectionType.TUNNEL_CONNECTION; }
-
+        #region public properties
+        public override ConnectionType ConnectionType => ConnectionType.TUNNEL_CONNECTION;
         public override IPAddress RemoteAddress => _remoteAddress;
+        public bool NatAware => _natAware;
+        #endregion
 
-        private readonly bool _natAware = false;
-        public bool NatAware { get => _natAware; }
 
+        #region constructors
         public TunnelingConnection(IPAddress remoteAddress, ushort remotePort, IPAddress localAddress, ushort localPort, bool natAware = false)
         {
             if (remoteAddress == null)
@@ -69,6 +75,7 @@ namespace Tiveria.Knx.IP
             _udpClient = new UdpClient(_localEndpoint);
             _packetReceiver = new UdpPacketReceiver(_udpClient, PacketReceivedDelegate, KnxFrameReceivedDelegate);
         }
+        #endregion
 
         public override async Task<bool> SendFrameAsync(KnxNetIPFrame frame)
         {
@@ -93,17 +100,14 @@ namespace Tiveria.Knx.IP
         }
 
         #region closing connection
-        public override Task CloseAsync()
+        public override async Task CloseAsync()
         {
-            return new Task(() =>
-            {
-                Stop();
-            });
+            await SendDisconnectRequestAsync().ConfigureAwait(false);
+            await Task.Run(() => Stop()).ConfigureAwait(false);
         }
 
-        public void Stop()
+        private void Stop()
         {
-            SendDisconnectRequestAsync().Wait();
             if (_packetReceiver.Running)
             {
                 _packetReceiver.Stop();

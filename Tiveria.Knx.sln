@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiveria.Knx", "src\Tiveria.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiveria.Knx.Tests", "tests\Tiveria.Knx.Tests\Tiveria.Knx.Tests.csproj", "{EAC40ED3-1E4C-4ADE-BAE3-07543571B15C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiveria.Common", "..\Tiveria.Common.Standard\Tiveria.Common.csproj", "{F3B74D99-37CF-4B6F-9C7B-6822F45D304D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiveria.Common", "src\Tiveria.Common.Standard\Tiveria.Common.csproj", "{E2010D24-B3F5-4400-A3E3-CFFE3C2F9377}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{EAC40ED3-1E4C-4ADE-BAE3-07543571B15C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EAC40ED3-1E4C-4ADE-BAE3-07543571B15C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EAC40ED3-1E4C-4ADE-BAE3-07543571B15C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F3B74D99-37CF-4B6F-9C7B-6822F45D304D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F3B74D99-37CF-4B6F-9C7B-6822F45D304D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F3B74D99-37CF-4B6F-9C7B-6822F45D304D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F3B74D99-37CF-4B6F-9C7B-6822F45D304D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2010D24-B3F5-4400-A3E3-CFFE3C2F9377}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2010D24-B3F5-4400-A3E3-CFFE3C2F9377}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2010D24-B3F5-4400-A3E3-CFFE3C2F9377}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2010D24-B3F5-4400-A3E3-CFFE3C2F9377}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

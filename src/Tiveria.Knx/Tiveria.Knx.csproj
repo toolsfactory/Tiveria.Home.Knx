@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Tiveria.Common.Standard\Tiveria.Common.csproj" />
+    <ProjectReference Include="..\Tiveria.Common.Standard\Tiveria.Common.csproj" />
   </ItemGroup>
 
 </Project>

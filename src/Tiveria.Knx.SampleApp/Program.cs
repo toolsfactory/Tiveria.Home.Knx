@@ -27,7 +27,7 @@ namespace ConsoleApp1
 
             con.ConnectAsync().Wait();
             Console.ReadLine();
-            con.Stop();
+            con.CloseAsync().Wait();
             Console.ReadLine();
         }
 
