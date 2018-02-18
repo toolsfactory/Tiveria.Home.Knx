@@ -212,5 +212,4 @@ namespace Tiveria.Knx.IP.Structures
         }
         #endregion
     }
-
 }

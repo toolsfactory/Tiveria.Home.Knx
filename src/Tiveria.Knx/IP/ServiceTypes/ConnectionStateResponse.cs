@@ -39,7 +39,7 @@ namespace Tiveria.Knx.IP.ServiceTypes
     /// +--------+--------+
     /// </code>
     /// </summary>
-    public class DisconnectResponse : ServiceTypeBase
+    public class ConnectionStateResponse : ServiceTypeBase
     {
         #region private fields
         private ErrorCodes _status;
@@ -52,19 +52,19 @@ namespace Tiveria.Knx.IP.ServiceTypes
         #endregion
 
         #region constructors
-        protected DisconnectResponse() : base(ServiceTypeIdentifier.DISCONNECT_RES)
+        protected ConnectionStateResponse() : base(ServiceTypeIdentifier.CONNECTIONSTATE_RESPONSE)
         {
             _structureLength = 2;
         }
 
-        public DisconnectResponse(byte channelId, ErrorCodes status)
+        public ConnectionStateResponse(byte channelId, ErrorCodes status)
             : this()
         {
             _status = status;
             _channelId = channelId;
         }
 
-        protected DisconnectResponse(IndividualEndianessBinaryReader br)
+        protected ConnectionStateResponse(IndividualEndianessBinaryReader br)
             : this()
         {
             ParseChannelId(br);
@@ -94,9 +94,9 @@ namespace Tiveria.Knx.IP.ServiceTypes
             buffer[offset + 1] = (byte)_status;
         }
 
-        public static DisconnectResponse Parse(byte[] buffer, int offset)
+        public static ConnectionStateResponse Parse(byte[] buffer, int offset)
         {
-            return new DisconnectResponse(new IndividualEndianessBinaryReader(buffer, offset, buffer.Length-offset));
+            return new ConnectionStateResponse(new IndividualEndianessBinaryReader(buffer, offset, buffer.Length - offset));
         }
     }
 }

@@ -29,7 +29,10 @@ using Tiveria.Common.IO;
 
 namespace Tiveria.Knx.IP.ServiceTypes
 {
-    public class TunnelingRequest : ServiceTypeBase, IServiceType
+    /// <summary>
+    /// Implementation of the ServiceType TunnelingRequest
+    /// </summary>
+    public class TunnelingRequest : ServiceTypeBase
     {
         public static readonly byte CONNECTIONHEADERLENGTH = 4;
 
@@ -49,7 +52,22 @@ namespace Tiveria.Knx.IP.ServiceTypes
             _connectionHeader = ConnectionHeader.Parse(br);
             _cemiFrame = Cemi.CemiLData.Parse(br);
         }
-        
+
+        public TunnelingRequest(ConnectionHeader header, Cemi.CemiLData cemiFrame)
+            : this()
+        {
+            _connectionHeader = header;
+            _cemiFrame = cemiFrame;
+        }
+
+        public override void WriteToByteArray(byte[] buffer, int offset = 0)
+        {
+            base.WriteToByteArray(buffer, offset);
+            _connectionHeader.WriteToByteArray(buffer, offset);
+            _cemiFrame.WriteToByteArray(buffer, offset + _connectionHeader.StructureLength);
+        }
+
+
         #region static methods
         /// <summary>
         /// Parses a part of a buffer and creates a CemiLData class from it

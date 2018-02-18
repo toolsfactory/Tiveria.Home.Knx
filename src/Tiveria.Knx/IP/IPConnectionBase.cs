@@ -31,17 +31,28 @@ using Tiveria.Common.Logging;
 
 namespace Tiveria.Knx.IP
 {
+    /// <summary>
+    /// Region base class for all ip connections.
+    /// This clas provides basic shared functionalities and helper functions.
+    /// </summary>
     public abstract class IPConnectionBase : IIPConnection
     {
+        #region private fields
         protected readonly ILogger _logger;
+        protected byte _channelId;
 
+        private byte _rcvSeqCounter = 0;
+        private byte _sndSeqCounter = 0;
+        private object _seqLock = new object();
+        private ConnectionState _connectionState = ConnectionState.Initialized;
+        #endregion
+
+        #region public properties
         public abstract ConnectionType ConnectionType { get; }
         public abstract IPAddress RemoteAddress { get; }
-        public string ConnectionName { get => GetConnectionName(); }
 
-        protected abstract string GetConnectionName();
-
-        private ConnectionState _connectionState = ConnectionState.Initialized;
+        public string ConnectionName => GetConnectionName();
+        public byte ChannelId => _channelId;
         public ConnectionState ConnectionState
         {
             get => _connectionState;
@@ -55,9 +66,7 @@ namespace Tiveria.Knx.IP
                 }
             }
         }
-
-        protected byte _channelId;
-        public byte ChannelId { get => _channelId; }
+        #endregion
 
         #region Events
         public event EventHandler<StateChangedEventArgs> StateChanged;
@@ -94,16 +103,12 @@ namespace Tiveria.Knx.IP
 
         protected IPConnectionBase()
         {
-            _logger = Tiveria.Knx.Utils.LogFactory.GetLogger("Tiveria.Knx.Connection." + ConnectionName);
+            _logger = Tiveria.Knx.Utils.LogFactory.GetLogger("Tiveria.Knx.IP." + ConnectionName);
             ResetRcvSeqCounter();
             ResetSndSeqCounter();
         }
 
         #region Sequence Counters
-        private byte _rcvSeqCounter = 0;
-        private byte _sndSeqCounter = 0;
-        private object _seqLock = new object();
-
         protected void ResetRcvSeqCounter()
         {
             lock (_seqLock)
@@ -112,9 +117,9 @@ namespace Tiveria.Knx.IP
             }
         }
 
-        protected long IncRcvSeqCounter()
+        protected byte IncRcvSeqCounter()
         {
-            int result = 0;
+            byte result = 0;
             lock (_seqLock)
             {
                 _rcvSeqCounter++;
@@ -123,7 +128,7 @@ namespace Tiveria.Knx.IP
             return result;
         }
 
-        protected long RcvSeqCounter => _rcvSeqCounter; 
+        protected byte RcvSeqCounter => _rcvSeqCounter;
 
         protected void ResetSndSeqCounter()
         {
@@ -133,9 +138,9 @@ namespace Tiveria.Knx.IP
             }
         }
 
-        protected long IncSndSeqCounter()
+        protected byte IncSndSeqCounter()
         {
-            long result = 0;
+            byte result = 0;
             lock (_seqLock)
             {
                 _sndSeqCounter++;
@@ -144,13 +149,32 @@ namespace Tiveria.Knx.IP
             return result;
         }
 
-        protected long SndSeqCounter => _sndSeqCounter; 
+        protected byte SndSeqCounter => _sndSeqCounter;
         #endregion
 
+        #region helper methods
+        protected bool isCorrectChannelID(byte channelId, ServiceTypeIdentifier serviceType)
+        {
+            if (channelId == _channelId)
+            {
+                return true;
+            }
+            else
+            {
+                _logger.Warn($"Wrong channelID {channelId} received for service {serviceType}. Expected: {_channelId}");
+                return false;
+            }
+        }
+        #endregion
+
+        #region abstract base methods
         public abstract Task<bool> SendFrameAsync(KnxNetIPFrame frame);
 
         public abstract Task CloseAsync();
 
         public abstract Task<bool> ConnectAsync();
+
+        protected abstract string GetConnectionName();
+        #endregion
     }
 }

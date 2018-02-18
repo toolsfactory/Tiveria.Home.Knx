@@ -107,6 +107,8 @@ namespace Tiveria.Knx.IP
                     return TunnelingRequest.Parse(_body, 0, _body.Length);
                 case ServiceTypeIdentifier.DISCONNECT_RES:
                     return DisconnectResponse.Parse(_body, 0);
+                case ServiceTypeIdentifier.CONNECTIONSTATE_RESPONSE:
+                    return ConnectionStateResponse.Parse(_body, 0);
                 default:
                     return UnknownService.Parse(new Common.IO.IndividualEndianessBinaryReader(_body), Header.ServiceTypeRaw, _body.Length);
             }

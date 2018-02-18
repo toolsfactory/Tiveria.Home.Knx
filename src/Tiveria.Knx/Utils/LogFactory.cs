@@ -22,15 +22,29 @@
     combination.
 */
 
+using System;
 using Tiveria.Common.Logging;
 
 namespace Tiveria.Knx.Utils
 {
-    public static class LogFactory
+    public class LogFactory
     {
+        public static ILogManager LogManager;
+
         public static ILogger GetLogger(string name)
         {
-            return new ConsoleLogger();
+            if (LogManager == null)
+                return new ConsoleLogger();
+            else
+                return LogManager.GetLogger(name);
+        }
+
+        public static ILogger GetLogger(Type type)
+        {
+            if (LogManager == null)
+                return new ConsoleLogger();
+            else
+                return LogManager.GetLogger(type);
         }
     }
 }
