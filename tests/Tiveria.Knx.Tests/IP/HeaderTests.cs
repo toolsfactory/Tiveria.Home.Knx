@@ -3,6 +3,7 @@ using System.Net;
 using NUnit.Framework;
 using Tiveria.Knx.IP.Structures;
 using Tiveria.Knx.IP.Utils;
+using Tiveria.Knx.Exceptions;
 using Tiveria.Common.Extensions;
 
 namespace Tiveria.Knx.Tests.IP
@@ -27,15 +28,15 @@ namespace Tiveria.Knx.Tests.IP
         {
             //Standard body for Connection_Request but length set to 8
             var data = "0810020500180801c0a80278e1f60801c0a80278e1f70203".ToByteArray(); 
-            Assert.Catch(typeof(ArgumentException), () => FrameHeader.Parse(data, 0));
+            Assert.Catch(typeof(BufferFieldException), () => FrameHeader.Parse(data, 0));
         }
 
         [Test]
         public void ParseHeaderFromBytesWrongHeaderVersion()
         {
             //Standard body for Connection_Request but Version changed from 0x10 to 0x20
-            var data = "0820020500180801c0a80278e1f60801c0a80278e1f70203".ToByteArray(); 
-            Assert.Catch(typeof(ArgumentException), () => FrameHeader.Parse(data, 0));
+            var data = "0620020500180801c0a80278e1f60801c0a80278e1f70203".ToByteArray(); 
+            Assert.Catch(typeof(BufferFieldException), () => FrameHeader.Parse(data, 0));
         }
 
         [Test]
@@ -43,15 +44,17 @@ namespace Tiveria.Knx.Tests.IP
         {
             //Standard body for Connection_Request but totallength set wrong 0x20 instead of 0x18
             var data = "0610020500200801c0a80278e1f60801c0a80278e1f70203".ToByteArray(); 
-            Assert.Catch(typeof(ArgumentException), () => FrameHeader.Parse(data, 0));
+            Assert.Catch(typeof(BufferSizeException), () => FrameHeader.Parse(data, 0));
         }
 
         [Test]
-        public void ParseHeaderFromBytesWrongServiceTypeIdentifier()
+        public void ParseHeaderFromBytesUnknownServiceTypeIdentifier()
         {
             //Standard body for Connection_Request but ServiceTypeIdentifier set to 0x00ff
             var data = "061000ff00200801c0a80278e1f60801c0a80278e1f70203".ToByteArray();
-            Assert.Catch(typeof(ArgumentException), () => FrameHeader.Parse(data, 0));
+            var result = FrameHeader.Parse(data, 0);
+            Assert.AreEqual(ServiceTypeIdentifier.UNKNOWN, result.ServiceTypeIdentifier);
+            Assert.AreEqual(0x00ff, result.ServiceTypeRaw);
         }
 
         [Test]
