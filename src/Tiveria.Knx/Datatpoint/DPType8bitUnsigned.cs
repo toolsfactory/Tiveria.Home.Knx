@@ -1,4 +1,28 @@
-﻿using System;
+﻿/*
+    Tiveria.Knx - a .Net Core base KNX library
+    Copyright (c) 2018 M. Geissler
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation; either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    Linking this library statically or dynamically with other modules is
+    making a combined work based on this library. Thus, the terms and
+    conditions of the GNU General Public License cover the whole
+    combination.
+*/
+
+using System;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
@@ -7,7 +31,6 @@ using Tiveria.Common.Extensions;
 
 namespace Tiveria.Knx.Datapoint
 {
-
     public class DPType8bitUnsigned : DPType<ushort>
     {
         public DPType8bitUnsigned(string id, string name, ushort min = 0, ushort max = 0, string unit = "", string description = "") : base(id, name, min, max, unit, description)
@@ -45,7 +68,6 @@ namespace Tiveria.Knx.Datapoint
             return (byte) value;
         }
 
-
         public override string ToStringValue(byte[] data)
         {
             return ToValue(data).ToString();
@@ -61,9 +83,14 @@ namespace Tiveria.Knx.Datapoint
             return ToValue(data);
         }
 
+        public override bool ToBoolValue(byte[] data)
+        {
+            return ToValue(data) == Maximum;
+        }
+
         public override ushort ToValue(byte[] data)
         {
-            return ScaleToValue(data[0]);
+            return ScaleToValue(data[1]);
         }
 
         private ushort ScaleToValue(byte data)
@@ -74,70 +101,22 @@ namespace Tiveria.Knx.Datapoint
                 return (ushort) Math.Round(data * 360.0f / 255);
             return (ushort)data;
         }
-        
+
         public static readonly DPType8bitUnsigned DPT_SCALING = new DPType8bitUnsigned("5.001", "Scaling", 0, 100, "%");
         public static readonly DPType8bitUnsigned DPT_ANGLE = new DPType8bitUnsigned("5.003", "Angle", 0, 360, "\u00b0");
         public static readonly DPType8bitUnsigned DPT_PERCENT_U8 = new DPType8bitUnsigned("5.004", "Percent (8 Bit)", 0, 255, "%");
         public static readonly DPType8bitUnsigned DPT_DECIMALFACTOR = new DPType8bitUnsigned("5.005", "Decimal factor", 0, 255, "ratio");
         public static readonly DPType8bitUnsigned DPT_TARIFF = new DPType8bitUnsigned("5.006", "Tariff information", 0, 254);
         public static readonly DPType8bitUnsigned DPT_VALUE_1_UCOUNT = new DPType8bitUnsigned("5.010", "Unsigned count", 0, 255, "counter pulses");
-    }
 
-    public class DPTypeBoolean : DPType<bool>
-    {
-        public string AllowedTrue { get; }
-        public string AllowedFalse { get; }
-
-        public DPTypeBoolean(string id, string name, string allowedtrue, string allowedfalse, string unit = "", string description = "") 
-            : base(id, name, false, true, unit, description)
+        static DPType8bitUnsigned()
         {
-            AllowedTrue = allowedtrue;
-            AllowedFalse = allowedfalse;
-        }
-
-        public override byte[] ToData(bool value)
-        {
-            return new byte[] { (byte)(value ? 1 : 0) };
-        }
-
-        public override byte[] ToData(string value)
-        {
-            if (AllowedTrue.ListContains(',', value))
-                return ToData(true);
-            if (AllowedFalse.ListContains(',', value))
-                return ToData(false);
-            throw new Exceptions.TranslationExcception("translation error, value not recognized");
-        }.
-
-        public override byte[] ToData(double value)
-        {
-            if(value == 0)
-                return ToData(false);
-        }
-
-        public override byte[] ToData(long data)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override double ToDoubleValue(byte[] data)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override long ToLongValue(byte[] data)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string ToStringValue(byte[] data)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool ToValue(byte[] data)
-        {
-            return (data[0] & 0x01) != 0 ? true : false;
+            DatapointTypesList.AddOrReplace(DPT_ANGLE);
+            DatapointTypesList.AddOrReplace(DPT_SCALING);
+            DatapointTypesList.AddOrReplace(DPT_PERCENT_U8);
+            DatapointTypesList.AddOrReplace(DPT_SCALING);
+            DatapointTypesList.AddOrReplace(DPT_TARIFF);
+            DatapointTypesList.AddOrReplace(DPT_VALUE_1_UCOUNT);
         }
     }
 }

@@ -36,7 +36,7 @@ namespace Tiveria.Knx.Cemi
     /// 4 bits: APDU Byte 1 bits 6+7 and APDU Byte 2 bits 0+1
     /// 10 bits: 4 bits as above and APDU byte 2 bits 2+3+4+5+6+7
     /// </summary>
-    public struct Acpi
+    public struct Apci
     {
         private static readonly List<APCIEntry> RelevantAPCIEntry = new List<Cemi.APCIEntry>()
         {
@@ -75,7 +75,6 @@ namespace Tiveria.Knx.Cemi
         };
 
         private static byte DataMask6 = 0b00_111111;  //0x3f
-        private static byte DataMask0 = 0xff;
 
         private byte[] _data;
         private byte _high;
@@ -87,7 +86,7 @@ namespace Tiveria.Knx.Cemi
         public byte Low => _low;
         public byte[] Data => _data;
         public APCIType Type => _type;
-        public Acpi(byte[] buffer, int offset = 0)
+        public Apci(byte[] buffer, int offset = 0)
         {
             _high = 0;
             _low = 0;

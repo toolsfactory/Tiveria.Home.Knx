@@ -29,8 +29,7 @@ namespace Tiveria.Knx.Datapoint
 
         public bool Equals(IDatapointType other)
         {
-            return other != null &&
-                    Id == other.Id;
+            return other != null && Id == other.Id;
         }
 
         public override int GetHashCode()
@@ -48,13 +47,14 @@ namespace Tiveria.Knx.Datapoint
             return !(type1 == type2);
         }
 
-        public abstract TValue ToValue(byte[] data);
         public abstract byte[] ToData(TValue value);
         public abstract byte[] ToData(string value);
         public abstract byte[] ToData(double value);
-        public abstract byte[] ToData(long data);
+        public abstract byte[] ToData(long value);
+        public abstract TValue ToValue(byte[] data);
         public abstract string ToStringValue(byte[] data);
         public abstract double ToDoubleValue(byte[] data);
         public abstract long ToLongValue(byte[] data);
+        public abstract bool ToBoolValue(byte[] data);
     }
 }

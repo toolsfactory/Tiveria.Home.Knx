@@ -4,7 +4,8 @@ using Tiveria.Knx;
 using Tiveria.Knx.IP;
 using Tiveria.Common.Extensions;
 using Tiveria.Knx.IP.Utils;
-using Tiveria.Common.Logging;
+using Tiveria.Knx.IP.ServiceTypes;
+using Tiveria.Knx.Datapoint;
 using System.Net.Sockets;
 using NLog;
 using NLog.Targets;
@@ -14,6 +15,7 @@ namespace Tiveria.Knx
 {
     static class Program
     {
+        public static DatapointTypesList DatapointTypesList = new DatapointTypesList();
         public static void Main(string[] args)
         {
             ConfigureLogging();
@@ -39,20 +41,38 @@ namespace Tiveria.Knx
 
         private static void Con_FrameReceived(object sender, FrameReceivedEventArgs e)
         {
-            Console.WriteLine($"Frame received. Type: {e.Frame.ServiceType}");
-            /*
+//            Console.WriteLine($"Frame received. Type: {e.Frame.ServiceType}");
             if (e.Frame.ServiceType.ServiceTypeIdentifier == ServiceTypeIdentifier.TUNNELING_REQ)
             {
                 var req = (TunnelingRequest)e.Frame.ServiceType;
-                Console.WriteLine(req.CemiFrame.ToDescription(2));
-                //req.CemiFrame.
+
+                if (req.CemiFrame.DestinationAddress.IsGroupAddress())
+                {
+                    var addr = ((GroupAddress)req.CemiFrame.DestinationAddress).ToString();
+                    if (addr.EndsWith("/2/3") || addr.EndsWith("/2/23") || addr.EndsWith("/2/43") || addr.EndsWith("/2/63"))
+                    { 
+                        if ((req.CemiFrame.Apci.Type == Cemi.APCIType.GroupValue_Write)
+                            || (req.CemiFrame.Apci.Type == Cemi.APCIType.GroupValue_Response))
+                        {
+                            var value = DPType8bitUnsigned.DPT_SCALING.ToValue(req.CemiFrame.Apci.Data);
+                            Console.WriteLine($"++ {req.CemiFrame.Apci.Type} for \"{addr}\": {value}%");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"{req.CemiFrame.Apci.Type} for \"{addr}\" - ACPI DATA: {req.CemiFrame.Apci.Data.ToHexString()} - Payload: {req.CemiFrame.Payload.ToHexString()}");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{req.CemiFrame.Apci.Type} for \"{addr}\" - ACPI DATA: {req.CemiFrame.Apci.Data.ToHexString()} - Payload: {req.CemiFrame.Payload.ToHexString()}");
+                    }
+                }
             }
-            */
         }
 
         private static void Con_DataReceived(object sender, Tiveria.Knx.IP.DataReceivedArgs e)
         {
-            Console.WriteLine(e.Data.ToHexString());
+//            Console.WriteLine(e.Data.ToHexString());
         }
 
         public static IPAddress GetLocalIPAddress()

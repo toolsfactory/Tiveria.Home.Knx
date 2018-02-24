@@ -31,6 +31,7 @@ using Tiveria.Common.Extensions;
 using Tiveria.Common.Logging;
 using Tiveria.Knx.IP.Utils;
 using Tiveria.Knx.IP.ServiceTypes;
+using Tiveria.Knx.IP.Structures;
 
 namespace Tiveria.Knx.IP
 {
@@ -292,14 +293,25 @@ namespace Tiveria.Knx.IP
         }
         #endregion
 
+        #region handling disconnect request
+        private void HandleDisconnectRequest(DisconnectRequest request)
+        {
+            SendDisconnectResponseAsync(request.ChannelId, request.ControlEndpoint);
+            InternalCloseAsync("External request received.", true);
+        }
+
+        private Task SendDisconnectResponseAsync(byte channelId, Hpai controlEndpoint)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
         #region handling disconnect response
         private void HandleDisconnectResponse(DisconnectResponse response)
         {
             if (response.Status != ErrorCodes.NO_ERROR)
                 _logger.Warn($"Connection closed with status code 0x{response.Status:x2} - " + response.Status.ToDescription());
             _closeEvent.Set();
-            if (ConnectionState != ConnectionState.Closing && ConnectionState != ConnectionState.Closed)
-                InternalCloseAsync("External request received.", true);
         }
         #endregion
 
@@ -365,6 +377,9 @@ namespace Tiveria.Knx.IP
             {
                 case ServiceTypeIdentifier.CONNECT_RESPONSE:
                     HandleConnectResponse((ConnectionResponse)frame.ServiceType, source);
+                    break;
+                case ServiceTypeIdentifier.DISCONNECT_REQ:
+                    HandleDisconnectRequest((DisconnectRequest)frame.ServiceType);
                     break;
                 case ServiceTypeIdentifier.DISCONNECT_RES:
                     HandleDisconnectResponse((DisconnectResponse)frame.ServiceType);
