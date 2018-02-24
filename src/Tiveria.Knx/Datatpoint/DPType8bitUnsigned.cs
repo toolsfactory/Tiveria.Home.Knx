@@ -107,12 +107,15 @@ namespace Tiveria.Knx.Datapoint
             if (AllowedFalse.ListContains(',', value))
                 return ToData(false);
             throw new Exceptions.TranslationExcception("translation error, value not recognized");
-        }.
+        }
 
         public override byte[] ToData(double value)
         {
             if(value == 0)
                 return ToData(false);
+            if (value == 1)
+                return ToData(true);
+            throw new Exceptions.TranslationExcception("translation error, value not recognized");
         }
 
         public override byte[] ToData(long data)

@@ -69,13 +69,10 @@ namespace Tiveria.Knx.Cemi
             new Cemi.APCIEntry(0b1100, 0b000000, 10, APCIType.DeviceDescriptor_Read),
             new Cemi.APCIEntry(0b1101, 0b000000, 10, APCIType.DeviceDescriptor_Response),
             new Cemi.APCIEntry(0b1110, 0b000000, 10, APCIType.Restart)
-
-
             */
         };
 
         private static byte DataMask6 = 0b00_111111;  //0x3f
-        private static byte DataMask0 = 0xff;
 
         private byte[] _data;
         private byte _high;

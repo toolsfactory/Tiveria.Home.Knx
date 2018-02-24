@@ -18,8 +18,8 @@ namespace Tiveria.Knx.Datapoint
 
         public void AddOrReplace(IDatapointType dptype)
         {
-            if(_list.ContainsKey(dptype.Id))
-                _list.Remove(dptype.Id):
+            if (_list.ContainsKey(dptype.Id))
+                _list.Remove(dptype.Id);
             _list.Add(dptype.Id, dptype);
         }
 

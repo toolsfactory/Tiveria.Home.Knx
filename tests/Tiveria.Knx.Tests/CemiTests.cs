@@ -73,7 +73,6 @@ namespace Tiveria.Knx.Tests
             Assert.AreEqual(((GroupAddress) result.DestinationAddress).ToString(), "6/1/47");
 
             Assert.AreEqual(result.Payload.Length, 2);
-            System.Activator.CreateInstance()
         }
 
         [Test]
