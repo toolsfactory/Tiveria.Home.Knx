@@ -17,6 +17,7 @@ namespace Tiveria.Knx.Datapoint
         string ToStringValue(byte[] data);
         double ToDoubleValue(byte[] data);
         long ToLongValue(byte[] data);
+        bool ToBoolValue(byte[] data);
     }
 
     public interface IDatapointType<TValue> : IDatapointType

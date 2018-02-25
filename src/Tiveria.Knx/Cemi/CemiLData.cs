@@ -66,6 +66,7 @@ namespace Tiveria.Knx.Cemi
         protected Priority _priority;
         protected ControlField1 _controlField1;
         protected ControlField2 _controlField2;
+        private Apci _apci;
         #endregion
 
         #region public properties
@@ -73,6 +74,7 @@ namespace Tiveria.Knx.Cemi
         public IKnxAddress DestinationAddress => _destinationAddress;
         public ControlField1 ControlField1 => _controlField1;
         public ControlField2 ControlField2 => _controlField2;
+        public Apci Apci => _apci;
         #endregion
 
         #region constructors
@@ -95,6 +97,7 @@ namespace Tiveria.Knx.Cemi
             _sourceAddress = srcAddress;
             _destinationAddress = dstAddress;
             _payload = (byte[]) tpdu.Clone();
+            _apci = new Apci(_payload);
             _structureLength = MESSAGEMINLENGTH + _payload.Length - 1;
         }
 
@@ -181,6 +184,7 @@ namespace Tiveria.Knx.Cemi
             if (br.Available < len)
                 throw BufferSizeException.TooBig("Cemi Frame - TCPI Data");
             _payload = br.ReadBytes(len);
+            _apci = new Apci(_payload);
         }
         #endregion
 

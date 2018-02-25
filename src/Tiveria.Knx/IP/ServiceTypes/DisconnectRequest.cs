@@ -95,5 +95,11 @@ namespace Tiveria.Knx.IP.ServiceTypes
             buffer[offset + 1] = 0x00; //Reserved;
             _controlEndpoint.WriteToByteArray(buffer, offset + 2);
         }
+
+        public static DisconnectRequest Parse(byte[] buffer, int offset)
+        {
+            return new DisconnectRequest(new IndividualEndianessBinaryReader(buffer, offset, buffer.Length - offset));
+        }
+
     }
 }
