@@ -30,16 +30,16 @@ namespace Tiveria.Knx.IP.Utils
     /// </summary>
     public enum ServiceTypeIdentifier : ushort
     {
+        SEARCH_REQ = 0x0201,
+        SEARCH_RES = 0x0202,
+        DESCRIPTION_REQ = 0x0203,
+        DESCRIPTION_RES = 0x0204,
         CONNECT_REQUEST = 0x0205,
         CONNECT_RESPONSE = 0x0206,
         CONNECTIONSTATE_REQUEST = 0x0207,
         CONNECTIONSTATE_RESPONSE = 0x0208,
         DISCONNECT_REQ = 0x0209,
         DISCONNECT_RES = 0x020A,
-        DESCRIPTION_REQ = 0x0203,
-        DESCRIPTION_RES = 0x204,
-        SEARCH_REQ = 0x201,
-        SEARCH_RES = 0x202,
         DEVICE_CONFIGURATION_REQ = 0x0310,
         DEVICE_CONFIGURATION_ACK = 0x0311,
         TUNNELING_REQ = 0x0420,
@@ -47,6 +47,7 @@ namespace Tiveria.Knx.IP.Utils
         ROUTING_IND = 0x0530,
         ROUTING_LOST_MSG = 0x0531,
         ROUTING_BUSY = 0x0532,
+        OBJECTSERVER = 0xF080,
         UNKNOWN = 0xFFFF
     }
 }

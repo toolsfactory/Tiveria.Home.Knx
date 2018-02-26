@@ -28,15 +28,20 @@ using Tiveria.Knx.Exceptions;
 
 namespace Tiveria.Knx.Datapoint
 {
-    public class DPType1Bit : DPType<bool>
+    public class DPType1Bit : DPType
     {
-        private readonly string _allowedTrue;
-        private readonly string _allowedFalse;
+        #region private fields
+        protected readonly string _allowedTrue;
+        protected readonly string _allowedFalse;
+        #endregion
 
+        #region Additional Properties
         public string AllowedTrue { get; }
         public string AllowedFalse { get; }
+        #endregion
 
-        public DPType1Bit(string id, string name, string allowedtrue, string allowedfalse, string unit = "", string description = "") 
+        #region constructor
+        public DPType1Bit(string id, string name, string allowedtrue, string allowedfalse, string unit = "", string description = "")
             : base(id, name, false, true, unit, description)
         {
             AllowedTrue = allowedtrue;
@@ -45,47 +50,66 @@ namespace Tiveria.Knx.Datapoint
             _allowedFalse = allowedfalse.Trim().ToLower();
             DataSize = 0;
         }
+        #endregion
 
-        public override byte[] ToData(bool value)
+        #region decoding dpt data
+        public override string DecodeString(byte[] dptData, int offset = 0, bool withUnit = false)
+        {
+            return (bool)DecodeObject(dptData, offset) ? AllowedTrue : AllowedFalse;
+        }
+
+        public override object DecodeObject(byte[] dptData, int offset = 0)
+        {
+            if (dptData.Length - offset < 1)
+                throw new TranslationException("Data can not be translated to 1bit value");
+            return (dptData[offset] & 0x01) != 0;
+        }
+        #endregion
+
+        #region encoding dpt data
+        protected override byte[] EncodeFromLong(long value)
+        {
+            if (value == 0)
+                return EncodeFromBool(false);
+            if (value == 1)
+                return EncodeFromBool(true);
+            throw new Exceptions.TranslationException("translation error, value not recognized");
+        }
+
+        protected override byte[] EncodeFromULong(long value)
+        {
+            if (value == 0)
+                return EncodeFromBool(false);
+            if (value == 1)
+                return EncodeFromBool(true);
+            throw new Exceptions.TranslationException("translation error, value not recognized");
+        }
+
+        protected override byte[] EncodeFromBool(bool value)
         {
             return new byte[] { (byte)(value ? 1 : 0) };
         }
 
-        public override byte[] ToData(string value)
-        {
-            if (value.ToLower() == _allowedTrue)
-                return ToData(true);
-            if (value.ToLower() == _allowedFalse)
-                return ToData(false);
-            throw new Exceptions.TranslationExcception("translation error, value not recognized");
-        }
-
-        public override byte[] ToData(double value)
+        protected override byte[] EncodeFromDouble(double value)
         {
             if (value == 0)
-                return ToData(false);
+                return EncodeFromBool(false);
             if (value == 1)
-                return ToData(true);
-            throw new Exceptions.TranslationExcception("translation error, value not recognized");
+                return EncodeFromBool(true);
+            throw new Exceptions.TranslationException("translation error, value not recognized");
         }
 
-        public override double ToDoubleValue(byte[] data, int offset = 0)
+        protected override byte[] EncodeFromString(string value)
         {
-            return ToValue(data, offset) ? 1 : 0;
+            if (value.ToLower() == _allowedTrue)
+                return EncodeFromBool(true);
+            if (value.ToLower() == _allowedFalse)
+                return EncodeFromBool(false);
+            throw new Exceptions.TranslationException("translation error, value not recognized");
         }
+        #endregion
 
-        public override string ToStringValue(byte[] data, int offset = 0)
-        {
-            return ToValue(data, offset) ? AllowedTrue : AllowedFalse;
-        }
-
-        public override bool ToValue(byte[] data, int offset = 0)
-        {
-            if(data.Length - offset < 1)
-                throw new TranslationExcception("Data can not be translated to 1bit value");
-            return (data[offset] & 0x01) != 0;
-        }
-
+        #region specific xlator instances
         public static readonly DPType1Bit DPT_SWITCH      = new DPType1Bit("1.001", "Switch", "On", "Off");
         public static readonly DPType1Bit DPT_BOOL        = new DPType1Bit("1.002", "Bool", "True", "False");
         public static readonly DPType1Bit DPT_ENABLE      = new DPType1Bit("1.003", "Enable", "Enable", "Disable");
@@ -136,6 +160,6 @@ namespace Tiveria.Knx.Datapoint
             DatapointTypesList.AddOrReplace(DPT_SBMODE);
             DatapointTypesList.AddOrReplace(DPT_HEAT_COOL);
         }
-
+        #endregion
     }
 }

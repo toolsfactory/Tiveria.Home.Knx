@@ -9,20 +9,14 @@ namespace Tiveria.Knx.Datapoint
         string Id { get; }
         string Name { get; }
         string Unit { get; }
+        object Maximum { get; }
+        object Minimum { get; }
+        int DataSize { get; }
 
-        byte[] ToData(string value);
-        byte[] ToData(double value);
-        
-        string ToStringValue(byte[] data, int offset = 0);
-        double ToDoubleValue(byte[] data, int offset = 0);
-    }
+        byte[] EncodeDPT(object value);
+        string DecodeString(byte[] dptData, int offset = 0, bool withUnit = false);
+        object DecodeObject(byte[] dptData, int offset = 0);
 
-    public interface IDatapointType<TValue> : IDatapointType
-    {
-        TValue Maximum { get; }
-        TValue Minimum { get; }
-
-        byte[] ToData(TValue value);
-        TValue ToValue(byte[] data, int offset = 0);
+        bool IsMainCategory(int category);
     }
 }

@@ -49,7 +49,7 @@ namespace Tiveria.Knx.Datapoint
         public override byte[] ToData(uint value)
         {
             if (value < Minimum || value > Maximum)
-                throw new TranslationExcception($"value out of range [{Minimum}..{Maximum}]");
+                throw new TranslationException($"value out of range [{Minimum}..{Maximum}]");
             var val = value;
             if (this == DPT_TIMEPERIOD_10MS)
                 val = (uint)Math.Round(value / 10.0f);
@@ -71,7 +71,7 @@ namespace Tiveria.Knx.Datapoint
         public override uint ToValue(byte[] data, int offset = 0)
         {
             if (data.Length - offset < DataSize)
-                throw new Exceptions.TranslationExcception("Data size invalid");
+                throw new Exceptions.TranslationException("Data size invalid");
             uint value = (uint)(data[0] << 8 + data[1]);
             if (this == DPT_TIMEPERIOD_10MS)
                 value = value * 10;
@@ -80,6 +80,7 @@ namespace Tiveria.Knx.Datapoint
             return value;
         }
 
+        #region specific xlator instances
         public static DPType16bitUnsigned DPT_VALUE_2_UCOUNT   = new DPType16bitUnsigned("7.001", "16bit Unsigned Counter", 0, 65535, "pulses");
         public static DPType16bitUnsigned DPT_TIMEPERIOD_1MS   = new DPType16bitUnsigned("7.002", "Time Period 1ms resolution", 0, 65535, "ms");
         public static DPType16bitUnsigned DPT_TIMEPERIOD_10MS  = new DPType16bitUnsigned("7.003", "Time Period 10ms resolution", 0, 655350, "ms");
@@ -106,7 +107,7 @@ namespace Tiveria.Knx.Datapoint
             DatapointTypesList.AddOrReplace(DPT_LENGTH_MM);
             DatapointTypesList.AddOrReplace(DPT_ELECTRICAL_CURRENT);
             DatapointTypesList.AddOrReplace(DPT_BRIGHTNESS);
-
         }
+        #endregion
     }
 }

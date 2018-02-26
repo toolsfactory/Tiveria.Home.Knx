@@ -23,89 +23,85 @@
 */
 
 using Tiveria.Knx.Exceptions;
+using Tiveria.Common.Extensions;
+using System;
 
 namespace Tiveria.Knx.Datapoint
 {
-    public class DPType1BitControl : DPType<(bool Value, bool Control)>
+
+    public class DPType1BitControl : DPType1Bit
     {
-        private readonly string _allowedTrue;
-        private readonly string _allowedFalse;
+        public DPType1BitControl(string id, string name, string allowedtrue, string allowedfalse, string unit = "", string description = "") : base(id, name, allowedtrue, allowedfalse, unit, description)
+        { }
 
-        public string AllowedTrue { get; }
-        public string AllowedFalse { get; }
-
-        public DPType1BitControl(string id, string name, string allowedtrue, string allowedfalse, string unit = "", string description = "")
-            : base(id, name, (false, false), (true, true), unit, description)
+        public override string DecodeString(byte[] dptData, int offset = 0, bool withUnit = false)
         {
-            AllowedTrue = allowedtrue;
-            AllowedFalse = allowedfalse;
-            _allowedTrue = allowedtrue.Trim().ToLower();
-            _allowedFalse = allowedfalse.Trim().ToLower();
-            DataSize = 0;
+            var (Value, Control) = Decode(dptData, offset);
+            string result = Value ? _allowedTrue : _allowedFalse;
+            if (Control)
+                return result + " controlled";
+            else
+                return result + " not controlled";
         }
 
-        public override byte[] ToData((bool Value, bool Control) value)
+        public (bool Value, bool Control) Decode(byte[] dptData, int offset = 0)
         {
-            var data = new byte[] { (byte)(value.Value ? 1 : 0) };
-            data[0] = (byte)(value.Control ? data[0] | 0x02 : data[0]);
+            if (dptData.Length - offset < 1)
+                throw new TranslationException("Data can not be translated to 1bit value");
+            return ((dptData[offset] & 0x01) != 0, (dptData[offset] & 0x02) != 0);
+        }
+
+        public override object DecodeObject(byte[] dptData, int offset = 0)
+        {
+            if (dptData.Length - offset < 1)
+                throw new TranslationException("Data can not be translated to 1bit value");
+            return dptData[offset] & 0x01;
+        }
+
+        public byte[] EncodeDPT(bool value, bool controlled)
+        {
+            var data = new byte[] { (byte)(value ? 1 : 0) };
+            data[0] = (byte)(controlled ? data[0] | 0x02 : data[0]);
             return data;
         }
 
-        public override byte[] ToData(string value)
+        protected override byte[] EncodeFromBool(bool value)
         {
-            return ToData(value, true);
+            return EncodeDPT(value, true);
         }
 
-        public byte[] ToData(string value, bool control)
+        protected override byte[] EncodeFromString(string value)
+        {
+            bool val, ctrl = false;
+            var items = value.ToLower().NormalizeWhiteSpaces().Split(' ');
+            if (items.Length > 3 || items.Length < 1)
+                throw new Exceptions.TranslationException("translation error, value not recognized");
+            val = ValueFromString(items[0]);
+            ctrl = CtrlFromItems(items);
+            return EncodeDPT(val, ctrl);
+        }
+
+        private bool CtrlFromItems(string[] items)
+        {
+            if (items.Length == 2 && items[2] == "controlled")
+                return true;
+            if (items.Length == 2 && items[1] == "not" && items[3] == "controlled")
+                return false;
+            throw new Exceptions.TranslationException("translation error, value not recognized");
+        }
+
+        private bool ValueFromString(string value)
         {
             if (value.ToLower() == _allowedTrue)
-                return ToData((true, control));
-            if (value.ToLower() == _allowedFalse)
-                return ToData((false, control));
-            throw new Exceptions.TranslationExcception("translation error, value not recognized");
+                return true;
+            else
+                if (value.ToLower() == _allowedFalse)
+                    return false;
+                else
+                    throw new Exceptions.TranslationException("translation error, value not recognized");
         }
 
-
-        public override byte[] ToData(double value)
-        {
-            return ToData(value, true);
-        }
-
-        public byte[] ToData(double value, bool control)
-        {
-            if (value == 0)
-                return ToData((false, control));
-            if (value == 1)
-                return ToData((true, control));
-            throw new Exceptions.TranslationExcception("translation error, value not recognized");
-        }
-
-        public byte[] ToData(long value, bool control)
-        {
-            if (value == 0)
-                return ToData((false, control));
-            if (value == 1)
-                return ToData((true, control));
-            throw new Exceptions.TranslationExcception("translation error, value not recognized");
-        }
-
-        public override double ToDoubleValue(byte[] data, int offset = 0)
-        {
-            return ToValue(data, offset).Value ? 1 : 0;
-        }
-
-        public override string ToStringValue(byte[] data, int offset = 0)
-        {
-            return ToValue(data, offset).Value ? AllowedTrue : AllowedFalse;
-        }
-
-        public override (bool Value, bool Control) ToValue(byte[] data, int offset = 0)
-        {
-            if (data.Length - offset < 1)
-                throw new TranslationExcception("Data can not be translated to 1bit value");
-            return ((data[offset] & 0x01) != 0, (data[offset] & 0x02) != 0);
-        }
-
+        #region specific xlator instances
         public static readonly DPType1BitControl DPT_SWITCH_CTRL = new DPType1BitControl("2.001", "Switch Controlled", "On", "Off");
         public static readonly DPType1BitControl DPT_BOOL_CTRL = new DPType1BitControl("2.002", "Bool Controlled", "True", "False");
         public static readonly DPType1BitControl DPT_ENABLE_CTRL = new DPType1BitControl("2.003", "Enable Controlled", "Enable", "Disable");
@@ -134,5 +130,6 @@ namespace Tiveria.Knx.Datapoint
             DatapointTypesList.AddOrReplace(DPT_STATE_CTRL);
             DatapointTypesList.AddOrReplace(DPT_INVERT_CTRL);
         }
+        #endregion
     }
 }

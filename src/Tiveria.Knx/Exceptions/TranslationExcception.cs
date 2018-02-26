@@ -27,21 +27,21 @@ using System.Runtime.Serialization;
 
 namespace Tiveria.Knx.Exceptions
 {
-    public class TranslationExcception : KnxBaseException
+    public class TranslationException : KnxBaseException
     {
-        protected TranslationExcception()
+        protected TranslationException()
         {
         }
 
-        public TranslationExcception(string message) : base(message)
+        public TranslationException(string message) : base(message)
         {
         }
 
-        protected TranslationExcception(string message, Exception innerException) : base(message, innerException)
+        protected TranslationException(string message, Exception innerException) : base(message, innerException)
         {
         }
 
-        protected TranslationExcception(SerializationInfo info, StreamingContext context) : base(info, context)
+        protected TranslationException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
     }
