@@ -43,6 +43,7 @@ namespace Tiveria.Knx.Datapoint
             AllowedFalse = allowedfalse;
             _allowedTrue = allowedtrue.Trim().ToLower();
             _allowedFalse = allowedfalse.Trim().ToLower();
+            DataSize = 0;
         }
 
         public override byte[] ToData(bool value)
@@ -68,42 +69,21 @@ namespace Tiveria.Knx.Datapoint
             throw new Exceptions.TranslationExcception("translation error, value not recognized");
         }
 
-        public override byte[] ToData(long value)
+        public override double ToDoubleValue(byte[] data, int offset = 0)
         {
-            if (value == 0)
-                return ToData(false);
-            if (value == 1)
-                return ToData(true);
-            throw new Exceptions.TranslationExcception("translation error, value not recognized");
+            return ToValue(data, offset) ? 1 : 0;
         }
 
-        public override double ToDoubleValue(byte[] data)
+        public override string ToStringValue(byte[] data, int offset = 0)
         {
-            return ToValue(data) ? 1 : 0;
+            return ToValue(data, offset) ? AllowedTrue : AllowedFalse;
         }
 
-        public override long ToLongValue(byte[] data)
+        public override bool ToValue(byte[] data, int offset = 0)
         {
-            return ToValue(data) ? 1 : 0;
-        }
-
-        public override string ToStringValue(byte[] data)
-        {
-            return ToValue(data) ? AllowedTrue : AllowedFalse;
-        }
-
-        public override bool ToValue(byte[] data)
-        {
-            if(data.Length == 1)
-                return (data[0] & 0x01) != 0;
-            else if (data.Length == 2)
-                return (data[1] & 0x01) != 0;
-            throw new TranslationExcception("Data can not be translated to 1bit value");
-        }
-
-        public override bool ToBoolValue(byte[] data)
-        {
-            return ToValue(data);
+            if(data.Length - offset < 1)
+                throw new TranslationExcception("Data can not be translated to 1bit value");
+            return (data[offset] & 0x01) != 0;
         }
 
         public static readonly DPType1Bit DPT_SWITCH      = new DPType1Bit("1.001", "Switch", "On", "Off");

@@ -41,6 +41,7 @@ namespace Tiveria.Knx.Datapoint
             AllowedFalse = allowedfalse;
             _allowedTrue = allowedtrue.Trim().ToLower();
             _allowedFalse = allowedfalse.Trim().ToLower();
+            DataSize = 0;
         }
 
         public override byte[] ToData((bool Value, bool Control) value)
@@ -79,11 +80,6 @@ namespace Tiveria.Knx.Datapoint
             throw new Exceptions.TranslationExcception("translation error, value not recognized");
         }
 
-        public override byte[] ToData(long value)
-        {
-            return ToData(value, true);
-        }
-
         public byte[] ToData(long value, bool control)
         {
             if (value == 0)
@@ -93,36 +89,21 @@ namespace Tiveria.Knx.Datapoint
             throw new Exceptions.TranslationExcception("translation error, value not recognized");
         }
 
-        public override double ToDoubleValue(byte[] data)
+        public override double ToDoubleValue(byte[] data, int offset = 0)
         {
-            return ToValue(data).Value ? 1 : 0;
+            return ToValue(data, offset).Value ? 1 : 0;
         }
 
-        public override long ToLongValue(byte[] data)
+        public override string ToStringValue(byte[] data, int offset = 0)
         {
-            return ToValue(data).Value ? 1 : 0;
+            return ToValue(data, offset).Value ? AllowedTrue : AllowedFalse;
         }
 
-        public override string ToStringValue(byte[] data)
+        public override (bool Value, bool Control) ToValue(byte[] data, int offset = 0)
         {
-            return ToValue(data).Value ? AllowedTrue : AllowedFalse;
-        }
-
-        public override (bool Value, bool Control) ToValue(byte[] data)
-        {
-            byte item = 0;
-            if (data.Length == 1)
-                item = data[0];
-            else if (data.Length == 2)
-                item = data[1];
-            else
+            if (data.Length - offset < 1)
                 throw new TranslationExcception("Data can not be translated to 1bit value");
-            return ((item & 0x01) != 0, (item & 0x02) != 0);
-        }
-
-        public override bool ToBoolValue(byte[] data)
-        {
-            return ToValue(data).Value;
+            return ((data[offset] & 0x01) != 0, (data[offset] & 0x02) != 0);
         }
 
         public static readonly DPType1BitControl DPT_SWITCH_CTRL = new DPType1BitControl("2.001", "Switch Controlled", "On", "Off");

@@ -32,29 +32,21 @@ namespace Tiveria.Knx.Datapoint
         {
         }
 
-        public override bool ToBoolValue(byte[] data)
-        {
-            throw new TranslationExcception("Translation not supported");
-        }
-
-        public override double ToDoubleValue(byte[] data)
+        public override double ToDoubleValue(byte[] data, int offset = 0)
         {
             throw new System.NotImplementedException();
         }
 
-        public override long ToLongValue(byte[] data)
+        public override string ToStringValue(byte[] data, int offset = 0)
         {
             throw new System.NotImplementedException();
         }
 
-        public override string ToStringValue(byte[] data)
+        public override (byte Value, bool Control) ToValue(byte[] data, int offset = 0)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public override (byte Value, bool Control) ToValue(byte[] data)
-        {
-            throw new System.NotImplementedException();
+            var val  = (byte)(data[offset] & 0x07);
+            var ctrl = (data[offset] & 0x08) == 0x08;
+            return (val, ctrl);
         }
 
 
@@ -72,11 +64,5 @@ namespace Tiveria.Knx.Datapoint
         {
             throw new System.NotImplementedException();
         }
-
-        public override byte[] ToData(long value)
-        {
-            throw new System.NotImplementedException();
-        }
-
     }
 }

@@ -47,11 +47,6 @@ namespace Tiveria.Knx.Datapoint
             return ToData((ushort)value);
         }
 
-        public override byte[] ToData(long value)
-        {
-            return ToData((ushort)value);
-        }
-
         public override byte[] ToData(ushort value)
         {
             return new byte[] { ScaleToData(value) };
@@ -76,16 +71,6 @@ namespace Tiveria.Knx.Datapoint
         public override double ToDoubleValue(byte[] data)
         {
             return ToValue(data);
-        }
-
-        public override long ToLongValue(byte[] data)
-        {
-            return ToValue(data);
-        }
-
-        public override bool ToBoolValue(byte[] data)
-        {
-            return ToValue(data) == Maximum;
         }
 
         public override ushort ToValue(byte[] data)

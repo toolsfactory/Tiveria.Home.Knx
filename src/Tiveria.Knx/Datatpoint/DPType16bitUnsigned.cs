@@ -33,11 +33,7 @@ namespace Tiveria.Knx.Datapoint
 
         protected DPType16bitUnsigned(string id, string name, uint min = 0, uint max = 0, string unit = "", string description = "") : base(id, name, min, max, unit, description)
         {
-        }
-
-        public override bool ToBoolValue(byte[] data)
-        {
-            throw new TranslationExcception("Bool cannot be assigned to this Datapoint");
+            DataSize = 2;
         }
 
         public override byte[] ToData(string value)
@@ -46,11 +42,6 @@ namespace Tiveria.Knx.Datapoint
         }
 
         public override byte[] ToData(double value)
-        {
-            return ToData((uint)value);
-        }
-
-        public override byte[] ToData(long value)
         {
             return ToData((uint)value);
         }
@@ -67,25 +58,26 @@ namespace Tiveria.Knx.Datapoint
             return new byte[] { (byte)(val >> 8), (byte)(val & 0xff) };
         }
 
-
-        public override double ToDoubleValue(byte[] data)
+        public override double ToDoubleValue(byte[] data, int offset = 0)
         {
-            throw new NotImplementedException();
+            return ToValue(data, offset);
         }
 
-        public override long ToLongValue(byte[] data)
+        public override string ToStringValue(byte[] data, int offset = 0)
         {
-            throw new NotImplementedException();
+            return ToValue(data, offset).ToString();
         }
 
-        public override string ToStringValue(byte[] data)
+        public override uint ToValue(byte[] data, int offset = 0)
         {
-            throw new NotImplementedException();
-        }
-
-        public override uint ToValue(byte[] data)
-        {
-            throw new NotImplementedException();
+            if (data.Length - offset < DataSize)
+                throw new Exceptions.TranslationExcception("Data size invalid");
+            uint value = (uint)(data[0] << 8 + data[1]);
+            if (this == DPT_TIMEPERIOD_10MS)
+                value = value * 10;
+            else if (this == DPT_TIMEPERIOD_100MS)
+                value = value * 100;
+            return value;
         }
 
         public static DPType16bitUnsigned DPT_VALUE_2_UCOUNT   = new DPType16bitUnsigned("7.001", "16bit Unsigned Counter", 0, 65535, "pulses");

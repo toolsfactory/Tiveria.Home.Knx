@@ -11,6 +11,7 @@ namespace Tiveria.Knx.Datapoint
         public string Unit { get; }
         public TValue Minimum { get; }
         public TValue Maximum { get; }
+        public int DataSize { get; protected set; }
 
         protected DPType(string id, string name, TValue min = default, TValue max = default, string unit = "", string description = "")
         {
@@ -50,11 +51,8 @@ namespace Tiveria.Knx.Datapoint
         public abstract byte[] ToData(TValue value);
         public abstract byte[] ToData(string value);
         public abstract byte[] ToData(double value);
-        public abstract byte[] ToData(long value);
         public abstract TValue ToValue(byte[] data);
         public abstract string ToStringValue(byte[] data);
         public abstract double ToDoubleValue(byte[] data);
-        public abstract long ToLongValue(byte[] data);
-        public abstract bool ToBoolValue(byte[] data);
     }
 }

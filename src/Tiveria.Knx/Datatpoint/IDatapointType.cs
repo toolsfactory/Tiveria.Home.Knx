@@ -12,12 +12,9 @@ namespace Tiveria.Knx.Datapoint
 
         byte[] ToData(string value);
         byte[] ToData(double value);
-        byte[] ToData(long value);
         
-        string ToStringValue(byte[] data);
-        double ToDoubleValue(byte[] data);
-        long ToLongValue(byte[] data);
-        bool ToBoolValue(byte[] data);
+        string ToStringValue(byte[] data, int offset = 0);
+        double ToDoubleValue(byte[] data, int offset = 0);
     }
 
     public interface IDatapointType<TValue> : IDatapointType
@@ -26,6 +23,6 @@ namespace Tiveria.Knx.Datapoint
         TValue Minimum { get; }
 
         byte[] ToData(TValue value);
-        TValue ToValue(byte[] data);
+        TValue ToValue(byte[] data, int offset = 0);
     }
 }
