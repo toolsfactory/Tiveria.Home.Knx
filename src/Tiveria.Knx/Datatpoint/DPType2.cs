@@ -29,14 +29,15 @@ using System;
 namespace Tiveria.Knx.Datapoint
 {
 
-    public class DPType1BitControl : DPType1Bit
+    public class DPType2 : DPType1
     {
-        public DPType1BitControl(string id, string name, string allowedtrue, string allowedfalse, string unit = "", string description = "") : base(id, name, allowedtrue, allowedfalse, unit, description)
+        public DPType2(string id, string name, string allowedtrue, string allowedfalse, string unit = "", string description = "") : base(id, name, allowedtrue, allowedfalse, unit, description)
         { }
 
+        #region decoding
         public override string DecodeString(byte[] dptData, int offset = 0, bool withUnit = false)
         {
-            var (Value, Control) = Decode(dptData, offset);
+            var (Value, Control) = DecodeControlled(dptData, offset);
             string result = Value ? _allowedTrue : _allowedFalse;
             if (Control)
                 return result + " controlled";
@@ -44,7 +45,7 @@ namespace Tiveria.Knx.Datapoint
                 return result + " not controlled";
         }
 
-        public (bool Value, bool Control) Decode(byte[] dptData, int offset = 0)
+        public (bool Value, bool Control) DecodeControlled(byte[] dptData, int offset = 0)
         {
             if (dptData.Length - offset < 1)
                 throw new TranslationException("Data can not be translated to 1bit value");
@@ -57,8 +58,10 @@ namespace Tiveria.Knx.Datapoint
                 throw new TranslationException("Data can not be translated to 1bit value");
             return dptData[offset] & 0x01;
         }
+        #endregion
 
-        public byte[] EncodeDPT(bool value, bool controlled)
+        #region encoding
+        public byte[] Encode(bool value, bool controlled)
         {
             var data = new byte[] { (byte)(value ? 1 : 0) };
             data[0] = (byte)(controlled ? data[0] | 0x02 : data[0]);
@@ -67,7 +70,7 @@ namespace Tiveria.Knx.Datapoint
 
         protected override byte[] EncodeFromBool(bool value)
         {
-            return EncodeDPT(value, true);
+            return Encode(value, true);
         }
 
         protected override byte[] EncodeFromString(string value)
@@ -78,7 +81,7 @@ namespace Tiveria.Knx.Datapoint
                 throw new Exceptions.TranslationException("translation error, value not recognized");
             val = ValueFromString(items[0]);
             ctrl = CtrlFromItems(items);
-            return EncodeDPT(val, ctrl);
+            return Encode(val, ctrl);
         }
 
         private bool CtrlFromItems(string[] items)
@@ -100,22 +103,23 @@ namespace Tiveria.Knx.Datapoint
                 else
                     throw new Exceptions.TranslationException("translation error, value not recognized");
         }
+        #endregion
 
         #region specific xlator instances
-        public static readonly DPType1BitControl DPT_SWITCH_CTRL = new DPType1BitControl("2.001", "Switch Controlled", "On", "Off");
-        public static readonly DPType1BitControl DPT_BOOL_CTRL = new DPType1BitControl("2.002", "Bool Controlled", "True", "False");
-        public static readonly DPType1BitControl DPT_ENABLE_CTRL = new DPType1BitControl("2.003", "Enable Controlled", "Enable", "Disable");
-        public static readonly DPType1BitControl DPT_RAMP_CTRL = new DPType1BitControl("2.004", "Ramp Controlled", "Ramp", "No Ramp");
-        public static readonly DPType1BitControl DPT_ALARM_CTRL = new DPType1BitControl("2.005", "Alarm Controlled", "Alarm", "No Alarm");
-        public static readonly DPType1BitControl DPT_BINARYVALUE_CTRL = new DPType1BitControl("2.006", "BinaryValue Controlled", "High", "Low");
-        public static readonly DPType1BitControl DPT_STEP_CTRL = new DPType1BitControl("2.007", "Step Controlled", "Increase", "Decrease");
-        public static readonly DPType1BitControl DPT_UPDOWN_CTRL = new DPType1BitControl("2.008", "UpDown Controlled", "Down", "Up");
-        public static readonly DPType1BitControl DPT_OPENCLOSE_CTRL = new DPType1BitControl("2.009", "OpenClose Controlled", "Close", "Open");
-        public static readonly DPType1BitControl DPT_START_CTRL = new DPType1BitControl("2.010", "Start Controlled", "Start", "Stop");
-        public static readonly DPType1BitControl DPT_STATE_CTRL = new DPType1BitControl("2.011", "State Controlled", "Active", "Inactive");
-        public static readonly DPType1BitControl DPT_INVERT_CTRL = new DPType1BitControl("2.012", "Invert Controlled", "Inverted", "Not inverted");
+        public static readonly DPType2 DPT_SWITCH_CTRL = new DPType2("2.001", "Switch Controlled", "On", "Off");
+        public static readonly DPType2 DPT_BOOL_CTRL = new DPType2("2.002", "Bool Controlled", "True", "False");
+        public static readonly DPType2 DPT_ENABLE_CTRL = new DPType2("2.003", "Enable Controlled", "Enable", "Disable");
+        public static readonly DPType2 DPT_RAMP_CTRL = new DPType2("2.004", "Ramp Controlled", "Ramp", "No Ramp");
+        public static readonly DPType2 DPT_ALARM_CTRL = new DPType2("2.005", "Alarm Controlled", "Alarm", "No Alarm");
+        public static readonly DPType2 DPT_BINARYVALUE_CTRL = new DPType2("2.006", "BinaryValue Controlled", "High", "Low");
+        public static readonly DPType2 DPT_STEP_CTRL = new DPType2("2.007", "Step Controlled", "Increase", "Decrease");
+        public static readonly DPType2 DPT_UPDOWN_CTRL = new DPType2("2.008", "UpDown Controlled", "Down", "Up");
+        public static readonly DPType2 DPT_OPENCLOSE_CTRL = new DPType2("2.009", "OpenClose Controlled", "Close", "Open");
+        public static readonly DPType2 DPT_START_CTRL = new DPType2("2.010", "Start Controlled", "Start", "Stop");
+        public static readonly DPType2 DPT_STATE_CTRL = new DPType2("2.011", "State Controlled", "Active", "Inactive");
+        public static readonly DPType2 DPT_INVERT_CTRL = new DPType2("2.012", "Invert Controlled", "Inverted", "Not inverted");
 
-        static DPType1BitControl()
+        static DPType2()
         {
             DatapointTypesList.AddOrReplace(DPT_SWITCH_CTRL);
             DatapointTypesList.AddOrReplace(DPT_BOOL_CTRL);

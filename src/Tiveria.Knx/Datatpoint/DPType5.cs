@@ -31,9 +31,9 @@ using Tiveria.Common.Extensions;
 
 namespace Tiveria.Knx.Datapoint
 {
-    public class DPType8bitUnsigned : DPType<ushort>
+    public class DPType5 : DPType<ushort>
     {
-        public DPType8bitUnsigned(string id, string name, ushort min = 0, ushort max = 0, string unit = "", string description = "") : base(id, name, min, max, unit, description)
+        public DPType5(string id, string name, ushort min = 0, ushort max = 0, string unit = "", string description = "") : base(id, name, min, max, unit, description)
         { }
 
         public override byte[] ToData(string value)
@@ -87,14 +87,14 @@ namespace Tiveria.Knx.Datapoint
             return (ushort)data;
         }
 
-        public static readonly DPType8bitUnsigned DPT_SCALING = new DPType8bitUnsigned("5.001", "Scaling", 0, 100, "%");
-        public static readonly DPType8bitUnsigned DPT_ANGLE = new DPType8bitUnsigned("5.003", "Angle", 0, 360, "\u00b0");
-        public static readonly DPType8bitUnsigned DPT_PERCENT_U8 = new DPType8bitUnsigned("5.004", "Percent (8 Bit)", 0, 255, "%");
-        public static readonly DPType8bitUnsigned DPT_DECIMALFACTOR = new DPType8bitUnsigned("5.005", "Decimal factor", 0, 255, "ratio");
-        public static readonly DPType8bitUnsigned DPT_TARIFF = new DPType8bitUnsigned("5.006", "Tariff information", 0, 254);
-        public static readonly DPType8bitUnsigned DPT_VALUE_1_UCOUNT = new DPType8bitUnsigned("5.010", "Unsigned count", 0, 255, "counter pulses");
+        public static readonly DPType5 DPT_SCALING = new DPType5("5.001", "Scaling", 0, 100, "%");
+        public static readonly DPType5 DPT_ANGLE = new DPType5("5.003", "Angle", 0, 360, "\u00b0");
+        public static readonly DPType5 DPT_PERCENT_U8 = new DPType5("5.004", "Percent (8 Bit)", 0, 255, "%");
+        public static readonly DPType5 DPT_DECIMALFACTOR = new DPType5("5.005", "Decimal factor", 0, 255, "ratio");
+        public static readonly DPType5 DPT_TARIFF = new DPType5("5.006", "Tariff information", 0, 254);
+        public static readonly DPType5 DPT_VALUE_1_UCOUNT = new DPType5("5.010", "Unsigned count", 0, 255, "counter pulses");
 
-        static DPType8bitUnsigned()
+        static DPType5()
         {
             DatapointTypesList.AddOrReplace(DPT_ANGLE);
             DatapointTypesList.AddOrReplace(DPT_SCALING);

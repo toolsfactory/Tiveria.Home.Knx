@@ -26,43 +26,30 @@ using Tiveria.Knx.Exceptions;
 
 namespace Tiveria.Knx.Datapoint
 {
-    public class DPType3BitControl : DPType<(byte Value, bool Control)>
+    public class DPType3 : DPType<sbyte>
     {
-        protected DPType3BitControl(string id, string name, (byte Value, bool Control) min = default, (byte Value, bool Control) max = default, string unit = "", string description = "") : base(id, name, min, max, unit, description)
+        protected DPType3(string id, string name, sbyte min = -7, sbyte max = 7, string unit = "", string description = "") : base(id, name, min, max, unit, description)
         {
         }
 
-        public override double ToDoubleValue(byte[] data, int offset = 0)
+        public override sbyte Decode(byte[] dptData, int offset = 0)
         {
             throw new System.NotImplementedException();
         }
 
-        public override string ToStringValue(byte[] data, int offset = 0)
+        public override byte[] Encode(sbyte value)
         {
             throw new System.NotImplementedException();
         }
 
-        public override (byte Value, bool Control) ToValue(byte[] data, int offset = 0)
-        {
-            var val  = (byte)(data[offset] & 0x07);
-            var ctrl = (data[offset] & 0x08) == 0x08;
-            return (val, ctrl);
-        }
+        public static readonly DPType3 DPT_CONTROL_DIMMING = new DPType3("3.007", "Dimming", -7, 7);
+        public static readonly DPType3 DPT_CONTROL_BLINDS = new DPType3("3.008", "Blinds", -7, 7, "intervals");
 
-
-        public override byte[] ToData((byte Value, bool Control) value)
+        static DPType3()
         {
-            throw new System.NotImplementedException();
-        }
+            DatapointTypesList.AddOrReplace(DPT_CONTROL_DIMMING);
+            DatapointTypesList.AddOrReplace(DPT_CONTROL_BLINDS);
 
-        public override byte[] ToData(string value)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override byte[] ToData(double value)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

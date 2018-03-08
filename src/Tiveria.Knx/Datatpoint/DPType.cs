@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Tiveria.Knx.Datapoint
 {
-    public abstract class DPType : IDatapointType
+    public abstract class DPType<TValue> : IDatapointType
     {
         protected int _mainCategory;
         protected int _subCategory;
@@ -13,27 +13,31 @@ namespace Tiveria.Knx.Datapoint
         public string Name { get; }
         public string Description { get; }
         public string Unit { get; }
-        public object Minimum { get; }
-        public object Maximum { get; }
+        public TValue Minimum { get; }
+        public TValue Maximum { get; }
         public int DataSize { get; protected set; }
         #endregion
 
         #region constructor
-        protected DPType(string id, string name, object min, object max, string unit = "", string description = "")
+        protected DPType(string id, string name, TValue min, TValue max, string unit = "", string description = "")
         {
             if (min == null || max == null)
                 throw new ArgumentNullException("Min/Max need to be set");
             if (String.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException("Name must not be null or empty");
+            (Minimum, Maximum) = ValidateMinMax(min, max);
             Id = ParseId(id);
             Name = name;
             Description = description;
             Unit = unit;
-            Minimum = min;
-            Maximum = max;
         }
 
-        private string ParseId(string id)
+        protected virtual (TValue, TValue) ValidateMinMax(TValue min, TValue max)
+        {
+            return (min, max);
+        }
+
+    private string ParseId(string id)
         {
             if(String.IsNullOrWhiteSpace(id))
                 throw new ArgumentNullException("Id must not be null or empty");
@@ -51,12 +55,12 @@ namespace Tiveria.Knx.Datapoint
         #region standard overwrites
         public override bool Equals(object obj)
         {
-            return Equals(obj as DPType);
+            return Equals(obj as DPType<TValue>);
         }
 
         public bool Equals(IDatapointType other)
         {
-            var typedother = (DPType)other;
+            var typedother = (DPType<TValue>)other;
             return typedother != null && Id == other.Id;
         }
 
@@ -67,12 +71,12 @@ namespace Tiveria.Knx.Datapoint
         #endregion
 
         #region operators
-        public static bool operator ==(DPType type1, DPType type2)
+        public static bool operator ==(DPType<TValue> type1, DPType<TValue> type2)
         {
-            return EqualityComparer<DPType>.Default.Equals(type1, type2);
+            return EqualityComparer<DPType<TValue>>.Default.Equals(type1, type2);
         }
 
-        public static bool operator !=(DPType type1, DPType type2)
+        public static bool operator !=(DPType<TValue> type1, DPType<TValue> type2)
         {
             return !(type1 == type2);
         }
@@ -84,7 +88,9 @@ namespace Tiveria.Knx.Datapoint
         }
 
         #region encoding DPT
-        public virtual byte[] EncodeDPT(object value)
+        public abstract byte[] Encode(TValue value);
+
+        public virtual byte[] Encode(object value)
         {
             if (value is null)
                 throw new ArgumentNullException("Value must not be null");
@@ -132,16 +138,18 @@ namespace Tiveria.Knx.Datapoint
         }
         #endregion
 
-
+        #region decoding DPT
         public virtual string DecodeString(byte[] dptData, int offset = 0, bool withUnit = false)
         {
-            throw new NotImplementedException();
+            return Decode(dptData, offset) + ((withUnit & !String.IsNullOrEmpty(Unit)) ? " " + Unit : "");
         }
 
         public virtual object DecodeObject(byte[] dptData, int offset = 0)
         {
-            throw new NotImplementedException();
+            return Decode(dptData, offset);
         }
 
+        public abstract TValue Decode(byte[] dptData, int offset = 0);
+        #endregion
     }
 }

@@ -28,7 +28,7 @@ using Tiveria.Knx.Exceptions;
 
 namespace Tiveria.Knx.Datapoint
 {
-    public class DPType1Bit : DPType
+    public class DPType1 : DPType<bool>
     {
         #region private fields
         protected readonly string _allowedTrue;
@@ -41,7 +41,7 @@ namespace Tiveria.Knx.Datapoint
         #endregion
 
         #region constructor
-        public DPType1Bit(string id, string name, string allowedtrue, string allowedfalse, string unit = "", string description = "")
+        public DPType1(string id, string name, string allowedtrue, string allowedfalse, string unit = "", string description = "")
             : base(id, name, false, true, unit, description)
         {
             AllowedTrue = allowedtrue;
@@ -53,6 +53,11 @@ namespace Tiveria.Knx.Datapoint
         #endregion
 
         #region decoding dpt data
+        public override bool Decode(byte[] dptData, int offset = 0)
+        {
+            return (bool)DecodeObject(dptData, offset);
+        }
+
         public override string DecodeString(byte[] dptData, int offset = 0, bool withUnit = false)
         {
             return (bool)DecodeObject(dptData, offset) ? AllowedTrue : AllowedFalse;
@@ -67,6 +72,11 @@ namespace Tiveria.Knx.Datapoint
         #endregion
 
         #region encoding dpt data
+        public override byte[] Encode(bool value)
+        {
+            return EncodeFromBool(value);
+        }
+
         protected override byte[] EncodeFromLong(long value)
         {
             if (value == 0)

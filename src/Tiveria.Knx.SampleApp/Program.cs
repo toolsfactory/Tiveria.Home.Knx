@@ -53,7 +53,7 @@ namespace Tiveria.Knx
                         if ((req.CemiFrame.Apci.Type == Cemi.APCIType.GroupValue_Write)
                             || (req.CemiFrame.Apci.Type == Cemi.APCIType.GroupValue_Response))
                         {
-                            var value = DPType8bitUnsigned.DPT_SCALING.ToValue(req.CemiFrame.Apci.Data);
+                            var value = DPType5.DPT_SCALING.ToValue(req.CemiFrame.Apci.Data);
                             Console.WriteLine($"++ {req.CemiFrame.Apci.Type} for \"{addr}\": {value}%");
                         }
                         else
