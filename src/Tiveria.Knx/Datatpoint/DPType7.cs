@@ -68,21 +68,21 @@ namespace Tiveria.Knx.Datapoint
         {
             if (value < Minimum || value > Maximum)
                 throw new TranslationException($"value out of range [{Minimum}..{Maximum}]");
-            return EncodeDPT((ushort)value);
+            return Encode((ushort)value);
         }
 
         protected override byte[] EncodeFromULong(long value)
         {
             if (value < Minimum || value > Maximum)
                 throw new TranslationException($"value out of range [{Minimum}..{Maximum}]");
-            return EncodeDPT((ushort)value);
+            return Encode((ushort)value);
         }
 
         protected override byte[] EncodeFromDouble(double value)
         {
             if (value < Minimum || value > Maximum)
                 throw new TranslationException($"value out of range [{Minimum}..{Maximum}]");
-            return EncodeDPT((ushort)value);
+            return Encode((ushort)value);
         }
 
         protected override byte[] EncodeFromString(string value)
@@ -96,8 +96,7 @@ namespace Tiveria.Knx.Datapoint
         {
             if (dptData.Length - offset < DataSize)
                 throw new Exceptions.TranslationException("Data size invalid");
-            ushort value = (ushort)(dptData[0] << 8 + dptData[1]);
-            return value;
+            return (ushort)(dptData[0] << 8 + dptData[1]);
         }
 
         public uint DecodeScaled(byte[] dptData, int offset = 0)
@@ -124,15 +123,15 @@ namespace Tiveria.Knx.Datapoint
         #region specific xlator instances
         public static DPType7 DPT_VALUE_2_UCOUNT   = new DPType7("7.001", "16bit Unsigned Counter", 0, 65535, "pulses");
         public static DPType7 DPT_TIMEPERIOD_1MS   = new DPType7("7.002", "Time Period 1ms resolution", 0, 65535, "ms");
-        public static DPType7 DPT_TIMEPERIOD_10MS  = new DPType7("7.003", "Time Period 10ms resolution", 0, 655350, "ms");
-        public static DPType7 DPT_TIMEPERIOD_100MS = new DPType7("7.004", "Time Period 100ms resolution", 0, 6553500, "ms");
+        public static DPType7 DPT_TIMEPERIOD_10MS  = new DPType7("7.003", "Time Period 10ms resolution", 0, 65535, "ms");
+        public static DPType7 DPT_TIMEPERIOD_100MS = new DPType7("7.004", "Time Period 100ms resolution", 0, 65535, "ms");
         public static DPType7 DPT_TIMEPERIOD_SEC   = new DPType7("7.005", "Time Period Seconds", 0, 65535, "sec");
         public static DPType7 DPT_TIMEPERIOD_MIN   = new DPType7("7.006", "Time Period Minutes", 0, 65535, "min");
         public static DPType7 DPT_TIMEPERIOD_HRS   = new DPType7("7.007", "Time Period Hours", 0, 65535, "hrs");
 
         public static DPType7 DPT_PROP_DATATYPE    = new DPType7("7.010", "Interface object property ID", 0, 65535, "");
         public static DPType7 DPT_LENGTH_MM        = new DPType7("7.011", "Length in mm", 0, 65535, "mm");
-        public static DPType7 DPT_ELECTRICAL_CURRENT = new DPType7("7.012", "Electrical current", 0, 65535, "mA");
+        public static DPType7 DPT_ELECTRICAL_CUR   = new DPType7("7.012", "Electrical current", 0, 65535, "mA");
         public static DPType7 DPT_BRIGHTNESS       = new DPType7("7.013", "Brightness", 0, 65535, "ls");
 
         static DPType7()
@@ -146,7 +145,7 @@ namespace Tiveria.Knx.Datapoint
             DatapointTypesList.AddOrReplace(DPT_TIMEPERIOD_HRS);
             DatapointTypesList.AddOrReplace(DPT_PROP_DATATYPE);
             DatapointTypesList.AddOrReplace(DPT_LENGTH_MM);
-            DatapointTypesList.AddOrReplace(DPT_ELECTRICAL_CURRENT);
+            DatapointTypesList.AddOrReplace(DPT_ELECTRICAL_CUR);
             DatapointTypesList.AddOrReplace(DPT_BRIGHTNESS);
         }
         #endregion
