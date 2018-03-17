@@ -21,32 +21,40 @@
     conditions of the GNU General Public License cover the whole
     combination.
 */
-    
+
 using System;
-using System.Net;
-using System.Threading.Tasks;
-using Tiveria.Knx.IP.Utils;
 
-namespace Tiveria.Knx.IP
+namespace Tiveria.Knx.Datapoint
 {
-    public interface IIPConnection
+    public class DPType17 : DPType<int>
     {
-        event EventHandler<StateChangedEventArgs> StateChanged;
-        event EventHandler<DataReceivedArgs> DataReceived;
-        event EventHandler<FrameReceivedEventArgs> FrameReceived;
-        event EventHandler Connected;
-        event EventHandler DisConnected;
+        protected DPType17(string id, string name, string unit = "", string description = "") : base(id, name, 0, 63, unit, description)
+        {
+            DataSize = 1;
+        }
 
-        ConnectionState ConnectionState { get; }
-        ConnectionType ConnectionType { get; }
-        IPAddress RemoteAddress { get; }
-        String ConnectionName { get; }
+        public override byte[] Encode(int value)
+        {
+            if (value < Minimum || value > Maximum)
+                throw new ArgumentOutOfRangeException($"Value must be in range [{Minimum}..{Maximum}]");
+            return new byte[1] { (byte)(value & 0b0011_1111) };                
+        }
 
-        Task<bool> ConnectAsync();
-        Task CloseAsync();
+        public override int Decode(byte[] dptData, int offset = 0)
+        {
+            base.Decode(dptData, offset);
+            return dptData[offset] & 0b0011_1111;
+        }
 
-        Task <bool> SendAsync(KnxNetIPFrame frame);
-//        Task<bool> SendCemiAsync(Cemi.ICemi cemi);
-//        bool SendCemiWithAck(Cemi.ICemi cemi);
+        #region specific xlator instances
+        public static DPType17 DPT_SCENE_NUMBER = new DPType17("17.001", "Scene Number");
+
+        static DPType17()
+        {
+            DatapointTypesList.AddOrReplace(DPT_SCENE_NUMBER);
+        }
+        #endregion
     }
+
+
 }

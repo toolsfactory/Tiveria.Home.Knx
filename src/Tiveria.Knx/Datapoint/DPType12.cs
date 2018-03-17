@@ -21,32 +21,35 @@
     conditions of the GNU General Public License cover the whole
     combination.
 */
-    
 using System;
-using System.Net;
-using System.Threading.Tasks;
-using Tiveria.Knx.IP.Utils;
 
-namespace Tiveria.Knx.IP
+namespace Tiveria.Knx.Datapoint
 {
-    public interface IIPConnection
+    public class DPType12 : DPType<UInt32>
     {
-        event EventHandler<StateChangedEventArgs> StateChanged;
-        event EventHandler<DataReceivedArgs> DataReceived;
-        event EventHandler<FrameReceivedEventArgs> FrameReceived;
-        event EventHandler Connected;
-        event EventHandler DisConnected;
+        protected DPType12(string id, string name, string unit = "", string description = "") : base(id, name, UInt32.MinValue, UInt32.MaxValue, unit, description)
+        {
+            DataSize = 4;
+        }
 
-        ConnectionState ConnectionState { get; }
-        ConnectionType ConnectionType { get; }
-        IPAddress RemoteAddress { get; }
-        String ConnectionName { get; }
+        public override uint Decode(byte[] dptData, int offset = 0)
+        {
+            base.Decode(dptData, offset);
+            return (uint) ((dptData[offset] << 24) | (dptData[offset + 1] << 16) | (dptData[offset + 2] << 8) | dptData[offset + 3]);
+        }
 
-        Task<bool> ConnectAsync();
-        Task CloseAsync();
+        public override byte[] Encode(uint value)
+        {
+            return new byte[4] { (byte)((value >> 24) & 0xFF), (byte)((value >> 16) & 0xFF), (byte)((value >> 8) & 0xFF), (byte)(value & 0xFF) };
+        }
 
-        Task <bool> SendAsync(KnxNetIPFrame frame);
-//        Task<bool> SendCemiAsync(Cemi.ICemi cemi);
-//        bool SendCemiWithAck(Cemi.ICemi cemi);
+        #region specific xlator instances
+        public static DPType12 DPT_VALUE_4_UCOUNT = new DPType12("12.001", "Unsigned count", "counter pulses");
+
+        static DPType12()
+        {
+            DatapointTypesList.AddOrReplace(DPT_VALUE_4_UCOUNT);
+        }
+        #endregion
     }
 }

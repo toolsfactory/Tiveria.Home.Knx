@@ -21,7 +21,7 @@ making a combined work based on this library. Thus, the terms and
 conditions of the GNU General Public License cover the whole
 combination.
 */
-
+using System;
 using Tiveria.Knx.Exceptions;
 
 namespace Tiveria.Knx.Datapoint
@@ -29,17 +29,24 @@ namespace Tiveria.Knx.Datapoint
     public class DPType3 : DPType<sbyte>
     {
         protected DPType3(string id, string name, sbyte min = -7, sbyte max = 7, string unit = "", string description = "") : base(id, name, min, max, unit, description)
-        {
-        }
+        { }
 
         public override sbyte Decode(byte[] dptData, int offset = 0)
         {
-            throw new System.NotImplementedException();
+            var data = dptData[offset];
+            var control = (data & 0b0000_1000) != 0;
+            var code = data & 0b0000_0111;
+            return (sbyte) (control ? code : -code);
         }
 
         public override byte[] Encode(sbyte value)
         {
-            throw new System.NotImplementedException();
+            if (value < Minimum || value > Maximum)
+                throw new ArgumentOutOfRangeException($"Value must be in the range [{Minimum}..{Maximum}]");
+            var data = new byte[1];
+            data[0] = (byte)Math.Abs(value);
+            if (value < 0) data[0] = (byte) (data[0] | 0b0000_1000);
+            return data;
         }
 
         public static readonly DPType3 DPT_CONTROL_DIMMING = new DPType3("3.007", "Dimming", -7, 7);

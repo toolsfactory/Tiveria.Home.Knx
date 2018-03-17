@@ -55,7 +55,7 @@ namespace Tiveria.Knx.Datapoint
             if (bytes == null || bytes.Length != 1)
                 throw new ArgumentException();
 
-            return bytes[];
+            return bytes;
         }
 
         protected override byte[] EncodeFromLong(long value)
@@ -75,7 +75,9 @@ namespace Tiveria.Knx.Datapoint
 
         protected override byte[] EncodeFromString(string value)
         {
-            if(String.v)
+            if (String.IsNullOrEmpty(value))
+                throw new ArgumentNullException("value is null or empty");
+            return Encode(value[0]);
         }
 
 

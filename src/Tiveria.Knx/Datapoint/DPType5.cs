@@ -36,20 +36,15 @@ namespace Tiveria.Knx.Datapoint
         public DPType5(string id, string name, ushort min = 0, ushort max = 0, string unit = "", string description = "") : base(id, name, min, max, unit, description)
         { }
 
-        public override byte[] ToData(string value)
-        {
-            var val = ushort.Parse(value);
-            return ToData(val);
-        }
-
-        public override byte[] ToData(double value)
-        {
-            return ToData((ushort)value);
-        }
-
-        public override byte[] ToData(ushort value)
+        public override byte[] Encode(ushort value)
         {
             return new byte[] { ScaleToData(value) };
+        }
+
+        public override ushort Decode(byte[] dptData, int offset = 0)
+        {
+            var data = dptData[offset];
+            return ScaleToValue(data);
         }
 
         private byte ScaleToData(ushort value)
@@ -62,22 +57,7 @@ namespace Tiveria.Knx.Datapoint
                 return (byte) Math.Round(value * 255.0f / 360);
             return (byte) value;
         }
-
-        public override string ToStringValue(byte[] data)
-        {
-            return ToValue(data).ToString();
-        }
-
-        public override double ToDoubleValue(byte[] data)
-        {
-            return ToValue(data);
-        }
-
-        public override ushort ToValue(byte[] data)
-        {
-            return ScaleToValue(data[1]);
-        }
-
+        
         private ushort ScaleToValue(byte data)
         {
             if (this == DPT_SCALING)
@@ -104,4 +84,6 @@ namespace Tiveria.Knx.Datapoint
             DatapointTypesList.AddOrReplace(DPT_VALUE_1_UCOUNT);
         }
     }
+
+
 }

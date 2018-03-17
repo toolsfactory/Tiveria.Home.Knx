@@ -78,7 +78,7 @@ namespace Tiveria.Knx.IP
         }
         #endregion
 
-        public override async Task<bool> SendFrameAsync(KnxNetIPFrame frame)
+        public override async Task<bool> SendAsync(KnxNetIPFrame frame)
         {
             var data = frame.ToBytes();
             try
@@ -107,7 +107,7 @@ namespace Tiveria.Knx.IP
                 throw new ArgumentException("Only CemiLData allowed for now");
             var body = new TunnelingRequest(new Structures.ConnectionHeader(_channelId, SndSeqCounter), cemiLData);
             var frame = new KnxNetIPFrame(ServiceTypeIdentifier.TUNNELING_REQ, body.ToBytes());
-            return SendFrameAsync(frame);
+            return SendAsync(frame);
         }
 
         #region closing connection

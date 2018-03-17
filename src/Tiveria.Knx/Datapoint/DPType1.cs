@@ -120,31 +120,31 @@ namespace Tiveria.Knx.Datapoint
         #endregion
 
         #region specific xlator instances
-        public static readonly DPType1Bit DPT_SWITCH      = new DPType1Bit("1.001", "Switch", "On", "Off");
-        public static readonly DPType1Bit DPT_BOOL        = new DPType1Bit("1.002", "Bool", "True", "False");
-        public static readonly DPType1Bit DPT_ENABLE      = new DPType1Bit("1.003", "Enable", "Enable", "Disable");
-        public static readonly DPType1Bit DPT_RAMP        = new DPType1Bit("1.004", "Ramp", "Ramp", "No Ramp");
-        public static readonly DPType1Bit DPT_ALARM       = new DPType1Bit("1.005", "Alarm", "Alarm", "No Alarm");
-        public static readonly DPType1Bit DPT_BINARYVALUE = new DPType1Bit("1.006", "BinaryValue", "High", "Low");
-        public static readonly DPType1Bit DPT_STEP        = new DPType1Bit("1.007", "Step", "Increase", "Decrease");
-        public static readonly DPType1Bit DPT_UPDOWN      = new DPType1Bit("1.008", "UpDown", "Down", "Up");
-        public static readonly DPType1Bit DPT_OPENCLOSE   = new DPType1Bit("1.009", "OpenClose", "Close", "Open");
-        public static readonly DPType1Bit DPT_START       = new DPType1Bit("1.010", "Start", "Start", "Stop");
-        public static readonly DPType1Bit DPT_STATE       = new DPType1Bit("1.011", "State", "Active", "Inactive");
-        public static readonly DPType1Bit DPT_INVERT      = new DPType1Bit("1.012", "Invert", "Inverted", "Not inverted");
-        public static readonly DPType1Bit DPT_DIMSENDSTYLE= new DPType1Bit("1.013", "DimSendStyle", "Cyclically", "Start/Stop");
-        public static readonly DPType1Bit DPT_INPUTSOURCE = new DPType1Bit("1.014", "InputSource", "Calculated", "Fixed");
-        public static readonly DPType1Bit DPT_RESET       = new DPType1Bit("1.015", "Reset", "TriggerReset", "NoAction");
-        public static readonly DPType1Bit DPT_ACK         = new DPType1Bit("1.016", "Ack", "Acknowledge", "NoAction");
-        public static readonly DPType1Bit DPT_TRIGGER     = new DPType1Bit("1.017", "Trigger", "trigger", "trigger"); //For DPT_Trigger, both values 0 and 1 shall have the same effect and shall not be differentiated in sender or receiver. 
-        public static readonly DPType1Bit DPT_OCCUPANCY   = new DPType1Bit("1.018", "Occupancy", "occupied", "not occupied");
-        public static readonly DPType1Bit DPT_WINDOWDOOOR = new DPType1Bit("1.019", "Window_Door", "open", "closed");
-        public static readonly DPType1Bit DPT_LOGICALFUNC = new DPType1Bit("1.021", "LogicalFunction", "AND", "OR");
-        public static readonly DPType1Bit DPT_SCENEAB     = new DPType1Bit("1.022", "Scene A/B", "Scene B", "Scene A");
-        public static readonly DPType1Bit DPT_SBMODE      = new DPType1Bit("1.023", "Shutter/Blinds Mode", "move up/down + step-stop", "only move up/down");
-        public static readonly DPType1Bit DPT_HEAT_COOL   = new DPType1Bit("1.100", "Heat/Cool", "heating", "cooling");
+        public static readonly DPType1 DPT_SWITCH      = new DPType1("1.001", "Switch", "On", "Off");
+        public static readonly DPType1 DPT_BOOL        = new DPType1("1.002", "Bool", "True", "False");
+        public static readonly DPType1 DPT_ENABLE      = new DPType1("1.003", "Enable", "Enable", "Disable");
+        public static readonly DPType1 DPT_RAMP        = new DPType1("1.004", "Ramp", "Ramp", "No Ramp");
+        public static readonly DPType1 DPT_ALARM       = new DPType1("1.005", "Alarm", "Alarm", "No Alarm");
+        public static readonly DPType1 DPT_BINARYVALUE = new DPType1("1.006", "BinaryValue", "High", "Low");
+        public static readonly DPType1 DPT_STEP        = new DPType1("1.007", "Step", "Increase", "Decrease");
+        public static readonly DPType1 DPT_UPDOWN      = new DPType1("1.008", "UpDown", "Down", "Up");
+        public static readonly DPType1 DPT_OPENCLOSE   = new DPType1("1.009", "OpenClose", "Close", "Open");
+        public static readonly DPType1 DPT_START       = new DPType1("1.010", "Start", "Start", "Stop");
+        public static readonly DPType1 DPT_STATE       = new DPType1("1.011", "State", "Active", "Inactive");
+        public static readonly DPType1 DPT_INVERT      = new DPType1("1.012", "Invert", "Inverted", "Not inverted");
+        public static readonly DPType1 DPT_DIMSENDSTYLE= new DPType1("1.013", "DimSendStyle", "Cyclically", "Start/Stop");
+        public static readonly DPType1 DPT_INPUTSOURCE = new DPType1("1.014", "InputSource", "Calculated", "Fixed");
+        public static readonly DPType1 DPT_RESET       = new DPType1("1.015", "Reset", "TriggerReset", "NoAction");
+        public static readonly DPType1 DPT_ACK         = new DPType1("1.016", "Ack", "Acknowledge", "NoAction");
+        public static readonly DPType1 DPT_TRIGGER     = new DPType1("1.017", "Trigger", "trigger", "trigger"); //For DPT_Trigger, both values 0 and 1 shall have the same effect and shall not be differentiated in sender or receiver. 
+        public static readonly DPType1 DPT_OCCUPANCY   = new DPType1("1.018", "Occupancy", "occupied", "not occupied");
+        public static readonly DPType1 DPT_WINDOWDOOOR = new DPType1("1.019", "Window_Door", "open", "closed");
+        public static readonly DPType1 DPT_LOGICALFUNC = new DPType1("1.021", "LogicalFunction", "AND", "OR");
+        public static readonly DPType1 DPT_SCENEAB     = new DPType1("1.022", "Scene A/B", "Scene B", "Scene A");
+        public static readonly DPType1 DPT_SBMODE      = new DPType1("1.023", "Shutter/Blinds Mode", "move up/down + step-stop", "only move up/down");
+        public static readonly DPType1 DPT_HEAT_COOL   = new DPType1("1.100", "Heat/Cool", "heating", "cooling");
 
-        static DPType1Bit()
+        static DPType1()
         {
             DatapointTypesList.AddOrReplace(DPT_SWITCH);
             DatapointTypesList.AddOrReplace(DPT_BOOL);

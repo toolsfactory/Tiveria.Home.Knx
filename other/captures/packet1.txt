@@ -1,0 +1,36 @@
+Frame 120: 65 bytes on wire (520 bits), 65 bytes captured (520 bits) on interface 0
+Ethernet II, Src: MdtTechn_0e:44 (cc:1b:e0:80:0e:44), Dst: Dell_71:49:7a (90:b1:1c:71:49:7a)
+Internet Protocol Version 4, Src: 192.168.2.101, Dst: 192.168.2.120
+User Datagram Protocol, Src Port: 3671, Dst Port: 57847
+KNXnet/IP  == 061004200017041100002900bce0118f65000300800c56
+    Header
+        Header Length: 0x06
+        Protocol Version: 0x10
+        Service Type Identifier: TUNNELLING_REQUEST (0x0420)
+        Total Length: 23 octets
+    Body
+        Structure Length: 4 octets
+        Communication Channel ID: 17
+        Sequence Counter: 0
+        reserved: 00
+        cEMI == 2900bce0118f65000300800c56
+            messagecode: L_Data.ind (0x29)
+            add information length: 0 octets
+            Controlfield 1: 0xbc
+                1... .... = Frametype: 1
+                ..1. .... = Repeat: 1
+                ...1 .... = System-Broadcast: 1
+                .... 11.. = Priority: 0x3
+                .... ..0. = Acknowledge-Request: 0
+                .... ...0 = Confirm-Flag: 0
+            Controlfield 2: 0xe0
+                1... .... = Destination address type: 1
+                .110 .... = Hop count: 6
+                .... 0000 = Extended Frame Format: 0x0
+            Source Address 1.1.143
+            Destination Address 12/5/0 or 12/1280
+            NPDU length: 3 octets
+            00.. .... = TPCI: UDT (Unnumbered Data Packet) (0x0)
+            .... ..00  10.. .... = APCI: A_GroupValue_Write (0x0002)
+            data: 0c56
+

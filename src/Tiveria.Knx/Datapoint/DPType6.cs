@@ -21,32 +21,30 @@
     conditions of the GNU General Public License cover the whole
     combination.
 */
-    
+
 using System;
-using System.Net;
-using System.Threading.Tasks;
-using Tiveria.Knx.IP.Utils;
 
-namespace Tiveria.Knx.IP
+namespace Tiveria.Knx.Datapoint
 {
-    public interface IIPConnection
+    public class DPType6 : DPType<sbyte>
     {
-        event EventHandler<StateChangedEventArgs> StateChanged;
-        event EventHandler<DataReceivedArgs> DataReceived;
-        event EventHandler<FrameReceivedEventArgs> FrameReceived;
-        event EventHandler Connected;
-        event EventHandler DisConnected;
+        protected DPType6(string id, string name, sbyte min, sbyte max, string unit = "", string description = "") : base(id, name, min, max, unit, description)
+        {  }
 
-        ConnectionState ConnectionState { get; }
-        ConnectionType ConnectionType { get; }
-        IPAddress RemoteAddress { get; }
-        String ConnectionName { get; }
+        public override sbyte Decode(byte[] dptData, int offset = 0)
+        {
+            return (sbyte)dptData[offset];
+        }
 
-        Task<bool> ConnectAsync();
-        Task CloseAsync();
+        public override byte[] Encode(sbyte value)
+        {
+            return new byte[1] { (byte) value };
+        }
 
-        Task <bool> SendAsync(KnxNetIPFrame frame);
-//        Task<bool> SendCemiAsync(Cemi.ICemi cemi);
-//        bool SendCemiWithAck(Cemi.ICemi cemi);
+        public static readonly DPType6 DPT_PERCENT_V8 = new DPType6("6.001", "Percent (8 Bit)", -128, 127, "%");
+        public static readonly DPType6 DPT_VALUE_1_UCOUNT = new DPType6("6.010", "Decimal factor", -128, 127, "pulses");
+
+        // 6.020 not supported at the moment
+
     }
 }

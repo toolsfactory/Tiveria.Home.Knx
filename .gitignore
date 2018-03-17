@@ -1,5 +1,6 @@
 # site ignore directories
 **/bin
+docs/KNX/
 
 #OS junk files
 [Tt]humbs.db

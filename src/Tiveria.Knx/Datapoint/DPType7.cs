@@ -25,64 +25,47 @@
 using System;
 using Tiveria.Knx.Exceptions;
 
-
 namespace Tiveria.Knx.Datapoint
 {
-    public class DPType7 : DPType<ushort>
+    public class DPType7 : DPType<uint>
     {
         #region constructor
-        public DPType7(string id, string name, ushort min = ushort.MinValue, ushort max = ushort.MaxValue, string unit = "", string description = "") : base(id, name, min, max, unit, description)
+        public DPType7(string id, string name, uint min, uint max, string unit = "", string description = "") : base(id, name, min, max, unit, description)
         {
             DataSize = 2;
         }
         #endregion
 
         #region encoding
-        public override byte[] Encode(ushort value)
+        private byte[] InternalEncode(ushort value)
         {
-            if (value < Minimum || value > Maximum)
-                throw new TranslationException($"value out of range [{Minimum}..{Maximum}]");
             return new byte[] { (byte)(value >> 8), (byte)(value & 0xff) };
         }
 
-        public byte[] EncodeScaled(uint value)
+        public override byte[] Encode(uint value)
         {
+            if (value < Minimum || value > Maximum)
+                throw new TranslationException($"value out of range [{Minimum}..{Maximum}]");
             if (this == DPT_TIMEPERIOD_10MS)
-            {
-                if (value > ushort.MaxValue * 10)
-                    throw new ArgumentOutOfRangeException("Value must be in the range 0.." + (ushort.MaxValue * 10));
-                return Encode((ushort)(value / 10));
-            }
+                return InternalEncode((ushort)(value / 10));
             if (this == DPT_TIMEPERIOD_100MS)
-            {
-                if (value > ushort.MaxValue * 100)
-                    throw new ArgumentOutOfRangeException("Value must be in the range 0.." + (ushort.MaxValue * 100));
-                return Encode((ushort)(value / 100));
-            }
-            if (value > ushort.MaxValue)
-                throw new ArgumentOutOfRangeException("Value must be in the range 0.." + (ushort.MaxValue));
-            return Encode((ushort)value);
+                return InternalEncode((ushort)(value / 100));
+            return InternalEncode((ushort)value);
         }
 
         protected override byte[] EncodeFromLong(long value)
         {
-            if (value < Minimum || value > Maximum)
-                throw new TranslationException($"value out of range [{Minimum}..{Maximum}]");
-            return EncodeDPT((ushort)value);
+            return Encode((uint)value);
         }
 
         protected override byte[] EncodeFromULong(long value)
         {
-            if (value < Minimum || value > Maximum)
-                throw new TranslationException($"value out of range [{Minimum}..{Maximum}]");
-            return EncodeDPT((ushort)value);
+            return Encode((uint)value);
         }
 
         protected override byte[] EncodeFromDouble(double value)
         {
-            if (value < Minimum || value > Maximum)
-                throw new TranslationException($"value out of range [{Minimum}..{Maximum}]");
-            return EncodeDPT((ushort)value);
+            return Encode((ushort)value);
         }
 
         protected override byte[] EncodeFromString(string value)
@@ -92,22 +75,16 @@ namespace Tiveria.Knx.Datapoint
         #endregion
 
         #region decoding
-        public override ushort Decode(byte[] dptData, int offset = 0)
+        public override uint Decode(byte[] dptData, int offset = 0)
         {
             if (dptData.Length - offset < DataSize)
                 throw new Exceptions.TranslationException("Data size invalid");
-            ushort value = (ushort)(dptData[0] << 8 + dptData[1]);
-            return value;
-        }
-
-        public uint DecodeScaled(byte[] dptData, int offset = 0)
-        {
-            uint result = Decode(dptData, offset);
+            var value = (uint)(dptData[0] << 8 + dptData[1]);
             if (this == DPT_TIMEPERIOD_10MS)
-                return result * 10;
+                return value * 10;
             if (this == DPT_TIMEPERIOD_100MS)
-                return result * 100;
-            return result;
+                return value * 100;
+            return value;
         }
 
         public override string DecodeString(byte[] dptData, int offset = 0, bool withUnit = false)

@@ -168,7 +168,7 @@ namespace Tiveria.Knx.IP
         #endregion
 
         #region abstract base methods
-        public abstract Task<bool> SendFrameAsync(KnxNetIPFrame frame);
+        public abstract Task<bool> SendAsync(KnxNetIPFrame frame);
 
         public abstract Task CloseAsync();
 
