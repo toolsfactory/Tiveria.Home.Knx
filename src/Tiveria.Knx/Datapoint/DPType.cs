@@ -46,7 +46,6 @@ namespace Tiveria.Knx.Datapoint
         #region constructor
         protected DPType(string id, string name, TValue min, TValue max, string unit = "", string description = "")
         {
-                throw new ArgumentNullException("Min/Max need to be set");
             if (String.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException("Name must not be null or empty");
             (Minimum, Maximum) = ValidateMinMax(min, max);
