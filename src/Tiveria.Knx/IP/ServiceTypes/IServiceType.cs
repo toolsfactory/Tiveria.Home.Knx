@@ -28,6 +28,7 @@ namespace Tiveria.Knx.IP.ServiceTypes
 {
     public interface IServiceType
     {
+        int Size { get; }
         ServiceTypeIdentifier ServiceTypeIdentifier { get; }
         byte[] ToBytes();
         void WriteToByteArray(byte[] buffer, int offset = 0);

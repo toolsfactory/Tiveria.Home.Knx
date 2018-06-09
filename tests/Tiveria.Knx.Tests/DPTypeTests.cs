@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 using NUnit.Framework;
-using Tiveria.Knx.Cemi;
+using Tiveria.Knx.Datapoint;
 using Tiveria.Common.Extensions;
 using Tiveria.Common.IO;
 
@@ -61,6 +61,16 @@ namespace Tiveria.Knx.Tests
                 msb |= 0x80;
             var lsb = (byte)m;
             return ((byte)msb, lsb);
+        }
+
+        [Test]
+        public void DecodeDPT14()
+        {
+            var data = "3D0B4396".ToByteArray();
+            var result = DPType14.DPT_ELECTRIC_CURRENT.Decode(data);
+            var test = BitConverter.GetBytes(0.034f);
+
+            Assert.AreEqual(0.034f, result);
         }
         
     }

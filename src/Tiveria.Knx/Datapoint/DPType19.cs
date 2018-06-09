@@ -1,4 +1,6 @@
-﻿namespace Tiveria.Knx.Datapoint
+﻿using System.Reflection;
+
+namespace Tiveria.Knx.Datapoint
 {
     public class DPType19 : DPType<ComplexDateTime>
     {
@@ -33,23 +35,23 @@
         {
             base.Decode(dptData, offset);
             var result = new ComplexDateTime();
-            result.Year  = (short) (dptData[offset] + 1900);
-            result.Month = (byte)  (dptData[offset + 1] & 0b0000_1111);
-            result.DayOfMonth = (byte) (dptData[offset + 2] & 0b0001_1111);
-            result.DayOfWeek = (DayOfWeek) ((dptData[offset + 3] & 0b1110_0000) >> 5);
-            result.HourOfDay = (byte) (dptData[offset + 3] & 0b0001_1111);
+            result.Year = (short)(dptData[offset] + 1900);
+            result.Month = (byte)(dptData[offset + 1] & 0b0000_1111);
+            result.DayOfMonth = (byte)(dptData[offset + 2] & 0b0001_1111);
+            result.DayOfWeek = (DayOfWeek)((dptData[offset + 3] & 0b1110_0000) >> 5);
+            result.HourOfDay = (byte)(dptData[offset + 3] & 0b0001_1111);
             result.Minutes = (byte)(dptData[offset + 4] & 0b0011_1111);
             result.Seconds = (byte)(dptData[offset + 5] & 0b0011_1111);
 
-            result.Fault        = (dptData[offset + 6] & 0b1000_0000) != 0;
-            result.WorkingDay   = (dptData[offset + 6] & 0b0100_0000) != 0;
+            result.Fault = (dptData[offset + 6] & 0b1000_0000) != 0;
+            result.WorkingDay = (dptData[offset + 6] & 0b0100_0000) != 0;
             result.NoWorkingDay = (dptData[offset + 6] & 0b0010_0000) != 0;
-            result.NoYear       = (dptData[offset + 6] & 0b0001_0000) != 0;
-            result.NoDate       = (dptData[offset + 6] & 0b0000_1000) != 0;
-            result.NoDayOfWeek  = (dptData[offset + 6] & 0b0000_0100) != 0;
-            result.NoTime       = (dptData[offset + 6] & 0b0000_0010) != 0;
+            result.NoYear = (dptData[offset + 6] & 0b0001_0000) != 0;
+            result.NoDate = (dptData[offset + 6] & 0b0000_1000) != 0;
+            result.NoDayOfWeek = (dptData[offset + 6] & 0b0000_0100) != 0;
+            result.NoTime = (dptData[offset + 6] & 0b0000_0010) != 0;
             result.StandardSummerTime = (dptData[offset + 6] & 0b0000_0001) != 0;
-            result.QualityOfClock     = (dptData[offset + 7] & 0b1000_0000) != 0;
+            result.QualityOfClock = (dptData[offset + 7] & 0b1000_0000) != 0;
             return result;
         }
 
@@ -63,3 +65,5 @@
         #endregion
     }
 }
+
+

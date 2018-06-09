@@ -22,17 +22,35 @@
     combination.
 */
 
-namespace Tiveria.Knx.Cemi
-{
-    public interface ICemi
-    {
-        int Size { get; }
-        CemiMessageCode MessageCode { get; }
-        byte AdditionalInfoLength { get; }
-        AdditionalInformationField[] AdditionalInfoFields { get; }
-        byte[] Payload { get; }
+using System;
+using Tiveria.Common.IO;
 
-        byte[] ToBytes();
-        void WriteToByteArray(byte[] buffer, int offset = 0);
+namespace Tiveria.Knx.IP.Structures
+{
+    public abstract class StructureBase : IStructure
+    {
+        protected int _size;
+        public int Size { get => _size; }
+
+        public byte[] ToBytes()
+        {
+            var data = new byte[Size];
+            WriteToByteArray(data, 0);
+            return data;
+        }
+
+        public virtual void Write(IndividualEndianessBinaryWriter writer)
+        {
+            if (writer == null)
+                throw new ArgumentNullException("writer is null");
+        }
+
+        public virtual void WriteToByteArray(byte[] buffer, int offset = 0)
+        {
+            if (buffer == null)
+                throw new ArgumentNullException("buffer is null");
+            if (offset + _size > buffer.Length)
+                throw new ArgumentOutOfRangeException("buffer too small");
+        }
     }
 }

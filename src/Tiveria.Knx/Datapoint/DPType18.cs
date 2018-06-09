@@ -57,6 +57,4 @@ namespace Tiveria.Knx.Datapoint
         }
         #endregion
     }
-
-
 }

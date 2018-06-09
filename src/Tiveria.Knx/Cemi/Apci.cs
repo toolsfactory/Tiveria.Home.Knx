@@ -41,8 +41,8 @@ namespace Tiveria.Knx.Cemi
         private static readonly List<APCIEntry> RelevantAPCIEntry = new List<Cemi.APCIEntry>()
         {
             new Cemi.APCIEntry(0b0000, 0b000000, 10, APCIType.GroupValue_Read),
-            new Cemi.APCIEntry(0b0001, 0xff,      4, APCIType.GroupValue_Response),
-            new Cemi.APCIEntry(0b0010, 0xff,      4, APCIType.GroupValue_Write),
+            new Cemi.APCIEntry(0b0001, 0xff,      4, APCIType.GroupValue_Response, true),
+            new Cemi.APCIEntry(0b0010, 0xff,      4, APCIType.GroupValue_Write, true),
             new Cemi.APCIEntry(0b0011, 0b000000, 10, APCIType.IndividualAddress_Write),
             new Cemi.APCIEntry(0b0100, 0b000000, 10, APCIType.IndividualAddress_Read),
             new Cemi.APCIEntry(0b0101, 0b000000, 10, APCIType.IndividualAddress_Response),
@@ -184,12 +184,14 @@ namespace Tiveria.Knx.Cemi
         public byte Low { get; }
         public byte AcpiBits { get; }
         public APCIType Type { get; }
-        public APCIEntry(byte high, byte low, byte acpiBits, APCIType type)
+        public bool CanOptimize { get; }
+        public APCIEntry(byte high, byte low, byte acpiBits, APCIType type, bool canOptimize = false)
         {
             Type = type;
             High = high;
             Low = low;
             AcpiBits = acpiBits;
+            CanOptimize = canOptimize;
         }
     }
     public enum APCIType {

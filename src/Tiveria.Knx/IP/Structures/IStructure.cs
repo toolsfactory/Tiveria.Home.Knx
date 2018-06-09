@@ -21,14 +21,16 @@
     conditions of the GNU General Public License cover the whole
     combination.
 */
+using Tiveria.Common.IO;
     
-namespace Tiveria.Knx.Structures
+namespace Tiveria.Knx.IP.Structures
 {
     public interface IStructure
     {
-        int StructureLength { get; }
+        int Size { get; }
 
         byte[] ToBytes();
         void WriteToByteArray(byte[] buffer, int offset = 0);
+        void Write(IndividualEndianessBinaryWriter writer);
     }
 }

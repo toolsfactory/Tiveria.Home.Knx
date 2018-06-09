@@ -61,7 +61,7 @@ namespace Tiveria.Knx.IP.ServiceTypes
         {
             base.WriteToByteArray(buffer, offset);
             _connectionHeader.WriteToByteArray(buffer, offset);
-            _cemiFrame.WriteToByteArray(buffer, offset + _connectionHeader.StructureLength);
+            _cemiFrame.WriteToByteArray(buffer, offset + _connectionHeader.Size);
         }
 
 

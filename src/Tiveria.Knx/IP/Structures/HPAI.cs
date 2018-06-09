@@ -24,7 +24,6 @@
 
 using System;
 using System.Net;
-using Tiveria.Knx.Structures;
 using Tiveria.Knx.IP.Utils;
 using Tiveria.Knx.Exceptions;
 using Tiveria.Common.Extensions;
@@ -80,7 +79,7 @@ namespace Tiveria.Knx.IP.Structures
             _endpointType = endpointType;
             _ip = address;
             _port = port;
-            _structureLength = HPAI_SIZE;
+            _size = HPAI_SIZE;
         }
 
         protected Hpai(IndividualEndianessBinaryReader br)
@@ -97,9 +96,9 @@ namespace Tiveria.Knx.IP.Structures
         #region parsing
         private void ParseStructureSize(IndividualEndianessBinaryReader br)
         {
-            _structureLength = br.ReadByte();
-            if (_structureLength != Hpai.HPAI_SIZE)
-                throw BufferFieldException.WrongValue("HPAI.Size", Hpai.HPAI_SIZE, _structureLength);
+            _size = br.ReadByte();
+            if (_size != Hpai.HPAI_SIZE)
+                throw BufferFieldException.WrongValue("HPAI.Size", Hpai.HPAI_SIZE, _size);
         }
 
         private void ParseEndpointType(IndividualEndianessBinaryReader br)
@@ -130,6 +129,16 @@ namespace Tiveria.Knx.IP.Structures
             Ip.GetAddressBytes().CopyTo(buffer, offset + 2);
             buffer[offset + 6] = (byte)(Port >> 8);
             buffer[offset + 7] = (byte)Port;
+        }
+
+        public override void Write(IndividualEndianessBinaryWriter writer)
+        {
+            base.Write(writer);
+            writer.Write(Hpai.HPAI_SIZE);
+            writer.Write((byte)EndpointType);
+            writer.Write(Ip.GetAddressBytes());
+            writer.Write((byte)(Port >> 8));
+            writer.Write((byte)Port);
         }
 
         public override string ToString()

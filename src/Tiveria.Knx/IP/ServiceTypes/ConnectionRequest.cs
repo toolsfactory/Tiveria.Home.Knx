@@ -58,22 +58,22 @@ namespace Tiveria.Knx.IP.ServiceTypes
             _cri = requestInfo;
             _controlHPAI = controlEndpoint;
             _dataHPAI = dataEndpoint;
-            _structureLength = _cri.StructureLength + _controlHPAI.StructureLength + _dataHPAI.StructureLength;
+            _size = _cri.Size + _controlHPAI.Size + _dataHPAI.Size;
         }
 
         public override void WriteToByteArray(byte[] buffer, int offset = 0)
         {
             base.WriteToByteArray(buffer, offset);
             _controlHPAI.WriteToByteArray(buffer, offset);
-            _dataHPAI.WriteToByteArray(buffer, offset += _controlHPAI.StructureLength);
-            _cri.WriteToByteArray(buffer, offset += _dataHPAI.StructureLength);
+            _dataHPAI.WriteToByteArray(buffer, offset += _controlHPAI.Size);
+            _cri.WriteToByteArray(buffer, offset += _dataHPAI.Size);
         }
 
-        public static ConnectionRequest FromBuffer(byte[] buffer, int offset = 0)
+        public static ConnectionRequest Parse(byte[] buffer, int offset = 0)
         {
             var disEP = Hpai.Parse(buffer, offset);
-            var datEP = Hpai.Parse(buffer, offset += disEP.StructureLength);
-            var cri = CRI.FromBuffer(buffer, offset+= datEP.StructureLength);
+            var datEP = Hpai.Parse(buffer, offset += disEP.Size);
+            var cri = CRI.FromBuffer(buffer, offset+= datEP.Size);
             return new ConnectionRequest(cri, disEP, datEP);
         }
     }

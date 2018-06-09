@@ -23,7 +23,6 @@
 */
 
 using System;
-using Tiveria.Knx.Structures;
 using Tiveria.Knx.IP.Utils;
 using Tiveria.Common.IO;
 using Tiveria.Knx.Exceptions;
@@ -55,14 +54,12 @@ namespace Tiveria.Knx.IP.Structures
 
         #region private fields
         private ServiceTypeIdentifier _serviceTypeIdentifier;
-        private byte _size;
         private byte _version;
         private int _totalLength;
         private ushort _serviceTypeRaw;
         #endregion
 
         #region public properties
-        public byte Size => _size;
         public byte Version => _version;
         public int VersionMajor => _version / 0x10; 
         public int VersionMinor => _version % 0x10; 
@@ -88,7 +85,7 @@ namespace Tiveria.Knx.IP.Structures
             _version = version;
             _totalLength = _size + bodyLength;
             _serviceTypeIdentifier = servicetypeidentifier;
-            _structureLength = _size;
+            base._size = _size;
         }
 
         public FrameHeader(ServiceTypeIdentifier servicetypeidentifier, ushort bodyLength)
@@ -124,7 +121,7 @@ namespace Tiveria.Knx.IP.Structures
                 _serviceTypeIdentifier = ServiceTypeIdentifier.UNKNOWN;
         }
 
-        private void ValidateVersionAndSize(byte version, byte size)
+        private void ValidateVersionAndSize(byte version, int size)
         {
             if (ThrowExceptionOnUnknownVersion)
             {
@@ -146,6 +143,17 @@ namespace Tiveria.Knx.IP.Structures
             buffer[3] = (byte)(int)ServiceTypeIdentifier;
             buffer[4] = (byte)(_totalLength >> 8);
             buffer[5] = (byte)_totalLength;
+        }
+
+        public override void Write(IndividualEndianessBinaryWriter writer)
+        {
+            base.Write(writer);
+            writer.Write(HEADER_SIZE_10);
+            writer.Write(KNXNETIP_VERSION_10);
+            writer.Write((byte)((int)ServiceTypeIdentifier >> 8));
+            writer.Write((byte)ServiceTypeIdentifier);
+            writer.Write((byte)(_totalLength >> 8));
+            writer.Write((byte)_totalLength);
         }
 
         public override String ToString()

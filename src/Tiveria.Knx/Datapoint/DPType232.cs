@@ -22,17 +22,34 @@
     combination.
 */
 
-namespace Tiveria.Knx.Cemi
-{
-    public interface ICemi
-    {
-        int Size { get; }
-        CemiMessageCode MessageCode { get; }
-        byte AdditionalInfoLength { get; }
-        AdditionalInformationField[] AdditionalInfoFields { get; }
-        byte[] Payload { get; }
 
-        byte[] ToBytes();
-        void WriteToByteArray(byte[] buffer, int offset = 0);
+namespace Tiveria.Knx.Datapoint
+{
+    public class DPType232 : DPType<(byte Red, byte Green, byte Blue)>
+    {
+        protected DPType232(string id, string name, (byte Red, byte Green, byte Blue) min, (byte Red, byte Green, byte Blue) max, string unit = "", string description = "") : base(id, name, min, max, unit, description)
+        {
+            DataSize = 3;
+        }
+
+        public override byte[] Encode((byte Red, byte Green, byte Blue) value)
+        {
+            return new byte[3] { value.Red, value.Green, value.Blue };
+        }
+
+        public override (byte Red, byte Green, byte Blue) Decode(byte[] dptData, int offset = 0)
+        {
+            base.Decode(dptData, offset);
+            return (dptData[offset], dptData[offset + 1], dptData[offset + 2]);
+        }
+
+        #region specific xlator instances
+        public static DPType232 DPT_RGB = new DPType232("232.600", "RGB", (0,0,0), (255,255,255), "r g b");
+
+        static DPType232()
+        {
+            DatapointTypesList.AddOrReplace(DPT_RGB);
+        }
+        #endregion
     }
 }

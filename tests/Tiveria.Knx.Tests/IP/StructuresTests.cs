@@ -54,7 +54,7 @@ namespace Tiveria.Knx.Tests.IP
         {
             var cri = new CRI(ConnectionType.TUNNEL_CONNECTION);
             Assert.IsTrue(cri.ConnectionType == ConnectionType.TUNNEL_CONNECTION);
-            Assert.IsTrue(cri.StructureLength == 2);
+            Assert.IsTrue(cri.Size == 2);
             var data = cri.ToBytes();
             Assert.IsTrue(data.Length == 2);
             Assert.IsTrue(data[0] == 2);
@@ -67,7 +67,7 @@ namespace Tiveria.Knx.Tests.IP
             var opt = new byte[4] { 1, 2, 3, 4 };
             var cri = new CRI(ConnectionType.TUNNEL_CONNECTION, opt);
             Assert.IsTrue(cri.ConnectionType == ConnectionType.TUNNEL_CONNECTION);
-            Assert.IsTrue(cri.StructureLength == 6);
+            Assert.IsTrue(cri.Size == 6);
             var data = cri.ToBytes();
             Assert.IsTrue(data.Length == 6);
             Assert.IsTrue(data[0] == 6);
@@ -83,7 +83,7 @@ namespace Tiveria.Knx.Tests.IP
         {
             var buffer = "04060200".ToByteArray(); // Size: 4, Type: Remlog Connection, Layer: Link
             var cri = CRI.FromBuffer(buffer, 0);
-            Assert.IsTrue(cri.StructureLength == 4);
+            Assert.IsTrue(cri.Size == 4);
             Assert.IsTrue(cri.ConnectionType == ConnectionType.REMLOG_CONNECTION);
             var data = cri.ToBytes();
             Assert.IsTrue(data.Length == 4);

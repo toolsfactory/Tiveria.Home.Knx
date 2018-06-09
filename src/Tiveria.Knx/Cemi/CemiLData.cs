@@ -92,13 +92,13 @@ namespace Tiveria.Knx.Cemi
         {
             VerifyPayload(tpdu);
             _additionalInfoLength = 0;
-            _controlField1 = new ControlField1(_messageCode, false, priority, repeat, broadcast, ack);
-            _controlField2 = new ControlField2(_destinationAddress.IsGroupAddress(), hopCount, 0);
             _sourceAddress = srcAddress;
             _destinationAddress = dstAddress;
             _payload = (byte[]) tpdu.Clone();
             _apci = new Apci(_payload);
-            _structureLength = MESSAGEMINLENGTH + _payload.Length - 1;
+            _controlField1 = new ControlField1(_messageCode, false, priority, repeat, broadcast, ack);
+            _controlField2 = new ControlField2(_destinationAddress.IsGroupAddress(), hopCount, 0);
+            _size = MESSAGEMINLENGTH + _payload.Length;
         }
 
         public CemiLData(CemiMessageCode messageCode, IndividualAddress srcAddress, IKnxAddress dstAddress, byte[] tpdu,
@@ -217,6 +217,16 @@ namespace Tiveria.Knx.Cemi
         }
 
         #region static methods
+        public static CemiLData CreateReadRequestCemi(IndividualAddress srcAddress, IKnxAddress dstAddress, Priority priority = Priority.Normal)
+        {
+            return new CemiLData(CemiMessageCode.LDATA_REQ, srcAddress, dstAddress, new byte[2] { 0, 0 }, priority);
+        }
+
+        public static CemiLData CreateReadAnswerCemi(IndividualAddress srcAddress, IKnxAddress dstAddress, byte[] data, Priority priority = Priority.Normal)
+        {
+            return new CemiLData(CemiMessageCode.LDATA_IND, srcAddress, dstAddress, data , priority);
+        }
+
         /// <summary>
         /// Parses a part of a buffer and creates a CemiLData class from it
         /// </summary>

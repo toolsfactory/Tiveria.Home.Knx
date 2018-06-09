@@ -23,7 +23,6 @@
 */
 
 using System;
-using Tiveria.Knx.Structures;
 using Tiveria.Knx.IP.Utils;
 using Tiveria.Knx.Exceptions;
 

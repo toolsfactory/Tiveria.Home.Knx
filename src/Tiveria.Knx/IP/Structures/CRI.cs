@@ -23,10 +23,10 @@
 */
 
 using System;
-using Tiveria.Knx.Structures;
 using Tiveria.Knx.IP.Utils;
 using Tiveria.Knx.Exceptions;
 using Tiveria.Common.Extensions;
+using Tiveria.Common.IO;
 
 namespace Tiveria.Knx.IP.Structures
 {
@@ -49,7 +49,7 @@ namespace Tiveria.Knx.IP.Structures
         {
             _connectionType = connectionType;
             _optionalData = optionalData ?? (new byte[0]);
-            _structureLength = 2 + _optionalData.Length;
+            _size = 2 + _optionalData.Length;
         }
 
         /// <summary>
@@ -64,10 +64,19 @@ namespace Tiveria.Knx.IP.Structures
         public override void WriteToByteArray(byte[] buffer, int offset)
         {
             base.WriteToByteArray(buffer, offset);
-            buffer[offset + 0] = (byte) (2 + _optionalData.Length);
+            buffer[offset + 0] = (byte) (_size);
             buffer[offset + 1] = (byte)_connectionType;
             if (_optionalData.Length > 0)
                 _optionalData.CopyTo(buffer, offset+2);
+        }
+
+        public override void Write(IndividualEndianessBinaryWriter writer)
+        {
+            base.Write(writer);
+            writer.Write((byte)_size);
+            writer.Write((byte)_connectionType);
+            if (_optionalData.Length > 0)
+                writer.Write(_optionalData);
         }
 
         public static CRI FromBuffer(byte[] buffer, int offset = 0)

@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Tiveria.Knx.Cemi;
 using Tiveria.Common.Extensions;
 using Tiveria.Common.IO;
+using Tiveria.Knx.Datapoint;
 
 namespace Tiveria.Knx.Tests
 {
@@ -103,6 +104,15 @@ namespace Tiveria.Knx.Tests
             Assert.AreEqual(((GroupAddress)result.DestinationAddress).ToString(), "6/1/47");
 
             Assert.AreEqual(result.Payload.Length, 2);
+        }
+
+        [Test]
+        public void CreateCemi()
+        {
+            var data = DPType7.DPT_TIMEPERIOD_HRS.Encode(4604);
+            var cemi = Cemi.CemiLData.CreateReadAnswerCemi(new IndividualAddress(1, 1, 3), new GroupAddress(6, 1, 47), data);
+            var bytes = cemi.ToBytes();
+            Assert.AreEqual(1, 1);
         }
     }
 }

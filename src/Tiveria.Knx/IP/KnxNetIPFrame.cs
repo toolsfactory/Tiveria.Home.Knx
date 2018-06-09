@@ -33,7 +33,7 @@ namespace Tiveria.Knx.IP
 {
     public class KnxNetIPFrame
     {
-        public static readonly KnxNetIPVersion[] SupportedKnxNEtIPVersions = new KnxNetIPVersion[1] { new KnxNetIPVersion("KnxNetIP Version 1.0", 0x10, 0x06) };
+        public static readonly KnxNetIPVersion[] SupportedKnxNetIPVersions = new KnxNetIPVersion[1] { new KnxNetIPVersion("KnxNetIP Version 1.0", 0x10, 0x06) };
 
         #region private fields
         private byte[] _body;
@@ -100,9 +100,9 @@ namespace Tiveria.Knx.IP
             switch (Header.ServiceTypeIdentifier)
             {
                 case ServiceTypeIdentifier.CONNECT_REQUEST:
-                    return ConnectionRequest.FromBuffer(_body, 0);
+                    return ConnectionRequest.Parse(_body, 0);
                 case ServiceTypeIdentifier.CONNECT_RESPONSE:
-                    return ConnectionResponse.FromBuffer(_body, 0);
+                    return ConnectionResponse.Parse(_body, 0);
                 case ServiceTypeIdentifier.TUNNELING_REQ:
                     return TunnelingRequest.Parse(_body, 0, _body.Length);
                 case ServiceTypeIdentifier.DISCONNECT_REQ:
@@ -111,6 +111,8 @@ namespace Tiveria.Knx.IP
                     return DisconnectResponse.Parse(_body, 0);
                 case ServiceTypeIdentifier.CONNECTIONSTATE_RESPONSE:
                     return ConnectionStateResponse.Parse(_body, 0);
+                case ServiceTypeIdentifier.TUNNELING_ACK:
+                    return TunnelingAcknowledgement.Parse(_body, 0);
                 default:
                     return UnknownService.Parse(new Common.IO.IndividualEndianessBinaryReader(_body), Header.ServiceTypeRaw, _body.Length);
             }

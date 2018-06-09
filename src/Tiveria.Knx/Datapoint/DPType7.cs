@@ -79,7 +79,7 @@ namespace Tiveria.Knx.Datapoint
         {
             if (dptData.Length - offset < DataSize)
                 throw new Exceptions.TranslationException("Data size invalid");
-            var value = (uint)(dptData[0] << 8 + dptData[1]);
+            var value = (uint)((dptData[0] << 8) + dptData[1]);
             if (this == DPT_TIMEPERIOD_10MS)
                 return value * 10;
             if (this == DPT_TIMEPERIOD_100MS)

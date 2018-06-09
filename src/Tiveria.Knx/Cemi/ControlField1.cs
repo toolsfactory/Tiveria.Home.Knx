@@ -50,6 +50,7 @@ namespace Tiveria.Knx.Cemi
     /// Confirm:            In L_Data.con this shall indicate whether there has been any error in the transmitted frame.
     ///                     0 = no error, 1 = error
     /// </code>
+
     public class ControlField1
     {
         #region private fields

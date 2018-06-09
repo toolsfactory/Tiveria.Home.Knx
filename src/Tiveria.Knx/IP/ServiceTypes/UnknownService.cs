@@ -44,12 +44,12 @@ namespace Tiveria.Knx.IP.ServiceTypes
                 throw new ArgumentNullException("frameRaw must not be null");
             _serviceTypeRaw = serviceTypeRaw;
             _frameRaw = frameRaw;
-            _structureLength = _frameRaw.Length;
+            _size = _frameRaw.Length;
         }
 
         public override string ToString()
         {
-            return $"UnknownService: {_serviceTypeRaw:x4} - Length: {_structureLength}";
+            return $"UnknownService: {_serviceTypeRaw:x4} - Length: {_size}";
         }
 
         public override void WriteToByteArray(byte[] buffer, int offset = 0)

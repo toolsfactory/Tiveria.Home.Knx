@@ -51,7 +51,7 @@ namespace Tiveria.Knx.Cemi
     ///                          See <seealso cref="Tiveria.Knx.Cemi.AdditionalInformationField"/> for more details on this substructure
     /// </code>
     /// </summary>
-    public abstract class CemiBase : Structures.StructureBase, ICemi
+    public abstract class CemiBase : ICemi
     {
 
         #region private fields
@@ -59,6 +59,7 @@ namespace Tiveria.Knx.Cemi
         protected byte _additionalInfoLength;
         protected AdditionalInformationField[] _additionalInfoFields;
         protected byte[] _payload;
+        protected int _size;
         #endregion
 
         #region public properties
@@ -66,6 +67,7 @@ namespace Tiveria.Knx.Cemi
         public byte AdditionalInfoLength => _additionalInfoLength;
         public AdditionalInformationField[] AdditionalInfoFields => _additionalInfoFields;
         public byte[] Payload => _payload;
+        public int Size { get => _size; }
         #endregion
 
         #region constructors
@@ -134,7 +136,7 @@ namespace Tiveria.Knx.Cemi
             {
                 var field = AdditionalInformationField.Parse(br);
                 items.Add(field);
-                count += field.StructureLength;
+                count += field.Size;
             }
             _additionalInfoFields = items.ToArray();
         }
@@ -142,9 +144,19 @@ namespace Tiveria.Knx.Cemi
         protected abstract void ParseServiceInformation(IndividualEndianessBinaryReader br);
         #endregion
 
-        public override void WriteToByteArray(byte[] buffer, int offset = 0)
+        public byte[] ToBytes()
         {
-            base.WriteToByteArray(buffer, offset);
+            var data = new byte[Size];
+            WriteToByteArray(data, 0);
+            return data;
+        }
+
+        public virtual void WriteToByteArray(byte[] buffer, int offset = 0)
+        {
+            if (buffer == null)
+                throw new ArgumentNullException("buffer is null");
+            if (offset + _size > buffer.Length)
+                throw new ArgumentOutOfRangeException("buffer too small");
         }
     }
 }

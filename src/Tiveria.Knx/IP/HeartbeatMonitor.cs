@@ -128,7 +128,9 @@ namespace Tiveria.Knx.IP
                         SendHeartbeat();
                         int waitResult = WaitForHearbeat();
                         receivedFlag = waitResult == 0;
-                        if (waitResult != WaitHandle.WaitTimeout)
+                        if (waitResult == WaitHandle.WaitTimeout)
+                            _logger.Debug("Hartbeat not received in retry " + i);
+                        else
                             break;
                     }
                     if (receivedFlag)

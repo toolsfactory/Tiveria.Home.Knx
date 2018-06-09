@@ -25,35 +25,156 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Tiveria.Knx.IP.Structures;
 using Tiveria.Knx.IP.Utils;
+using Tiveria.Knx.Utils;
+using Tiveria.Knx.Exceptions;
+using Tiveria.Common.Logging;
+using Tiveria.Common.IO;
 
 namespace Tiveria.Knx.IP.ServiceTypes
 {
+    /// <summary>
+    /// <code>
+    /// +--------+--------+--------+--------+
+    /// | byte 1 | byte 2 | byte 3 | byte 4 |
+    /// +--------+--------+--------+--------+
+    /// | Header |Channel |Sequence|Status  |
+    /// | Length |ID      |Counter |Code    |
+    /// +--------+--------+--------+--------+
+    /// | 0x04   |        |        |        |
+    /// +--------+--------+-----------------+
+    ///
+    /// Serice Type:  <see cref="Tiveria.Knx.IP.Utils.ServiceTypeIdentifier"/>
+    /// </code>
+    /// </summary>
     public class ServiceAcknowledgement : ServiceTypeBase, IServiceType
     {
+        #region Constants
+        public static readonly byte SERVICEACK_HEADER_SIZE_10 = 0x04;
+        #endregion
+
+        #region private fields
         private byte _channelId;
         private byte _sequenceCounter;
         private ErrorCodes _statusCode;
+        #endregion
 
-        public byte ChannelId { get => _channelId; }
-        public byte SequenceCounter { get => _sequenceCounter; }
-        public ErrorCodes StatusCode { get => _statusCode; }
+        #region public properties
+        public byte ChannelId => _channelId;
+        public byte SequenceCounter => _sequenceCounter;
+        public ErrorCodes StatusCode => _statusCode;
+        #endregion
 
-        public ServiceAcknowledgement(ServiceTypeIdentifier serviceTypeIdentifier, byte channelId, byte sequenceCounter, ErrorCodes statusCode) : base(serviceTypeIdentifier)
+        #region Constructors
+        public ServiceAcknowledgement(ServiceTypeIdentifier svcTypeIdentifier, IndividualEndianessBinaryReader br)
+            : base(svcTypeIdentifier)
         {
+            if (br == null)
+                throw new ArgumentNullException("buffer is null");
+            ParseHeaderSize(br);
+            ParseChannelId(br);
+            ParseSequenceCounter(br);
+            ParseLastByte(br);
+        }
+
+        public ServiceAcknowledgement(ServiceTypeIdentifier svcTypeIdentifier, byte channelId, byte sequenceCounter, ErrorCodes statusCode)
+            : base(svcTypeIdentifier)
+        {
+            _size = SERVICEACK_HEADER_SIZE_10;
             _channelId = channelId;
             _sequenceCounter = sequenceCounter;
             _statusCode = statusCode;
-            _structureLength = 4;
+        }
+        #endregion
+
+        #region private parsing and verification methods
+        private void ParseHeaderSize(IndividualEndianessBinaryReader br)
+        {
+            var len = br.ReadByte();
+            ValidateSize(len);
+            _size = len;
         }
 
-        public override void WriteToByteArray(byte[] buffer, int offset = 0)
+        private void ParseChannelId(IndividualEndianessBinaryReader br)
+        {
+            _channelId = br.ReadByte();
+        }
+
+        private void ParseSequenceCounter(IndividualEndianessBinaryReader br)
+        {
+            _sequenceCounter = br.ReadByte();
+        }
+
+        private void ValidateSize(byte size)
+        {
+            if (size != SERVICEACK_HEADER_SIZE_10)
+                throw BufferFieldException.WrongValue("KnxNetIP ServiceAcknowledgement Size", SERVICEACK_HEADER_SIZE_10, size);
+        }
+
+        protected virtual void ParseLastByte(IndividualEndianessBinaryReader br)
+        {
+            var statusCode = br.ReadByte();
+            if (!Enum.IsDefined(typeof(ErrorCodes), statusCode))
+                throw BufferFieldException.TypeUnknown("StatusCode", statusCode);
+            _statusCode = (ErrorCodes)statusCode;
+        }
+        #endregion
+
+        #region Public Methods
+        public override void WriteToByteArray(byte[] buffer, int offset)
         {
             base.WriteToByteArray(buffer, offset);
-            buffer[offset] = (byte) _structureLength;
-            buffer[offset + 1] = _channelId;
-            buffer[offset + 2] = _sequenceCounter;
-            buffer[offset + 3] = (byte)_statusCode;
+            buffer[0] = SERVICEACK_HEADER_SIZE_10;
+            buffer[1] = _channelId;
+            buffer[2] = _sequenceCounter;
+            buffer[3] = (byte)_statusCode;
         }
+
+        public override String ToString()
+        {
+            return String.Format($"ServiceAck: Size={_size}, ChannelId={_channelId}, SequenceCounter={_sequenceCounter}, StatusCode={_statusCode}");
+        }
+        #endregion
+
+        #region Static Parsing
+        public static ServiceAcknowledgement Parse(ServiceTypeIdentifier svcTypeIdentifier, IndividualEndianessBinaryReader br)
+        {
+            return new ServiceAcknowledgement(svcTypeIdentifier, br);
+        }
+
+        public static ServiceAcknowledgement Parse(ServiceTypeIdentifier svcTypeIdentifier, byte[] buffer, int offset)
+        {
+            return Parse(svcTypeIdentifier, new IndividualEndianessBinaryReader(buffer, offset));
+        }
+
+        public static bool TryParse(ServiceTypeIdentifier svcTypeIdentifier, IndividualEndianessBinaryReader br, out ServiceAcknowledgement header)
+        {
+            try
+            {
+                header = Parse(svcTypeIdentifier, br);
+                return true;
+            }
+            catch
+            {
+                header = null;
+                return false;
+            }
+        }
+
+        public static bool TryParse(ServiceTypeIdentifier svcTypeIdentifier, byte[] buffer, int offset, out ServiceAcknowledgement header)
+        {
+            try
+            {
+                header = Parse(svcTypeIdentifier, buffer, offset);
+                return true;
+            }
+            catch
+            {
+                header = null;
+                return false;
+            }
+        }
+        #endregion
     }
 }

@@ -12,4 +12,8 @@
     <ProjectReference Include="..\Tiveria.Common.Standard\Tiveria.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Structures\" />
+  </ItemGroup>
+
 </Project>

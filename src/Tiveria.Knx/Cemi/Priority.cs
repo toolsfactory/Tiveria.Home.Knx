@@ -42,7 +42,7 @@ namespace Tiveria.Knx.Cemi
     public static partial class EnumExtensions
     {
         /// <summary>
-        /// translate <see cref="HPAIEndpointType"/> to a readable string
+        /// translate <see cref="Priority"/> to a readable string
         /// </summary>
         /// <returns>the string representation of the enum value</returns>
         public static String ToDescription(this Priority priority)

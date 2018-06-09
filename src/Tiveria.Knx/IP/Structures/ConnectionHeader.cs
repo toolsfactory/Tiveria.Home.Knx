@@ -23,7 +23,6 @@
 */
 
 using System;
-using Tiveria.Knx.Structures;
 using Tiveria.Knx.IP.Utils;
 using Tiveria.Common.IO;
 using Tiveria.Knx.Exceptions;
@@ -68,13 +67,12 @@ namespace Tiveria.Knx.IP.Structures
             ParseHeaderSize(br);
             ParseChannelId(br);
             ParseSequenceCounter(br);
-            // just read last byte as this is 0x00 and reserved
-            br.ReadByte();
+            ParseLastByte(br);
         }
 
         public ConnectionHeader(byte channelId, byte sequenceCounter)
         {
-            _structureLength = CONNECTION_HEADER_SIZE_10;
+            _size = CONNECTION_HEADER_SIZE_10;
             _channelId = channelId;
             _sequenceCounter = sequenceCounter;
         }
@@ -85,7 +83,7 @@ namespace Tiveria.Knx.IP.Structures
         {
             var len = br.ReadByte();
             ValidateSize(len);
-            _structureLength = len;
+            _size = len;
         }
 
         private void ParseChannelId(IndividualEndianessBinaryReader br)
@@ -103,6 +101,14 @@ namespace Tiveria.Knx.IP.Structures
             if (size != CONNECTION_HEADER_SIZE_10)
                 throw BufferFieldException.WrongValue("KnxNetIP ConnectionHeader Size", CONNECTION_HEADER_SIZE_10, size);
         }
+
+        protected virtual void ParseLastByte(IndividualEndianessBinaryReader br)
+        {
+            // just read last byte as this is 0x00 and reserved
+            var lastbyte = br.ReadByte();
+            if (lastbyte != 0x00)
+                throw BufferFieldException.WrongValue("ConnectionHeader/LastByte", 0, lastbyte);
+        }
         #endregion
 
         #region Public Methods
@@ -115,9 +121,18 @@ namespace Tiveria.Knx.IP.Structures
             buffer[3] = 0x00;
         }
 
+        public override void Write(IndividualEndianessBinaryWriter writer)
+        {
+            base.Write(writer);
+            writer.Write(CONNECTION_HEADER_SIZE_10);
+            writer.Write(_channelId);
+            writer.Write(_sequenceCounter);
+            writer.Write(0x00);
+        }
+
         public override String ToString()
         {
-            return String.Format($"ConnectionHeader: Size={_structureLength}, ChannelId={_channelId}, SequenceCounter={_sequenceCounter}");
+            return String.Format($"ConnectionHeader: Size={_size}, ChannelId={_channelId}, SequenceCounter={_sequenceCounter}");
         }
         #endregion
 

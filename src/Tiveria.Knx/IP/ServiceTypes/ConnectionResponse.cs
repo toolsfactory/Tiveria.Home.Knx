@@ -71,11 +71,11 @@ namespace Tiveria.Knx.IP.ServiceTypes
             if (_status == ErrorCodes.NO_ERROR && _crd != null && _endpointHPAI != null)
             {
                 _crd.WriteToByteArray(buffer, offset + 2);
-                _endpointHPAI.WriteToByteArray(buffer, offset + 2 + _crd.StructureLength);
+                _endpointHPAI.WriteToByteArray(buffer, offset + 2 + _crd.Size);
             }
         }
 
-        public static ConnectionResponse FromBuffer(byte[] buffer, int offset = 0)
+        public static ConnectionResponse Parse(byte[] buffer, int offset = 0)
         {
             if (buffer.Length - offset < 2)
                 throw BufferSizeException.TooSmall("ConnectRespopnse");
@@ -86,7 +86,7 @@ namespace Tiveria.Knx.IP.ServiceTypes
             if(status == (byte) ErrorCodes.NO_ERROR)
             {
                 var endpoint = Hpai.Parse(buffer, offset + 2);
-                var crd = CRD.FromBuffer(buffer, offset + 2 + endpoint.StructureLength);
+                var crd = CRD.FromBuffer(buffer, offset + 2 + endpoint.Size);
                 return new ConnectionResponse(channelid, (ErrorCodes)status, endpoint, crd);
             } else
             {

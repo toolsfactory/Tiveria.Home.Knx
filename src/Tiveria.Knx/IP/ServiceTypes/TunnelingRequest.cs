@@ -34,8 +34,6 @@ namespace Tiveria.Knx.IP.ServiceTypes
     /// </summary>
     public class TunnelingRequest : ServiceTypeBase
     {
-        public static readonly byte CONNECTIONHEADERLENGTH = 4;
-
         private readonly ConnectionHeader _connectionHeader;
         private readonly Cemi.CemiLData _cemiFrame;
 
@@ -51,6 +49,7 @@ namespace Tiveria.Knx.IP.ServiceTypes
         {
             _connectionHeader = ConnectionHeader.Parse(br);
             _cemiFrame = Cemi.CemiLData.Parse(br);
+            _size = _connectionHeader.Size + _cemiFrame.Size;
         }
 
         public TunnelingRequest(ConnectionHeader header, Cemi.CemiLData cemiFrame)
@@ -58,13 +57,14 @@ namespace Tiveria.Knx.IP.ServiceTypes
         {
             _connectionHeader = header;
             _cemiFrame = cemiFrame;
+            _size = _connectionHeader.Size + _cemiFrame.Size;
         }
 
         public override void WriteToByteArray(byte[] buffer, int offset = 0)
         {
             base.WriteToByteArray(buffer, offset);
             _connectionHeader.WriteToByteArray(buffer, offset);
-            _cemiFrame.WriteToByteArray(buffer, offset + _connectionHeader.StructureLength);
+            _cemiFrame.WriteToByteArray(buffer, offset + _connectionHeader.Size);
         }
 
 

@@ -41,7 +41,10 @@ namespace Tiveria.Knx.Datapoint
         public override float Decode(byte[] dptData, int offset = 0)
         {
             base.Decode(dptData, offset);
-            return BitConverter.ToSingle(dptData, offset);
+            var data = new byte[4];
+            Array.Copy(dptData, offset, data, 0, 4);
+            Array.Reverse(data);
+            return BitConverter.ToSingle(data, offset);
         }
 
         #region specific xlator instances

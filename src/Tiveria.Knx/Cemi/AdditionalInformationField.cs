@@ -26,7 +26,6 @@ using System;
 using System.Collections.Generic;
 using Tiveria.Common.Extensions;
 using Tiveria.Common.IO;
-using Tiveria.Knx.Structures;
 using Tiveria.Knx.Exceptions;
 
 namespace Tiveria.Knx.Cemi
@@ -46,7 +45,7 @@ namespace Tiveria.Knx.Cemi
     ///  InfoLength : Size of Additional Info 
     ///  Additional Info : Array of bytes representign the additional infos
     /// </summary>
-    public class AdditionalInformationField : StructureBase, IStructure
+    public class AdditionalInformationField
     {
         #region internal static field with size infos
         private static readonly Dictionary<AdditionalInfoType, int> TypeSizes = new Dictionary<AdditionalInfoType, int>
@@ -65,6 +64,7 @@ namespace Tiveria.Knx.Cemi
             {AdditionalInfoType.MANUFACTURER,   255 },
             {AdditionalInfoType.RESERVED255,    0 }
         };
+        private readonly int _size;
         #endregion
 
         #region private fields
@@ -77,6 +77,7 @@ namespace Tiveria.Knx.Cemi
         public AdditionalInfoType InfoType => _infoType;
         public int InfoLength => _infoLength;
         public byte[] Information => _information;
+        public int Size => _size;
         #endregion
 
         #region construct from fields
@@ -93,7 +94,7 @@ namespace Tiveria.Knx.Cemi
                 throw new ArgumentException("Size of data array to small");
             _infoType = infoType;
             SetInfo(info);
-            _structureLength = 2 + _infoLength;
+            _size = 2 + _infoLength;
         }
 
         private void SetInfo(byte[] data)
@@ -120,7 +121,7 @@ namespace Tiveria.Knx.Cemi
                 throw BufferSizeException.TooSmall("AdditionalInformationField");
             ParseInfo(br);
             VerifyLength(_infoType, _infoLength);
-            _structureLength = 2 + _infoLength;
+            _size = 2 + _infoLength;
         }
 
         private void ParseType(IndividualEndianessBinaryReader br)
@@ -137,7 +138,7 @@ namespace Tiveria.Knx.Cemi
         private void ParseLength(IndividualEndianessBinaryReader br)
         {
             _infoLength = br.ReadByte();
-            if (br.Available <_infoLength)
+            if (br.Available < _infoLength)
                 throw BufferSizeException.TooSmall("AdditionalFieldInfo");
         }
 
@@ -167,9 +168,12 @@ namespace Tiveria.Knx.Cemi
         #endregion
 
         #region write data to buffer
-        public override void WriteToByteArray(byte[] buffer, int offset = 0)
+        public void WriteToByteArray(byte[] buffer, int offset = 0)
         {
-            base.WriteToByteArray(buffer, offset);
+            if (buffer == null)
+                throw new ArgumentNullException("buffer is null");
+            if (offset + _size > buffer.Length)
+                throw new ArgumentOutOfRangeException("buffer too small");
             buffer[offset] = (byte)_infoType;
             buffer[offset + 1] = (byte)_infoLength;
             Array.Copy(_information, 0, buffer, offset + 2, _infoLength);

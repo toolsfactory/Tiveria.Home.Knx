@@ -21,8 +21,12 @@
     conditions of the GNU General Public License cover the whole
     combination.
 */
-
+using System;
+using Tiveria.Knx.Utils;
 using Tiveria.Knx.IP.Utils;
+using Tiveria.Knx.Exceptions;
+using Tiveria.Common.Logging;
+using Tiveria.Common.IO;
 
 namespace Tiveria.Knx.IP.ServiceTypes
 {
@@ -32,12 +36,49 @@ namespace Tiveria.Knx.IP.ServiceTypes
             : base(ServiceTypeIdentifier.TUNNELING_ACK, channelId, sequenceCounter, statusCode)
         { }
 
-        public static TunnelingAcknowledgement FromBuffer(byte[] buffer, int offset = 0)
+        protected TunnelingAcknowledgement(IndividualEndianessBinaryReader br) 
+            : base(ServiceTypeIdentifier.TUNNELING_ACK, br)
+        { }
+
+        #region Static Parsing
+        public static TunnelingAcknowledgement Parse(IndividualEndianessBinaryReader br)
         {
-            var channelId = buffer[offset + 1];
-            var sequenceCounter = buffer[offset + 2];
-            var statusCode = buffer[offset + 3];
-            return new TunnelingAcknowledgement(channelId, sequenceCounter, (ErrorCodes) statusCode);
+            return new TunnelingAcknowledgement(br);
         }
+
+        public static TunnelingAcknowledgement Parse(byte[] buffer, int offset)
+        {
+            return Parse(new IndividualEndianessBinaryReader(buffer, offset));
+        }
+
+        public static bool TryParse(IndividualEndianessBinaryReader br, out TunnelingAcknowledgement header)
+        {
+            try
+            {
+                header = Parse(br);
+                return true;
+            }
+            catch
+            {
+                header = null;
+                return false;
+            }
+        }
+
+        public static bool TryParse(byte[] buffer, int offset, out TunnelingAcknowledgement header)
+        {
+            try
+            {
+                header = Parse(buffer, offset);
+                return true;
+            }
+            catch
+            {
+                header = null;
+                return false;
+            }
+        }
+        #endregion
+
     }
 }

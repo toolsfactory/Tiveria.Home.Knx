@@ -54,7 +54,7 @@ namespace Tiveria.Knx.IP.ServiceTypes
         #region constructors
         protected DisconnectResponse() : base(ServiceTypeIdentifier.DISCONNECT_RES)
         {
-            _structureLength = 2;
+            _size = 2;
         }
 
         public DisconnectResponse(byte channelId, ErrorCodes status)

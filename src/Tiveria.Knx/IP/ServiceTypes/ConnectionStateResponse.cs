@@ -54,7 +54,7 @@ namespace Tiveria.Knx.IP.ServiceTypes
         #region constructors
         protected ConnectionStateResponse() : base(ServiceTypeIdentifier.CONNECTIONSTATE_RESPONSE)
         {
-            _structureLength = 2;
+            _size = 2;
         }
 
         public ConnectionStateResponse(byte channelId, ErrorCodes status)

@@ -63,7 +63,7 @@ namespace Tiveria.Knx.IP.ServiceTypes
                 throw new ArgumentNullException("Controlendpoint");
             _controlEndpoint = controlEndpoint;
             _channelId = channelId;
-            _structureLength = 2 + _controlEndpoint.StructureLength;
+            _size = 2 + _controlEndpoint.Size;
         }
 
         protected ConnectionStateRequest(IndividualEndianessBinaryReader br)
@@ -72,7 +72,7 @@ namespace Tiveria.Knx.IP.ServiceTypes
             ParseChannelId(br);
             SkipReserved(br);
             ParseHpai(br);
-            _structureLength = 2 + _controlEndpoint.StructureLength;
+            _size = 2 + _controlEndpoint.Size;
         }
         #endregion
 

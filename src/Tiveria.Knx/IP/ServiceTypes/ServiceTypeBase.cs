@@ -34,10 +34,10 @@ namespace Tiveria.Knx.IP.ServiceTypes
     {
         protected static ILogger Logger = LogFactory.GetLogger("KnxNetIP Service");
 
-        protected int _structureLength;
+        protected int _size;
         private ServiceTypeIdentifier _serviceTypeIdentifier;
 
-        public int StructureLength { get => _structureLength; }
+        public int Size { get => _size; }
         public ServiceTypeIdentifier ServiceTypeIdentifier { get => _serviceTypeIdentifier; }
 
         protected ServiceTypeBase(ServiceTypeIdentifier serviceTypeIdentifier)
@@ -57,7 +57,7 @@ namespace Tiveria.Knx.IP.ServiceTypes
 
         public byte[] ToBytes()
         {
-            var data = new byte[StructureLength];
+            var data = new byte[Size];
             WriteToByteArray(data, 0);
             return data;
         }
@@ -66,7 +66,7 @@ namespace Tiveria.Knx.IP.ServiceTypes
         {
             if (buffer == null)
                 throw new ArgumentNullException("buffer is null");
-            if (offset + _structureLength > buffer.Length)
+            if (offset + _size > buffer.Length)
                 throw new ArgumentOutOfRangeException("buffer too small");
         }
 
