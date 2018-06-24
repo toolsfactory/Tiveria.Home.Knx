@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Net;
 using NUnit.Framework;
-using Tiveria.Knx.Cemi;
+using Tiveria.Home.Knx.Cemi;
 using Tiveria.Common.Extensions;
 using Tiveria.Common.IO;
 
-namespace Tiveria.Knx.Tests
+namespace Tiveria.Home.Knx.Tests
 {
     [TestFixture]
     class AcpiTests

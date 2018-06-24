@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using Tiveria.Knx.IP.ServiceTypes;
-using Tiveria.Knx.IP;
-using Tiveria.Knx.IP.Utils;
+using Tiveria.Home.Knx.IP.ServiceTypes;
+using Tiveria.Home.Knx.IP;
+using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Common.Extensions;
 
-namespace Tiveria.Knx.Tests
+namespace Tiveria.Home.Knx.Tests
 {
     [TestFixture]
     public class TunnelingConnectionRequestTests

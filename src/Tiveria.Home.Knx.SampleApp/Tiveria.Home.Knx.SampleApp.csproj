@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+<!--
+	<RuntimeFrameworkVersion>2.0.0-beta-001737-00</RuntimeFrameworkVersion> 
+	<RuntimeIdentifiers>win8-arm;ubuntu.14.04-arm;ubuntu.16.04-arm;win-x64</RuntimeIdentifiers> 
+-->
+	<ApplicationIcon /> 
+	<StartupObject>Tiveria.Home.Knx.Program</StartupObject> 
+	<AssemblyName>Tiveria.Home.Knx.SampleApp</AssemblyName> 
+	<RootNamespace>Tiveria.Home.Knx.SampleApp</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NLog" Version="4.5.0-rc05" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Tiveria.Common.Standard\Tiveria.Common.csproj" />
+    <ProjectReference Include="..\Tiveria.KNX\Tiveria.Home.Knx.csproj" />
+  </ItemGroup>
+
+</Project>

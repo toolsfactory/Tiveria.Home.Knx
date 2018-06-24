@@ -13,7 +13,7 @@
         [Test]
         public void Demo()
         {
-            var hpai = new Tiveria.Knx.Structures.HPAI(Tiveria.Knx.HPAIEndpointType.IPV4_UDP, IPAddress.Parse("192.168.2.120"), 57846);
+            var hpai = new Tiveria.Home.Knx.Structures.HPAI(Tiveria.Home.Knx.HPAIEndpointType.IPV4_UDP, IPAddress.Parse("192.168.2.120"), 57846);
             var expected = new byte[8] { 0x08, 0x01, 0xc0, 0xa8, 0x02, 0x78, 0xe1, 0xf6 };
 
             var result = hpai.ToBytes();

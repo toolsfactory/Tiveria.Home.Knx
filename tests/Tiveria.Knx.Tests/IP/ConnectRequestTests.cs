@@ -1,9 +1,9 @@
 ﻿using System.Net;
 using NUnit.Framework;
-using Tiveria.Knx.IP.ServiceTypes;
+using Tiveria.Home.Knx.IP.ServiceTypes;
 using Tiveria.Common.Extensions;
 
-namespace Tiveria.Knx.Tests.IP
+namespace Tiveria.Home.Knx.Tests.IP
 {
     [TestFixture]
     public class ConnectRequest

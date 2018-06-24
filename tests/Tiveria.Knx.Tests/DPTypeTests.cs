@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Net;
 using NUnit.Framework;
-using Tiveria.Knx.Datapoint;
+using Tiveria.Home.Knx.Datapoint;
 using Tiveria.Common.Extensions;
 using Tiveria.Common.IO;
 
-namespace Tiveria.Knx.Tests
+namespace Tiveria.Home.Knx.Tests
 {
     [TestFixture]
     class DPTypeTests

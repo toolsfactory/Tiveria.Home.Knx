@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Net;
 using NUnit.Framework;
-using Tiveria.Knx.Cemi;
+using Tiveria.Home.Knx.Cemi;
 using Tiveria.Common.Extensions;
 using Tiveria.Common.IO;
-using Tiveria.Knx.Datapoint;
+using Tiveria.Home.Knx.Datapoint;
 
-namespace Tiveria.Knx.Tests
+namespace Tiveria.Home.Knx.Tests
 {
     [TestFixture]
     class CemiTests
@@ -67,7 +67,7 @@ namespace Tiveria.Knx.Tests
             Assert.AreEqual(result.ControlField1.Confirm, ConfirmType.NoError);
 
             Assert.AreEqual(result.ControlField2.HopCount, 5);
-            Assert.AreEqual(result.ControlField2.DestinationAddressType, KnxAddressType.GroupAddress);
+            Assert.AreEqual(result.ControlField2.DestinationAddressType, AddressType.GroupAddress);
             Assert.AreEqual(result.ControlField2.ExtendedFrameFormat, 0);
 
             Assert.AreEqual(result.SourceAddress.ToString(), "1.1.205");
@@ -97,7 +97,7 @@ namespace Tiveria.Knx.Tests
             Assert.AreEqual(result.ControlField1.Confirm, ConfirmType.NoError);
 
             Assert.AreEqual(result.ControlField2.HopCount, 5);
-            Assert.AreEqual(result.ControlField2.DestinationAddressType, KnxAddressType.GroupAddress);
+            Assert.AreEqual(result.ControlField2.DestinationAddressType, AddressType.GroupAddress);
             Assert.AreEqual(result.ControlField2.ExtendedFrameFormat, 0);
 
             Assert.AreEqual(result.SourceAddress.ToString(), "1.1.205");

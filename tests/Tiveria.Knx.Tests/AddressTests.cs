@@ -1,8 +1,8 @@
 ﻿using System;
 using NUnit.Framework;
-using Tiveria.Knx;
+using Tiveria.Home.Knx;
 
-namespace Tiveria.Knx.Tests
+namespace Tiveria.Home.Knx.Tests
 {
     [TestFixture]
     public class AddressTests
@@ -16,7 +16,7 @@ namespace Tiveria.Knx.Tests
             Assert.IsTrue(individualAddress.Area == 15);
             Assert.IsTrue(individualAddress.Line == 15);
             Assert.IsTrue(individualAddress.Device == 241);
-            Assert.IsTrue(individualAddress.AddressType == KnxAddressType.IndividualAddress);
+            Assert.IsTrue(individualAddress.AddressType == AddressType.IndividualAddress);
         }
 
         [Test]
@@ -29,7 +29,7 @@ namespace Tiveria.Knx.Tests
             Assert.IsTrue(individualAddress.Line == 15);
             Assert.IsTrue(individualAddress.Device == 241);
             Assert.IsTrue(individualAddress.RawAddress == sampleAddress);
-            Assert.IsTrue(individualAddress.AddressType == KnxAddressType.IndividualAddress);
+            Assert.IsTrue(individualAddress.AddressType == AddressType.IndividualAddress);
         }
 
         [Test]
@@ -69,7 +69,7 @@ namespace Tiveria.Knx.Tests
             Assert.IsTrue(individualAddress.Line == 15);
             Assert.IsTrue(individualAddress.Device == 241);
             Assert.IsTrue(individualAddress.RawAddress == 0xff_f1);
-            Assert.IsTrue(individualAddress.AddressType == KnxAddressType.IndividualAddress);
+            Assert.IsTrue(individualAddress.AddressType == AddressType.IndividualAddress);
         }
 
         [Test]
@@ -81,7 +81,7 @@ namespace Tiveria.Knx.Tests
             Assert.IsTrue(group.RawAddress == 0x31_2f);
             Assert.IsTrue(group.TwoLevelAddress.MainGroup == 6);
             Assert.IsTrue(group.TwoLevelAddress.SubGroup == 303);
-            Assert.IsTrue(group.AddressType == KnxAddressType.GroupAddress);
+            Assert.IsTrue(group.AddressType == AddressType.GroupAddress);
         }
 
         [Test]

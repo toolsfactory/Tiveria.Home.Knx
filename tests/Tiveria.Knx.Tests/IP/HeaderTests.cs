@@ -1,12 +1,12 @@
 using System;
 using System.Net;
 using NUnit.Framework;
-using Tiveria.Knx.IP.Structures;
-using Tiveria.Knx.IP.Utils;
-using Tiveria.Knx.Exceptions;
+using Tiveria.Home.Knx.IP.Structures;
+using Tiveria.Home.Knx.IP.Enums;
+using Tiveria.Home.Knx.Exceptions;
 using Tiveria.Common.Extensions;
 
-namespace Tiveria.Knx.Tests.IP
+namespace Tiveria.Home.Knx.Tests.IP
 {
     [TestFixture]
     public class HeaderTests
