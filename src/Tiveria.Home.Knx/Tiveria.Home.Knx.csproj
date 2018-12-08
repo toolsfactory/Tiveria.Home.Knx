@@ -12,6 +12,7 @@
     <RepositoryUrl>https://github.com/toolsfactory/Tiveria.Home.Knx</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
     <PackageLicenseUrl>https://github.com/toolsfactory/Tiveria.Home.Knx/blob/master/LICENSE</PackageLicenseUrl>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

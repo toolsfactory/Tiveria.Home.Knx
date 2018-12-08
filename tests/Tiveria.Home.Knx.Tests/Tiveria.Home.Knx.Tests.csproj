@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Tiveria.KNX\Tiveria.Home.Knx.csproj" />
+    <ProjectReference Include="..\..\src\Tiveria.Home.KNX\Tiveria.Home.Knx.csproj" />
   </ItemGroup>
 
 </Project>
