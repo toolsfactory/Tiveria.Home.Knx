@@ -9,7 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiveria.Home.Knx", "src\Tiv
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiveria.Home.Knx.Tests", "tests\Tiveria.Home.Knx.Tests\Tiveria.Home.Knx.Tests.csproj", "{EAC40ED3-1E4C-4ADE-BAE3-07543571B15C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiveria.Common", "src\Tiveria.Common.Standard\Tiveria.Common.csproj", "{E2010D24-B3F5-4400-A3E3-CFFE3C2F9377}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{053047C0-C1A7-47A5-B3F0-F9A82C3BAE29}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +33,6 @@ Global
 		{EAC40ED3-1E4C-4ADE-BAE3-07543571B15C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EAC40ED3-1E4C-4ADE-BAE3-07543571B15C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EAC40ED3-1E4C-4ADE-BAE3-07543571B15C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E2010D24-B3F5-4400-A3E3-CFFE3C2F9377}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E2010D24-B3F5-4400-A3E3-CFFE3C2F9377}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E2010D24-B3F5-4400-A3E3-CFFE3C2F9377}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E2010D24-B3F5-4400-A3E3-CFFE3C2F9377}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

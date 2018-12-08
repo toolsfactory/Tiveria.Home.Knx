@@ -24,7 +24,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Tiveria.Common.Standard\Tiveria.Common.csproj" />
+    <PackageReference Include="Tiveria.Common.Standard" Version="1.0.0" />
   </ItemGroup>
 
 </Project>
