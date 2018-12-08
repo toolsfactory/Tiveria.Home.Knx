@@ -2,15 +2,25 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Michael Geissler</Authors>
     <Company>Tiveria Embedded Solutions GmbH</Company>
     <Description>A small KNX library inspired by the Calimero</Description>
     <Copyright>GNU LGPL V3.0</Copyright>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>https://github.com/toolsfactory/Tiveria.Home.Knx</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/toolsfactory/Tiveria.Home.Knx</RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
+    <PackageLicenseUrl>https://github.com/toolsfactory/Tiveria.Home.Knx/blob/master/LICENSE</PackageLicenseUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <LangVersion>latest</LangVersion>
+    <OutputPath>..\..\bin</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\..\bin</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>

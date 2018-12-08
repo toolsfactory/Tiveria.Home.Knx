@@ -1,5 +1,6 @@
 # site ignore directories
 **/bin
+**/obj
 docs/KNX/
 
 #OS junk files
