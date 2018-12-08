@@ -2,6 +2,7 @@
 **/bin
 **/obj
 docs/KNX/
+other/captures
 
 #OS junk files
 [Tt]humbs.db
