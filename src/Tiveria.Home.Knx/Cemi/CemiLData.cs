@@ -210,7 +210,7 @@ namespace Tiveria.Home.Knx.Cemi
             foreach (var info in AdditionalInfoFields)
                 addinfos += info.ToDescription(padding + 4) + Environment.NewLine;
 
-            return $"CemiLData: AdditionalInfoLength = {AdditionalInfoLength}, Source = {SourceAddress}, Destination = {DestinationAddress}, TPDU = ".AddPrefixSpaces(padding) + _payload.ToHexString() + Environment.NewLine+
+            return $"CemiLData: AdditionalInfoLength = {AdditionalInfoLength}, Source = {SourceAddress}, Destination = {DestinationAddress}, TPDU = ".AddPrefixSpaces(padding) + _payload.ToHex() + Environment.NewLine+
                 addinfos+
                 ControlField1.ToDescription(padding + 4) + Environment.NewLine +
                 ControlField2.ToDescription(padding + 4);

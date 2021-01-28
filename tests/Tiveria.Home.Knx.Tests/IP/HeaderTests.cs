@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using NUnit.Framework;
+using Tiveria.Home.Knx.IP;
 using Tiveria.Home.Knx.IP.Structures;
 using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Home.Knx.Exceptions;
@@ -17,10 +18,10 @@ namespace Tiveria.Home.Knx.Tests.IP
             var data = "0610020500180801c0a80278e1f60801c0a80278e1f70203".ToByteArray(); //Standard body for Connection_Request
 
             var result = FrameHeader.Parse(data, 0);
-            Assert.AreEqual(result.Size, FrameHeader.HEADER_SIZE_10);
-            Assert.AreEqual(result.Version, FrameHeader.KNXNETIP_VERSION_10);
+            Assert.AreEqual(result.Size, KnxNetIPVersion.Version10.HeaderLength);
+            Assert.AreEqual(result.Version, KnxNetIPVersion.Version10.Identifier);
             Assert.AreEqual(result.ServiceTypeIdentifier, ServiceTypeIdentifier.CONNECT_REQUEST);
-            Assert.AreEqual(result.TotalLength, 18 + FrameHeader.HEADER_SIZE_10);
+            Assert.AreEqual(result.TotalLength, 18 + KnxNetIPVersion.Version10.HeaderLength);
         }
 
         [Test]
@@ -62,10 +63,11 @@ namespace Tiveria.Home.Knx.Tests.IP
         {
             var result = new FrameHeader(ServiceTypeIdentifier.CONNECT_REQUEST, 18);
 
-            Assert.AreEqual(result.Size, FrameHeader.HEADER_SIZE_10);
-            Assert.AreEqual(result.Version, FrameHeader.KNXNETIP_VERSION_10);
+            Assert.AreEqual(result.Size, KnxNetIPVersion.Version10.HeaderLength);
+            Assert.AreEqual(result.Version, KnxNetIPVersion.Version10.Identifier);
             Assert.AreEqual(result.ServiceTypeIdentifier, ServiceTypeIdentifier.CONNECT_REQUEST);
-            Assert.AreEqual(result.TotalLength, 18 + FrameHeader.HEADER_SIZE_10);
+            Assert.AreEqual(result.TotalLength, 18 + KnxNetIPVersion.Version10.HeaderLength);
         }
     }
+
 }

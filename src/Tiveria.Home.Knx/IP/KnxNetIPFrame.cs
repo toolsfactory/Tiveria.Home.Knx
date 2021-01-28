@@ -33,8 +33,6 @@ namespace Tiveria.Home.Knx.IP
 {
     public class KnxNetIPFrame
     {
-        public static readonly KnxNetIPVersion[] SupportedKnxNetIPVersions = new KnxNetIPVersion[1] { new KnxNetIPVersion("KnxNetIP Version 1.0", 0x10, 0x06) };
-
         #region private fields
         private byte[] _body;
         private FrameHeader _header;
@@ -113,24 +111,40 @@ namespace Tiveria.Home.Knx.IP
                     return ConnectionStateResponse.Parse(_body, 0);
                 case ServiceTypeIdentifier.TUNNELING_ACK:
                     return TunnelingAcknowledgement.Parse(_body, 0);
+                case ServiceTypeIdentifier.OBJECTSERVER:
+                    return ObjectServerMessage.Parse(_body, 0, _body.Length);
                 default:
                     return UnknownService.Parse(new Common.IO.IndividualEndianessBinaryReader(_body), Header.ServiceTypeRaw, _body.Length);
             }
         }
 
         #region Static Parsing
-        public static KnxNetIPFrame Parse(byte[] data)
+        public static KnxNetIPFrame Parse(byte[] data, int offset = 0)
         {
             if (data == null)
                 throw new ArgumentNullException("data is empty");
-            if (data.Length < 6)
+            if (data.Length - offset < 6)
                 throw BufferSizeException.TooSmall("KNXNetIP Frame");
 
-            var header = FrameHeader.Parse(data, 0);
+            var header = FrameHeader.Parse(data, offset);
             var body = new byte[header.TotalLength - header.Size];
 
-            data.Slice(body, header.Size, 0, body.Length);
+            data.Slice(body, header.Size + offset, 0, body.Length);
             return new KnxNetIPFrame(header, body);
+        }
+
+        public static bool TryParse(out KnxNetIPFrame frame, byte[] data, int offset = 0)
+        {
+            frame = null;
+            try
+            {
+                frame = Parse(data, offset);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
         #endregion
     }

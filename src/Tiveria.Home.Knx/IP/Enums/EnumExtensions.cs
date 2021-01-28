@@ -132,6 +132,8 @@ namespace Tiveria.Home.Knx.IP.Enums
                     return "RoutingLost.msg";
                 case ServiceTypeIdentifier.ROUTING_BUSY:
                     return "RoutingBusy.ind";
+                case ServiceTypeIdentifier.OBJECTSERVER:
+                    return "ObjectServer";
                 default:
                     return "Unknown";
             }

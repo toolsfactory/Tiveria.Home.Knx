@@ -34,7 +34,7 @@ namespace Tiveria.Home.Knx.Utils
         public static ILogger GetLogger(string name)
         {
             if (LogManager == null)
-                return new ConsoleLogger();
+                return new ConsoleLogger(name);
             else
                 return LogManager.GetLogger(name);
         }
@@ -42,7 +42,7 @@ namespace Tiveria.Home.Knx.Utils
         public static ILogger GetLogger(Type type)
         {
             if (LogManager == null)
-                return new ConsoleLogger();
+                return new ConsoleLogger(type.Name);
             else
                 return LogManager.GetLogger(type);
         }

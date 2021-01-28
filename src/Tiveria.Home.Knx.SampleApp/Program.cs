@@ -41,7 +41,7 @@ namespace Tiveria.Home.Knx
     {
         // replace the IP Address below with your specific router or tunnel interface IP Address.
         // Port should be correct assuming you have a standard setup
-        private static IPAddress GatewayIPAddress = IPAddress.Parse("192.168.2.101");
+        private static IPAddress GatewayIPAddress = IPAddress.Parse("192.168.2.154");
         private static ushort GatewayPort = 3671;
 
         private static Tiveria.Home.Knx.IP.TunnelingConnection Con;
@@ -139,7 +139,7 @@ namespace Tiveria.Home.Knx
                         }
                         else
                         {
-                            Console.WriteLine($"{req.CemiFrame.Apci.Type} for \"{addr}\" - ACPI DATA: {req.CemiFrame.Apci.Data.ToHexString()} - Payload: {req.CemiFrame.Payload.ToHexString()}");
+                            Console.WriteLine($"{req.CemiFrame.Apci.Type} for \"{addr}\" - ACPI DATA: {req.CemiFrame.Apci.Data.ToHex()} - Payload: {req.CemiFrame.Payload.ToHex()}");
                         }
                     }
                     else if ((req.CemiFrame.Apci.Type == Cemi.APCIType.GroupValue_Read) && addr.EndsWith("29/0/0"))
@@ -148,7 +148,7 @@ namespace Tiveria.Home.Knx
                     }
                     if (req.CemiFrame.Apci.Type == Cemi.APCIType.GroupValue_Response)
                     {
-                        Console.WriteLine($"--{req.CemiFrame.Apci.Type} for \"{addr}\" - ACPI DATA: {req.CemiFrame.Apci.Data.ToHexString()} - Payload: {req.CemiFrame.Payload.ToHexString()}");
+                        Console.WriteLine($"--{req.CemiFrame.Apci.Type} for \"{addr}\" - ACPI DATA: {req.CemiFrame.Apci.Data.ToHex()} - Payload: {req.CemiFrame.Payload.ToHex()}");
                     }
                     else
                     {

@@ -126,7 +126,7 @@ namespace Tiveria.Home.Knx.IP
         private Task<bool> DoSendCemiBlockingAsync(KnxNetIPFrame frame)
         {
             var data = frame.ToBytes();
-            Console.WriteLine($"Writing Data: " + data.ToHexString());
+            Console.WriteLine($"Writing Data: " + data.ToHex());
 
             return Task.Run(() => 
             {
@@ -248,7 +248,7 @@ namespace Tiveria.Home.Knx.IP
         {
             ConnectionState = ConnectionState.Opening;
             var data = CreateConnectionRequestFrame();
-            _logger.Trace("ConnectAsync: Sending connection request to " + _remoteControlEndpoint + " with data " + data.ToHexString());
+            _logger.Trace("ConnectAsync: Sending connection request to " + _remoteControlEndpoint + " with data " + data.ToHex());
             try
             {
                 _packetReceiver.Start();
@@ -442,7 +442,7 @@ namespace Tiveria.Home.Knx.IP
         #region handling unknown servicetype
         private void HandleUnknownServiceType(UnknownService serviceType)
         {
-            _logger.Warn($"Unknown Servicetype: {serviceType.ServiceTypeRaw:x2}. Data: " + serviceType.FrameRaw.ToHexString());
+            _logger.Warn($"Unknown Servicetype: {serviceType.ServiceTypeRaw:x2}. Data: " + serviceType.FrameRaw.ToHex());
         }
         #endregion
 
@@ -455,7 +455,7 @@ namespace Tiveria.Home.Knx.IP
         private void KnxFrameReceivedDelegate(DateTime timestamp, IPEndPoint source, KnxNetIPFrame frame)
         {
 #if DEBUG
-            _logger.Trace($"Frame received. Type: {frame.ServiceType}. Data: " + frame.Body.ToHexString());
+            _logger.Trace($"Frame received. Type: {frame.ServiceType}. Data: " + frame.Body.ToHex());
 #endif
             switch (frame.ServiceType.ServiceTypeIdentifier)
             {

@@ -26,6 +26,10 @@ namespace Tiveria.Home.Knx.IP
 {
     public struct KnxNetIPVersion
     {
+        public static readonly KnxNetIPVersion Version10 = new KnxNetIPVersion("KnxNetIP Version 1.0", 0x10, 0x06);
+        public static readonly KnxNetIPVersion Version20 = new KnxNetIPVersion("KnxNetIP Version 2.0", 0x20, 0x06);
+        public static readonly KnxNetIPVersion[] SupportedVersions = new KnxNetIPVersion[2] { Version10, Version20 };
+
         private readonly string _name;
         private readonly byte _identifier;
         private readonly byte _length;

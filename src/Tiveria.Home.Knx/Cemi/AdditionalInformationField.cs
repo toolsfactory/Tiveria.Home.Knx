@@ -183,7 +183,7 @@ namespace Tiveria.Home.Knx.Cemi
 
         public string ToDescription(int padding)
         {
-            return ($"AdditionalInfo : Type = {InfoType}, Length = {InfoLength}, Data = " + Information.ToHexString()).AddPrefixSpaces(padding);
+            return ($"AdditionalInfo : Type = {InfoType}, Length = {InfoLength}, Data = " + Information.ToHex()).AddPrefixSpaces(padding);
         }
 
         #region Static parsing function

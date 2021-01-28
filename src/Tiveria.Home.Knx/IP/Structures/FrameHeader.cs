@@ -47,8 +47,6 @@ namespace Tiveria.Home.Knx.IP.Structures
     public class FrameHeader : StructureBase
     {
         #region Constants
-        public static readonly byte KNXNETIP_VERSION_10 = 0x10;
-        public static readonly byte HEADER_SIZE_10 = 0x06;
         public static bool ThrowExceptionOnUnknownVersion = true;
         #endregion
 
@@ -78,6 +76,16 @@ namespace Tiveria.Home.Knx.IP.Structures
             ParseTotalSize(br);
         }
 
+        public FrameHeader(KnxNetIPVersion version, ServiceTypeIdentifier servicetypeidentifier, ushort bodyLength)
+        {
+            ValidateVersion(version);
+            _size = version.HeaderLength;
+            _version = version.Identifier;
+            _totalLength = _size + bodyLength;
+            _serviceTypeIdentifier = servicetypeidentifier;
+            base._size = _size;
+        }
+
         public FrameHeader(byte version, byte size, ServiceTypeIdentifier servicetypeidentifier, ushort bodyLength)
         {
             ValidateVersionAndSize(version, size);
@@ -89,7 +97,7 @@ namespace Tiveria.Home.Knx.IP.Structures
         }
 
         public FrameHeader(ServiceTypeIdentifier servicetypeidentifier, ushort bodyLength)
-            : this(KNXNETIP_VERSION_10, HEADER_SIZE_10, servicetypeidentifier, bodyLength)
+            : this(KnxNetIPVersion.Version10.Identifier, KnxNetIPVersion.Version10.HeaderLength, servicetypeidentifier, bodyLength)
         { }
         #endregion
 
@@ -107,7 +115,7 @@ namespace Tiveria.Home.Knx.IP.Structures
         {
             _size = br.ReadByte();
             _version = br.ReadByte();
-            ValidateVersionAndSize(_version, _size);
+            ValidateVersionAndSize(_version, (byte) _size);
         }
 
         private void ParseServiceType(IndividualEndianessBinaryReader br)
@@ -121,15 +129,22 @@ namespace Tiveria.Home.Knx.IP.Structures
                 _serviceTypeIdentifier = ServiceTypeIdentifier.UNKNOWN;
         }
 
-        private void ValidateVersionAndSize(byte version, int size)
+        private void ValidateVersion(KnxNetIPVersion ver)
         {
-            if (ThrowExceptionOnUnknownVersion)
-            {
-                if (version != KNXNETIP_VERSION_10)
-                    throw BufferFieldException.WrongValue("KnxNetIP Frame Version", 0x10, version);
-                if (size != HEADER_SIZE_10)
-                    throw BufferFieldException.WrongValue("KnxNetIP Frame Size", 0x06, size);
-            }
+            bool found = false;
+            foreach(var item in KnxNetIPVersion.SupportedVersions)
+                if((item.Identifier == ver.Identifier) &&(item.HeaderLength == ver.HeaderLength))
+                {
+                    found = true;
+                    break;
+                }
+            if(!found && ThrowExceptionOnUnknownVersion)
+                throw new BufferFieldException($"Unknown KnxNetIPVersion {ver.Identifier} with header size {ver.HeaderLength}");
+        }
+
+        private void ValidateVersionAndSize(byte version, byte size)
+        {
+            ValidateVersion(new KnxNetIPVersion("Custom Version", version, size));
         }
         #endregion
 
@@ -137,8 +152,8 @@ namespace Tiveria.Home.Knx.IP.Structures
         public override void WriteToByteArray(byte[] buffer, int offset)
         {
             base.WriteToByteArray(buffer, offset);
-            buffer[0] = HEADER_SIZE_10;
-            buffer[1] = KNXNETIP_VERSION_10;
+            buffer[0] = (byte)_size;
+            buffer[1] = _version;
             buffer[2] = (byte)((int)ServiceTypeIdentifier >> 8);
             buffer[3] = (byte)(int)ServiceTypeIdentifier;
             buffer[4] = (byte)(_totalLength >> 8);
@@ -148,8 +163,8 @@ namespace Tiveria.Home.Knx.IP.Structures
         public override void Write(IndividualEndianessBinaryWriter writer)
         {
             base.Write(writer);
-            writer.Write(HEADER_SIZE_10);
-            writer.Write(KNXNETIP_VERSION_10);
+            writer.Write((byte)_size);
+            writer.Write(_version);
             writer.Write((byte)((int)ServiceTypeIdentifier >> 8));
             writer.Write((byte)ServiceTypeIdentifier);
             writer.Write((byte)(_totalLength >> 8));
@@ -206,17 +221,32 @@ namespace Tiveria.Home.Knx.IP.Structures
         /// </summary>
         /// <param name="buffer">The buffer containing the header and the payload</param>
         /// <param name="offset">Position where the KnxNetIP Header is supposed to start</param>
+        /// <param name="version">Version</param>
+        /// <param name="size">Header size</param>
         /// <returns>validity of hte buffer</returns>
         /// <remarks>besides knxnetip header version, lenght of header and payload are checked. ServiceType is not checked in detail</remarks>
-        public static bool IsValidHeaderV10(byte[] buffer, int offset)
+        public static bool IsValidHeader(byte[] buffer, int offset, KnxNetIPVersion version)
         {
             if (buffer == null)
                 throw new ArgumentNullException("buffer is null");
             // check basics
-            return buffer.Length - offset == 6 &&
-                buffer[offset] == HEADER_SIZE_10 &&
-                buffer[offset + 1] == KNXNETIP_VERSION_10 &&
+            return buffer.Length - offset == version.HeaderLength &&
+                buffer[offset] == version.HeaderLength &&
+                buffer[offset + 1] == version.Identifier &&
                 (buffer[offset + 4] << 8) + buffer[offset + 5] == buffer.Length - offset;
+        }
+
+
+        /// <summary>
+        /// Performs basic validation if the provided buffer starts with a correct KnxNetIP Header.
+        /// </summary>
+        /// <param name="buffer">The buffer containing the header and the payload</param>
+        /// <param name="offset">Position where the KnxNetIP Header is supposed to start</param>
+        /// <returns>validity of hte buffer</returns>
+        /// <remarks>besides knxnetip header version, lenght of header and payload are checked. ServiceType is not checked in detail</remarks>
+        public static bool IsValidHeaderV10(byte[] buffer, int offset)
+        {
+            return IsValidHeader(buffer, offset, KnxNetIPVersion.Version10);
         }
         #endregion
     }
