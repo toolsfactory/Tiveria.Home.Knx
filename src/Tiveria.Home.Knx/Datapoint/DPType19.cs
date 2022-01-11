@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace Tiveria.Home.Knx.Datapoint
+﻿namespace Tiveria.Home.Knx.Datapoint
 {
     public class DPType19 : DPType<ComplexDateTime>
     {

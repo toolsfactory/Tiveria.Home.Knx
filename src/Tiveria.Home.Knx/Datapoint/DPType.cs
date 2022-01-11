@@ -21,9 +21,7 @@
     conditions of the GNU General Public License cover the whole
     combination.
 */
-    
-using System;
-using System.Collections.Generic;
+
 using Tiveria.Home.Knx.Exceptions;
 
 namespace Tiveria.Home.Knx.Datapoint

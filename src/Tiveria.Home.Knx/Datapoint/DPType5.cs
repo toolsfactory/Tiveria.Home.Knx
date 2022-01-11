@@ -22,13 +22,6 @@
     combination.
 */
 
-using System;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Collections.Generic;
-using Tiveria.Common.Extensions;
-
-
 namespace Tiveria.Home.Knx.Datapoint
 {
     public class DPType5 : DPType<ushort>

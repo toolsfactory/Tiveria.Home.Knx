@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 using NUnit.Framework;
-using Tiveria.Home.Knx.Cemi;
+using Tiveria.Home.Knx.EMI;
 using Tiveria.Common.Extensions;
 using Tiveria.Common.IO;
 using Tiveria.Home.Knx.Datapoint;
@@ -80,7 +80,7 @@ namespace Tiveria.Home.Knx.Tests
         public void ParseCemi02_ok()
         {
             var data = withAI.RemoveAll('_').ToByteArray(); //Standard body for Connection_Request
-            var result = CemiLDataEx.Parse(data, 0, data.Length);
+            var result = CemiLData.Parse(data, 0, data.Length);
 
             Assert.AreEqual(result.MessageCode, CemiMessageCode.LDATA_IND);
             Assert.AreEqual(result.AdditionalInfoLength, 6);
@@ -110,7 +110,7 @@ namespace Tiveria.Home.Knx.Tests
         public void CreateCemi()
         {
             var data = DPType7.DPT_TIMEPERIOD_HRS.Encode(4604);
-            var cemi = Cemi.CemiLData.CreateReadAnswerCemi(new IndividualAddress(1, 1, 3), new GroupAddress(6, 1, 47), data);
+            var cemi = EMI.CemiLData.CreateReadAnswerCemi(new IndividualAddress(1, 1, 3), new GroupAddress(6, 1, 47), data);
             var bytes = cemi.ToBytes();
             Assert.AreEqual(1, 1);
         }

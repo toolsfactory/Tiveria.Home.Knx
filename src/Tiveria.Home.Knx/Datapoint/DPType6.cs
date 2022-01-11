@@ -22,8 +22,6 @@
     combination.
 */
 
-using System;
-
 namespace Tiveria.Home.Knx.Datapoint
 {
     public class DPType6 : DPType<sbyte>

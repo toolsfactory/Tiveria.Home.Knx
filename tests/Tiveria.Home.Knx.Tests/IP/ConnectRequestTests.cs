@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using NUnit.Framework;
-using Tiveria.Home.Knx.IP.ServiceTypes;
 using Tiveria.Common.Extensions;
 
 namespace Tiveria.Home.Knx.Tests.IP

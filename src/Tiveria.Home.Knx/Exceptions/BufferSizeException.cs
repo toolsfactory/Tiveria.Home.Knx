@@ -36,6 +36,7 @@ namespace Tiveria.Home.Knx.Exceptions
         public static BufferSizeException TooSmall(string structure) => new BufferSizeException($"Buffer too small for structure '{structure}'");
         public static BufferSizeException TooBig(string structure) => new BufferSizeException($"Buffer too big for structure '{structure}'");
         public static BufferSizeException WrongSize(string structure, int expected, int actual) => new BufferSizeException($"Buffer for structure '{structure}' has wrong size {actual}. Expected: {expected}");
+        public static BufferSizeException WrongSize(string structure, int actual) => new BufferSizeException($"Buffer for structure '{structure}' has wrong size {actual}. See specs for expected values.");
     }
 
 

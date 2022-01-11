@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using Tiveria.Home.Knx.IP.ServiceTypes;
 using Tiveria.Home.Knx.IP;
 using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Common.Extensions;

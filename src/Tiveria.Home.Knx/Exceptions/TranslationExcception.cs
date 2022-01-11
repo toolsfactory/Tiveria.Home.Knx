@@ -22,7 +22,6 @@
     combination.
 */
 
-using System;
 using System.Runtime.Serialization;
 
 namespace Tiveria.Home.Knx.Exceptions

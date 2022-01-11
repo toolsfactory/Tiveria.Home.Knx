@@ -4,6 +4,7 @@ using Tiveria.Common.Extensions;
 using Tiveria.Home.Knx.Exceptions;
 using Tiveria.Home.Knx.IP.Structures;
 using Tiveria.Home.Knx.IP.Enums;
+using Tiveria.Common.IO;
 
 namespace Tiveria.Home.Knx.Tests.IP
 {
@@ -21,8 +22,9 @@ namespace Tiveria.Home.Knx.Tests.IP
         [Test]
         public void HPAI_FromBytes_Ok()
         {
-            var buffer = "0801c0a80278e1f6".ToByteArray(); // Type: IPV4 UDP, IP: 192.168.2.120, Port: 57846
-            var hpai = Hpai.Parse(buffer, 0);
+            var data = "0801c0a80278e1f6".ToByteArray(); // Type: IPV4 UDP, IP: 192.168.2.120, Port: 57846
+            var reader = new BigEndianBinaryReader(new MemoryStream(data));
+            var hpai = Hpai.Parse(reader);
             Assert.AreEqual(hpai.Ip.ToString(), "192.168.2.120");
             Assert.IsTrue(hpai.Port == 57846);
             Assert.IsTrue(hpai.EndpointType == HPAIEndpointType.IPV4_UDP);
@@ -31,22 +33,25 @@ namespace Tiveria.Home.Knx.Tests.IP
         [Test]
         public void HPAI_FromBytes_WrongEndpointTypeByte()
         {
-            var buffer = "0822c0a80278e1f6".ToByteArray(); // EnpointType byte set to 0x22
-            Assert.Catch<BufferFieldException>(() => Hpai.Parse(buffer, 0));
+            var data = "0822c0a80278e1f6".ToByteArray(); // EnpointType byte set to 0x22
+            var reader = new BigEndianBinaryReader(new MemoryStream(data));
+            Assert.Catch<BufferFieldException>(() => Hpai.Parse(reader));
         }
 
         [Test]
         public void HPAI_FromBytes_WrongSizeByte()
         {
-            var buffer = "0701c0a80278e1f6".ToByteArray(); // Size set to 0x07 (first byte)
-            Assert.Catch<BufferFieldException>(() => Hpai.Parse(buffer, 0));
+            var data = "0701c0a80278e1f6".ToByteArray(); // Size set to 0x07 (first byte)
+            var reader = new BigEndianBinaryReader(new MemoryStream(data));
+            Assert.Catch<BufferFieldException>(() => Hpai.Parse(reader));
         }
 
         [Test]
         public void HPAI_FromBytes_WrongBufferSize()
         {
-            var buffer = "0801c0a80278e1".ToByteArray(); // Buffer one byte too short
-            Assert.Catch<BufferException>(() => Hpai.Parse(buffer, 0));
+            var data = "0801c0a80278e1".ToByteArray(); // Buffer one byte too short
+            var reader = new BigEndianBinaryReader(new MemoryStream(data));
+            Assert.Catch<BufferException>(() => Hpai.Parse(reader));
         }
 
         [Test]
@@ -58,7 +63,7 @@ namespace Tiveria.Home.Knx.Tests.IP
             var data = cri.ToBytes();
             Assert.IsTrue(data.Length == 2);
             Assert.IsTrue(data[0] == 2);
-            Assert.IsTrue(data[1] == (byte) ConnectionType.TUNNEL_CONNECTION);
+            Assert.IsTrue(data[1] == (byte)ConnectionType.TUNNEL_CONNECTION);
         }
 
         [Test]
@@ -81,8 +86,9 @@ namespace Tiveria.Home.Knx.Tests.IP
         [Test]
         public void CRI_FromBytes_Ok()
         {
-            var buffer = "04060200".ToByteArray(); // Size: 4, Type: Remlog Connection, Layer: Link
-            var cri = CRI.FromBuffer(buffer, 0);
+            var source = "04060200".ToByteArray(); // Size: 4, Type: Remlog Connection, Layer: Link
+            var reader = new BigEndianBinaryReader(new MemoryStream(source));
+            var cri = CRI.Parse(reader);
             Assert.IsTrue(cri.Size == 4);
             Assert.IsTrue(cri.ConnectionType == ConnectionType.REMLOG_CONNECTION);
             var data = cri.ToBytes();
@@ -97,7 +103,8 @@ namespace Tiveria.Home.Knx.Tests.IP
         public void CRI_FromBytes_WrongConnectionTypeByte()
         {
             var buffer = "04ff0200".ToByteArray(); // Size: 4, Type byte set to 0xff
-            Assert.Catch<BufferFieldException>(() => CRI.FromBuffer(buffer, 0));
+            var reader = new BigEndianBinaryReader(new MemoryStream(buffer));
+            Assert.Catch<BufferFieldException>(() => CRI.Parse(reader));
         }
     }
 }

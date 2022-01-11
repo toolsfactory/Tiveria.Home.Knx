@@ -1,5 +1,4 @@
-﻿using System;
-using Tiveria.Common.Logging;
+﻿using Tiveria.Common.Logging;
 
 namespace Tiveria.Home.Knx
 {

@@ -22,9 +22,6 @@
     combination.
 */
 
-using System;
-using Tiveria.Home.Knx.Exceptions;
-
 namespace Tiveria.Home.Knx.Datapoint
 {
     public class DPType9 : DPType<double>

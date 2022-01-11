@@ -21,7 +21,6 @@
     conditions of the GNU General Public License cover the whole
     combination.
 */
-using System;
 
 namespace Tiveria.Home.Knx.Datapoint
 {

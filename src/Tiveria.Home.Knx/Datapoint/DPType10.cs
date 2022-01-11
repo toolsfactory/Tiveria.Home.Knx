@@ -22,9 +22,6 @@
     combination.
 */
 
-using System;
-using Tiveria.Home.Knx.Exceptions;
-
 namespace Tiveria.Home.Knx.Datapoint
 {
     public class DPType10 : DPType<TimeOfDay>

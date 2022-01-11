@@ -24,7 +24,6 @@
 
 using Tiveria.Home.Knx.Exceptions;
 using Tiveria.Common.Extensions;
-using System;
 
 namespace Tiveria.Home.Knx.Datapoint
 {

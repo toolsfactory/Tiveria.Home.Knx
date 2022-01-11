@@ -22,8 +22,6 @@
     combination.
 */
 
-using System;
-using Tiveria.Common.Extensions;
 using Tiveria.Home.Knx.Exceptions;
 
 namespace Tiveria.Home.Knx.Datapoint

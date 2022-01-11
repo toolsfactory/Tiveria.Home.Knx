@@ -22,10 +22,6 @@
     combination.
 */
 
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using Tiveria.Home.Knx.Exceptions;
 using System.Reflection;
 
 namespace Tiveria.Home.Knx.Datapoint
