@@ -37,30 +37,23 @@ namespace Tiveria.Home.Knx
             AnsiConsole.MarkupLine("[underline red]  Search Interfaces Demo  [/]");
             Console.WriteLine();
 
-            var finder = new KnxIPInterfaceFinder();
-            finder.DataReceived += Finder_DataReceived;
-            await finder.SearchForInterfacesAsync();
-            Console.WriteLine($"Interfaces found: {finder.Interfaces.Count}");
+            var finder = new KnxNetIPServerDiscoveryAgent();
+            finder.ServerResponded += Finder_ServerResponded;
+            await finder.DiscoverAsync();
+            Console.WriteLine($"Interfaces found: {finder.Servers.Count}");
             await finder.SearchForInterfacesInProgrammingModeAsync();
-            Console.WriteLine($"Interfaces programming: {finder.Interfaces.Count}");
+            Console.WriteLine($"Interfaces programming: {finder.Servers.Count}");
             await finder.SearchForInterfaceByMacAsync(new byte[] {0xdc, 0xa6, 0x32, 0xb7, 0x47, 0x1a});
-            Console.WriteLine($"Interfaces MAC: {finder.Interfaces.Count}");
+            Console.WriteLine($"Interfaces MAC: {finder.Servers.Count}");
             Task.Delay(1000).Wait();
 
             Console.WriteLine("Press <enter> to return.");
             Console.ReadLine();
         }
 
-        private void Finder_DataReceived(object? sender, DataReceivedArgs e)
+        private void Finder_ServerResponded(object? sender, ServerRespondedEventArgs e)
         {
-            var parser = KnxNetIPFrameSerializerFactory.Instance.Create<SearchResponseFrame>();
-            if (parser.TryDeserialize(e.Data, out var frame))
-            {
-                var sf = ((SearchResponseFrame)frame!);
-                Console.WriteLine($"SearchResponse on {e.ReceivingEndpoint}: {sf.DeviceInfoDIB.FriendlyName} - {sf.ServiceEndpoint.Ip} - {sf.DeviceInfoDIB.IndividualAddress} - {BitConverter.ToString(sf.DeviceInfoDIB.MAC)}");
-            }
-            else
-                Console.WriteLine(BitConverter.ToString(e.Data)); ;
+                Console.WriteLine($"SearchResponse on {e.ReceivingEndpoint}: {e.Server.DeviceInfoDIB.FriendlyName} - {e.Server.ServiceEndpoint.Address} - {e.Server.DeviceInfoDIB.IndividualAddress} - {BitConverter.ToString(e.Server.DeviceInfoDIB.MAC)}");
         }
     }
 }

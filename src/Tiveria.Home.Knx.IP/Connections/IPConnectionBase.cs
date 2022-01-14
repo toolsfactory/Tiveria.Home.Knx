@@ -25,6 +25,7 @@
 using System.Net;
 using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Common.Logging;
+using Tiveria.Home.Knx.Cemi;
 
 namespace Tiveria.Home.Knx.IP.Connections
 {
@@ -67,11 +68,11 @@ namespace Tiveria.Home.Knx.IP.Connections
         #endregion
 
         #region Events
-        public event EventHandler<StateChangedEventArgs>? StateChanged;
+        public event EventHandler<ConnectionStateChangedEventArgs>? ConnectionStateChanged;
         protected void OnStateChanged(ConnectionState state)
         {
-            var args = new StateChangedEventArgs(state);
-            StateChanged?.Invoke(this, args);
+            var args = new ConnectionStateChangedEventArgs(state);
+            ConnectionStateChanged?.Invoke(this, args);
         }
 
         public event EventHandler<FrameReceivedEventArgs>? FrameReceived;
@@ -105,6 +106,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             ResetRcvSeqCounter();
             ResetSndSeqCounter();
         }
+
 
         #region Sequence Counters
         protected void ResetRcvSeqCounter()
@@ -173,6 +175,21 @@ namespace Tiveria.Home.Knx.IP.Connections
         public abstract Task<bool> ConnectAsync();
 
         protected abstract string GetConnectionName();
+
+        public Task DisconnectAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SendAsync(ICemiMessage message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

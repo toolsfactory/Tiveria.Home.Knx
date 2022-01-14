@@ -32,9 +32,8 @@ using Tiveria.Home.Knx.IP.Structures;
 
 namespace Tiveria.Home.Knx.IP.Connections
 {
-    public record KnxNetIPInterface (IPEndPoint LocalEndpoint, IPEndPoint RemoteEndpoint, DeviceInfoDIB RemoteDeviceInfo, ServiceFamiliesDIB RemoteServices );
 
-    public class KnxIPInterfaceFinder
+    public class KnxNetIPServerDiscoveryAgent
     {
         #region static members
         public static readonly IPAddress KNXBROADCASTADDRESS = IPAddress.Parse("224.0.23.12");
@@ -45,90 +44,66 @@ namespace Tiveria.Home.Knx.IP.Connections
         #region private members
         private readonly List<UdpClient> _udpClients = new List<UdpClient>();
         private readonly List<UdpPacketReceiver> _udpReceivers = new List<UdpPacketReceiver>();
-        private readonly List<KnxNetIPInterface> _interfaces = new List<KnxNetIPInterface>();
+        private readonly List<KnxNetIPServer> _Servers = new List<KnxNetIPServer>();
         #endregion
 
         #region public properties
-        public IReadOnlyList<KnxNetIPInterface> Interfaces => _interfaces; 
-        
-        public event EventHandler<DataReceivedArgs>? DataReceived;
-        protected void OnDataReceived(DateTime timestamp, byte[] data, IPEndPoint receiver)
-        {
-            DataReceived?.Invoke(this, new DataReceivedArgs(timestamp, data, receiver));
-        }
+        public IReadOnlyList<KnxNetIPServer> Servers => _Servers;
+        public event EventHandler<ServerRespondedEventArgs>? ServerResponded;
         #endregion
 
-        public async Task<bool> SearchForInterfacesAsync(int timeoutms = 1000)
+        public Task<bool> DiscoverAsync(int timeoutms = 1000)
         {
-            StartListening();
-            BroadcastSearchRequest(ipendpoint =>
-            {
+            return InternalDiscoverAsync(ipendpoint => {
                 var frame = new SearchRequestFrame(new Hpai(HPAIEndpointType.IPV4_UDP, ipendpoint.Address, (ushort)ipendpoint.Port));
                 return KnxNetIPFrameSerializerFactory.Instance.Create(frame.ServiceTypeIdentifier).Serialize(frame);
-            });
-            await Task.Delay(timeoutms, CancellationToken.None);
-            StopListening();
-            return Interfaces.Count > 0;
+            }, timeoutms);
         }
 
-        public async Task<bool> SearchForInterfaceByMacAsync(byte[] macAddress, int timeoutms = 1000)
+        public Task<bool> SearchForInterfaceByMacAsync(byte[] macAddress, int timeoutms = 1000)
         {
-            if(macAddress == null || macAddress.Length != 6)
+            if (macAddress == null || macAddress.Length != 6)
                 throw new ArgumentException(nameof(macAddress));
 
-            StartListening();
-            BroadcastSearchRequest(ipendpoint =>
+            return InternalDiscoverAsync(ipendpoint =>
             {
                 var frame = new ExtendedSearchRequestFrame(new Hpai(HPAIEndpointType.IPV4_UDP, ipendpoint.Address, (ushort)ipendpoint.Port), new SRP(SrpType.SelectByMacAddress, macAddress));
                 return KnxNetIPFrameSerializerFactory.Instance.Create(frame.ServiceTypeIdentifier).Serialize(frame);
-            });
-            await Task.Delay(timeoutms, CancellationToken.None);
-            StopListening();
-            return Interfaces.Count > 0;
+            }, timeoutms);
         }
 
-        public async Task<bool> SearchForInterfacesInProgrammingModeAsync(int timeoutms = 1000)
+        public Task<bool> SearchForInterfacesInProgrammingModeAsync(int timeoutms = 1000)
         {
-            StartListening();
-            BroadcastSearchRequest(ipendpoint =>
+            return InternalDiscoverAsync(ipendpoint =>
             {
                 var frame = new ExtendedSearchRequestFrame(new Hpai(HPAIEndpointType.IPV4_UDP, ipendpoint.Address, (ushort)ipendpoint.Port), new SRP(SrpType.SelectByProgrammingMode, Array.Empty<byte>()));
                 return KnxNetIPFrameSerializerFactory.Instance.Create(frame.ServiceTypeIdentifier).Serialize(frame);
-            });
-            await Task.Delay(timeoutms, CancellationToken.None);
-            StopListening();
-            return Interfaces.Count > 0;
+            }, timeoutms);
         }
 
-        public void StartListening()
+        #region private methods
+        private async Task<bool> InternalDiscoverAsync(Func<IPEndPoint, byte[]> frameDataGenerator, int timeoutms)
         {
             Initialize();
             foreach (var receiver in _udpReceivers)
             {
                 receiver.Start();
             }
-        }
 
-        public void StopListening()
-        {
+            BroadcastSearchRequest(frameDataGenerator);
+            await Task.Delay(timeoutms, CancellationToken.None);
+
             foreach (var receiver in _udpReceivers)
             {
                 receiver.Stop();
             }
+            return Servers.Count > 0;
         }
 
-        private void BroadcastSearchRequest(Func<IPEndPoint, byte[]> generator)
-        {
-            _interfaces.Clear();
-            foreach (var client in _udpClients)
-            {
-                SendSearchMessageAsync(client, generator);
-            }
-        }
-
+        #region Sending the search requests
         private void Initialize()
         {
-            _interfaces.Clear();
+            _Servers.Clear();
             _udpClients.Clear();
             _udpReceivers.Clear();
             GetLocalNetworkInterfaces();
@@ -139,6 +114,28 @@ namespace Tiveria.Home.Knx.IP.Connections
             }
         }
 
+        private void BroadcastSearchRequest(Func<IPEndPoint, byte[]> generator)
+        {
+            _Servers.Clear();
+            foreach (var client in _udpClients)
+            {
+                SendSearchMessageAsync(client, generator);
+            }
+        }
+
+        private async Task SendSearchMessageAsync(UdpClient client, Func<IPEndPoint, byte[]> generator)
+        {
+            var endpoint = client.Client.LocalEndPoint;
+            if (endpoint == null) return;
+
+            var ipendpoint = (IPEndPoint)endpoint;
+            var data = generator(ipendpoint);
+
+            await client.SendAsync(data, data.Length, KNXBroadcastEndpoint);
+        }
+        #endregion
+
+        #region Finding available interfaces
         private void GetLocalNetworkInterfaces()
         {
             NetworkInterface[] networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
@@ -168,30 +165,26 @@ namespace Tiveria.Home.Knx.IP.Connections
             _udpClient.Client.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.MulticastInterface, IPAddress.HostToNetworkOrder(nicIndex));
             _udpClients.Add(_udpClient);
         }
+        #endregion
 
-        private async Task SendSearchMessageAsync(UdpClient client, Func<IPEndPoint, byte[]> generator)
-        {
-            var endpoint = client.Client.LocalEndPoint;
-            if (endpoint == null) return;
-
-            var ipendpoint = (IPEndPoint)endpoint;
-            var data  = generator(ipendpoint);
-
-            await client.SendAsync(data, data.Length, KNXBroadcastEndpoint);
-        }
-
+        #region Reacting on search responses
         private void PacketReceivedDelegate(DateTime timestamp, IPEndPoint source, IPEndPoint receiver, byte[] data)
         {
             var parser = new SearchResponseFrameSerializer();
             if (parser.TryDeserialize(data, out var frame))
             {
                 var sf = ((SearchResponseFrame)frame!);
-                var intf = new KnxNetIPInterface(receiver, new IPEndPoint(sf.ServiceEndpoint.Ip, sf.ServiceEndpoint.Port), sf.DeviceInfoDIB, sf.ServiceFamiliesDIB);
-                _interfaces.Add(intf);
-                OnDataReceived(timestamp, data, receiver);
+                var intf = new KnxNetIPServer(new IPEndPoint(sf.ServiceEndpoint.Ip, sf.ServiceEndpoint.Port), sf.DeviceInfoDIB, sf.ServiceFamiliesDIB);
+                _Servers.Add(intf);
+                OnServerResponded(receiver, intf);
             }
         }
 
+        protected void OnServerResponded(IPEndPoint receiver, KnxNetIPServer server)
+        {
+            ServerResponded?.Invoke(this, new ServerRespondedEventArgs(receiver, server));
+        }
+        #endregion
+        #endregion
     }
-
 }

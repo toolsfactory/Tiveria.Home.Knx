@@ -24,25 +24,17 @@
 
 using System.Net;
 
-namespace Tiveria.Home.Knx.IP
+namespace Tiveria.Home.Knx.IP.Connections
 {
-    public delegate void PacketReceivedDelegate(DateTime timestamp, IPEndPoint source, IPEndPoint receiver, byte[] data);
-    public delegate void KnxFrameReceivedDelegate(DateTime timestamp, IPEndPoint source, IPEndPoint receiver, IKnxNetIPFrame frame);
-
-    public class FrameReceivedEventArgs : EventArgs
+    public class ServerRespondedEventArgs : EventArgs
     {
-        private readonly IKnxNetIPFrame _frame;
-        private readonly DateTime _timestamp;
-        private readonly bool _handled;
-
-        public IKnxNetIPFrame Frame => _frame; 
-        public DateTime TimeStamp => _timestamp;
-        public bool Handled => _handled;
-        public FrameReceivedEventArgs(DateTime timestamp, IKnxNetIPFrame frame, bool handled)
+        public KnxNetIPServer Server { get; init; }
+        public IPEndPoint ReceivingEndpoint { get; init; }
+        public ServerRespondedEventArgs(IPEndPoint receivingEndpoint, KnxNetIPServer server)
         {
-            _timestamp = timestamp;
-            _frame = frame;
-            _handled = handled;
+            ReceivingEndpoint = receivingEndpoint;
+            Server = server;
         }
     }
+
 }

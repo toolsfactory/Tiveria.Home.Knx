@@ -124,7 +124,6 @@ namespace Tiveria.Home.Knx.IP.Connections
         {
             var serializer = KnxNetIPFrameSerializerFactory.Instance.Create(frame.ServiceTypeIdentifier);
             var data = serializer.Serialize(frame);
-            Console.WriteLine($"Writing Data: " + data.ToHex());
 
             return Task.Run(() =>
             {
@@ -136,7 +135,6 @@ namespace Tiveria.Home.Knx.IP.Connections
                         InitAckReceiving();
                         for (var i = 0; i < _sendRepeats; i++)
                         {
-                            Console.WriteLine($"Try {i}");
                             _udpClient.Send(data, data.Length, _remoteControlEndpoint);
                             ackReceived = _ackEvent.WaitOne(AckTimeout);
                             if (ackReceived)
@@ -347,7 +345,6 @@ namespace Tiveria.Home.Knx.IP.Connections
 
         private void HeartbeatOk()
         {
-            Console.Out.WriteLineAsync("Heartbeat OK");
         }
 
         private void VerifyRemoteDataEndpointforNAT(Structures.Hpai remoteHPAI, IPEndPoint remoteEndpoint)

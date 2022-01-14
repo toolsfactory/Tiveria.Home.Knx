@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiveria.Home.Knx.SampleApp", "src\Tiveria.Home.Knx.SampleApp\Tiveria.Home.Knx.SampleApp.csproj", "{88D14116-4455-4374-9FA2-5AE3556CDF2F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiveria.Home.Knx", "src\Tiveria.Home.KNX\Tiveria.Home.Knx.csproj", "{CBB4C5D9-3D25-493E-AB99-843957C785E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiveria.Home.Knx", "src\Tiveria.Home.Knx\Tiveria.Home.Knx.csproj", "{CBB4C5D9-3D25-493E-AB99-843957C785E0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiveria.Home.Knx.Tests", "tests\Tiveria.Home.Knx.Tests\Tiveria.Home.Knx.Tests.csproj", "{EAC40ED3-1E4C-4ADE-BAE3-07543571B15C}"
 EndProject

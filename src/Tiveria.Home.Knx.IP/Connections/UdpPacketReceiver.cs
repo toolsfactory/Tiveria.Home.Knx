@@ -103,7 +103,6 @@ namespace Tiveria.Home.Knx.IP.Connections
             {
                 var reader = new Common.IO.BigEndianBinaryReader(buffer);
                 var header = FrameHeader.Parse(reader);
-                Console.WriteLine(header);
                 var parser = KnxNetIPFrameSerializerFactory.Instance.Create(header.ServiceTypeIdentifier);
                 reader.Seek(0);
                 frame = parser.Deserialize(reader);

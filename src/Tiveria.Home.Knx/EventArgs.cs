@@ -22,34 +22,30 @@
     combination.
 */
 
-using Tiveria.Home.Knx.Cemi;
+using System.Net;
 
 namespace Tiveria.Home.Knx
 {
-    // ToDo: Not used at the moment. Remove?
-    public interface IKnxExternalMessage
+
+    public class ConnectionStateChangedEventArgs : EventArgs
     {
-        public IKnxAddress DestinationAddress { get; }
-        ApciTypes ApciType { get; }
+        private ConnectionState _connectionState;
+        public ConnectionState ConnectionState { get => _connectionState; }
 
-        int GetLength(EMIVersion version = EMIVersion.CEMI);
+        public ConnectionStateChangedEventArgs(ConnectionState state)
+        {
+            _connectionState = state;
+        }
+    }
 
-        /// <summary>
-        /// Gets the Byte array representing the message using standard values for additional configuration fields
-        /// </summary>
-        /// <param name="version">specifies the EMI format to be used</param>
-        /// <returns></returns>
-        byte[] GetBytes(EMIVersion version = EMIVersion.CEMI);
-
-        /// <summary>
-        /// Gets the cEMI version of the message with customized control fields
-        /// </summary>
-        /// <param name="cf1">ControlField1 of cEMI</param>
-        /// <param name="cf2">ControlField2 of cEMI</param>
-        /// <returns></returns>
-        byte[] GetBytes(ControlField1 cf1, ControlField2 cf2); 
-
-        int WriteBytes(Span<byte> buffer);
-        int WriteBytes(Span<byte> buffer, ControlField1 cf1, ControlField2 cf2);
+    public class DataReceivedArgs : EventArgs
+    {
+        public byte[] Data { get; init; }
+        public DateTime Timestamp { get; init; }
+        public DataReceivedArgs(DateTime timestamp, byte[] data)
+        {
+            Timestamp = timestamp;
+            Data = data;
+        }
     }
 }

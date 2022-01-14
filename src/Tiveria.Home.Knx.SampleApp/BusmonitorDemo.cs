@@ -55,7 +55,7 @@ namespace Tiveria.Home.Knx
             Con = new Tiveria.Home.Knx.IP.Connections.TunnelingConnection(_gatewayIPAddress, _gatewayPort, GetLocalIPAddress(), 55555,true);
             Con.DataReceived += Con_DataReceived;
             Con.FrameReceived += Con_FrameReceived;
-            Con.StateChanged += Con_StateChanged;
+            Con.ConnectionStateChanged += Con_StateChanged;
             Console.WriteLine("Hello World!");
 
             Con.ConnectAsync().Wait();
@@ -69,7 +69,7 @@ namespace Tiveria.Home.Knx
         }
 
 
-        private void Con_StateChanged(object sender, StateChangedEventArgs e)
+        private void Con_StateChanged(object sender, ConnectionStateChangedEventArgs e)
         {
             Console.WriteLine(" == Connection state changed == " + e.ConnectionState.ToString());
         }
@@ -84,7 +84,7 @@ namespace Tiveria.Home.Knx
             }
         }
 
-        private void Con_DataReceived(object sender, Tiveria.Home.Knx.IP.DataReceivedArgs e)
+        private void Con_DataReceived(object sender, DataReceivedArgs e)
         {
              Console.WriteLine(BitConverter.ToString(e.Data));
         }

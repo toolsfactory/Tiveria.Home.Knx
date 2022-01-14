@@ -23,25 +23,26 @@
 */
 
 using Tiveria.Home.Knx.Adresses;
+using Tiveria.Home.Knx.Cemi;
 
 namespace Tiveria.Home.Knx
 {
     public interface IKnxClient : IDisposable
     {
         bool IsConnected  => ConnectionState == ConnectionState.Open;
+
         ConnectionState ConnectionState { get; }
-        IndividualAddress IndividualAddress { get; }
         String ConnectionName { get; }
 
         event EventHandler<ConnectionStateChangedEventArgs>? ConnectionStateChanged;
-        event EventHandler? MessageReceived;
+        event EventHandler<DataReceivedArgs>? DataReceived;
         event EventHandler? Connected;
         event EventHandler? DisConnected;
 
         Task<bool> ConnectAsync();
         Task DisconnectAsync();
 
-        Task SendAsync(IKnxExternalMessage message);
+        Task SendAsync(ICemiMessage message);
     }
 
     public enum ConnectionState
@@ -53,17 +54,4 @@ namespace Tiveria.Home.Knx
         Closed,
         Invalid
     }
-
-    public class ConnectionStateChangedEventArgs : EventArgs
-    {
-        private ConnectionState _connectionState;
-        public ConnectionState ConnectionState { get => _connectionState; }
-
-        public ConnectionStateChangedEventArgs(ConnectionState state)
-        {
-            _connectionState = state;
-        }
-    }
-
-
 }

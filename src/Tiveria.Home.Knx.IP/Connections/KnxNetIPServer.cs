@@ -23,26 +23,10 @@
 */
 
 using System.Net;
+using Tiveria.Home.Knx.IP.Structures;
 
-namespace Tiveria.Home.Knx.IP
+namespace Tiveria.Home.Knx.IP.Connections
 {
-    public delegate void PacketReceivedDelegate(DateTime timestamp, IPEndPoint source, IPEndPoint receiver, byte[] data);
-    public delegate void KnxFrameReceivedDelegate(DateTime timestamp, IPEndPoint source, IPEndPoint receiver, IKnxNetIPFrame frame);
+    public record KnxNetIPServer (IPEndPoint ServiceEndpoint, DeviceInfoDIB DeviceInfoDIB, ServiceFamiliesDIB ServiceFamiliesDIB);
 
-    public class FrameReceivedEventArgs : EventArgs
-    {
-        private readonly IKnxNetIPFrame _frame;
-        private readonly DateTime _timestamp;
-        private readonly bool _handled;
-
-        public IKnxNetIPFrame Frame => _frame; 
-        public DateTime TimeStamp => _timestamp;
-        public bool Handled => _handled;
-        public FrameReceivedEventArgs(DateTime timestamp, IKnxNetIPFrame frame, bool handled)
-        {
-            _timestamp = timestamp;
-            _frame = frame;
-            _handled = handled;
-        }
-    }
 }

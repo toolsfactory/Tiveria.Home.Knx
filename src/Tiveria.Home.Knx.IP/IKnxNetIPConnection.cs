@@ -27,24 +27,13 @@ using Tiveria.Home.Knx.IP.Enums;
 
 namespace Tiveria.Home.Knx.IP
 {
-    public interface IKnxNetIPConnection
+    public interface IKnxNetIPConnection : IKnxClient
     {
-        event EventHandler<StateChangedEventArgs> StateChanged;
-        event EventHandler<DataReceivedArgs> DataReceived;
         event EventHandler<FrameReceivedEventArgs> FrameReceived;
-        event EventHandler Connected;
-        event EventHandler DisConnected;
 
-        ConnectionState ConnectionState { get; }
         ConnectionType ConnectionType { get; }
         IPAddress RemoteAddress { get; }
-        String ConnectionName { get; }
-
-        Task<bool> ConnectAsync();
-        Task CloseAsync();
 
         Task <bool> SendAsync(IKnxNetIPFrame frame);
-//        Task<bool> SendCemiAsync(EMI.ICemi cemi);
-//        bool SendCemiWithAck(EMI.ICemi cemi);
     }
 }
