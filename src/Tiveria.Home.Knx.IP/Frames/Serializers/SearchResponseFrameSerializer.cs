@@ -30,7 +30,7 @@ namespace Tiveria.Home.Knx.IP.Frames.Serializers
 {
     public class SearchResponseFrameSerializer : FrameSerializerBase<SearchResponseFrame>
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.SEARCH_RESPONSE;
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.SearchResponse;
 
         public override SearchResponseFrame Deserialize(BigEndianBinaryReader reader)
         {

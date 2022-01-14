@@ -41,16 +41,16 @@ namespace Tiveria.Home.Knx.IP.Frames
     public class DisconnectResponseFrame : FrameBase, IKnxNetIPFrame
     {
         public static readonly byte STRUCTURE_SIZE = 2;
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DISCONNECT_RES;
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DisconnectResponse;
         public ErrorCodes Status { get; init; }
         public byte ChannelId { get; init; }
 
         public DisconnectResponseFrame(byte channelId, ErrorCodes status = ErrorCodes.NoError)
-            : this(new FrameHeader(ServiceTypeIdentifier.CONNECTIONSTATE_RESPONSE, STRUCTURE_SIZE), channelId, status)
+            : this(new FrameHeader(ServiceTypeIdentifier.DisconnectResponse, STRUCTURE_SIZE), channelId, status)
         { }
 
         public DisconnectResponseFrame(FrameHeader frameHeader, byte channelId, ErrorCodes status = ErrorCodes.NoError)
-            : base(frameHeader, ServiceTypeIdentifier.CONNECTIONSTATE_RESPONSE, STRUCTURE_SIZE)
+            : base(frameHeader, ServiceTypeIdentifier.DisconnectResponse, STRUCTURE_SIZE)
         {
             ChannelId = channelId;
             Status = status;

@@ -22,23 +22,40 @@
     combination.
 */
 
-using Tiveria.Common.IO;
+using Tiveria.Common.Extensions;
 
-namespace Tiveria.Home.Knx
+namespace Tiveria.Home.Knx.Cemi
 {
-    public abstract class DataElement : IKnxDataElement
+    /// <summary>
+    /// Class representing a CEMI Frame for a service that is not fully implemented here.
+    /// For details please read: "03_06_03_EMI_IMI V01.03.03 AS.PDF" chapter 4 from KNX Association
+    /// <code>
+    /// +--------+-----------------+
+    /// | byte 1 | byte 2 - n      |
+    /// +--------+-----------------+
+    /// |  Msg   |  Raw Payload    |
+    /// | Code   |                 |
+    /// +--------+-----------------+
+    /// </code>
+    ///
+    /// </summary>
+    /// <remarks> 
+    /// This class does NOT support additional info!
+    /// </remarks>    
+    public class CemiRaw : ICemiMessage
     {
         public int Size { get; init; }
+        public byte[] Payload { get; init; }
+        public MessageCode MessageCode { get; init; }
 
-        public virtual byte[] ToBytes()
+        public CemiRaw(MessageCode messageCode, byte[] payload)
         {
-            byte[] bytes = new byte[Size];
-            var stream = new MemoryStream(bytes);
-            var writer = new BigEndianBinaryWriter(stream);
-            Write(writer);
-            return bytes;
+            Payload = payload ?? Array.Empty<byte>();
+            Size = 1 + Payload.Length;
         }
 
-        public abstract void Write(BigEndianBinaryWriter writer);
+        public string ToDescription(int padding = 4) 
+            => $"CemiRaw: MC = {MessageCode}, Payload = {BitConverter.ToString(Payload)}".AddPrefixSpaces(padding);
     }
+
 }

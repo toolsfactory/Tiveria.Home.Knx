@@ -30,7 +30,7 @@ namespace Tiveria.Home.Knx.IP.Frames.Serializers
 {
     public class RoutingBusyFrameSerializer : FrameSerializerBase<RoutingBusyFrame>
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.ROUTING_BUSY;
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.ROURoutingBusyING_BUSY;
 
         public override RoutingBusyFrame Deserialize(BigEndianBinaryReader reader)
         {

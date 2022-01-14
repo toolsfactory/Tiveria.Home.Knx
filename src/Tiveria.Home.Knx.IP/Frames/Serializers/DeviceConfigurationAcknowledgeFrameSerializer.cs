@@ -44,7 +44,7 @@ namespace Tiveria.Home.Knx.IP.Frames.Serializers
     /// </summary>
     public class DeviceConfigurationAcknowledgeFrameSerializer : FrameSerializerBase<DeviceConfigurationAcknowledgeFrame>
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DEVICE_CONFIGURATION_ACK;
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DeviceConfigurationResponse;
 
         public override DeviceConfigurationAcknowledgeFrame Deserialize(BigEndianBinaryReader reader)
         {

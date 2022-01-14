@@ -40,7 +40,7 @@ namespace Tiveria.Home.Knx.IP.Frames.Serializers
     /// </summary>
     public class ConnectionStateResponseFrameSerializer : FrameSerializerBase<ConnectionStateResponseFrame>
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.CONNECTIONSTATE_RESPONSE;
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.ConnectionStateResponse;
 
         public override ConnectionStateResponseFrame Deserialize(BigEndianBinaryReader reader)
         {

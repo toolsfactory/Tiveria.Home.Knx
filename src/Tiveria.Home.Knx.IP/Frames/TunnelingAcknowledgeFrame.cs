@@ -44,23 +44,19 @@ namespace Tiveria.Home.Knx.IP.Frames
     /// </summary>
     public class TunnelingAcknowledgeFrame : FrameBase, IKnxNetIPFrame
     {
-        public static readonly byte STRUCTURE_SIZE = 0x04;
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.TunnelingAcknowledge;
+        public ConnectionHeader ConnectionHeader { get; init; }
 
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.TUNNELING_ACK;
-        public ErrorCodes Status { get; init; }
-        public byte ChannelId { get; init; }
-        public byte SequenceCounter { get; init; }
-
-        public TunnelingAcknowledgeFrame(FrameHeader frameHeader, byte channelId, byte sequenceCounter, ErrorCodes status)
-            : base(frameHeader, ServiceTypeIdentifier.TUNNELING_ACK, STRUCTURE_SIZE)
+        public TunnelingAcknowledgeFrame(FrameHeader frameHeader, ConnectionHeader connectionHeader)
+            : base(frameHeader, ServiceTypeIdentifier.TunnelingAcknowledge, ConnectionHeader.STRUCTURE_SIZE)
         {
-            ChannelId = channelId;
-            SequenceCounter = sequenceCounter;
-            Status = status;
+            ConnectionHeader = connectionHeader;
         }
 
-        public TunnelingAcknowledgeFrame(byte channelId, byte sequenceCounter, ErrorCodes status)
-            : this(new FrameHeader(ServiceTypeIdentifier.TUNNELING_ACK, STRUCTURE_SIZE), channelId, sequenceCounter, status)
-        { }
+        public TunnelingAcknowledgeFrame(ConnectionHeader connectionHeader)
+            : base (ServiceTypeIdentifier.TunnelingAcknowledge, ConnectionHeader.STRUCTURE_SIZE)
+        {
+            ConnectionHeader = connectionHeader;
+        }
     }
 }

@@ -40,20 +40,20 @@ namespace Tiveria.Home.Knx.IP.Frames
     /// </summary>
     public class ConnectionStateResponseFrame : FrameBase, IKnxNetIPFrame
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.CONNECTIONSTATE_RESPONSE;
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.ConnectionStateResponse;
         public static readonly byte STRUCTURE_SIZE = 0x02;
         public ErrorCodes Status { get; init; }
         public byte ChannelId { get; init; }
 
         public ConnectionStateResponseFrame(FrameHeader frameHeader, byte channelId, ErrorCodes status = ErrorCodes.NoError)
-            : base(frameHeader, ServiceTypeIdentifier.CONNECTIONSTATE_RESPONSE, STRUCTURE_SIZE)
+            : base(frameHeader, ServiceTypeIdentifier.ConnectionStateResponse, STRUCTURE_SIZE)
         {
             ChannelId = channelId;
             Status = status;
         }
 
         public ConnectionStateResponseFrame(byte channelId, ErrorCodes status = ErrorCodes.NoError)
-            : this(new FrameHeader(ServiceTypeIdentifier.CONNECTIONSTATE_RESPONSE, STRUCTURE_SIZE), channelId, status)
+            : this(new FrameHeader(ServiceTypeIdentifier.ConnectionStateResponse, STRUCTURE_SIZE), channelId, status)
         { }
     }
 }

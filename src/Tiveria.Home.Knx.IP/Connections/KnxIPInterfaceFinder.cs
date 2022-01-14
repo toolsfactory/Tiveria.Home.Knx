@@ -61,7 +61,40 @@ namespace Tiveria.Home.Knx.IP.Connections
         public async Task<bool> SearchForInterfacesAsync(int timeoutms = 1000)
         {
             StartListening();
-            BroadcastSearchRequest();
+            BroadcastSearchRequest(ipendpoint =>
+            {
+                var frame = new SearchRequestFrame(new Hpai(HPAIEndpointType.IPV4_UDP, ipendpoint.Address, (ushort)ipendpoint.Port));
+                return KnxNetIPFrameSerializerFactory.Instance.Create(frame.ServiceTypeIdentifier).Serialize(frame);
+            });
+            await Task.Delay(timeoutms, CancellationToken.None);
+            StopListening();
+            return Interfaces.Count > 0;
+        }
+
+        public async Task<bool> SearchForInterfaceByMacAsync(byte[] macAddress, int timeoutms = 1000)
+        {
+            if(macAddress == null || macAddress.Length != 6)
+                throw new ArgumentException(nameof(macAddress));
+
+            StartListening();
+            BroadcastSearchRequest(ipendpoint =>
+            {
+                var frame = new ExtendedSearchRequestFrame(new Hpai(HPAIEndpointType.IPV4_UDP, ipendpoint.Address, (ushort)ipendpoint.Port), new SRP(SrpType.SelectByMacAddress, macAddress));
+                return KnxNetIPFrameSerializerFactory.Instance.Create(frame.ServiceTypeIdentifier).Serialize(frame);
+            });
+            await Task.Delay(timeoutms, CancellationToken.None);
+            StopListening();
+            return Interfaces.Count > 0;
+        }
+
+        public async Task<bool> SearchForInterfacesInProgrammingModeAsync(int timeoutms = 1000)
+        {
+            StartListening();
+            BroadcastSearchRequest(ipendpoint =>
+            {
+                var frame = new ExtendedSearchRequestFrame(new Hpai(HPAIEndpointType.IPV4_UDP, ipendpoint.Address, (ushort)ipendpoint.Port), new SRP(SrpType.SelectByProgrammingMode, Array.Empty<byte>()));
+                return KnxNetIPFrameSerializerFactory.Instance.Create(frame.ServiceTypeIdentifier).Serialize(frame);
+            });
             await Task.Delay(timeoutms, CancellationToken.None);
             StopListening();
             return Interfaces.Count > 0;
@@ -84,12 +117,12 @@ namespace Tiveria.Home.Knx.IP.Connections
             }
         }
 
-        public void BroadcastSearchRequest()
+        private void BroadcastSearchRequest(Func<IPEndPoint, byte[]> generator)
         {
             _interfaces.Clear();
             foreach (var client in _udpClients)
             {
-                SendSearchMessageAsync(client);
+                SendSearchMessageAsync(client, generator);
             }
         }
 
@@ -118,10 +151,11 @@ namespace Tiveria.Home.Knx.IP.Connections
                     || OperationalStatus.Up != nic.OperationalStatus)
                     continue;
 
+                // and skip the ones who dont have IPv4 at all
+                if (nic.Supports(NetworkInterfaceComponent.IPv4) == false)
+                    continue;
                 // now get ipv4 details
                 IPv4InterfaceProperties p = props.GetIPv4Properties();
-                // and skip the ones who dont have IPv4 at all
-                if (null == p) continue;
 
                 var addr = nic.GetIPProperties().UnicastAddresses.Where(x => x.Address.AddressFamily == AddressFamily.InterNetwork).First().Address;
                 CreateUdpClientForIP(addr, p.Index);
@@ -135,15 +169,13 @@ namespace Tiveria.Home.Knx.IP.Connections
             _udpClients.Add(_udpClient);
         }
 
-        private async Task SendSearchMessageAsync(UdpClient client)
+        private async Task SendSearchMessageAsync(UdpClient client, Func<IPEndPoint, byte[]> generator)
         {
             var endpoint = client.Client.LocalEndPoint;
             if (endpoint == null) return;
 
             var ipendpoint = (IPEndPoint)endpoint;
-            var frame = new SearchRequestFrame(new Hpai(HPAIEndpointType.IPV4_UDP, ipendpoint.Address, (ushort)ipendpoint.Port));
-            var data  = KnxNetIPFrameSerializerFactory.
-                Instance.Create(frame.ServiceTypeIdentifier).Serialize(frame);
+            var data  = generator(ipendpoint);
 
             await client.SendAsync(data, data.Length, KNXBroadcastEndpoint);
         }

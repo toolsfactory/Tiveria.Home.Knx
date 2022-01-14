@@ -37,7 +37,7 @@ namespace Tiveria.Home.Knx.IP.Structures
     /// |  Size  | Device | Routing busy    | Routing busy    |
     /// |  (8)   | State  | wait time MS    | Control Field   |
     /// +--------+--------+-----------------+-----------------+
-    public class BusyInfo : DataElement
+    public class BusyInfo : KnxDataElement
     {
         public static readonly byte STRUCTURE_SIZE = 0x06;
         public DeviceStatus DeviceStatus { get; init; }

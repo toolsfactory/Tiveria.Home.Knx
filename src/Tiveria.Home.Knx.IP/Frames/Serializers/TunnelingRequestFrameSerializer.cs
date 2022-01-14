@@ -23,7 +23,7 @@
 */
 
 using Tiveria.Common.IO;
-using Tiveria.Home.Knx.EMI;
+using Tiveria.Home.Knx.Cemi;
 using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Home.Knx.IP.Structures;
 
@@ -31,13 +31,15 @@ namespace Tiveria.Home.Knx.IP.Frames.Serializers
 {
     public class TunnelingRequestFrameSerializer : FrameSerializerBase<TunnelingRequestFrame>
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.TUNNELING_REQ;
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.TunnelingRequest;
 
         public override TunnelingRequestFrame Deserialize(BigEndianBinaryReader reader)
         {
             var header = FrameHeader.Parse(reader);
             var conheader = ConnectionHeader.Parse(reader);
-            var cemi = CemiLData.Parse(reader);
+            var messageCode = reader.ReadByteEnum<MessageCode>("TunnelingRequest.Cemi.MessageCode");
+            reader.Seek(reader.Position - 1); // move one back again as Cemi parsers also read the messagecode
+            var cemi = KnxCemiSerializerFactory.Instance.Create(messageCode).Deserialize(reader);
             return new TunnelingRequestFrame(header, conheader, cemi);
         }
 
@@ -45,7 +47,7 @@ namespace Tiveria.Home.Knx.IP.Frames.Serializers
         {
             frame.FrameHeader.Write(writer);
             frame.ConnectionHeader.Write(writer);
-            frame.CemiMessage.Write(writer);
+            KnxCemiSerializerFactory.Instance.Create(frame.CemiMessage.MessageCode).Serialize(frame.CemiMessage, writer);
         }
     }
 }

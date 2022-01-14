@@ -23,7 +23,7 @@
 */
 
 
-namespace Tiveria.Home.Knx.EMI
+namespace Tiveria.Home.Knx.Cemi
 {
     /// <summary>
     /// Enumeration of all all specified types of <see cref="AdditionalInformationField"/> variants

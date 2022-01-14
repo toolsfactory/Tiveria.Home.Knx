@@ -23,7 +23,7 @@
 */
 
 
-namespace Tiveria.Home.Knx
+namespace Tiveria.Home.Knx.Adresses
 {
     public enum GroupAddressStyle
     {

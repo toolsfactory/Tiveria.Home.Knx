@@ -23,10 +23,13 @@
 */
 
 using System.Net;
+using Tiveria.Home.Knx.Adresses;
 using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Home.Knx.IP.Structures;
 using Tiveria.Home.Knx.IP.Frames;
 using Tiveria.Home.Knx.IP;
+using Tiveria.Home.Knx.Cemi;
+using Tiveria.Home.Knx.Cemi.Serializers;
 
 namespace Tiveria.Home.Knx
 {
@@ -38,10 +41,13 @@ namespace Tiveria.Home.Knx
             {
                 bool on = true;
                 var input = (byte)(on ? 0x01 : 0x00);
-                var apci = new EMI.Apci(EMI.ApciTypes.GroupValue_Write, new byte[] { input });
+                var apci = new Cemi.Apci(Cemi.ApciTypes.GroupValue_Write, new byte[] { input });
                 Console.WriteLine("APCI: " + BitConverter.ToString(apci.ToBytes()));
-                var cemi = new EMI.CemiLData(EMI.CemiMessageCode.LDATA_REQ, new IndividualAddress(0, 0, 0), GroupAddress.Parse("4/0/0"), apci.ToBytes(), EMI.Priority.System);
-                Console.WriteLine("CEMI: " + BitConverter.ToString(cemi.ToBytes()));
+                var ctrl1 = new ControlField1(MessageCode.LDATA_REQ);
+                var ctrl2 = new ControlField2();
+                var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), GroupAddress.Parse("4/0/0"), ctrl1, ctrl2, apci);
+                var cemibytes = new CemiLDataSerializer().Serialize(cemi);
+                Console.WriteLine("CEMI: " + BitConverter.ToString(cemibytes));
                 var con = new IP.Structures.ConnectionHeader(11, 22);
                 Console.WriteLine("HEAD: " + BitConverter.ToString(con.ToBytes()));
                 var frame = new TunnelingRequestFrame(con, cemi);

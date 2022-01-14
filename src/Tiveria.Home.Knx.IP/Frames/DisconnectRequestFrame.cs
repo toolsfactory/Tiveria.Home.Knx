@@ -40,16 +40,16 @@ namespace Tiveria.Home.Knx.IP.Frames
     /// </summary>
     public class DisconnectRequestFrame : FrameBase, IKnxNetIPFrame
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DISCONNECT_REQ;
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DisconnectRequest;
         public Hpai ControlEndpoint { get; init; }
         public byte ChannelId { get; init; }
 
         public DisconnectRequestFrame(byte channelId, Hpai controlEndpoint)
-            : this(new FrameHeader(ServiceTypeIdentifier.DISCONNECT_REQ, 2 + controlEndpoint.Size), channelId, controlEndpoint)
+            : this(new FrameHeader(ServiceTypeIdentifier.DisconnectRequest, 2 + controlEndpoint.Size), channelId, controlEndpoint)
         { } 
 
         public DisconnectRequestFrame(FrameHeader frameHeader, byte channelId, Hpai controlEndpoint)
-            : base(frameHeader, ServiceTypeIdentifier.DISCONNECT_REQ, 2 + controlEndpoint.Size)
+            : base(frameHeader, ServiceTypeIdentifier.DisconnectRequest, 2 + controlEndpoint.Size)
         {
             ChannelId = channelId;
             ControlEndpoint = controlEndpoint;

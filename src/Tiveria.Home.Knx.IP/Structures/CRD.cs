@@ -44,7 +44,7 @@ namespace Tiveria.Home.Knx.IP.Structures
     /// Serice Type:  <see cref="Tiveria.Home.Knx.IP.Enums.ServiceTypeIdentifier"/>
     /// </code>
     /// </summary>
-    public class CRD : DataElement
+    public class CRD : KnxDataElement
     {
         #region public properties
         public ConnectionType ConnectionType { get; init; }

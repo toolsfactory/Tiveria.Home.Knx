@@ -40,7 +40,7 @@ namespace Tiveria.Home.Knx.IP.Frames.Serializers
     /// </summary>
     public class DisconnectResponseFrameSerializer : FrameSerializerBase<DisconnectResponseFrame>
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DISCONNECT_RES;
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DisconnectResponse;
 
         public override DisconnectResponseFrame Deserialize(BigEndianBinaryReader reader)
         {

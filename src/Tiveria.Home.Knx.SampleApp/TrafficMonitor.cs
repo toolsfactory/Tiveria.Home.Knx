@@ -23,6 +23,7 @@
 */
 
 using System.Net;
+using Tiveria.Home.Knx.Adresses;
 using Tiveria.Home.Knx.IP;
 using Tiveria.Common.Extensions;
 using Tiveria.Home.Knx.IP.Enums;
@@ -31,7 +32,7 @@ using System.Net.Sockets;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
-using Tiveria.Home.Knx.EMI;
+using Tiveria.Home.Knx.Cemi;
 using Tiveria.Home.Knx.IP.Frames;
 
 namespace Tiveria.Home.Knx
@@ -40,7 +41,7 @@ namespace Tiveria.Home.Knx
     {
         // replace the IP Address below with your specific router or tunnel interface IP Address.
         // Port should be correct assuming you have a standard setup
-        private static IPAddress GatewayIPAddress = IPAddress.Parse("192.168.2.154");
+        private static IPAddress GatewayIPAddress = IPAddress.Parse("192.168.2.150");
         private static ushort GatewayPort = 3671;
 
         private IP.Connections.TunnelingConnection? Con;
@@ -77,30 +78,33 @@ namespace Tiveria.Home.Knx
                     case ConsoleKey.D1: SendWriteRequestAsync(true).Wait(); break;
                 }
             } while (cki.Key != ConsoleKey.Enter);
+            await Con.CloseAsync();
         }
 
 
         private async Task SendWriteRequestAsync(bool on)
         {
             var data = (byte)(on ? 0x01 : 0x00);
-            var apci = new EMI.Apci(EMI.ApciTypes.GroupValue_Write, new byte[] { data });
-            var cemi = new EMI.CemiLData(EMI.CemiMessageCode.LDATA_REQ, new IndividualAddress(0, 0, 0), GroupAddress.Parse("4/0/0"), apci.ToBytes(), EMI.Priority.System);
+            var apci = new Cemi.Apci(Cemi.ApciTypes.GroupValue_Write, new byte[] { data });
+            var ctrl1 = new ControlField1(MessageCode.LDATA_REQ);
+            var ctrl2 = new ControlField2();
+            var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), GroupAddress.Parse("4/0/0"), ctrl1, ctrl2, apci);
             await Con.SendCemiFrameAsync(cemi, true);
         }
 
         private async Task SendReadRequestAsync()
         {
             Console.WriteLine("Sending read request to 22/7/0");
-            var cemi = EMI.CemiLData.CreateReadRequestCemi(new IndividualAddress(1, 1, 206), new GroupAddress(22, 7, 0));
-            await Con.SendCemiFrameAsync(cemi, true);
+//            var cemi = Cemi.CemiLData.CreateReadRequestCemi(new IndividualAddress(1, 1, 206), new GroupAddress(22, 7, 0));
+//            await Con.SendCemiFrameAsync(cemi, true);
         }
 
         private async Task SendReadAnswerAsync()
         {
             Console.WriteLine("Sending read answer for 29/0/0");
             var data = DPType9.DPT_TEMPERATURE.Encode(12.3);
-            var cemi = EMI.CemiLData.CreateReadAnswerCemi(new IndividualAddress(1, 1, 206), new GroupAddress(29, 0, 0), data);
-            await Con.SendCemiFrameAsync(cemi, true);
+//            var cemi = Cemi.CemiLData.CreateReadAnswerCemi(new IndividualAddress(1, 1, 206), new GroupAddress(29, 0, 0), data);
+//            await Con.SendCemiFrameAsync(cemi, true);
         }
 
         private void Con_StateChanged(object sender, StateChangedEventArgs e)
@@ -111,7 +115,7 @@ namespace Tiveria.Home.Knx
         private void Con_FrameReceived(object sender, FrameReceivedEventArgs e)
         {
 //            Console.WriteLine($"Frame received. Type: {e.Frame.ServiceType}");
-            if (e.Frame.FrameHeader.ServiceTypeIdentifier == ServiceTypeIdentifier.TUNNELING_REQ)
+            if (e.Frame.FrameHeader.ServiceTypeIdentifier == ServiceTypeIdentifier.TunnelingRequest)
             {
                 var req = ((TunnelingRequestFrame)e.Frame);
                 var cemi = (CemiLData)req.CemiMessage;
@@ -119,7 +123,7 @@ namespace Tiveria.Home.Knx
                 if (cemi.DestinationAddress.IsGroupAddress())
                 {
                     var addr = (cemi.DestinationAddress).ToString();
-                    if (cemi.Apci.Type == EMI.ApciTypes.GroupValue_Write)
+                    if (cemi.Apci.Type == Cemi.ApciTypes.GroupValue_Write)
                     {
                         if (addr.EndsWith("/2/3") || addr.EndsWith("/2/23") || addr.EndsWith("/2/43") || addr.EndsWith("/2/63"))
                         {
@@ -153,16 +157,16 @@ namespace Tiveria.Home.Knx
                         }
                         else
                         {
-                            Console.WriteLine($"{cemi.Apci.Type} for \"{addr}\" - ACPI DATA: {cemi.Apci.Data.ToHex()} - Payload: {cemi.Payload.ToHex()}");
+                            Console.WriteLine($"{cemi.Apci.Type} for \"{addr}\" - ACPI DATA: {cemi.Apci.Data.ToHex()}");
                         }
                     }
-                    else if ((cemi.Apci.Type == EMI.ApciTypes.GroupValue_Read) && addr.EndsWith("29/0/0"))
+                    else if ((cemi.Apci.Type == Cemi.ApciTypes.GroupValue_Read) && addr.EndsWith("29/0/0"))
                     {
                         SendReadAnswerAsync();   
                     }
-                    if (cemi.Apci.Type == EMI.ApciTypes.GroupValue_Response)
+                    if (cemi.Apci.Type == Cemi.ApciTypes.GroupValue_Response)
                     {
-                        Console.WriteLine($"--{cemi.Apci.Type} for \"{addr}\" - ACPI DATA: {cemi.Apci.Data.ToHex()} - Payload: {cemi.Payload.ToHex()}");
+                        Console.WriteLine($"--{cemi.Apci.Type} for \"{addr}\" - ACPI DATA: {cemi.Apci.Data.ToHex()}");
                     }
                     else
                     {

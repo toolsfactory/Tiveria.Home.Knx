@@ -26,7 +26,7 @@ using Tiveria.Common.Extensions;
 using Tiveria.Common.IO;
 using Tiveria.Home.Knx.Exceptions;
 
-namespace Tiveria.Home.Knx.EMI
+namespace Tiveria.Home.Knx.Cemi
 {
     /// <summary>
     /// Class representing an AdditionalInformationField within a cEMI Frame.
@@ -40,7 +40,7 @@ namespace Tiveria.Home.Knx.EMI
     /// +--------+--------+-----------------+
     /// </code>
     /// 
-    ///  InfoType :   <seealso cref="Tiveria.Home.Knx.EMI.AdditionalInfoType"/>
+    ///  InfoType :   <seealso cref="Tiveria.Home.Knx.Cemi.AdditionalInfoType"/>
     ///  InfoLength : Size of Additional Info 
     ///  Additional Info : Array of bytes representign the additional infos
     /// </summary>
@@ -167,21 +167,17 @@ namespace Tiveria.Home.Knx.EMI
         #endregion
 
         #region write data to buffer
-        public void WriteToByteArray(byte[] buffer, int offset = 0)
+        public void Write(BigEndianBinaryWriter writer)
         {
-            if (buffer == null)
-                throw new ArgumentNullException("buffer is null");
-            if (offset + _size > buffer.Length)
-                throw new ArgumentOutOfRangeException("buffer too small");
-            buffer[offset] = (byte)_infoType;
-            buffer[offset + 1] = (byte)_infoLength;
-            Array.Copy(_information, 0, buffer, offset + 2, _infoLength);
+            writer.Write((byte) InfoType);
+            writer.Write((byte) InfoLength);
+            writer.Write(Information);
         }
         #endregion
 
-        public string ToDescription(int padding)
+        public override string ToString()
         {
-            return ($"AdditionalInfo : Type = {InfoType}, Length = {InfoLength}, Data = " + Information.ToHex()).AddPrefixSpaces(padding);
+            return ($"AdditionalInfo : Type = {InfoType}, Length = {InfoLength}, Data = " + Information.ToHex());
         }
 
         #region Static parsing function

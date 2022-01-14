@@ -23,21 +23,28 @@
 */
 
 using Tiveria.Common.IO;
+using Tiveria.Home.Knx.IP.Enums;
+using Tiveria.Home.Knx.IP.Structures;
 
-namespace Tiveria.Home.Knx.EMI
+namespace Tiveria.Home.Knx.IP.Frames.Serializers
 {
-    /// <summary>
-    /// Interface describing standard properties and methods available in all classes representing a Cemi Message
-    /// </summary>
-    public interface ICemi
+    public class ExtendedSearchRequestFrameSerializer : FrameSerializerBase<ExtendedSearchRequestFrame>
     {
-        int Size { get; }
-        CemiMessageCode MessageCode { get; }
-        byte AdditionalInfoLength { get; }
-        AdditionalInformationField[] AdditionalInfoFields { get; }
-        byte[] Payload { get; }
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.ExtendedSearchRequest;
 
-        byte[] ToBytes();
-        void Write(BigEndianBinaryWriter writer);
+        public override ExtendedSearchRequestFrame Deserialize(BigEndianBinaryReader reader)
+        {
+            var header = FrameHeader.Parse(reader);
+            var discoveryEndpoint = Hpai.Parse(reader);
+            var searchRequestParameter = SRP.Parse(reader);
+            return new ExtendedSearchRequestFrame(header, discoveryEndpoint, searchRequestParameter);
+        }
+
+        public override void Serialize(ExtendedSearchRequestFrame frame, BigEndianBinaryWriter writer)
+        {
+            frame.FrameHeader.Write(writer);
+            frame.DiscoveryEndpoint.Write(writer);
+            frame.SearchRequestParameter.Write(writer);
+        }
     }
 }

@@ -41,7 +41,7 @@ namespace Tiveria.Home.Knx.IP.Frames.Serializers
     /// </summary>
     public class ConnectionResponseFrameSerializer : FrameSerializerBase<ConnectionResponseFrame>
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.CONNECT_RESPONSE;
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.ConnectResponse;
 
         public override ConnectionResponseFrame Deserialize(BigEndianBinaryReader reader)
         {

@@ -22,7 +22,7 @@ namespace Tiveria.Home.Knx.Tests.IP
             var result = FrameHeader.Parse(reader);
             Assert.AreEqual(result.Size, KnxNetIPVersion.Version10.HeaderLength);
             Assert.AreEqual(result.Version, KnxNetIPVersion.Version10.Identifier);
-            Assert.AreEqual(result.ServiceTypeIdentifier, ServiceTypeIdentifier.CONNECT_REQUEST);
+            Assert.AreEqual(result.ServiceTypeIdentifier, ServiceTypeIdentifier.ConnectRequest);
             Assert.AreEqual(result.TotalLength, 18 + KnxNetIPVersion.Version10.HeaderLength);
         }
 
@@ -40,7 +40,7 @@ namespace Tiveria.Home.Knx.Tests.IP
         public void ParseHeaderFromBytesWrongHeaderVersion()
         {
             //Standard body for Connection_Request but Version changed from 0x10 to 0x20
-            var data = "0620020500180801c0a80278e1f60801c0a80278e1f70203".ToByteArray();
+            var data = "0630020500180801c0a80278e1f60801c0a80278e1f70203".ToByteArray();
             var reader = new BigEndianBinaryReader(new MemoryStream(data));
             Assert.Catch(typeof(BufferFieldException), () => FrameHeader.Parse(reader));
         }
@@ -58,21 +58,21 @@ namespace Tiveria.Home.Knx.Tests.IP
         public void ParseHeaderFromBytesUnknownServiceTypeIdentifier()
         {
             //Standard body for Connection_Request but ServiceTypeIdentifier set to 0x00ff
-            var data = "061000ff00200801c0a80278e1f60801c0a80278e1f70203".ToByteArray();
+            var data = "061000ff00180801c0a80278e1f60801c0a80278e1f70203".ToByteArray();
             var reader = new BigEndianBinaryReader(new MemoryStream(data));
             var result = FrameHeader.Parse(reader);
-            Assert.AreEqual(ServiceTypeIdentifier.UNKNOWN, result.ServiceTypeIdentifier);
+            Assert.AreEqual(ServiceTypeIdentifier.Unknown, result.ServiceTypeIdentifier);
             Assert.AreEqual(0x00ff, result.ServiceTypeIdentifierRaw);
         }
 
         [Test]
         public void CreateHeaderOk()
         {
-            var result = new FrameHeader(ServiceTypeIdentifier.CONNECT_REQUEST, 18);
+            var result = new FrameHeader(ServiceTypeIdentifier.ConnectRequest, 18);
 
             Assert.AreEqual(result.Size, KnxNetIPVersion.Version10.HeaderLength);
             Assert.AreEqual(result.Version, KnxNetIPVersion.Version10.Identifier);
-            Assert.AreEqual(result.ServiceTypeIdentifier, ServiceTypeIdentifier.CONNECT_REQUEST);
+            Assert.AreEqual(result.ServiceTypeIdentifier, ServiceTypeIdentifier.ConnectRequest);
             Assert.AreEqual(result.TotalLength, 18 + KnxNetIPVersion.Version10.HeaderLength);
         }
     }

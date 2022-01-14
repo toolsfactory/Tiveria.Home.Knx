@@ -23,7 +23,7 @@
 */
 
 using Tiveria.Common.IO;
-using Tiveria.Home.Knx.EMI;
+using Tiveria.Home.Knx.Cemi;
 using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Home.Knx.IP.Structures;
 
@@ -32,16 +32,16 @@ namespace Tiveria.Home.Knx.IP.Frames
     public abstract class EMIFrameBase : FrameBase, IKnxNetIPFrame
     {
         public ConnectionHeader ConnectionHeader { get; init; }
-        public ICemi CemiMessage { get; init; }
+        public ICemiMessage CemiMessage { get; init; }
 
-        protected EMIFrameBase(FrameHeader frameHeader, ServiceTypeIdentifier serviceTypeIdentifier, ConnectionHeader connectionHeader, ICemi cemi)
+        protected EMIFrameBase(FrameHeader frameHeader, ServiceTypeIdentifier serviceTypeIdentifier, ConnectionHeader connectionHeader, ICemiMessage cemi)
             : base(frameHeader, serviceTypeIdentifier, connectionHeader.Size + cemi.Size)
         {
             ConnectionHeader = connectionHeader;
             CemiMessage = cemi;
         }
 
-        protected EMIFrameBase(ServiceTypeIdentifier serviceTypeIdentifier, ConnectionHeader connectionHeader, ICemi cemi)
+        protected EMIFrameBase(ServiceTypeIdentifier serviceTypeIdentifier, ConnectionHeader connectionHeader, ICemiMessage cemi)
             : base(serviceTypeIdentifier, connectionHeader.Size + cemi.Size)
         {
             ConnectionHeader = connectionHeader;

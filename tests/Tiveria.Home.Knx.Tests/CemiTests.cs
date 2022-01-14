@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Net;
 using NUnit.Framework;
-using Tiveria.Home.Knx.EMI;
+using Tiveria.Home.Knx.Cemi;
 using Tiveria.Common.Extensions;
 using Tiveria.Common.IO;
 using Tiveria.Home.Knx.Datapoint;
+using Tiveria.Home.Knx.Adresses;
+using Tiveria.Home.Knx.Cemi.Serializers;
 
 namespace Tiveria.Home.Knx.Tests
 {
@@ -53,11 +55,11 @@ namespace Tiveria.Home.Knx.Tests
         public void ParseCemi01_ok()
         {
             var data = basic.ToByteArray(); //Standard body for Connection_Request
-            var result = CemiLData.Parse(data, 0, data.Length);
+            var result = new CemiLDataSerializer().Deserialize(data);
 
-            Assert.AreEqual(result.MessageCode, CemiMessageCode.LDATA_IND);
+            Assert.AreEqual(result.MessageCode, MessageCode.LDATA_IND);
             Assert.AreEqual(result.AdditionalInfoLength, 0);
-            Assert.AreEqual(result.AdditionalInfoFields.Length, 0);
+            Assert.AreEqual(result.AdditionalInfoFields.Count, 0);
 
             Assert.AreEqual(result.ControlField1.ExtendedFrame, false);
             Assert.AreEqual(result.ControlField1.Repeat, false);
@@ -73,18 +75,18 @@ namespace Tiveria.Home.Knx.Tests
             Assert.AreEqual(result.SourceAddress.ToString(), "1.1.205");
             Assert.AreEqual(((GroupAddress) result.DestinationAddress).ToString(), "6/1/47");
 
-            Assert.AreEqual(result.Payload.Length, 2);
+            Assert.AreEqual(result.Apci.Size, 2);
         }
 
         [Test]
         public void ParseCemi02_ok()
         {
             var data = withAI.RemoveAll('_').ToByteArray(); //Standard body for Connection_Request
-            var result = CemiLData.Parse(data, 0, data.Length);
+            var result = new CemiLDataSerializer().Deserialize(data);
 
-            Assert.AreEqual(result.MessageCode, CemiMessageCode.LDATA_IND);
+            Assert.AreEqual(result.MessageCode, MessageCode.LDATA_IND);
             Assert.AreEqual(result.AdditionalInfoLength, 6);
-            Assert.AreEqual(result.AdditionalInfoFields.Length, 1);
+            Assert.AreEqual(result.AdditionalInfoFields.Count, 1);
             Assert.AreEqual(result.AdditionalInfoFields[0].InfoType, AdditionalInfoType.RFMULTI);
             Assert.AreEqual(result.AdditionalInfoFields[0].InfoLength, 4);
             Assert.AreEqual(result.AdditionalInfoFields[0].Information, new byte[4] { 0x01, 0x02, 0x03, 0x04 });
@@ -103,16 +105,32 @@ namespace Tiveria.Home.Knx.Tests
             Assert.AreEqual(result.SourceAddress.ToString(), "1.1.205");
             Assert.AreEqual(((GroupAddress)result.DestinationAddress).ToString(), "6/1/47");
 
-            Assert.AreEqual(result.Payload.Length, 2);
+            Assert.AreEqual(result.Apci.Size, 2);
         }
 
+        [Test]
+        public void Parse_Cemi04_ok()
+        {
+            var data = "29-00-BC-E0-11-03-19-0C-05-00-80-3D-30-20-C5-06-10-04-20-00-19-04-6D-00-00-29-00-BC-E0-11-03-19-0C-05-00-80-3D-30-20-C5".Replace("-", "").ToByteArray();
+            var result = new CemiLDataSerializer().Deserialize(data);
+        }
+
+        [Test]
+        public void Parse_Cemi05_ok()
+        {
+            var data = "29-00-BC-D0-11-78-3A-03-02-00-40-00".Replace("-", "").ToByteArray();
+            var result = new CemiLDataSerializer().Deserialize(data);
+            Assert.AreEqual(12, result.Size);
+        }
+        /*
         [Test]
         public void CreateCemi()
         {
             var data = DPType7.DPT_TIMEPERIOD_HRS.Encode(4604);
-            var cemi = EMI.CemiLData.CreateReadAnswerCemi(new IndividualAddress(1, 1, 3), new GroupAddress(6, 1, 47), data);
+            var cemi = Cemi.CemiLData.CreateReadAnswerCemi(new IndividualAddress(1, 1, 3), new GroupAddress(6, 1, 47), data);
             var bytes = cemi.ToBytes();
             Assert.AreEqual(1, 1);
         }
+        */
     }
 }

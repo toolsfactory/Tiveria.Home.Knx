@@ -22,7 +22,7 @@
     combination.
 */
 
-using Tiveria.Home.Knx.EMI;
+using Tiveria.Home.Knx.Cemi;
 using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Home.Knx.IP.Structures;
 
@@ -30,13 +30,13 @@ namespace Tiveria.Home.Knx.IP.Frames
 {
     public class DeviceConfigurationRequestFrame : EMIFrameBase, IKnxNetIPFrame
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DEVICE_CONFIGURATION_REQ;
-        public DeviceConfigurationRequestFrame(ConnectionHeader connectionHeader, ICemi cemi)
-            : base(ServiceTypeIdentifier.DEVICE_CONFIGURATION_REQ, connectionHeader, cemi)
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DeviceConfigurationRequest;
+        public DeviceConfigurationRequestFrame(ConnectionHeader connectionHeader, ICemiMessage cemi)
+            : base(ServiceTypeIdentifier.DeviceConfigurationRequest, connectionHeader, cemi)
         { }
 
-        public DeviceConfigurationRequestFrame(FrameHeader frameHeader, ConnectionHeader connectionHeader, ICemi cemi)
-            : base(frameHeader, ServiceTypeIdentifier.DEVICE_CONFIGURATION_REQ, connectionHeader, cemi)
+        public DeviceConfigurationRequestFrame(FrameHeader frameHeader, ConnectionHeader connectionHeader, ICemiMessage cemi)
+            : base(frameHeader, ServiceTypeIdentifier.DeviceConfigurationRequest, connectionHeader, cemi)
         { }
     }
 }

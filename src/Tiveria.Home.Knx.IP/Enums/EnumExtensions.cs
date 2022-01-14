@@ -73,13 +73,13 @@ namespace Tiveria.Home.Knx.IP.Enums
         {
             switch (connectionType)
             {
-                case ConnectionType.DEVICE_MGMT_CONNECTION:
+                case ConnectionType.DeviceManagement:
                     return "Device Management";
-                case ConnectionType.REMCONF_CONNECTION:
+                case ConnectionType.RemConf:
                     return "Remote Configuration";
-                case ConnectionType.REMLOG_CONNECTION:
+                case ConnectionType.RemLog:
                     return "Remote Logging";
-                case ConnectionType.TUNNEL_CONNECTION:
+                case ConnectionType.Tunnel:
                     return "Tunneling";
                 default:
                     return "Unknown";
@@ -94,39 +94,39 @@ namespace Tiveria.Home.Knx.IP.Enums
         {
             switch (serviceTypeIdentifier)
             {
-                case ServiceTypeIdentifier.CONNECT_REQUEST:
+                case ServiceTypeIdentifier.ConnectRequest:
                     return "Connect.req";
-                case ServiceTypeIdentifier.CONNECT_RESPONSE:
+                case ServiceTypeIdentifier.ConnectResponse:
                     return "Connect.res";
-                case ServiceTypeIdentifier.CONNECTIONSTATE_REQUEST:
+                case ServiceTypeIdentifier.ConnectionStateRequest:
                     return "Connectionstate.req";
-                case ServiceTypeIdentifier.CONNECTIONSTATE_RESPONSE:
+                case ServiceTypeIdentifier.ConnectionStateResponse:
                     return "Connectionstate.res";
-                case ServiceTypeIdentifier.DISCONNECT_REQ:
+                case ServiceTypeIdentifier.DisconnectRequest:
                     return "Disconnect.req";
-                case ServiceTypeIdentifier.DISCONNECT_RES:
+                case ServiceTypeIdentifier.DisconnectResponse:
                     return "Disconnect.res";
-                case ServiceTypeIdentifier.DESCRIPTION_REQ:
+                case ServiceTypeIdentifier.DescriptionRequest:
                     return "Description.req";
-                case ServiceTypeIdentifier.DESCRIPTION_RES:
+                case ServiceTypeIdentifier.DescriptionResponse:
                     return "Description.res";
-                case ServiceTypeIdentifier.SEARCH_REQ:
+                case ServiceTypeIdentifier.SearchRequest:
                     return "Search.req";
-                case ServiceTypeIdentifier.SEARCH_RESPONSE:
+                case ServiceTypeIdentifier.SearchResponse:
                     return "Search.res";
-                case ServiceTypeIdentifier.DEVICE_CONFIGURATION_REQ:
+                case ServiceTypeIdentifier.DeviceConfigurationRequest:
                     return "DeviceConfiguration.req";
-                case ServiceTypeIdentifier.DEVICE_CONFIGURATION_ACK:
+                case ServiceTypeIdentifier.DeviceConfigurationResponse:
                     return "DeviceConfiguration.ack";
-                case ServiceTypeIdentifier.TUNNELING_REQ:
+                case ServiceTypeIdentifier.TunnelingRequest:
                     return "Tunneling.req";
-                case ServiceTypeIdentifier.TUNNELING_ACK:
+                case ServiceTypeIdentifier.TunnelingAcknowledge:
                     return "Tunneling.ack";
-                case ServiceTypeIdentifier.ROUTING_IND:
+                case ServiceTypeIdentifier.RoutingIndication:
                     return "Routing.ind";
-                case ServiceTypeIdentifier.ROUTING_LOST_MSG:
+                case ServiceTypeIdentifier.RoutingLostMessage:
                     return "RoutingLost.msg";
-                case ServiceTypeIdentifier.ROUTING_BUSY:
+                case ServiceTypeIdentifier.ROURoutingBusyING_BUSY:
                     return "RoutingBusy.ind";
                 default:
                     return "Unknown";

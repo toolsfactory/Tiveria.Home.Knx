@@ -22,17 +22,29 @@
     combination.
 */
 
+using Tiveria.Common.IO;
+using Tiveria.Home.Knx.Exceptions;
 
-namespace Tiveria.Home.Knx.EMI
+namespace Tiveria.Home.Knx
 {
-    /// <summary>
-    /// Enumeration of all specified BroadcastType Flag values
-    /// </summary>
-    public enum BroadcastType : byte
+    public static class BigEndianBinaryReaderExtensions
     {
-        // Normal Broadcast of the cemi message
-        Normal = 0,
-        // System Broadcast of the cemi message
-        System = 1
+        public static T ReadByteEnum<T>(this BigEndianBinaryReader reader, string structure) where T : Enum
+        {
+            var value = reader.ReadByte();
+            if (!Enum.IsDefined(typeof(T), value))
+                throw BufferFieldException.TypeUnknown($"{structure}-{nameof(T)}", value);
+            return (T)Enum.ToObject(typeof(T), value);
+        }
+
+        public static byte ReadSizeAndCheck(this BigEndianBinaryReader reader, string structure, int expected)
+        {
+            var size = reader.ReadByte();
+            if (size != expected)
+                throw BufferFieldException.WrongSize(structure, expected, size);
+            if (reader.Available < (size - 2))
+                throw BufferSizeException.TooSmall(structure);
+            return size;
+        }
     }
 }

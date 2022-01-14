@@ -22,7 +22,7 @@
     combination.
 */
 
-namespace Tiveria.Home.Knx
+namespace Tiveria.Home.Knx.Adresses
 {
     /// <summary>
     /// Class representing an individual device address
@@ -95,6 +95,7 @@ namespace Tiveria.Home.Knx
             return (area & ~0x0f) == 0 && (line & ~0x0f) == 0 && ((device & ~0xff) == 0);
         }
 
+        public static IndividualAddress Empty() => new IndividualAddress(0);
         #endregion
     }
 }

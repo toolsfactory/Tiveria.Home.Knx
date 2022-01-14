@@ -22,7 +22,7 @@
     combination.
 */
 
-namespace Tiveria.Home.Knx.EMI
+namespace Tiveria.Home.Knx.Cemi
 {
     public enum ApciTypes : int
     {

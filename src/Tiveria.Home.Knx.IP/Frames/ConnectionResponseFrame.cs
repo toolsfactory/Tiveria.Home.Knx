@@ -41,7 +41,7 @@ namespace Tiveria.Home.Knx.IP.Frames
     /// </summary>
     public class ConnectionResponseFrame : FrameBase, IKnxNetIPFrame
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.CONNECT_RESPONSE;
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.ConnectResponse;
 
         public Hpai DataEndpoint { get; init; }
         public CRD Crd { get; init; }
@@ -49,7 +49,7 @@ namespace Tiveria.Home.Knx.IP.Frames
         public byte ChannelId { get; init; }
 
         public ConnectionResponseFrame(FrameHeader frameHeader, byte channelId, ErrorCodes status, Hpai dataEndpoint, CRD crd)
-            : base(frameHeader, ServiceTypeIdentifier.CONNECT_RESPONSE, 2 + dataEndpoint.Size + crd.Size)
+            : base(frameHeader, ServiceTypeIdentifier.ConnectResponse, 2 + dataEndpoint.Size + crd.Size)
         {
             ChannelId = channelId;
             Status = status;
@@ -58,7 +58,7 @@ namespace Tiveria.Home.Knx.IP.Frames
         }
 
         public ConnectionResponseFrame(byte channelId, ErrorCodes status, Hpai dataEndpoint, CRD crd)
-            : this(new FrameHeader(ServiceTypeIdentifier.CONNECT_RESPONSE, 2 + dataEndpoint.Size + crd.Size), channelId, status, dataEndpoint, crd)
+            : this(new FrameHeader(ServiceTypeIdentifier.ConnectResponse, 2 + dataEndpoint.Size + crd.Size), channelId, status, dataEndpoint, crd)
         { }
     }
 }

@@ -54,7 +54,7 @@ namespace Tiveria.Home.Knx.IP.Structures
         /// </summary>
         /// <param name="layer">KNX tunnel connection link layer</param>
         public CRITunnel(TunnelingLayer layer) 
-            : base(ConnectionType.TUNNEL_CONNECTION)
+            : base(ConnectionType.Tunnel)
         {
             Layer = layer;
             Size = STRUCTURE_SIZE;
@@ -81,8 +81,8 @@ namespace Tiveria.Home.Knx.IP.Structures
             var layer = reader.ReadByteEnum<TunnelingLayer>("CRITunnel.Layer");
             reader.ReadByte(); // reserved Byte
 
-            if (contype != ConnectionType.TUNNEL_CONNECTION)
-                throw BufferFieldException.WrongValue("CRITunnel.ConnectionType", (byte)ConnectionType.TUNNEL_CONNECTION, (byte)contype);
+            if (contype != ConnectionType.Tunnel)
+                throw BufferFieldException.WrongValue("CRITunnel.ConnectionType", (byte)ConnectionType.Tunnel, (byte)contype);
 
             return new CRITunnel(layer);
         }

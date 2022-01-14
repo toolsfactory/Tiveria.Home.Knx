@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Tiveria.Home.Knx;
+using Tiveria.Home.Knx.Adresses;
 
 namespace Tiveria.Home.Knx.Tests
 {

@@ -30,15 +30,15 @@ namespace Tiveria.Home.Knx.IP.Frames
 {
     public class RoutingLostMessageFrame : FrameBase, IKnxNetIPFrame
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.ROUTING_LOST_MSG;
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.RoutingLostMessage;
         public LostMessageInfo LostMessageInfo { get; init; }
 
         public RoutingLostMessageFrame(LostMessageInfo lostMessageInfo)
-            : this(new FrameHeader(ServiceTypeIdentifier.ROUTING_LOST_MSG, lostMessageInfo.Size), lostMessageInfo)
+            : this(new FrameHeader(ServiceTypeIdentifier.RoutingLostMessage, lostMessageInfo.Size), lostMessageInfo)
         { }
 
         public RoutingLostMessageFrame(FrameHeader frameHeader, LostMessageInfo lostMessageInfo)
-            : base(frameHeader, ServiceTypeIdentifier.ROUTING_LOST_MSG, lostMessageInfo.Size)
+            : base(frameHeader, ServiceTypeIdentifier.RoutingLostMessage, lostMessageInfo.Size)
         {
             LostMessageInfo = lostMessageInfo;
         }

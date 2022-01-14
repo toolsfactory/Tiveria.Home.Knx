@@ -40,7 +40,7 @@ namespace Tiveria.Home.Knx.IP.Frames.Serializers
     /// </summary>
     public class DescriptionRequestFrameSerializer : FrameSerializerBase<DescriptionRequestFrame>
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DESCRIPTION_REQ;
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DescriptionRequest;
 
         public override DescriptionRequestFrame Deserialize(BigEndianBinaryReader reader)
         {

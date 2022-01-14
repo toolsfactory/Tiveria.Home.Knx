@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 using NUnit.Framework;
-using Tiveria.Home.Knx.EMI;
+using Tiveria.Home.Knx.Cemi;
 using Tiveria.Common.Extensions;
 using Tiveria.Common.IO;
 
@@ -20,14 +20,14 @@ namespace Tiveria.Home.Knx.Tests
             Assert.IsNotNull(result.Data);
             Assert.Zero(result.Data.Length);
         }
-        /*
+
         [Test]
         public void ParseGroupValue_Write1()
         {
             var data = "00800c56".ToByteArray(); // Type:GroupValue_Write, Data:0c56
-            var result = new Apci(data, 0);
+            var result = Apci.Parse(data);
 
-            Assert.AreEqual(APCIType.GroupValue_Write, result.Type);
+            Assert.AreEqual(ApciTypes.GroupValue_Write, result.Type);
             Assert.IsNotNull(result.Data);
             Assert.AreEqual(2, result.Data.Length);
             Assert.AreEqual(0x0c, result.Data[0]);
@@ -37,23 +37,23 @@ namespace Tiveria.Home.Knx.Tests
         [Test]
         public void ParseGroupValue_Write2()
         {
-            var data = "00800d".ToByteArray(); // Type:GroupValue_Write, Data:0d
-            var result = new Apci(data, 0);
+            var data = "00800d".ToByteArray(); // Type:GroupValue_Write, Data:0d - could also be compressed. Threfore Data is only 1 byte in the parsed structure!
+            var result = Apci.Parse(data);
 
-            Assert.AreEqual(APCIType.GroupValue_Write, result.Type);
+            Assert.AreEqual(ApciTypes.GroupValue_Write, result.Type);
+            Assert.AreEqual(2, result.Size);
             Assert.IsNotNull(result.Data);
-            Assert.AreEqual(2, result.Data.Length);
-            Assert.AreEqual(0x00, result.Data[0]);
-            Assert.AreEqual(0x0d, result.Data[1]);
+            Assert.AreEqual(1, result.Data.Length);
+            Assert.AreEqual(0x0d, result.Data[0]);
         }
 
         [Test]
         public void ParseGroupValue_Response1()
         {
             var data = "00400abc".ToByteArray(); // Type:GroupValue_Response, Data:0abc
-            var result = new Apci(data, 0);
+            var result = Apci.Parse(data);
 
-            Assert.AreEqual(APCIType.GroupValue_Response, result.Type);
+            Assert.AreEqual(ApciTypes.GroupValue_Response, result.Type);
             Assert.IsNotNull(result.Data);
             Assert.AreEqual(2, result.Data.Length);
             Assert.AreEqual(0x0a, result.Data[0]);
@@ -64,40 +64,67 @@ namespace Tiveria.Home.Knx.Tests
         public void ParseGroupValue_Response2()
         {
             var data = "00404d".ToByteArray(); // Type:GroupValue_Response, Data:4d
-            var result = new Apci(data, 0);
+            var result = Apci.Parse(data);
 
-            Assert.AreEqual(APCIType.GroupValue_Response, result.Type);
+            Assert.AreEqual(ApciTypes.GroupValue_Response, result.Type);
+            Assert.AreEqual(3, result.Size);
             Assert.IsNotNull(result.Data);
-            Assert.AreEqual(2, result.Data.Length);
-            Assert.AreEqual(0x00, result.Data[0]);
-            Assert.AreEqual(0x4d, result.Data[1]);
+            Assert.AreEqual(1, result.Data.Length);
+            Assert.AreEqual(0x4d, result.Data[0]);
         }
 
         [Test]
         public void ParseGroupValue_Response3()
         {
             var data = "0041".ToByteArray(); // Type:GroupValue_Response, Data: low 6 bits = 0b000001 = 0x01
-            var result = new Apci(data, 0);
+            var result = Apci.Parse(data);
 
-            Assert.AreEqual(result.Type, APCIType.GroupValue_Response);
+            Assert.AreEqual(result.Type, ApciTypes.GroupValue_Response);
             Assert.IsNotNull(result.Data);
-            Assert.AreEqual(APCIType.GroupValue_Response, result.Type);
+            Assert.AreEqual(ApciTypes.GroupValue_Response, result.Type);
             Assert.IsNotNull(result.Data);
             Assert.AreEqual(1, result.Data.Length);
             Assert.AreEqual(0x01, result.Data[0]);
         }
 
+
         [Test]
         public void ParseGroupValue_Response4()
         {
             var data = "006A".ToByteArray(); // Type:GroupValue_Response, Data: low 6 bits = 0b101010 = 0x2a
-            var result = new Apci(data, 0);
+            var result = Apci.Parse(data);
 
-            Assert.AreEqual(APCIType.GroupValue_Response, result.Type);
+            Assert.AreEqual(ApciTypes.GroupValue_Response, result.Type);
             Assert.IsNotNull(result.Data);
             Assert.AreEqual(1, result.Data.Length);
             Assert.AreEqual(0x2a, result.Data[0]);
         }
-        */
+
+        [Test]
+        public void ParseGroupValue_Response5()
+        {
+            var data = "00-40-00".Replace("-", "").ToByteArray();
+            var result = Apci.Parse(data);
+            var buffer = result.ToBytes();
+
+            Assert.AreEqual(3, buffer.Length);
+            Assert.AreEqual(ApciTypes.GroupValue_Response, result.Type);
+            Assert.IsNotNull(result.Data);
+            Assert.AreEqual(1, result.Data.Length);
+            Assert.AreEqual(0x00, result.Data[0]);
+        }
+
+        [Test]
+        public void ParseGroupValue_Write3()
+        {
+            var data = "00-80-3D-30-20-C5".Replace("-", null).ToByteArray(); // Type:GroupValue_Response, Data: low 6 bits = 0b101010 = 0x2a
+            var result = Apci.Parse(data);
+
+            Assert.AreEqual(ApciTypes.GroupValue_Write, result.Type);
+            Assert.AreEqual(6, result.Size);
+            Assert.IsNotNull(result.Data);
+            Assert.AreEqual(4, result.Data.Length);
+            Assert.AreEqual(0x3d, result.Data[0]);
+        }
     }
 }

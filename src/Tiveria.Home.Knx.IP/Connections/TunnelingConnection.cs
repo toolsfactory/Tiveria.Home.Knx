@@ -45,6 +45,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         private readonly IPEndPoint _localEndpoint;
         private readonly IPEndPoint _remoteControlEndpoint;
         private readonly IPAddress _remoteAddress;
+        private readonly bool _busMonitor;
         private readonly UdpClient _udpClient;
         private readonly bool _natAware = false;
         private IPEndPoint? _remoteDataEndpoint;
@@ -55,7 +56,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         #endregion
 
         #region public properties
-        public override ConnectionType ConnectionType => ConnectionType.TUNNEL_CONNECTION;
+        public override ConnectionType ConnectionType => ConnectionType.Tunnel;
         public override IPAddress RemoteAddress => _remoteAddress;
         public bool NatAware => _natAware;
 
@@ -64,7 +65,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         #endregion
 
         #region constructors
-        public TunnelingConnection(IPAddress remoteAddress, ushort remotePort, IPAddress localAddress, ushort localPort, bool natAware = false)
+        public TunnelingConnection(IPAddress remoteAddress, ushort remotePort, IPAddress localAddress, ushort localPort, bool busmonitor = false, bool natAware = false)
         {
             if (remoteAddress == null)
                 throw new ArgumentNullException("RemoteAddress is null");
@@ -73,6 +74,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             AckTimeout = 500;
             SendRepeats = 3;
             _remoteAddress = remoteAddress;
+            _busMonitor = busmonitor;
             _remoteControlEndpoint = new IPEndPoint(remoteAddress, remotePort);
             _localEndpoint = new IPEndPoint(localAddress, localPort);
             _natAware = natAware;
@@ -108,19 +110,8 @@ namespace Tiveria.Home.Knx.IP.Connections
             }
         }
 
-        public async Task<bool> SendCemiFrameAsync(EMI.ICemi cemi, bool blocking = true)
+        public async Task<bool> SendCemiFrameAsync(Cemi.ICemiMessage cemi, bool blocking = true)
         {
-            /*
-            var cemiLData = (EMI.CemiLData)cemi;
-            if (cemiLData == null)
-                throw new ArgumentException("Only CemiLData allowed for now");
-            var frame = CreateTunnelingRequestFrameFromCemi(cemiLData);
-            if (blocking)
-                return await DoSendCemiBlockingAsync(frame);
-            else
-                return await SendAsync(frame);
-            */
-
             var conheader = new ConnectionHeader(_channelId, SndSeqCounter);
             var frame = new TunnelingRequestFrame(conheader, cemi);
             if (blocking)
@@ -179,7 +170,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             InternalCloseAsync("Ack not received", false).Wait();
         }
 
-        private TunnelingRequestFrame CreateTunnelingRequestFrameFromCemi(EMI.CemiLData cemi)
+        private TunnelingRequestFrame CreateTunnelingRequestFrameFromCemi(Cemi.CemiLData cemi)
         {
             var frame = new TunnelingRequestFrame(new Structures.ConnectionHeader(_channelId, SndSeqCounter), cemi);
             return frame;
@@ -283,14 +274,11 @@ namespace Tiveria.Home.Knx.IP.Connections
 
         private byte[] CreateConnectionRequestFrame()
         {
-            var cri = new CRITunnel(TunnelingLayer.TUNNEL_LINKLAYER);
+            var cri = new CRITunnel(_busMonitor ? TunnelingLayer.TUNNEL_BUSMONITOR : TunnelingLayer.TUNNEL_LINKLAYER);
             var hpai = new Structures.Hpai(Enums.HPAIEndpointType.IPV4_UDP, _localEndpoint.Address, (ushort)_localEndpoint.Port);
-            //            var req = new ServiceTypes.ConnectionRequest(cri, hpai, hpai);
-            //            return new RawIPFrame(req).ToBytes();
             var frame = new ConnectionRequestFrame(hpai, hpai, cri);
             var data  = KnxNetIPFrameSerializerFactory.
                 Instance.Create(frame.ServiceTypeIdentifier).Serialize(frame);
-
             return data;
         }
         #endregion
@@ -380,21 +368,21 @@ namespace Tiveria.Home.Knx.IP.Connections
         #region handling disconnect request
         private void HandleDisconnectRequest(DisconnectRequestFrame request)
         {
-            SendDisconnectResponseAsync(request.ChannelId, request.ControlEndpoint);
+            var frame = new DisconnectResponseFrame(request.ChannelId);
+            var data = KnxNetIPFrameSerializerFactory.
+                Instance.Create(frame.ServiceTypeIdentifier).Serialize(frame);
+            _udpClient.Send(data, data.Length, _remoteDataEndpoint);
+
             InternalCloseAsync("External request received.", true);
         }
 
-        private Task SendDisconnectResponseAsync(byte channelId, Hpai controlEndpoint)
-        {
-            throw new NotImplementedException();
-        }
         #endregion
 
         #region handling disconnect response
         private void HandleDisconnectResponse(DisconnectResponseFrame response)
         {
             if (response.Status != ErrorCodes.NoError)
-                _logger.Warn($"Connection closed with status code 0x{response.Status:x2} - " + response.Status.ToDescription());
+                _logger.Warn($"Connection closed with status code " + response.Status.ToDescription());
             _closeEvent.Set();
         }
         #endregion
@@ -406,7 +394,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             if (!ValidateReqSequenceCounter(seq))
                 return;
 
-            var frame = new TunnelingAcknowledgeFrame(_channelId, seq, ErrorCodes.NoError);
+            var frame = new TunnelingAcknowledgeFrame(request.ConnectionHeader);
             var data = KnxNetIPFrameSerializerFactory.
                 Instance.Create(frame.ServiceTypeIdentifier).Serialize(frame);
             _udpClient.Send(data, data.Length, _remoteDataEndpoint);
@@ -435,9 +423,9 @@ namespace Tiveria.Home.Knx.IP.Connections
         {
             if (_ackState != AckState.Pending)
                 return;
-            if (serviceType.ChannelId != _channelId)
+            if (serviceType.ConnectionHeader.ChannelId != _channelId)
                 return;
-            if (SndSeqCounter != serviceType.SequenceCounter)
+            if (SndSeqCounter != serviceType.ConnectionHeader.SequenceCounter)
                 return;
             _ackState = AckState.Received;
             _ackEvent.Set();
@@ -472,22 +460,22 @@ namespace Tiveria.Home.Knx.IP.Connections
         {
             switch (frame.FrameHeader.ServiceTypeIdentifier)
             {
-                case ServiceTypeIdentifier.CONNECT_RESPONSE:
+                case ServiceTypeIdentifier.ConnectResponse:
                     HandleConnectResponse((ConnectionResponseFrame)frame, source);
                     break;
-                case ServiceTypeIdentifier.DISCONNECT_REQ:
+                case ServiceTypeIdentifier.DisconnectRequest:
                     HandleDisconnectRequest((DisconnectRequestFrame)frame);
                     break;
-                case ServiceTypeIdentifier.DISCONNECT_RES:
+                case ServiceTypeIdentifier.DisconnectResponse:
                     HandleDisconnectResponse((DisconnectResponseFrame)frame);
                     break;
-                case ServiceTypeIdentifier.TUNNELING_REQ:
+                case ServiceTypeIdentifier.TunnelingRequest:
                     HandleTunnelingRequest((TunnelingRequestFrame)frame);
                     break;
-                case ServiceTypeIdentifier.TUNNELING_ACK:
+                case ServiceTypeIdentifier.TunnelingAcknowledge:
                     HandleTunnelingAck((TunnelingAcknowledgeFrame)frame);
                     break;
-                case ServiceTypeIdentifier.CONNECTIONSTATE_RESPONSE:
+                case ServiceTypeIdentifier.ConnectionStateResponse:
                     HandleConnectionStateResponse((ConnectionStateResponseFrame)frame);
                     break;
                     /*

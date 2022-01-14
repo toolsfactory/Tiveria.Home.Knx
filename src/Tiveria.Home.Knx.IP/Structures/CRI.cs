@@ -31,7 +31,7 @@ namespace Tiveria.Home.Knx.IP.Structures
     /// Immutable container for a connection request information (CRI).
     /// The CRI structure is used for the additional information in a connection request.<br>
     /// </summary>
-    public class CRI : DataElement
+    public class CRI : KnxDataElement
     {
         #region public properties
         public ConnectionType ConnectionType { get; init; }

@@ -45,17 +45,17 @@ namespace Tiveria.Home.Knx.IP.Frames
     public class DeviceConfigurationAcknowledgeFrame : FrameBase, IKnxNetIPFrame
     {
         public static readonly byte STRUCTURE_SIZE = 0x04;
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DEVICE_CONFIGURATION_ACK;
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DeviceConfigurationResponse;
         public ErrorCodes Status { get; init; }
         public byte ChannelId { get; init; }
         public byte SequenceCounter { get; init; }
 
         public DeviceConfigurationAcknowledgeFrame(byte channelId, byte sequenceCounter, ErrorCodes status)
-            : this(new FrameHeader(ServiceTypeIdentifier.DEVICE_CONFIGURATION_ACK, STRUCTURE_SIZE), channelId, sequenceCounter, status)
+            : this(new FrameHeader(ServiceTypeIdentifier.DeviceConfigurationResponse, STRUCTURE_SIZE), channelId, sequenceCounter, status)
         { }
 
         public DeviceConfigurationAcknowledgeFrame(FrameHeader frameHeader, byte channelId, byte sequenceCounter, ErrorCodes status)
-            : base(frameHeader, ServiceTypeIdentifier.DEVICE_CONFIGURATION_ACK, STRUCTURE_SIZE)
+            : base(frameHeader, ServiceTypeIdentifier.DeviceConfigurationResponse, STRUCTURE_SIZE)
         {
             ChannelId = channelId;
             SequenceCounter = sequenceCounter;

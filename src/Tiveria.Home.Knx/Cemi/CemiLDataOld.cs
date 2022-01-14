@@ -23,10 +23,11 @@
 */
 
 using Tiveria.Home.Knx.Exceptions;
+using Tiveria.Home.Knx.Adresses;
 using Tiveria.Common.IO;
 using Tiveria.Common.Extensions;
 
-namespace Tiveria.Home.Knx.EMI
+namespace Tiveria.Home.Knx.Cemi
 {
     /// <summary>
     /// Class representing a CEMI Frame for L_Data services.
@@ -55,25 +56,16 @@ namespace Tiveria.Home.Knx.EMI
     /// <remarks> 
     /// This class does NOT support additional info!
     /// </remarks>
-    public class CemiLData : CemiBase, ICemi
+    public class CemiLDataOld : CemiBase, ICemiMessage
     {
         private static int MESSAGEMINLENGTH = 9;
 
-        #region private fields
-        protected IndividualAddress _sourceAddress;
-        protected IKnxAddress _destinationAddress;
-        protected Priority _priority;
-        protected ControlField1 _controlField1;
-        protected ControlField2 _controlField2;
-        private Apci _apci;
-        #endregion
-
         #region public properties
-        public IndividualAddress SourceAddress => _sourceAddress;
-        public IKnxAddress DestinationAddress => _destinationAddress;
-        public ControlField1 ControlField1 => _controlField1;
-        public ControlField2 ControlField2 => _controlField2;
-        public Apci Apci => _apci;
+        public IndividualAddress SourceAddress { get; protected set; } = IndividualAddress.Empty();
+        public IKnxAddress DestinationAddress { get; protected set; } = GroupAddress.Empty();
+        public ControlField1 ControlField1 { get; protected set; } = new ControlField1(MessageCode.LDATA_REQ);
+        public ControlField2 ControlField2 { get; protected set; } = new ControlField2();
+        public Apci Apci { get; protected set; }
         #endregion
 
         #region constructors
@@ -81,34 +73,31 @@ namespace Tiveria.Home.Knx.EMI
         /// Creates a new cEMI L_Data Frame
         /// </summary>
         /// <param name="br">BigEndianBinaryReader with the underlying buffer the frame is parsed from</param>
-        protected CemiLData(BigEndianBinaryReader br)
+        protected CemiLDataOld(BigEndianBinaryReader br)
             : base(br)
-        {
-            _size = MESSAGEMINLENGTH + _payload.Length + _additionalInfoFields.Length;
-        }
+        { }
 
-        public CemiLData(CemiMessageCode messageCode, IndividualAddress srcAddress, IKnxAddress dstAddress, byte[] tpdu, 
+        public CemiLDataOld(MessageCode messageCode, IndividualAddress srcAddress, IKnxAddress dstAddress, byte[] tpdu, 
                          Priority priority, bool repeat = true, BroadcastType broadcast = BroadcastType.Normal, bool ack = false, int hopCount = 6)
             : base(messageCode)
         {
             VerifyPayload(tpdu);
-            _additionalInfoLength = 0;
-            _additionalInfoFields = Array.Empty<AdditionalInformationField>();
-            _sourceAddress = srcAddress;
-            _destinationAddress = dstAddress;
-            _payload = (byte[]) tpdu.Clone();
-            _apci = Apci.Parse(_payload);
-            _controlField1 = new ControlField1(_messageCode, false, priority, repeat, broadcast, ack);
-            _controlField2 = new ControlField2(_destinationAddress.IsGroupAddress(), hopCount, 0);
-            _size = MESSAGEMINLENGTH + _payload.Length + _additionalInfoFields.Length;
+            SourceAddress = srcAddress;
+            DestinationAddress = dstAddress;
+            Apci = Apci.Parse(tpdu);
+            // _payload = (byte[])tpdu.Clone();
+            // _apci = Apci.Parse(_payload);
+            ControlField1 = new ControlField1(MessageCode, false, priority, repeat, broadcast, ack);
+            ControlField2 = new ControlField2(DestinationAddress.IsGroupAddress(), hopCount, 0);
+            Size = MESSAGEMINLENGTH + tpdu.Length;  // AdditionalInfoLength is 0 for LData in this Message
         }
 
-        public CemiLData(CemiMessageCode messageCode, IndividualAddress srcAddress, IKnxAddress dstAddress, byte[] tpdu,
+        public CemiLDataOld(MessageCode messageCode, IndividualAddress srcAddress, IKnxAddress dstAddress, byte[] tpdu,
                          Priority priority, ConfirmType confirm)
             : this(messageCode, srcAddress, dstAddress, tpdu, priority, true, BroadcastType.Normal, false, 6)
         {
             //  overwrite controlField1 now including confirm
-            _controlField1 = new ControlField1(_messageCode, false, priority, true, BroadcastType.Normal, false, confirm);
+            ControlField1 = new ControlField1(messageCode, false, priority, true, BroadcastType.Normal, false, confirm);
         }
         #endregion
 
@@ -121,14 +110,13 @@ namespace Tiveria.Home.Knx.EMI
                 throw BufferSizeException.TooBig("TPDU is bigger than 16 bytes");
         }
 
-        protected override void VerifyMessageCode(CemiMessageCode messageCode)
+        protected override void VerifyMessageCode(MessageCode messageCode)
         {
-            if (messageCode != CemiMessageCode.LDATA_REQ &&
-                messageCode != CemiMessageCode.LDATA_CON &&
-                messageCode != CemiMessageCode.LDATA_IND)
+            if (messageCode != MessageCode.LDATA_REQ &&
+                messageCode != MessageCode.LDATA_CON &&
+                messageCode != MessageCode.LDATA_IND)
                 throw BufferFieldException.WrongValue("MessageCode", "LDATA*", messageCode.ToString());
         }
-
 
         protected override bool VerifyBufferSize(BigEndianBinaryReader br)
         {
@@ -137,9 +125,8 @@ namespace Tiveria.Home.Knx.EMI
 
         protected override void VerifyAdditionalLengthInfo(byte length)
         {
-            if (length != 0)
-                throw BufferFieldException.WrongValue("AdditionalInfoLength", 0, length);
-            _additionalInfoFields = Array.Empty<AdditionalInformationField>();
+//            if (length != 0)
+//                throw BufferFieldException.WrongValue("AdditionalInfoLength", 0, length);
         }
 
         #region parsing the buffer
@@ -155,28 +142,28 @@ namespace Tiveria.Home.Knx.EMI
         protected void ParseControlField1(BigEndianBinaryReader br)
         {
             var ctrl1 = br.ReadByte();
-            _controlField1 = new ControlField1(_messageCode, ctrl1);
+            ControlField1 = new ControlField1(MessageCode, ctrl1);
         }
 
         protected void ParseControlField2(BigEndianBinaryReader br)
         {
             var ctrl = br.ReadByte();
-            _controlField2 = new ControlField2(ctrl);
+            ControlField2 = new ControlField2(ctrl);
         }
 
         protected void ParseSourceAddress(BigEndianBinaryReader br)
         {
             var src = br.ReadUInt16();
-            _sourceAddress = new IndividualAddress(src);
+            SourceAddress = new IndividualAddress(src);
         }
 
         protected void ParseDestinationAddress(BigEndianBinaryReader br)
         {
             var dst = br.ReadUInt16();
-            if (_controlField2.DestinationAddressType == AddressType.GroupAddress)
-                _destinationAddress = new GroupAddress(dst);
+            if (ControlField2.DestinationAddressType == AddressType.GroupAddress)
+                DestinationAddress = new GroupAddress(dst);
             else
-                _destinationAddress = new IndividualAddress(dst);
+                DestinationAddress = new IndividualAddress(dst);
         }
 
         protected void ParseAPDU(BigEndianBinaryReader br)
@@ -185,48 +172,67 @@ namespace Tiveria.Home.Knx.EMI
             var len = br.ReadByte() + 1;
             if (br.Available < len)
                 throw BufferSizeException.TooBig("Cemi Frame - TCPI Data");
-            _payload = br.ReadBytes(len);
-            _apci = Apci.Parse(_payload);
+            var payload = br.ReadBytes(len);
+            Apci = Apci.Parse(payload);
         }
         #endregion
 
-        #region creating the buffer
-        public override void WriteToByteArray(byte[] buffer, int offset = 0)
+        /*        #region creating the buffer
+                public override void WriteToByteArray(byte[] buffer, int offset = 0)
+                {
+                    base.WriteToByteArray(buffer, offset);
+                    buffer[offset] = (byte)_messageCode;
+                    buffer[offset + 1] = _additionalInfoLength;
+                    buffer[offset + 2] = _controlField1.RawData;
+                    buffer[offset + 3] = _controlField2.RawData;
+                    _sourceAddress.WriteBytes(buffer.AsSpan(offset+4));
+                    _destinationAddress.WriteBytes(buffer.AsSpan(offset+6));
+                    buffer[offset + 8] = (byte) (_payload.Length - 1);
+                    _payload.CopyTo(buffer, offset + 9);
+                }
+                #endregion
+        */
+
+        public override void CalculateSize()
         {
-            base.WriteToByteArray(buffer, offset);
-            buffer[offset] = (byte)_messageCode;
-            buffer[offset + 1] = _additionalInfoLength;
-            buffer[offset + 2] = _controlField1.RawData;
-            buffer[offset + 3] = _controlField2.RawData;
-            _sourceAddress.WriteBytes(buffer.AsSpan(offset+4));
-            _destinationAddress.WriteBytes(buffer.AsSpan(offset+6));
-            buffer[offset + 8] = (byte) (_payload.Length - 1);
-            _payload.CopyTo(buffer, offset + 9);
+            Size = MESSAGEMINLENGTH + AdditionalInfoLength + Apci.Size;
         }
-        #endregion
-        #endregion
 
-        public string ToDescription(int padding)
+        public override void Write(BigEndianBinaryWriter writer)
         {
-            var addinfos = "";
-            foreach (var info in AdditionalInfoFields)
-                addinfos += info.ToDescription(padding + 4) + Environment.NewLine;
+            writer.Write((byte) Size);
+            writer.Write((byte)AdditionalInfoLength);
+            foreach(var info in AdditionalInfoFields)
+                info.Write(writer);
+            writer.Write((byte)ControlField1.RawData);
+            writer.Write((byte)ControlField2.RawData);
+            SourceAddress.Write(writer);
+            DestinationAddress.Write(writer);
+            Apci.Write(writer);
+        }
 
-            return $"CemiLData: AdditionalInfoLength = {AdditionalInfoLength}, Source = {SourceAddress}, Destination = {DestinationAddress}, TPDU = ".AddPrefixSpaces(padding) + _payload.ToHex() + Environment.NewLine+
-                addinfos+
+        #endregion
+
+        public override string ToDescription(int padding = 4)
+        {
+            return ($"CemiLData: Source = {SourceAddress}, Destination = {DestinationAddress}" + Environment.NewLine +
                 ControlField1.ToDescription(padding + 4) + Environment.NewLine +
-                ControlField2.ToDescription(padding + 4);
+                ControlField2.ToDescription(padding + 4) +Environment.NewLine +
+                Apci.ToString().AddPrefixSpaces(padding + 4))
+                .AddPrefixSpaces(padding);
         }
 
         #region static methods
-        public static CemiLData CreateReadRequestCemi(IndividualAddress srcAddress, IKnxAddress dstAddress, Priority priority = Priority.Normal)
+        // ToDo: Replace with more generic solution
+        public static CemiLDataOld CreateReadRequestCemi(IndividualAddress srcAddress, IKnxAddress dstAddress, Priority priority = Priority.Normal)
         {
-            return new CemiLData(CemiMessageCode.LDATA_REQ, srcAddress, dstAddress, new byte[2] { 0, 0 }, priority);
+            return new CemiLDataOld(MessageCode.LDATA_REQ, srcAddress, dstAddress, new byte[2] { 0, 0 }, priority);
         }
 
-        public static CemiLData CreateReadAnswerCemi(IndividualAddress srcAddress, IKnxAddress dstAddress, byte[] data, Priority priority = Priority.Normal)
+        // ToDo: Replace with more generic solution
+        public static CemiLDataOld CreateReadAnswerCemi(IndividualAddress srcAddress, IKnxAddress dstAddress, byte[] data, Priority priority = Priority.Normal)
         {
-            return new CemiLData(CemiMessageCode.LDATA_IND, srcAddress, dstAddress, data , priority);
+            return new CemiLDataOld(MessageCode.LDATA_IND, srcAddress, dstAddress, data , priority);
         }
 
         /// <summary>
@@ -236,22 +242,22 @@ namespace Tiveria.Home.Knx.EMI
         /// <param name="offset"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        public static CemiLData Parse(byte[] buffer, int offset, int length)
+        public static CemiLDataOld Parse(byte[] buffer, int offset, int length)
         {
-            return new CemiLData(new BigEndianBinaryReader(buffer, offset, length));
+            return new CemiLDataOld(new BigEndianBinaryReader(buffer, offset, length));
         }
 
-        public static CemiLData Parse(BigEndianBinaryReader br)
+        public static CemiLDataOld Parse(BigEndianBinaryReader br)
         {
-            return new CemiLData(br);
+            return new CemiLDataOld(br);
         }
 
-        public static bool TryParse(out CemiLData cemildata, byte[] buffer, int offset, int length)
+        public static bool TryParse(byte[] buffer, int offset, int length, out CemiLDataOld? cemildata)
         {
             bool result = false;
             try
             {
-                cemildata = new CemiLData(new BigEndianBinaryReader(buffer, offset, length));
+                cemildata = new CemiLDataOld(new BigEndianBinaryReader(buffer, offset, length));
                 result = true;
             }
             catch
@@ -262,12 +268,12 @@ namespace Tiveria.Home.Knx.EMI
             return result;
         }
 
-        public static bool TryParse(out CemiLData cemildata, BigEndianBinaryReader br)
+        public static bool TryParse(BigEndianBinaryReader br, out CemiLDataOld? cemildata)
         {
             bool result = false;
             try
             {
-                cemildata = new CemiLData(br);
+                cemildata = new CemiLDataOld(br);
                 result = true;
             }
             catch
@@ -279,4 +285,5 @@ namespace Tiveria.Home.Knx.EMI
         }
         #endregion
     }
+
 }

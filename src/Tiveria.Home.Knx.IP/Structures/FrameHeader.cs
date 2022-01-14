@@ -43,7 +43,7 @@ namespace Tiveria.Home.Knx.IP.Structures
     /// Total Length: Header Length + sizeof(cEMI Frame)
     /// </code>
     /// </summary>
-    public class FrameHeader : DataElement
+    public class FrameHeader : KnxDataElement
     {
         #region Constants
         public static bool ThrowExceptionOnUnknownVersion = true;
@@ -71,7 +71,7 @@ namespace Tiveria.Home.Knx.IP.Structures
             if (Enum.IsDefined(typeof(ServiceTypeIdentifier), servicetypeidentifierRaw))
                 ServiceTypeIdentifier = (ServiceTypeIdentifier)servicetypeidentifierRaw;
             else
-                ServiceTypeIdentifier = ServiceTypeIdentifier.UNKNOWN;
+                ServiceTypeIdentifier = ServiceTypeIdentifier.Unknown;
 
             Size = version.HeaderLength;
             Version = version.Identifier;
@@ -111,7 +111,7 @@ namespace Tiveria.Home.Knx.IP.Structures
             if (totalLength - headersize > reader.Available)
                 throw BufferSizeException.TooSmall("Buffer<Header|TotalLength");
 
-            return new FrameHeader(version!.Value, serviceTypeIdRaw, totalLength - headersize);
+            return new FrameHeader(version, serviceTypeIdRaw, totalLength - headersize);
         }
 
 

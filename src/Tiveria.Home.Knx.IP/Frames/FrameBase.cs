@@ -45,7 +45,7 @@ namespace Tiveria.Home.Knx.IP.Frames
             if (frameHeader.ServiceTypeIdentifier != serviceTypeIdentifier)
                 throw new ArgumentException("ServiceIdentifier in Header doesn't match");
             if (frameHeader.TotalLength != bodySize + frameHeader.Size)
-                throw new ArgumentException("TotalLength in Header doesn't match");
+                throw new ArgumentException($"TotalLength in Header doesn't match. Expected: {frameHeader.TotalLength}. Received: {bodySize + frameHeader.Size}.");
             FrameHeader = frameHeader;
             Size = FrameHeader.TotalLength;
         }

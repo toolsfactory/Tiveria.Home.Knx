@@ -22,9 +22,7 @@
     combination.
 */
 
-#nullable enable
-
-namespace Tiveria.Home.Knx.EMI
+namespace Tiveria.Home.Knx.Cemi
 {
     /// <summary>
     /// For data that is 6 bits or less in length, only the first two bytes are used in a Common EMI

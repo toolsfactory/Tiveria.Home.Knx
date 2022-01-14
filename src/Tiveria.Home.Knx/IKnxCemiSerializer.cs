@@ -22,14 +22,17 @@
     combination.
 */
 
+using Tiveria.Common.IO;
+using Tiveria.Home.Knx.Cemi;
+
 namespace Tiveria.Home.Knx
 {
-    public enum EMIVersion
+    public interface IKnxCemiSerializer
     {
-        EMI1,
-        EMI2,
-        cEMI
+        ICemiMessage Deserialize(byte[] buffer);
+        ICemiMessage Deserialize(BigEndianBinaryReader reader, int size = -1);
+
+        byte[] Serialize(ICemiMessage cemiMessage);
+        void Serialize(ICemiMessage cemiMessage, BigEndianBinaryWriter writer);
     }
-
-
 }

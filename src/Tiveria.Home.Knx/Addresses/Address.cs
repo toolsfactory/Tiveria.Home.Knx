@@ -24,9 +24,9 @@
 
 using Tiveria.Common.IO;
 
-namespace Tiveria.Home.Knx
+namespace Tiveria.Home.Knx.Adresses
 {
-    public abstract class Address : DataElement, IKnxAddress, IEquatable<Address>
+    public abstract class Address : KnxDataElement, IKnxAddress, IEquatable<Address>
     {
         public ushort RawAddress { get; init; }
         public AddressType AddressType { get; init; }
@@ -69,6 +69,16 @@ namespace Tiveria.Home.Knx
             if (other == null)  
                 return false;
             return (other.AddressType == AddressType) && (RawAddress == other.RawAddress);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as Address);
+        }
+
+        public override int GetHashCode()
+        {
+            return RawAddress.GetHashCode() * (AddressType == AddressType.IndividualAddress ? 3 : 94);
         }
     }
 }

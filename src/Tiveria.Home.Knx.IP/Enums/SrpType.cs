@@ -22,18 +22,36 @@
     combination.
 */
 
-namespace Tiveria.Home.Knx
+namespace Tiveria.Home.Knx.IP.Enums
 {
-    /// <summary>
-    /// Interface common to both Individual and Group Adresses in Knx.
-    /// </summary>
-    public interface IKnxAddress : ICloneable, IKnxDataElement
+    public enum SrpType : byte
     {
-        ushort RawAddress { get; }
-        AddressType AddressType { get; }
+        /// <summary>
+        /// Used for testing KnxNetIP routers. Should not be actively used in production!
+        /// </summary>
+        Invalid = 0x00,
 
-        int WriteBytes(Span<byte> buffer);
-        bool IsGroupAddress();
-        bool IsPhysicalAddress();
+        /// <summary>
+        /// Only KnxNetIP routers should answer to a broadcast search request which are 
+        /// currently in programming mode.
+        /// </summary>
+        SelectByProgrammingMode = 0x01,
+
+        /// <summary>
+        /// Only a KnxNetIP router with the specified MAC address should respond to the 
+        /// search request.
+        /// </summary>
+        SelectByMacAddress = 0x02,
+
+        /// <summary>
+        /// Only KnxNetIP routers supporting the given service family & version combination 
+        /// should answer to the search request.
+        /// </summary>
+        SelectByService = 0x03,
+
+        /// <summary>
+        /// Only KnxNetIP routers with the indicated description types should answer.
+        /// </summary>
+        RequestDibs = 0x04
     }
 }

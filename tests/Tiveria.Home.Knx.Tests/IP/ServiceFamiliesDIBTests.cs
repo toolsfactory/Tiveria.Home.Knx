@@ -34,7 +34,7 @@ namespace Tiveria.Home.Knx.Tests.IP
             servicefamilies.Add((0x02, 0x01));
             servicefamilies.Add((0x03, 0x01));
             servicefamilies.Add((0x04, 0x01));
-            var expected = "0602020103010401".ToByteArray();
+            var expected = "0802020103010401".ToByteArray();
             var dib = new ServiceFamiliesDIB(servicefamilies);
 
             Assert.AreEqual(dib.Size, 8);
@@ -48,7 +48,7 @@ namespace Tiveria.Home.Knx.Tests.IP
         [Test]
         public void Parse_Structure_01()
         {
-            var data = "0602020103010401".ToByteArray();
+            var data = "0802020103010401".ToByteArray();
             var reader = new BigEndianBinaryReader(new MemoryStream(data));
             var dib = ServiceFamiliesDIB.Parse(reader);
 

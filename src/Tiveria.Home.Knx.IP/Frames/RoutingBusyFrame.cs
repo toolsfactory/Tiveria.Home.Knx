@@ -30,17 +30,17 @@ namespace Tiveria.Home.Knx.IP.Frames
 {
     public class RoutingBusyFrame : FrameBase, IKnxNetIPFrame
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.ROUTING_BUSY;
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.ROURoutingBusyING_BUSY;
         public BusyInfo BusyInfo { get; init; }
 
         public RoutingBusyFrame(FrameHeader frameHeader, BusyInfo busyInfo)
-            : base(frameHeader, ServiceTypeIdentifier.ROUTING_LOST_MSG, busyInfo.Size)
+            : base(frameHeader, ServiceTypeIdentifier.RoutingLostMessage, busyInfo.Size)
         {
             BusyInfo = busyInfo;
         }
 
         public RoutingBusyFrame(BusyInfo busyInfo)
-            : this(new FrameHeader(ServiceTypeIdentifier.ROUTING_LOST_MSG, busyInfo.Size), busyInfo)
+            : this(new FrameHeader(ServiceTypeIdentifier.RoutingLostMessage, busyInfo.Size), busyInfo)
         { }
     }
 }

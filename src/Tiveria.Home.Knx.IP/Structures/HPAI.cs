@@ -39,7 +39,7 @@ namespace Tiveria.Home.Knx.IP.Structures
     /// |  (8)   | Type   |                                   |                 |
     /// +--------+--------+--------+--------+--------+--------+--------+--------+
     /// </code>
-    public class Hpai : DataElement
+    public class Hpai : KnxDataElement
     {
         public static readonly byte STRUCTURE_SIZE = 8;
 

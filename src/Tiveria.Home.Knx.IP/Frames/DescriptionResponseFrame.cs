@@ -30,24 +30,22 @@ namespace Tiveria.Home.Knx.IP.Frames
 {
     public class DescriptionResponseFrame : FrameBase
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DESCRIPTION_RES;
-        public Hpai ServiceEndpoint { get; init;}
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DescriptionResponse;
         public DeviceInfoDIB DeviceInfoDIB { get; init; }
         public ServiceFamiliesDIB ServiceFamiliesDIB { get; init; }
         public OtherDIB? OtherDIB { get; init; }
 
-        public DescriptionResponseFrame(FrameHeader frameHeader, Hpai serviceEndpoint, DeviceInfoDIB deviceInfoDIB, ServiceFamiliesDIB serviceFamiliesDIB, OtherDIB? otherDIB)
-            : base(frameHeader, ServiceTypeIdentifier.DESCRIPTION_RES, serviceEndpoint.Size + deviceInfoDIB.Size + serviceFamiliesDIB.Size + (otherDIB == null ? 0 : otherDIB.Size))
+        public DescriptionResponseFrame(FrameHeader frameHeader, DeviceInfoDIB deviceInfoDIB, ServiceFamiliesDIB serviceFamiliesDIB, OtherDIB? otherDIB)
+            : base(frameHeader, ServiceTypeIdentifier.DescriptionResponse,  deviceInfoDIB.Size + serviceFamiliesDIB.Size + (otherDIB == null ? 0 : otherDIB.Size))
         {
-            ServiceEndpoint = serviceEndpoint;
             DeviceInfoDIB = deviceInfoDIB;
             ServiceFamiliesDIB = serviceFamiliesDIB;
             OtherDIB = otherDIB;
         }
 
         public DescriptionResponseFrame(Hpai serviceEndpoint, DeviceInfoDIB deviceInfoDIB, ServiceFamiliesDIB serviceFamiliesDIB, OtherDIB? otherDIB)
-            : this(new FrameHeader(ServiceTypeIdentifier.DESCRIPTION_RES, serviceEndpoint.Size + deviceInfoDIB.Size + serviceFamiliesDIB.Size + (otherDIB == null ? 0 : otherDIB.Size)),
-                   serviceEndpoint, deviceInfoDIB, serviceFamiliesDIB, otherDIB) 
+            : this(new FrameHeader(ServiceTypeIdentifier.DescriptionResponse, serviceEndpoint.Size + deviceInfoDIB.Size + serviceFamiliesDIB.Size + (otherDIB == null ? 0 : otherDIB.Size)),
+                   deviceInfoDIB, serviceFamiliesDIB, otherDIB) 
         { }
     }
 }

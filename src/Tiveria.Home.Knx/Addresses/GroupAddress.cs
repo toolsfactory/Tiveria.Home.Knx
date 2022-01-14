@@ -26,7 +26,7 @@ using Tiveria.Home.Knx.Exceptions;
 using Tiveria.Common.IO;
 
 
-namespace Tiveria.Home.Knx
+namespace Tiveria.Home.Knx.Adresses
 {
     /// <summary>
     /// Class representing both a 2-level or a 3-level Group Address 
@@ -157,6 +157,8 @@ namespace Tiveria.Home.Knx
         {
             return (main & ~0x1f) == 0 && (sub & ~0x07_ff) == 0;
         }
+
+        public static GroupAddress Empty() => new GroupAddress(0);
         #endregion
     }
 }

@@ -22,7 +22,7 @@
     combination.
 */
 
-namespace Tiveria.Home.Knx.EMI
+namespace Tiveria.Home.Knx.Cemi
 {
     /// <summary>
     /// Enumeration of all available values for the priority flag in <see cref="ControlField1"/>

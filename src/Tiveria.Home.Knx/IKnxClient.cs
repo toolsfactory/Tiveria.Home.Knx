@@ -22,6 +22,8 @@
     combination.
 */
 
+using Tiveria.Home.Knx.Adresses;
+
 namespace Tiveria.Home.Knx
 {
     public interface IKnxClient : IDisposable

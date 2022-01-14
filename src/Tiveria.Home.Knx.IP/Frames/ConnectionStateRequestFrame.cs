@@ -40,19 +40,19 @@ namespace Tiveria.Home.Knx.IP.Frames
     /// </summary>
     public class ConnectionStateRequestFrame : FrameBase, IKnxNetIPFrame
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.CONNECTIONSTATE_REQUEST;
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.ConnectionStateRequest;
         public Hpai ControlEndpoint { get; init; }
         public byte ChannelId { get; init; }
 
         public ConnectionStateRequestFrame(FrameHeader frameHeader, byte channelId, Hpai controlEndpoint)
-            : base(frameHeader, ServiceTypeIdentifier.CONNECTIONSTATE_REQUEST, 2 + controlEndpoint.Size)
+            : base(frameHeader, ServiceTypeIdentifier.ConnectionStateRequest, 2 + controlEndpoint.Size)
         {
             ChannelId = channelId;
             ControlEndpoint = controlEndpoint;
         }
 
         public ConnectionStateRequestFrame(byte channelId, Hpai controlEndpoint)
-            : this (new FrameHeader(ServiceTypeIdentifier.CONNECTIONSTATE_REQUEST, 2 + controlEndpoint.Size), channelId, controlEndpoint)
+            : this (new FrameHeader(ServiceTypeIdentifier.ConnectionStateRequest, 2 + controlEndpoint.Size), channelId, controlEndpoint)
         { }
     }
 }

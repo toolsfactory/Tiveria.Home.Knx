@@ -30,15 +30,15 @@ namespace Tiveria.Home.Knx.IP.Frames
 {
     public class SearchRequestFrame : FrameBase
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.SEARCH_REQ;
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.SearchRequest;
         public Hpai DiscoveryEndpoint { get; init; }
 
         public SearchRequestFrame(Hpai discoveryEndpoint)
-            : this (new FrameHeader(ServiceTypeIdentifier.SEARCH_REQ, discoveryEndpoint.Size), discoveryEndpoint)
+            : this (new FrameHeader(ServiceTypeIdentifier.SearchRequest, discoveryEndpoint.Size), discoveryEndpoint)
         { }
 
         public SearchRequestFrame(FrameHeader frameHeader, Hpai discoveryEndpoint)
-            : base(frameHeader, ServiceTypeIdentifier.SEARCH_REQ, discoveryEndpoint.Size)
+            : base(frameHeader, ServiceTypeIdentifier.SearchRequest, discoveryEndpoint.Size)
         {
             DiscoveryEndpoint = discoveryEndpoint;
         }

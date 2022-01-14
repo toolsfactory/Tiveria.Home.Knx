@@ -51,32 +51,32 @@ namespace Tiveria.Home.Knx.Tests.IP
         {
             var data = "0801c0a80278e1".ToByteArray(); // Buffer one byte too short
             var reader = new BigEndianBinaryReader(new MemoryStream(data));
-            Assert.Catch<BufferException>(() => Hpai.Parse(reader));
+            Assert.Catch<EndOfStreamException>(() => Hpai.Parse(reader));
         }
 
         [Test]
         public void CRI_Constructor1_Ok()
         {
-            var cri = new CRI(ConnectionType.TUNNEL_CONNECTION);
-            Assert.IsTrue(cri.ConnectionType == ConnectionType.TUNNEL_CONNECTION);
+            var cri = new CRI(ConnectionType.Tunnel);
+            Assert.IsTrue(cri.ConnectionType == ConnectionType.Tunnel);
             Assert.IsTrue(cri.Size == 2);
             var data = cri.ToBytes();
             Assert.IsTrue(data.Length == 2);
             Assert.IsTrue(data[0] == 2);
-            Assert.IsTrue(data[1] == (byte)ConnectionType.TUNNEL_CONNECTION);
+            Assert.IsTrue(data[1] == (byte)ConnectionType.Tunnel);
         }
 
         [Test]
         public void CRI_Constructor2_Ok()
         {
             var opt = new byte[4] { 1, 2, 3, 4 };
-            var cri = new CRI(ConnectionType.TUNNEL_CONNECTION, opt);
-            Assert.IsTrue(cri.ConnectionType == ConnectionType.TUNNEL_CONNECTION);
+            var cri = new CRI(ConnectionType.Tunnel, opt);
+            Assert.IsTrue(cri.ConnectionType == ConnectionType.Tunnel);
             Assert.IsTrue(cri.Size == 6);
             var data = cri.ToBytes();
             Assert.IsTrue(data.Length == 6);
             Assert.IsTrue(data[0] == 6);
-            Assert.IsTrue(data[1] == (byte)ConnectionType.TUNNEL_CONNECTION);
+            Assert.IsTrue(data[1] == (byte)ConnectionType.Tunnel);
             Assert.IsTrue(data[2] == 1);
             Assert.IsTrue(data[3] == 2);
             Assert.IsTrue(data[4] == 3);
@@ -90,11 +90,11 @@ namespace Tiveria.Home.Knx.Tests.IP
             var reader = new BigEndianBinaryReader(new MemoryStream(source));
             var cri = CRI.Parse(reader);
             Assert.IsTrue(cri.Size == 4);
-            Assert.IsTrue(cri.ConnectionType == ConnectionType.REMLOG_CONNECTION);
+            Assert.IsTrue(cri.ConnectionType == ConnectionType.RemLog);
             var data = cri.ToBytes();
             Assert.IsTrue(data.Length == 4);
             Assert.IsTrue(data[0] == 4);
-            Assert.IsTrue(data[1] == (byte)ConnectionType.REMLOG_CONNECTION);
+            Assert.IsTrue(data[1] == (byte)ConnectionType.RemLog);
             Assert.IsTrue(data[2] == 2);
             Assert.IsTrue(data[3] == 0);
         }

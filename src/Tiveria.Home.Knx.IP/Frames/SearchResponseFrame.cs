@@ -30,13 +30,13 @@ namespace Tiveria.Home.Knx.IP.Frames
 {
     public class SearchResponseFrame : FrameBase
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.SEARCH_RESPONSE;
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.SearchResponse;
         public Hpai ServiceEndpoint { get; init; }
         public DeviceInfoDIB DeviceInfoDIB { get; init; }
         public ServiceFamiliesDIB ServiceFamiliesDIB { get; init; }
 
         public SearchResponseFrame(FrameHeader frameHeader, Hpai serviceEndpoint, DeviceInfoDIB deviceInfoDIB, ServiceFamiliesDIB serviceFamiliesDIB)
-            : base(frameHeader, ServiceTypeIdentifier.SEARCH_RESPONSE, serviceEndpoint.Size + deviceInfoDIB.Size + serviceFamiliesDIB.Size)
+            : base(frameHeader, ServiceTypeIdentifier.SearchResponse, serviceEndpoint.Size + deviceInfoDIB.Size + serviceFamiliesDIB.Size)
         {
             ServiceEndpoint = serviceEndpoint;
             DeviceInfoDIB = deviceInfoDIB;
@@ -44,7 +44,7 @@ namespace Tiveria.Home.Knx.IP.Frames
         }
 
         public SearchResponseFrame(Hpai serviceEndpoint, DeviceInfoDIB deviceInfoDIB, ServiceFamiliesDIB serviceFamiliesDIB)
-            :this(new FrameHeader(ServiceTypeIdentifier.SEARCH_RESPONSE, serviceEndpoint.Size + deviceInfoDIB.Size + serviceFamiliesDIB.Size), serviceEndpoint, deviceInfoDIB, serviceFamiliesDIB)
+            :this(new FrameHeader(ServiceTypeIdentifier.SearchResponse, serviceEndpoint.Size + deviceInfoDIB.Size + serviceFamiliesDIB.Size), serviceEndpoint, deviceInfoDIB, serviceFamiliesDIB)
         { }
     }
 }

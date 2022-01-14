@@ -33,7 +33,7 @@ namespace Tiveria.Home.Knx.IP.Connections
     {
         private readonly Tiveria.Common.Logging.ILogger _logger = Tiveria.Home.Knx.Utils.LogFactory.GetLogger("Tiveria.Home.Knx.UdpPacketReceiver");
         private readonly UdpClient _client;
-        private readonly CancellationToken _cancellationToken;
+        private readonly CancellationTokenSource _cancellationTokenSource;
         private readonly PacketReceivedDelegate? _packetReceived;
         private readonly KnxFrameReceivedDelegate? _knxFrameReceived;
         private bool _running;
@@ -47,7 +47,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             _client = client;
             _packetReceived = packetReceived;
             _knxFrameReceived = knxFrameReceived;
-            _cancellationToken = new CancellationToken();
+            _cancellationTokenSource = new CancellationTokenSource();
             _running = false;
         }
 
@@ -72,19 +72,19 @@ namespace Tiveria.Home.Knx.IP.Connections
         public void Stop()
         {
             _client.Close();
-            _cancellationToken.ThrowIfCancellationRequested();
+            _cancellationTokenSource.Cancel();
         }
 
         private void StartListen()
         {
             Task.Run(async () =>
             {
-                while (!_cancellationToken.IsCancellationRequested)
+                while (!_cancellationTokenSource.Token.IsCancellationRequested)
                 {
                     try
                     {
                         var receivedResults = await _client.ReceiveAsync()
-                                                           .WithCancellation(_cancellationToken)
+                                                           .WithCancellation(_cancellationTokenSource.Token)
                                                            .ConfigureAwait(false);
                         OnPacketReceived(receivedResults.RemoteEndPoint, (IPEndPoint)_client.Client.LocalEndPoint, receivedResults.Buffer);
                         TryParseKnxFrame(receivedResults.RemoteEndPoint, (IPEndPoint)_client.Client.LocalEndPoint, receivedResults.Buffer);
@@ -98,6 +98,7 @@ namespace Tiveria.Home.Knx.IP.Connections
 
         private void TryParseKnxFrame(IPEndPoint remoteEndPoint,IPEndPoint receiver, byte[] buffer)
         {
+            IKnxNetIPFrame? frame = null;
             try
             {
                 var reader = new Common.IO.BigEndianBinaryReader(buffer);
@@ -105,17 +106,14 @@ namespace Tiveria.Home.Knx.IP.Connections
                 Console.WriteLine(header);
                 var parser = KnxNetIPFrameSerializerFactory.Instance.Create(header.ServiceTypeIdentifier);
                 reader.Seek(0);
-                var frame = parser.Deserialize(reader);
-                OnKnxFrameReceived(remoteEndPoint, receiver, frame);
+                frame = parser.Deserialize(reader);
             }
-            catch (Exceptions.BufferException be)
+            catch (Exception e)
             {
-                _logger.Warn("Invalid frame received", be);
+                _logger.Warn($"Invalid frame received {BitConverter.ToString(buffer)}", e);
+                return;
             }
-            catch (ArgumentException ae)
-            {
-                _logger.Warn("Invalid frame received", ae);
-            }
+            OnKnxFrameReceived(remoteEndPoint, receiver, frame);
         }
     }
 }

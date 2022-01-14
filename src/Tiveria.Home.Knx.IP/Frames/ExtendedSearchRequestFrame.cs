@@ -22,17 +22,26 @@
     combination.
 */
 
+using Tiveria.Home.Knx.IP.Enums;
+using Tiveria.Home.Knx.IP.Structures;
 
-namespace Tiveria.Home.Knx.EMI
+namespace Tiveria.Home.Knx.IP.Frames
 {
-    /// <summary>
-    /// Enumeration of the possible values of the ConfirmType Flag in <see cref="ControlField1"/>
-    /// </summary>
-    public enum ConfirmType : byte
+    public class ExtendedSearchRequestFrame : FrameBase
     {
-        // No error in the transmitted frame
-        NoError = 0,
-        // Error in the transmitted frame
-        Error = 1
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.ExtendedSearchRequest;
+        public Hpai DiscoveryEndpoint { get; init; }
+        public SRP SearchRequestParameter { get; init; }
+
+        public ExtendedSearchRequestFrame(Hpai discoveryEndpoint, SRP searchRequestParameter)
+            : this(new FrameHeader(ServiceTypeIdentifier.ExtendedSearchRequest, discoveryEndpoint.Size + searchRequestParameter.Size), discoveryEndpoint, searchRequestParameter)
+        { }
+
+        public ExtendedSearchRequestFrame(FrameHeader frameHeader, Hpai discoveryEndpoint, SRP searchRequestParameter)
+            : base(frameHeader, ServiceTypeIdentifier.ExtendedSearchRequest, discoveryEndpoint.Size + searchRequestParameter.Size)
+        {
+            DiscoveryEndpoint = discoveryEndpoint;
+            SearchRequestParameter = searchRequestParameter;
+        }
     }
 }

@@ -44,6 +44,8 @@ namespace Tiveria.Home.Knx
                   .Add("Search KnxNetIP Routers/Tunnels", () => new SearchInterfacesDemo().RunAsync().Wait())
                   .Add("Build some structures", () => new StructureBuildDemo().RunAsync().Wait())
                   .Add("Connect & listen to traffic", () => new TrafficMonitor().RunAsync().Wait())
+                  .Add("DescriptionReq sample", () => new DescriptionRequestDemo("192.168.2.154", 3671).SendDescriptionRequest())
+                  .Add("Busmonitor", () => new BusmonitorDemo().RunAsync().Wait())
                   .Add("Exit", () => exit = true);
                 menu.Display();
             }

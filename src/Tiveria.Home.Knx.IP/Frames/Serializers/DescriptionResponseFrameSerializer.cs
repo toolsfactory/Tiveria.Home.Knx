@@ -41,22 +41,20 @@ namespace Tiveria.Home.Knx.IP.Frames.Serializers
     // TODO: fix description
     public class DescriptionResponseFrameSerializer : FrameSerializerBase<DescriptionResponseFrame>
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DESCRIPTION_RES;
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DescriptionResponse;
 
         public override DescriptionResponseFrame Deserialize(BigEndianBinaryReader reader)
         {
             var header = FrameHeader.Parse(reader);
-            var serviceEndpoint = Hpai.Parse(reader);
             var deviceInfoDIB = DeviceInfoDIB.Parse(reader);
             var serviceFamiliesDIB = ServiceFamiliesDIB.Parse(reader);  
-            var otherDIB = OtherDIB.Parse(reader);
-            return new DescriptionResponseFrame(header, serviceEndpoint, deviceInfoDIB, serviceFamiliesDIB, otherDIB);   
+            var otherDIB = (reader.Available > 0) ? OtherDIB.Parse(reader) : null;
+            return new DescriptionResponseFrame(header, deviceInfoDIB, serviceFamiliesDIB, otherDIB);   
         }
 
         public override void Serialize(DescriptionResponseFrame frame, BigEndianBinaryWriter writer)
         {
             frame.FrameHeader.Write(writer);
-            frame.ServiceEndpoint.Write(writer);
             frame.DeviceInfoDIB.Write(writer);
             frame.ServiceFamiliesDIB.Write(writer);
             frame.OtherDIB?.Write(writer);

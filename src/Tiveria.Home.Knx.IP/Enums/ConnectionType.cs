@@ -30,10 +30,10 @@ namespace Tiveria.Home.Knx.IP.Enums
     /// </summary>
     public enum ConnectionType : byte
     {
-        DEVICE_MGMT_CONNECTION = 0x03,
-        TUNNEL_CONNECTION = 0x04,
-        REMLOG_CONNECTION = 0x06,
-        REMCONF_CONNECTION = 0x07,
-        OBJSVR_CONNECTION = 0x08
+        DeviceManagement = 0x03,
+        Tunnel = 0x04,
+        RemLog = 0x06,
+        RemConf = 0x07,
+        ObjectServer = 0x08
     }
 }

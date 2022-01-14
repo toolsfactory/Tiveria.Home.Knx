@@ -37,7 +37,7 @@ namespace Tiveria.Home.Knx.IP.Structures
     /// |  (8)   | Type   |                 |
     /// +--------+--------+--------+--------+
     /// </code>
-    public class OtherDIB : DataElement
+    public class OtherDIB : KnxDataElement
     {
         public byte DIBType { get; init; }
         public byte[] Data { get; init; }

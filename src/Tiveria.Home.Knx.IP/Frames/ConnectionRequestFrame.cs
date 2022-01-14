@@ -41,13 +41,13 @@ namespace Tiveria.Home.Knx.IP.Frames
     /// </summary>
     public class ConnectionRequestFrame : FrameBase, IKnxNetIPFrame
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.CONNECT_REQUEST;
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.ConnectRequest;
         public Hpai ControlEndpoint { get; init; }
         public Hpai DataEndpoint { get; init; }
         public CRITunnel Cri { get; init; }
 
         public ConnectionRequestFrame(FrameHeader frameHeader, Hpai control, Hpai data, CRITunnel cri)
-            : base(frameHeader, ServiceTypeIdentifier.CONNECT_REQUEST, control.Size + data.Size + cri.Size)
+            : base(frameHeader, ServiceTypeIdentifier.ConnectRequest, control.Size + data.Size + cri.Size)
         {
             ControlEndpoint = control;
             DataEndpoint = data;
@@ -55,8 +55,7 @@ namespace Tiveria.Home.Knx.IP.Frames
         }
 
         public ConnectionRequestFrame(Hpai control, Hpai data, CRITunnel cri)
-            : this(new FrameHeader(ServiceTypeIdentifier.CONNECT_REQUEST, control.Size + data.Size + cri.Size), control, data, cri)
-        {
-        }
+            : this(new FrameHeader(ServiceTypeIdentifier.ConnectRequest, control.Size + data.Size + cri.Size), control, data, cri)
+        { }
     }
 }

@@ -22,7 +22,7 @@
     combination.
 */
 
-namespace Tiveria.Home.Knx.EMI
+namespace Tiveria.Home.Knx.Cemi
 {
     /// <summary>
     /// Represents the Control Field 1 of a cEMI structure.
@@ -53,7 +53,7 @@ namespace Tiveria.Home.Knx.EMI
     public class ControlField1
     {
         #region private fields
-        private readonly CemiMessageCode _messageCode;
+        private readonly MessageCode _messageCode;
         private byte _rawData;
         private bool _extendedFrame;
         private bool _repeat;
@@ -79,7 +79,7 @@ namespace Tiveria.Home.Knx.EMI
         /// </summary>
         /// <param name="messageCode">The cemi message code the controlfield was sent with</param>
         /// <param name="data">ControlField1 as byte representation</param>
-        public ControlField1(CemiMessageCode messageCode, byte data)
+        public ControlField1(MessageCode messageCode, byte data)
         {
             _messageCode = messageCode;
             _rawData = data;
@@ -90,18 +90,18 @@ namespace Tiveria.Home.Knx.EMI
         /// 
         /// </summary>
         /// <param name="mc"></param>
-        /// <param name="prio"></param>
+        /// <param name="priority"></param>
         /// <param name="repeat"></param>
         /// <param name="broadcast"></param>
         /// <param name="ack"></param>
         /// <param name="confirm"></param>
-        public ControlField1(CemiMessageCode mc, bool extendedFrame =false, Priority prio = Priority.Normal, bool repeat = true, BroadcastType broadcast = BroadcastType.Normal, bool ack = true, ConfirmType confirm = ConfirmType.NoError)
+        public ControlField1(MessageCode mc, bool extendedFrame =false, Priority priority = Priority.Normal, bool repeat = true, BroadcastType broadcast = BroadcastType.Normal, bool ack = true, ConfirmType confirm = ConfirmType.NoError)
         {
             _messageCode = mc;
             _extendedFrame = extendedFrame;
             _repeat = repeat;
             _broadcast = broadcast;
-            _priority = prio;
+            _priority = priority;
             _acknowledgeRequest = ack;
             _confirm = confirm;
             ToByte();
@@ -119,7 +119,7 @@ namespace Tiveria.Home.Knx.EMI
             if (!_extendedFrame)
                 _rawData |= 0b1000_0000;
 
-            var repflag = _messageCode == CemiMessageCode.LDATA_IND ? !Repeat : Repeat;
+            var repflag = _messageCode == MessageCode.LDATA_IND ? !Repeat : Repeat;
             if (repflag)
                 _rawData |= 0b0010_0000;
 
@@ -142,7 +142,7 @@ namespace Tiveria.Home.Knx.EMI
             _extendedFrame = (_rawData & 0x80) == 0;
             _acknowledgeRequest = (_rawData & 0x02) != 0;
 
-            if (_messageCode == CemiMessageCode.LDATA_IND)
+            if (_messageCode == MessageCode.LDATA_IND)
                 // ind: flag 0 = repeated frame, 1 = not repeated
                 _repeat = (_rawData & 0x20) == 0;
             else

@@ -37,7 +37,7 @@ namespace Tiveria.Home.Knx.IP.Structures
     /// |  Size  | Device | Number of lost  |
     /// |  (8)   | State  | Messages        |
     /// +--------+--------+-----------------+
-    public class LostMessageInfo : DataElement
+    public class LostMessageInfo : KnxDataElement
     {
         public static readonly byte STRUCTURE_SIZE = 0x04;
         public DeviceStatus DeviceStatus { get; init; }

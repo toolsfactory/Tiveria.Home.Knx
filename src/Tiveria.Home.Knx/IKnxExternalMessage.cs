@@ -22,23 +22,24 @@
     combination.
 */
 
-using Tiveria.Home.Knx.EMI;
+using Tiveria.Home.Knx.Cemi;
 
 namespace Tiveria.Home.Knx
 {
+    // ToDo: Not used at the moment. Remove?
     public interface IKnxExternalMessage
     {
         public IKnxAddress DestinationAddress { get; }
         ApciTypes ApciType { get; }
 
-        int GetLength(EMIVersion version = EMIVersion.cEMI);
+        int GetLength(EMIVersion version = EMIVersion.CEMI);
 
         /// <summary>
         /// Gets the Byte array representing the message using standard values for additional configuration fields
         /// </summary>
         /// <param name="version">specifies the EMI format to be used</param>
         /// <returns></returns>
-        byte[] GetBytes(EMIVersion version = EMIVersion.cEMI);
+        byte[] GetBytes(EMIVersion version = EMIVersion.CEMI);
 
         /// <summary>
         /// Gets the cEMI version of the message with customized control fields
@@ -46,9 +47,9 @@ namespace Tiveria.Home.Knx
         /// <param name="cf1">ControlField1 of cEMI</param>
         /// <param name="cf2">ControlField2 of cEMI</param>
         /// <returns></returns>
-        byte[] GetBytes(ControlField1 cf1, ControlField2 cf2 = default); 
+        byte[] GetBytes(ControlField1 cf1, ControlField2 cf2); 
 
         int WriteBytes(Span<byte> buffer);
-        int WriteBytes(Span<byte> buffer, ControlField1 cf1, ControlField2 cf2 = default);
+        int WriteBytes(Span<byte> buffer, ControlField1 cf1, ControlField2 cf2);
     }
 }

@@ -54,8 +54,8 @@ namespace Tiveria.Home.Knx.IP
         }
         #endregion
 
-        private Dictionary<ServiceTypeIdentifier, Type> _serializersByServiceTypeIdentifier = new Dictionary<ServiceTypeIdentifier, Type>();
-        private Dictionary<Type, Type> _serializersByFrameType = new Dictionary<Type, Type>();
+        private Dictionary<ServiceTypeIdentifier, Type> _serializersByServiceTypeIdentifier = new();
+        private Dictionary<Type, Type> _serializersByFrameType = new();
 
         private KnxNetIPFrameSerializerFactory()
         {
@@ -75,6 +75,7 @@ namespace Tiveria.Home.Knx.IP
             Register<DeviceConfigurationRequestFrameSerializer>();
             Register<DisconnectRequestFrameSerializer>();
             Register<DisconnectResponseFrameSerializer>();
+            Register<ExtendedSearchRequestFrameSerializer>();
             Register<RoutingBusyFrameSerializer>();
             Register<RoutingIndicationFrameSerializer>();
             Register<RoutingLostMessageFrameSerializer>();
@@ -108,6 +109,5 @@ namespace Tiveria.Home.Knx.IP
 
             throw new InvalidCastException();
         }
-
     }
 }

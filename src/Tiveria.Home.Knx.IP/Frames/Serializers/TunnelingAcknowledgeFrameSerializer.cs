@@ -44,24 +44,19 @@ namespace Tiveria.Home.Knx.IP.Frames.Serializers
     /// </summary>
     public class TunnelingAcknowledgeFrameSerializer : FrameSerializerBase<TunnelingAcknowledgeFrame>
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.TUNNELING_ACK;
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.TunnelingAcknowledge;
 
         public override TunnelingAcknowledgeFrame Deserialize(BigEndianBinaryReader reader)
         {
             var header = FrameHeader.Parse(reader);
-            var channelId = reader.ReadByte();
-            var seqCounter = reader.ReadByte();
-            var status = reader.ReadByteEnum<ErrorCodes>("ConnectionStateResponseFrame.Status");
-            return new TunnelingAcknowledgeFrame(header, channelId, seqCounter, status);
+            var connectionHeader = ConnectionHeader.Parse(reader);
+            return new TunnelingAcknowledgeFrame(header, connectionHeader);
         }
 
         public override void Serialize(TunnelingAcknowledgeFrame frame, BigEndianBinaryWriter writer)
         {
             frame.FrameHeader.Write(writer);
-            writer.Write(frame.Size);
-            writer.Write(frame.ChannelId);
-            writer.Write(frame.SequenceCounter);
-            writer.Write((byte)frame.Status);
+            frame.ConnectionHeader.Write(writer);
         }
     }
 }

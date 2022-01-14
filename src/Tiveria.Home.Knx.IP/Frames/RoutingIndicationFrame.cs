@@ -22,7 +22,7 @@
     combination.
 */
 
-using Tiveria.Home.Knx.EMI;
+using Tiveria.Home.Knx.Cemi;
 using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Home.Knx.IP.Structures;
 
@@ -30,13 +30,13 @@ namespace Tiveria.Home.Knx.IP.Frames
 {
     public class RoutingIndicationFrame : EMIFrameBase, IKnxNetIPFrame
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.ROUTING_IND;
-        public RoutingIndicationFrame(ConnectionHeader connectionHeader, ICemi cemi) 
-            : base(ServiceTypeIdentifier.ROUTING_IND, connectionHeader, cemi)
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.RoutingIndication;
+        public RoutingIndicationFrame(ConnectionHeader connectionHeader, ICemiMessage cemi) 
+            : base(ServiceTypeIdentifier.RoutingIndication, connectionHeader, cemi)
         { }
 
-        public RoutingIndicationFrame(FrameHeader frameHeader, ConnectionHeader connectionHeader, ICemi cemi)
-            : base(frameHeader, ServiceTypeIdentifier.ROUTING_IND, connectionHeader, cemi)
+        public RoutingIndicationFrame(FrameHeader frameHeader, ConnectionHeader connectionHeader, ICemiMessage cemi)
+            : base(frameHeader, ServiceTypeIdentifier.RoutingIndication, connectionHeader, cemi)
         { }
     }
 }

@@ -30,17 +30,17 @@ namespace Tiveria.Home.Knx.IP.Frames
 {
     public class DescriptionRequestFrame : FrameBase
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DESCRIPTION_REQ;
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DescriptionRequest;
         public Hpai ControlEndpoint { get; init; }
 
         public DescriptionRequestFrame(FrameHeader frameHeader, Hpai controlEndpoint)
-            : base  (frameHeader, ServiceTypeIdentifier.DESCRIPTION_REQ, controlEndpoint.Size)
+            : base  (frameHeader, ServiceTypeIdentifier.DescriptionRequest, controlEndpoint.Size)
         {
             ControlEndpoint = controlEndpoint;
         }
 
         public DescriptionRequestFrame(Hpai controlEndpoint)
-            : this(new FrameHeader(ServiceTypeIdentifier.DESCRIPTION_REQ, controlEndpoint.Size), controlEndpoint)
+            : this(new FrameHeader(ServiceTypeIdentifier.DescriptionRequest, controlEndpoint.Size), controlEndpoint)
         { }
     }
 }

@@ -25,7 +25,7 @@
 using Tiveria.Common.IO;
 using Tiveria.Home.Knx.Exceptions;
 
-namespace Tiveria.Home.Knx.EMI
+namespace Tiveria.Home.Knx.Cemi
 {
     /// <summary>
     /// Base class handling the core CEMI Frame structures.
@@ -41,7 +41,7 @@ namespace Tiveria.Home.Knx.EMI
     ///
     /// MsgCode : 
     /// A code describing the message transported in this cEMI Frame
-    /// See <seealso cref="Tiveria.Home.Knx.EMI.CemiMessageCode"/> for all supported codes and their meaning
+    /// See <seealso cref="Tiveria.Home.Knx.Cemi.MessageCode"/> for all supported codes and their meaning
     /// 
     ///  Add.Info Length : 
     ///  0x00      = no additional info
@@ -50,41 +50,30 @@ namespace Tiveria.Home.Knx.EMI
     ///                    
     /// Additional Information : 
     /// N repetitions of a Additional Information Fields.
-    /// See <seealso cref="Tiveria.Home.Knx.EMI.AdditionalInformationField"/> for more details on this substructure
+    /// See <seealso cref="Tiveria.Home.Knx.Cemi.AdditionalInformationField"/> for more details on this substructure
     /// </summary>
-    public abstract class CemiBase : ICemi
+    public abstract class CemiBase : ICemiMessage
     {
         #region private fields
-        protected CemiMessageCode _messageCode;
-        protected byte _additionalInfoLength;
-        protected AdditionalInformationField[] _additionalInfoFields;
-        protected byte[] _payload;
-        protected int _size;
+        protected List<AdditionalInformationField> _additionalInfoFields = new ();
         #endregion
 
         #region public properties
-        public CemiMessageCode MessageCode => _messageCode;
-        public byte AdditionalInfoLength => _additionalInfoLength;
-        public AdditionalInformationField[] AdditionalInfoFields => _additionalInfoFields;
-        public byte[] Payload => _payload;
-        public int Size { get => _size; }
+        public MessageCode MessageCode { get; protected set; } = MessageCode.LDATA_REQ;
+        public byte AdditionalInfoLength { get; protected set; } = 0;
+        public IReadOnlyList<AdditionalInformationField> AdditionalInfoFields => _additionalInfoFields;
+        public int Size { get; protected set; } = 0;
         #endregion
 
         #region constructors
-        protected CemiBase(CemiMessageCode messageCode)
+        protected CemiBase(MessageCode messageCode)
         {
             VerifyMessageCode(messageCode);
-            _messageCode = messageCode;
+            MessageCode = messageCode;
         }
 
-        /// <summary>
-        /// Creates a new cEMI Frame
-        /// </summary>
-        /// <param name="br">BigEndianBinaryReader with the underlying buffer the frame is parsed from</param>
         protected CemiBase(BigEndianBinaryReader br)
         {
-            if (!VerifyBufferSize(br))
-                throw BufferSizeException.TooSmall("buffer too short for cEMI frame");
             ParseBuffer(br);
         }
         #endregion
@@ -92,7 +81,7 @@ namespace Tiveria.Home.Knx.EMI
         #region verifying elements
         protected abstract bool VerifyBufferSize(BigEndianBinaryReader br);
 
-        protected abstract void VerifyMessageCode(CemiMessageCode messageCode);
+        protected abstract void VerifyMessageCode(MessageCode messageCode);
 
         protected abstract void VerifyAdditionalLengthInfo(byte length);
         #endregion
@@ -104,15 +93,16 @@ namespace Tiveria.Home.Knx.EMI
             ParseAdditinalInfoLength(br);
             ParseAdditionalInfo(br);
             ParseServiceInformation(br);
+            CalculateSize();
         }
 
         protected void ParseMessageCode(BigEndianBinaryReader br)
         {
             var messageCode = br.ReadByte();
-            if (Enum.IsDefined(typeof(CemiMessageCode), messageCode))
+            if (Enum.IsDefined(typeof(MessageCode), messageCode))
             {
-                _messageCode = (CemiMessageCode)messageCode;
-                VerifyMessageCode(_messageCode);
+                MessageCode = (MessageCode)messageCode;
+                VerifyMessageCode(MessageCode);
             }
             else
             {
@@ -122,47 +112,39 @@ namespace Tiveria.Home.Knx.EMI
 
         protected void ParseAdditinalInfoLength(BigEndianBinaryReader br)
         {
-            _additionalInfoLength = br.ReadByte();
-            VerifyAdditionalLengthInfo(_additionalInfoLength);
+            AdditionalInfoLength = br.ReadByte();
+            VerifyAdditionalLengthInfo(AdditionalInfoLength);
         }
 
         protected void ParseAdditionalInfo(BigEndianBinaryReader br)
         {
-            if (_additionalInfoLength == 0)
+            if (AdditionalInfoLength == 0)
                 return;
-            var items = new List<AdditionalInformationField>(2);
+
             var count = 0;
-            while (count < _additionalInfoLength)
+            while (count < AdditionalInfoLength)
             {
                 var field = AdditionalInformationField.Parse(br);
-                items.Add(field);
+                _additionalInfoFields.Add(field);
                 count += field.Size;
             }
-            _additionalInfoFields = items.ToArray();
         }
 
         protected abstract void ParseServiceInformation(BigEndianBinaryReader br);
+
+        public abstract void CalculateSize();  
         #endregion
 
         public byte[] ToBytes()
         {
             var data = new byte[Size];
-            WriteToByteArray(data, 0);
+            var writer = new BigEndianBinaryWriter(new MemoryStream(data));
+            Write(writer);
             return data;
         }
 
-        public virtual void WriteToByteArray(byte[] buffer, int offset = 0)
-        {
-            if (buffer == null)
-                throw new ArgumentNullException("buffer is null");
-            if (offset + _size > buffer.Length)
-                throw new ArgumentOutOfRangeException("buffer too small");
-        }
+        public abstract string ToDescription(int padding);
 
-        public void Write(BigEndianBinaryWriter writer)
-        {
-            // ToDo: Cleanup code and remove old WriteToByteArray
-            writer.Write(ToBytes());
-        }
+        public abstract void Write(BigEndianBinaryWriter writer);
     }
 }

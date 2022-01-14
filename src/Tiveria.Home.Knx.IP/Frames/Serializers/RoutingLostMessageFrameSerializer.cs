@@ -30,7 +30,7 @@ namespace Tiveria.Home.Knx.IP.Frames.Serializers
 {
     public class RoutingLostMessageFrameSerializer : FrameSerializerBase<RoutingLostMessageFrame>
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.ROUTING_LOST_MSG;
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.RoutingLostMessage;
 
         public override RoutingLostMessageFrame Deserialize(BigEndianBinaryReader reader)
         {

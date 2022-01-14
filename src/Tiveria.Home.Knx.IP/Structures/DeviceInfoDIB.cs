@@ -24,6 +24,7 @@
 
 using System.Net;
 using Tiveria.Home.Knx.IP.Enums;
+using Tiveria.Home.Knx.Adresses;
 using Tiveria.Common.IO;
 using Tiveria.Home.Knx.Exceptions;
 
@@ -49,7 +50,7 @@ namespace Tiveria.Home.Knx.IP.Structures
     /// 
     /// Project Installer
     /// </code>
-    public class DeviceInfoDIB : DataElement
+    public class DeviceInfoDIB : KnxDataElement
     {
         public static readonly byte DEVICEINFODIB_SIZE = 0x36;
         public static readonly byte DIB_TYPE = 0x01;

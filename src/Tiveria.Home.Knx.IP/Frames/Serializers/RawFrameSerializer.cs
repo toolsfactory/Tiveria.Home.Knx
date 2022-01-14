@@ -30,7 +30,7 @@ namespace Tiveria.Home.Knx.IP.Frames.Serializers
 {
     public class RawFrameSerializer : FrameSerializerBase<RawFrame>
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.UNKNOWN;
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.Unknown;
 
         public override RawFrame Deserialize(BigEndianBinaryReader reader)
         {

@@ -22,7 +22,9 @@
     combination.
 */
 
-namespace Tiveria.Home.Knx.EMI
+using Tiveria.Home.Knx.Adresses;
+
+namespace Tiveria.Home.Knx.Cemi
 {
     /// <summary>
     /// Represents the Control Field 2 of a cEMI structure.

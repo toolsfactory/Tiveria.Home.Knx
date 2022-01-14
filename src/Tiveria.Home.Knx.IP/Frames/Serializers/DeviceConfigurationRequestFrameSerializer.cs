@@ -23,7 +23,8 @@
 */
 
 using Tiveria.Common.IO;
-using Tiveria.Home.Knx.EMI;
+using Tiveria.Home.Knx.Cemi;
+using Tiveria.Home.Knx.Cemi.Serializers;
 using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Home.Knx.IP.Structures;
 
@@ -31,13 +32,13 @@ namespace Tiveria.Home.Knx.IP.Frames.Serializers
 {
     public class DeviceConfigurationRequestFrameSerializer : FrameSerializerBase<DeviceConfigurationRequestFrame>
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DEVICE_CONFIGURATION_REQ;
+        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DeviceConfigurationRequest;
 
         public override DeviceConfigurationRequestFrame Deserialize(BigEndianBinaryReader reader)
         {
             var header = FrameHeader.Parse(reader);
             var conheader = ConnectionHeader.Parse(reader);
-            var cemi = CemiLData.Parse(reader);
+            var cemi = new CemiLDataSerializer().Deserialize(reader, -1);
             return new DeviceConfigurationRequestFrame(header, conheader, cemi);
         }
 
@@ -45,7 +46,7 @@ namespace Tiveria.Home.Knx.IP.Frames.Serializers
         {
             frame.FrameHeader.Write(writer);
             frame.ConnectionHeader.Write(writer);
-            frame.CemiMessage.Write(writer);
+            new CemiLDataSerializer().Serialize((CemiLData)frame.CemiMessage, writer);
         }
     }
 }

@@ -28,27 +28,7 @@ using Tiveria.Home.Knx.Exceptions;
 
 namespace Tiveria.Home.Knx.IP.Structures
 {
-    /// <summary>
-    /// Represents the Device Information DIB block described in chapter 7.5.4.2 of the spec 3/8/2 KnxIPNet core.
-    /// </summary>
-    /// <code>
-    /// +--------+--------+--------+--------+--------+--------+--------+--------+
-    /// | byte 1 | byte 2 | byte 3 | byte 4 | byte 5 | byte 6 | byte 7 | byte 8 |
-    /// +--------+--------+--------+--------+--------+--------+-----------------+
-    /// |  Size  |Descript| Medium | Status | Individual Addr | Proj Installer  |  
-    /// |  (8)   | Type   |        |        |                 | Identifier      |
-    /// +--------+--------+--------+--------+--------+--------+-----------------+
-    /// 
-    /// +--------+--------+--------+--------+--------+--------+-----------------+
-    /// | bytes 9 - 14    | bytes 15 - 18   | bytes 19 - 24   | bytes 25 - 54   |
-    /// +--------+--------+-----------------+-----------------+-----------------+
-    /// |  Device serial  | Device Routing  | Device MAC      | Device Friendly |
-    /// |  Number         | Multicast Addr  | Address         | Name            |
-    /// +--------------------------+--------------------------+-----------------+
-    /// 
-    /// Project Installer
-    /// </code>
-    public class ServiceFamiliesDIB : DataElement
+    public class ServiceFamiliesDIB : KnxDataElement
     {
         public static readonly byte DIB_TYPE = 0x02;
         public ReadOnlyCollection<(byte Family, byte Version)> ServiceFamilies { get; init; }

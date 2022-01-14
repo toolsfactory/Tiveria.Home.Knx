@@ -39,12 +39,12 @@ namespace Tiveria.Home.Knx
 
             var finder = new KnxIPInterfaceFinder();
             finder.DataReceived += Finder_DataReceived;
-            finder.StartListening();
-            finder.BroadcastSearchRequest();
-            Thread.Sleep(1000);
+            await finder.SearchForInterfacesAsync();
             Console.WriteLine($"Interfaces found: {finder.Interfaces.Count}");
-            var result = await finder.SearchForInterfacesAsync();
-            Console.WriteLine(result);
+            await finder.SearchForInterfacesInProgrammingModeAsync();
+            Console.WriteLine($"Interfaces programming: {finder.Interfaces.Count}");
+            await finder.SearchForInterfaceByMacAsync(new byte[] {0xdc, 0xa6, 0x32, 0xb7, 0x47, 0x1a});
+            Console.WriteLine($"Interfaces MAC: {finder.Interfaces.Count}");
             Task.Delay(1000).Wait();
 
             Console.WriteLine("Press <enter> to return.");
