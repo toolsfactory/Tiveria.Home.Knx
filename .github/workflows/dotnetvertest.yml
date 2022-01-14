@@ -17,9 +17,9 @@ jobs:
         dotnet-version: 6.0.x
        
     - name: Install GitVersion
-      uses: gittools/actions/gitversion/setup@v0.9
+      uses: gittools/actions/gitversion/setup@v0.9.11
       with:
-          versionSpec: '5.1.x'
+          versionSpec: '5.8.x'
  
     - name: Restore dependencies
       run: dotnet restore
