@@ -23,5 +23,5 @@ jobs:
     - name: Publish Tiveria.Home.Knx
       uses: brandedoutcast/publish-nuget@v2.5.2
       with:
-          PROJECT_FILE_PATH: src/Tiveria.Home.Knx/Tiveria.Home.Knx.Core.csproj
+          PROJECT_FILE_PATH: src/Tiveria.Home.Knx/Tiveria.Home.Knx.csproj
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}
