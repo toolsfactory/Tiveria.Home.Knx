@@ -37,11 +37,11 @@ namespace Tiveria.Home.Knx.Tests
         [Test]
         public void ParseGroupValue_Write2()
         {
-            var data = "00800d".ToByteArray(); // Type:GroupValue_Write, Data:0d - could also be compressed. Threfore Data is only 1 byte in the parsed structure!
+            var data = "00800d".ToByteArray(); // Type:GroupValue_Write, Data:0d
             var result = Apci.Parse(data);
 
             Assert.AreEqual(ApciTypes.GroupValue_Write, result.Type);
-            Assert.AreEqual(2, result.Size);
+            Assert.AreEqual(3, result.Size);
             Assert.IsNotNull(result.Data);
             Assert.AreEqual(1, result.Data.Length);
             Assert.AreEqual(0x0d, result.Data[0]);
