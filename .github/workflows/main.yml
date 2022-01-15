@@ -49,8 +49,13 @@ jobs:
     - name: Publish Tiveria.Home.Knx
       run: dotnet nuget push bin/Tiveria.Home.Knx.$GITVERSION_NUGETVERSIONV2.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json
 
-    - name: Tag the release
-      uses: rickstaa/action-create-tag@v1
+    - name: Create tag
+      uses: actions/github-script@v5
       with:
-          tag: "$GITVERSION_NUGETVERSIONV2"
-          message: "Version $GITVERSION_NUGETVERSIONV2 release to nuget"
+        script: |
+          github.rest.git.createRef({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: 'refs/tags/v{$GITVERSION_NUGETVERSIONV2}',
+            sha: context.sha
+          })    
