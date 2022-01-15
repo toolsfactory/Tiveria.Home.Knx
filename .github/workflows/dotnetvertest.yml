@@ -2,7 +2,7 @@ name: Version update test
 
 on:
   push:
-    branches: [ V2 ]
+    branches: [ main ]
 
 jobs:
   build:
