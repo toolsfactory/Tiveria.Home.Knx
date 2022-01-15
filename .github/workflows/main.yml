@@ -2,24 +2,47 @@ name: Publish Tiveria.Home.Knx Package
 
 on:
   push:
-    branches: [ V2 ]
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: checkout repo
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '6.0.x'
-    - name: Install dependencies
+        dotnet-version: 6.0.x
+       
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v0.9.11
+      with:
+          versionSpec: '5.8.x'
+ 
+    - name: Restore dependencies
       run: dotnet restore
+      
+    - name: Determine Version
+      id: gitversion
+      uses: gittools/actions/gitversion/execute@v0.9.7
+      with:
+        useConfigFile: true
+        
+    - name: Display SemVer
+      run: | 
+        echo "SemVer: $GITVERSION_SEMVER"
+
     - name: Build
-      run: dotnet build -c Release
+      run: dotnet build -c Release --no-restore  -p:Version=${{ steps.gitversion.NuGetVersion }}
+
     - name: Test
       run: dotnet test -c Release --no-build --verbosity normal
+
     - name: Publish Tiveria.Home.Knx
       uses: brandedoutcast/publish-nuget@v2.5.2
       with:
