@@ -41,7 +41,7 @@ jobs:
       run: dotnet build --no-restore -p:Version=$GITVERSION_NUGETVERSION
 
     - name: Test
-      run: dotnet test -c Release --no-build --verbosity normal
+      run: dotnet test -c Release --verbosity normal
 
     - name: Publish Tiveria.Home.Knx
       uses: brandedoutcast/publish-nuget@v2.5.2
