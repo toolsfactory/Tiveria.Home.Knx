@@ -38,7 +38,7 @@ jobs:
         echo "SemVer: $GITVERSION_SEMVER"
 
     - name: Build
-      run: dotnet build -c Release --no-restore  -p:Version=${{ steps.gitversion.NuGetVersion }}
+      run: dotnet build --no-restore -p:Version=$GITVERSION_NUGETVERSION
 
     - name: Test
       run: dotnet test -c Release --no-build --verbosity normal
