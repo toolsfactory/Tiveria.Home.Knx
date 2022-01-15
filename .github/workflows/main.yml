@@ -44,7 +44,7 @@ jobs:
       run: dotnet build --no-restore /p:Version=${{ steps.gitversion.outputs.AssemblySemVer }} /p:AssemblyVersion=${{ steps.gitversion.outputs.AssemblySemVer }} /p:InformationalVersion=${{ steps.gitversion.outputs.InformationalVersion }}
 
     - name: Publish Tiveria.Home.Knx
-      run: dotnet nuget push *.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json
+      run: dotnet nuget push bin/*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json
 #      uses: brandedoutcast/publish-nuget@v2.5.2
 #      with:
 #          PROJECT_FILE_PATH: src/Tiveria.Home.Knx/Tiveria.Home.Knx.csproj
