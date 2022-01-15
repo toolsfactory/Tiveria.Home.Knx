@@ -56,6 +56,6 @@ jobs:
           github.rest.git.createRef({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            ref: 'refs/tags/v{$GITVERSION_NUGETVERSIONV2}',
+            ref: 'refs/tags/v${{ steps.gitversion.outputs.nuGetVersionV2 }}',
             sha: context.sha
           })    
