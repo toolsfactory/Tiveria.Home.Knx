@@ -8,7 +8,7 @@
     <Authors>Michael Geissler</Authors>
     <Company>Tiveria Embedded Solutions GmbH</Company>
     <Description>A small KNX library inspired by the Calimero and many other KNX solutions out there.</Description>
-    <Copyright>GNU LGPL V3.0</Copyright>
+    <Copyright>Michael Geissler</Copyright>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>https://github.com/toolsfactory/Tiveria.Home.Knx</PackageProjectUrl>
     <RepositoryUrl>https://github.com/toolsfactory/Tiveria.Home.Knx</RepositoryUrl>
@@ -16,6 +16,7 @@
     <LangVersion>latest</LangVersion>
     <Version>2.0.0</Version>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
