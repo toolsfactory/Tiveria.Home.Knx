@@ -37,11 +37,11 @@ jobs:
       run: | 
         echo "SemVer: $GITVERSION_SEMVER"
 
-    - name: Build
-      run: dotnet build --no-restore -p:Version=$GITVERSION_NUGETVERSION
-
     - name: Test
       run: dotnet test -c Release --verbosity normal
+
+    - name: Build
+      run: dotnet build --no-restore /p:Version=${{ steps.gitversion.outputs.AssemblySemVer }} /p:AssemblyVersion=${{ steps.gitversion.outputs.AssemblySemVer }} /p:InformationalVersion=${{ steps.gitversion.outputs.InformationalVersion }}
 
     - name: Publish Tiveria.Home.Knx
       uses: brandedoutcast/publish-nuget@v2.5.2
