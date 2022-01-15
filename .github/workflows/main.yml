@@ -32,22 +32,21 @@ jobs:
       uses: gittools/actions/gitversion/execute@v0.9.7
       with:
         useConfigFile: true
-        
-    - name: Display SemVer
-      run: | 
-        echo "SemVer: $GITVERSION_SEMVER"
 
     - name: Test
       run: dotnet test -c Release --verbosity normal  /p:Version=$GITVERSION_NUGETVERSIONV2 /p:AssemblyVersion=$GITVERSION_ASSEMBLYSEMVER /p:InformationalVersion=$GITVERSION_INFORMATIONALVERSION
 
     - name: Build
-      run: dotnet build --no-restore /p:Version=$GITVERSION_NUGETVERSIONV2 /p:AssemblyVersion=$GITVERSION_ASSEMBLYSEMVER /p:InformationalVersion=$GITVERSION_INFORMATIONALVERSION
+      run: dotnet build -c Release --no-restore /p:Version=$GITVERSION_NUGETVERSIONV2 /p:AssemblyVersion=$GITVERSION_ASSEMBLYSEMVER /p:InformationalVersion=$GITVERSION_INFORMATIONALVERSION
 
     - name: Show packages
       run: ls -la bin/
 
     - name: Publish Tiveria.Home.Knx
-      run: dotnet nuget push bin/Tiveria.Home.Knx.$GITVERSION_NUGETVERSIONV2.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json
+      run: dotnet nuget push bin/*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json
+
+#    - name: Publish Tiveria.Home.Knx.IP
+#      run: dotnet nuget push bin/Tiveria.Home.Knx.IP.$GITVERSION_NUGETVERSIONV2.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json
 
     - name: Create tag
       uses: actions/github-script@v5

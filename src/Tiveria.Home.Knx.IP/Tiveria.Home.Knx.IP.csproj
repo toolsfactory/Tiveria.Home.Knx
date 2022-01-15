@@ -4,7 +4,38 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Michael Geissler</Authors>
+    <Company>Tiveria Embedded Solutions GmbH</Company>
+    <Description>A small KNX library inspired by the Calimero and many other KNX solutions out there.</Description>
+    <Copyright>Michael Geissler</Copyright>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>https://github.com/toolsfactory/Tiveria.Home.Knx</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/toolsfactory/Tiveria.Home.Knx</RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
+    <LangVersion>latest</LangVersion>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <LangVersion>latest</LangVersion>
+    <OutputPath>..\..\bin</OutputPath>
+    <DefineConstants>$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <LangVersion>latest</LangVersion>
+    <OutputPath>..\..\bin</OutputPath>
+    <DefineConstants>$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Tiveria.Home.Knx\Tiveria.Home.Knx.csproj" />
