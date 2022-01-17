@@ -11,9 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiveria.Home.Knx.Tests", "t
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{053047C0-C1A7-47A5-B3F0-F9A82C3BAE29}"
 	ProjectSection(SolutionItems) = preProject
+		.github\workflows\default-flow.yml = .github\workflows\default-flow.yml
 		GitVersion.yml = GitVersion.yml
 		LICENSE = LICENSE
-		.github\workflows\main.yml = .github\workflows\main.yml
+		.github\workflows\publish-flow.yml = .github\workflows\publish-flow.yml
 		README.md = README.md
 	EndProjectSection
 EndProject

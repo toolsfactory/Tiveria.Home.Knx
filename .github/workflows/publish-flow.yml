@@ -3,6 +3,7 @@ name: Publish Tiveria.Home.Knx Package
 on:
   push:
     branches: [ main ]
+    tags: [ publish ]
 
 jobs:
   build:
@@ -47,6 +48,16 @@ jobs:
 
 #    - name: Publish Tiveria.Home.Knx.IP
 #      run: dotnet nuget push bin/Tiveria.Home.Knx.IP.$GITVERSION_NUGETVERSIONV2.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json
+
+    - name: Delete Publish Tag
+      uses: actions/github-script@v5
+      with:
+        script: |
+           github.git.deleteRef({
+             owner: context.repo.owner,
+             repo: context.repo.repo,
+             ref: "tags/publish"
+           })
 
     - name: Create tag
       uses: actions/github-script@v5

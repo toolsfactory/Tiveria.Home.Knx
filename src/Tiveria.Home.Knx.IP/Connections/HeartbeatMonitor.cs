@@ -26,7 +26,6 @@ using System.Net;
 using System.Net.Sockets;
 using Tiveria.Home.Knx.IP.Structures;
 using Tiveria.Home.Knx.IP.Frames;
-using Tiveria.Home.Knx.Utils;
 using Tiveria.Common.Logging;
 
 namespace Tiveria.Home.Knx.IP.Connections
@@ -53,7 +52,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         private readonly byte[] _rawPacket;
         private readonly AutoResetEvent _ReceivedEvent = new AutoResetEvent(false);
         private readonly CancellationTokenSource _cancelSource = new CancellationTokenSource();
-        private readonly ILogger _logger = LogFactory.GetLogger("Tiveria.Home.Knx.IP.HeartbeatMonitor");
+//        private readonly ILogger _logger = LogFactory.GetLogger("Tiveria.Home.Knx.IP.HeartbeatMonitor");
         #endregion
 
         #region public events
@@ -87,7 +86,7 @@ namespace Tiveria.Home.Knx.IP.Connections
 
         public void Start()
         {
-            _logger.Trace("Starting heartbeats");
+//            _logger.Trace("Starting heartbeats");
             Task.Run(() => InternalTask());
         }
 
@@ -107,7 +106,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             }
             else
             {
-                _logger.Warn($"ConnectionStateResponse. ChannelId: {response.ChannelId}, Status: {response.Status}");
+//                _logger.Warn($"ConnectionStateResponse. ChannelId: {response.ChannelId}, Status: {response.Status}");
             }
         }
 
@@ -128,7 +127,8 @@ namespace Tiveria.Home.Knx.IP.Connections
                         int waitResult = WaitForHearbeat();
                         receivedFlag = waitResult == 0;
                         if (waitResult == WaitHandle.WaitTimeout)
-                            _logger.Debug("Hartbeat not received in retry " + i);
+                        { }
+                            //_logger.Debug("Hartbeat not received in retry " + i);
                         else
                             break;
                     }

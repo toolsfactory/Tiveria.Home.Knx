@@ -31,7 +31,7 @@ namespace Tiveria.Home.Knx.IP.Connections
 {
     public class UdpPacketReceiver
     {
-        private readonly Tiveria.Common.Logging.ILogger _logger = Tiveria.Home.Knx.Utils.LogFactory.GetLogger("Tiveria.Home.Knx.UdpPacketReceiver");
+//        private readonly Tiveria.Common.Logging.ILogger _logger = Tiveria.Home.Knx.Utils.LogFactory.GetLogger("Tiveria.Home.Knx.UdpPacketReceiver");
         private readonly UdpClient _client;
         private readonly CancellationTokenSource _cancellationTokenSource;
         private readonly PacketReceivedDelegate? _packetReceived;
@@ -109,7 +109,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             }
             catch (Exception e)
             {
-                _logger.Warn($"Invalid frame received {BitConverter.ToString(buffer)}", e);
+//                _logger.Warn($"Invalid frame received {BitConverter.ToString(buffer)}", e);
                 return;
             }
             OnKnxFrameReceived(remoteEndPoint, receiver, frame);

@@ -96,7 +96,7 @@ namespace Tiveria.Home.Knx.IP.Connections
                 var bytessent = await _udpClient.SendAsync(data, data.Length, _remoteControlEndpoint);
                 if (bytessent == 0)
                 {
-                    _logger.Error("SendFrameAsync: Zero bytes sent");
+//                    _logger.Error("SendFrameAsync: Zero bytes sent");
                     return false;
                 }
                 else
@@ -104,7 +104,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             }
             catch (SocketException se)
             {
-                _logger.Error("SendFrameAsync: SocketException raised", se);
+                //_logger.Error("SendFrameAsync: SocketException raised", se);
                 ConnectionState = ConnectionState.Invalid;
                 return false;
             }
@@ -190,7 +190,7 @@ namespace Tiveria.Home.Knx.IP.Connections
                     return;
                 ConnectionState = ConnectionState.Closing;
             }
-            _logger.Info("Closing connection. " + reason);
+            //_logger.Info("Closing connection. " + reason);
             _heartbeatMonitor?.Stop();
             if (!external)
             {
@@ -245,26 +245,26 @@ namespace Tiveria.Home.Knx.IP.Connections
         {
             ConnectionState = ConnectionState.Opening;
             var data = CreateConnectionRequestFrame();
-            _logger.Trace("ConnectAsync: Sending connection request to " + _remoteControlEndpoint + " with data " + data.ToHex());
+            //_logger.Trace("ConnectAsync: Sending connection request to " + _remoteControlEndpoint + " with data " + data.ToHex());
             try
             {
                 _packetReceiver.Start();
                 var bytessent = await _udpClient.SendAsync(data, data.Length, _remoteControlEndpoint).ConfigureAwait(false);
                 if (bytessent == 0)
                 {
-                    _logger.Error("ConnectAsync: Zero bytes sent");
+                    //_logger.Error("ConnectAsync: Zero bytes sent");
                     ConnectionState = ConnectionState.Invalid;
                     return false;
                 }
                 else
                 {
-                    _logger.Trace("ConnectAsync: Connection request sucessfully sent");
+                    //_logger.Trace("ConnectAsync: Connection request sucessfully sent");
                     return true;
                 }
             }
             catch (SocketException se)
             {
-                _logger.Error("ConnectAsync: SocketException raised", se);
+                //_logger.Error("ConnectAsync: SocketException raised", se);
                 ConnectionState = ConnectionState.Invalid;
                 return false;
             }
@@ -310,13 +310,13 @@ namespace Tiveria.Home.Knx.IP.Connections
                 else
                 {
                     // Endpoint type is not IPv4/UDP
-                    _logger.Error("Server requested endpoint type that is not IPv4/UDP!");
+                    //_logger.Error("Server requested endpoint type that is not IPv4/UDP!");
                     return false;
                 }
             }
             else
             {
-                _logger.Error(String.Format("Server sent statuscode {0}: '{1}'", connectionResponse.Status, connectionResponse.Status.ToDescription()));
+                //_logger.Error(String.Format("Server sent statuscode {0}: '{1}'", connectionResponse.Status, connectionResponse.Status.ToDescription()));
                 return false;
             }
         }
@@ -334,11 +334,11 @@ namespace Tiveria.Home.Knx.IP.Connections
         {
             if (severe)
             {
-                _logger.Error("Heartbeat failed. " + message);
+                //_logger.Error("Heartbeat failed. " + message);
             }
             else
             {
-                _logger.Info("Heartbeat failed. " + message);
+                //_logger.Info("Heartbeat failed. " + message);
             }
             CloseAsync();
         }
@@ -352,12 +352,12 @@ namespace Tiveria.Home.Knx.IP.Connections
             if (_natAware && (remoteHPAI.Ip == IPAddress.Any || remoteHPAI.Port == 0))
             {
                 _remoteDataEndpoint = remoteEndpoint;
-                _logger.Debug("ConnectionResponse: NAT mode, using socket endpoint " + _remoteDataEndpoint);
+                //_logger.Debug("ConnectionResponse: NAT mode, using socket endpoint " + _remoteDataEndpoint);
             }
             else
             {
                 _remoteDataEndpoint = new IPEndPoint(remoteHPAI.Ip, remoteHPAI.Port);
-                _logger.Debug("ConnectionResponse: using protocol endpoint " + _remoteDataEndpoint);
+                //_logger.Debug("ConnectionResponse: using protocol endpoint " + _remoteDataEndpoint);
             }
         }
         #endregion
@@ -379,7 +379,8 @@ namespace Tiveria.Home.Knx.IP.Connections
         private void HandleDisconnectResponse(DisconnectResponseFrame response)
         {
             if (response.Status != ErrorCodes.NoError)
-                _logger.Warn($"Connection closed with status code " + response.Status.ToDescription());
+            { }
+                //_logger.Warn($"Connection closed with status code " + response.Status.ToDescription());
             _closeEvent.Set();
         }
         #endregion
@@ -408,7 +409,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             var missed = (expSeq - 1 == expSeq);
             if (missed && ResyncOnSkippedRcvSeq)
             {
-                _logger.Error($"tunneling request with rcv-seq '{rcvSeq}', expected '{expSeq}' -> re-sync with server (1 tunneled msg lost)");
+                //_logger.Error($"tunneling request with rcv-seq '{rcvSeq}', expected '{expSeq}' -> re-sync with server (1 tunneled msg lost)");
                 IncRcvSeqCounter();
                 expSeq++;
             }

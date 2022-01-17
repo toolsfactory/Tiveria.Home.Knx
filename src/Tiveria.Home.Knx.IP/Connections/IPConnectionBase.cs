@@ -36,7 +36,7 @@ namespace Tiveria.Home.Knx.IP.Connections
     public abstract class IPConnectionBase : IKnxNetIPConnection
     {
         #region private fields
-        protected readonly ILogger _logger;
+//        protected readonly ILogger _logger;
         protected byte _channelId;
 
         private byte _rcvSeqCounter = 0;
@@ -102,7 +102,7 @@ namespace Tiveria.Home.Knx.IP.Connections
 
         protected IPConnectionBase()
         {
-            _logger = Tiveria.Home.Knx.Utils.LogFactory.GetLogger("Tiveria.Home.Knx.IP." + ConnectionName);
+//            _logger = Tiveria.Home.Knx.Utils.LogFactory.GetLogger("Tiveria.Home.Knx.IP." + ConnectionName);
             ResetRcvSeqCounter();
             ResetSndSeqCounter();
         }
@@ -161,7 +161,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             }
             else
             {
-                _logger.Warn($"Wrong channelID {channelId} received for service {serviceType}. Expected: {_channelId}");
+//                _logger.Warn($"Wrong channelID {channelId} received for service {serviceType}. Expected: {_channelId}");
                 return false;
             }
         }

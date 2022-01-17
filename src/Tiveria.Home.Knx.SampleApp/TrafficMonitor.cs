@@ -222,7 +222,7 @@ namespace Tiveria.Home.Knx
 
             // Step 5. Activate the configuration
             LogManager.Configuration = config;
-            Tiveria.Home.Knx.Utils.LogFactory.LogManager = new NLogLogManager();
+//            Tiveria.Home.Knx.Utils.LogFactory.LogManager = new NLogLogManager();
 
         }
     }

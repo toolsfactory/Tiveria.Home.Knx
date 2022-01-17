@@ -22,28 +22,29 @@
     combination.
 */
 
-using Tiveria.Common.Logging;
+using Microsoft.Extensions.Logging;
 
-namespace Tiveria.Home.Knx.Utils
+namespace Tiveria.Home.Knx
 {
-    public class LogFactory
+    internal static class LoggerExtensions
     {
-        public static ILogManager LogManager;
+        private static readonly Action<ILogger, Exception> startReceive = LoggerMessage.Define(LogLevel.Information, new EventId(100001), "");
+        private static readonly Action<ILogger, Exception> connectingFailed = LoggerMessage.Define(LogLevel.Error, new EventId(100002), "Connecting to MQTT broker failed");
 
-        public static ILogger GetLogger(string name)
+        public static void XLogStartReceive(this ILogger logger)
         {
-            if (LogManager == null)
-                return new ConsoleLogger(name);
-            else
-                return LogManager.GetLogger(name);
+            startReceive(logger, null);
         }
 
-        public static ILogger GetLogger(Type type)
+        public static void XLogConnectingFailed(this ILogger logger, Exception ex)
         {
-            if (LogManager == null)
-                return new ConsoleLogger(type.Name);
-            else
-                return LogManager.GetLogger(type);
+            connectingFailed(logger, ex);
         }
+    }
+
+    internal static class LogEvents
+    {
+        private const int IDBase = 50000;
+        internal static readonly EventId event1 = new(IDBase + 0, "first");
     }
 }
