@@ -2,8 +2,10 @@ name: Publish Tiveria.Home.Knx Package
 
 on:
   push:
-    branches: [ main ]
-    tags: [ publish ]
+    branches: 
+      - 'main'
+    tags: 
+      - 'publish'
 
 jobs:
   build:
