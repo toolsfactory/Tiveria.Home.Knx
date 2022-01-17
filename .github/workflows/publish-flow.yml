@@ -53,10 +53,10 @@ jobs:
       uses: actions/github-script@v5
       with:
         script: |
-           github.git.deleteRef({
+           github.rest.git.deleteRef({
              owner: context.repo.owner,
              repo: context.repo.repo,
-             ref: "tags/publish"
+             ref: "ref/tags/publish"
            })
 
     - name: Create tag
