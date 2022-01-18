@@ -22,15 +22,38 @@
     combination.
 */
 
-namespace Tiveria.Home.Knx.IP.Enums
+using System.Net;
+
+namespace Tiveria.Home.Knx.IP.Connections
 {
-    public enum ConnectionState
+    /// <summary>
+    /// Configuration options for a kinds of KnxNetIP connections
+    /// </summary>
+    public record IPConnectionConfiguration
     {
-        Initialized,
-        Opening,
-        Open,
-        Closing,
-        Closed,
-        Invalid
+        /// <summary>
+        /// >Enable/Disable automatic resynchronization of sequence number
+        /// </summary>
+        public bool ResyncSequenceNumbers { get; set; } = false;
+
+        /// <summary>
+        /// Switch NAT Awarenes of the cennection initiation
+        /// </summary>
+        public bool NatAware { get; set; } = false;
+
+        /// <summary>
+        /// Defines how often a failed send should be repeated
+        /// </summary>
+        public ushort SendRepeats { get; set; } = 3;
+
+        /// <summary>
+        /// Timeout after the achnowledge is deemed to not happen anymore
+        /// </summary>
+        public ushort AcknowledgeTimeout { get; set; } = 500;
+
+        /// <summary>
+        /// maximum time a send can take before it is timed out
+        /// </summary>
+        public ushort SendTimeout { get; set; } = 500;
     }
 }

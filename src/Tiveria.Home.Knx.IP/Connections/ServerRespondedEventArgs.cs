@@ -1,6 +1,6 @@
 ﻿/*
     Tiveria.Home.Knx - a .Net Core base KNX library
-    Copyright (c) 2018 M. Geissler
+    Copyright (c) 2018-2022 M. Geissler
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -26,9 +26,18 @@ using System.Net;
 
 namespace Tiveria.Home.Knx.IP.Connections
 {
+    /// <summary>
+    /// Arguments class used by <see cref="KnxNetIPServerDiscoveryAgent"/> in case a server responded
+    /// </summary>
     public class ServerRespondedEventArgs : EventArgs
     {
+        /// <summary>
+        /// Details about the server
+        /// </summary>
         public KnxNetIPServer Server { get; init; }
+        /// <summary>
+        /// The local IP endpoint where the discovery message was sent and the server responded
+        /// </summary>
         public IPEndPoint ReceivingEndpoint { get; init; }
         public ServerRespondedEventArgs(IPEndPoint receivingEndpoint, KnxNetIPServer server)
         {

@@ -1,6 +1,6 @@
 ﻿/*
     Tiveria.Home.Knx - a .Net Core base KNX library
-    Copyright (c) 2018 M. Geissler
+    Copyright (c) 2018-2022 M. Geissler
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -21,13 +21,25 @@
     conditions of the GNU General Public License cover the whole
     combination.
 */
-    
+
 namespace Tiveria.Home.Knx.IP
 {
+    /// <summary>
+    /// Structure representing the KNX Version information
+    /// </summary>
     public class KnxNetIPVersion
     {
+        /// <summary>
+        /// Constant representing Version 1.0 of KnxNetIP
+        /// </summary>
         public static readonly KnxNetIPVersion Version10 = new KnxNetIPVersion("KnxNetIP Version 1.0", 0x10, 0x06);
+        /// <summary>
+        /// Constant representing Version 1.0 of KnxNetIP
+        /// </summary>
         public static readonly KnxNetIPVersion Version20 = new KnxNetIPVersion("KnxNetIP Version 2.0", 0x20, 0x06);
+        /// <summary>
+        /// List of versions supported by this library 
+        /// </summary>
         public static readonly KnxNetIPVersion[] SupportedVersions = new KnxNetIPVersion[2] { Version10, Version20 };
 
         private readonly string _name;
@@ -38,6 +50,12 @@ namespace Tiveria.Home.Knx.IP
         public byte Identifier { get => _identifier; }
         public byte HeaderLength { get => _length; }
 
+        /// <summary>
+        /// Creates a new KNX Version object
+        /// </summary>
+        /// <param name="name">Readable name of the version</param>
+        /// <param name="identifier">Identifier representing thjis version in the KnxNetIP header</param>
+        /// <param name="headerlength">Size of the KnxNetIP header in this version</param>
         public KnxNetIPVersion(string name, byte identifier, byte headerlength)
         {
             _name = name;
@@ -46,17 +64,44 @@ namespace Tiveria.Home.Knx.IP
         }
 
         #region static helpers
+        /// <summary>
+        /// Checks whether a version object provided matches one of the predefined supported versions
+        /// </summary>
+        /// <param name="ver"></param>
+        /// <returns></returns>
         public static bool IsSupportedVersion(KnxNetIPVersion ver)
         {
             return TryGetFindSupportedVersion(ver.Identifier, ver.HeaderLength, out _);
         }
 
+        /// <summary>
+        /// Try to find a supported version that matches the provided criteria
+        /// </summary>
+        /// <param name="identifier">Identifier in the header</param>
+        /// <param name="headersize">Size of the header</param>
+        /// <param name="version">The version object that matches</param>
+        /// <returns>true in case a matching version was found. false in all other cases </returns>
         public static bool TryGetFindSupportedVersion(byte identifier, byte headersize, out KnxNetIPVersion? version)
         {
             version = SupportedVersions
                 .Where(x => (x.Identifier == identifier) && (x.HeaderLength == headersize))
                 .FirstOrDefault();
             return version != null; 
+        }
+
+
+        /// <summary>
+        /// Try to find a supported version that matches the provided criteria
+        /// </summary>
+        /// <param name="identifier">Identifier in the header</param>
+        /// <param name="version">The version object that matches</param>
+        /// <returns>true in case a matching version was found. false in all other cases </returns>
+        public static bool TryGetFindSupportedVersion(byte identifier, out KnxNetIPVersion? version)
+        {
+            version = SupportedVersions
+                .Where(x => (x.Identifier == identifier))
+                .FirstOrDefault();
+            return version != null;
         }
         #endregion
     }

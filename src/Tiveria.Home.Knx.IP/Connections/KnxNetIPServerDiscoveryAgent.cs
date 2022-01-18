@@ -1,6 +1,6 @@
 ﻿/*
     Tiveria.Home.Knx - a .Net Core base KNX library
-    Copyright (c) 2018 M. Geissler
+    Copyright (c) 2018-2022 M. Geissler
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -32,26 +32,30 @@ using Tiveria.Home.Knx.IP.Structures;
 
 namespace Tiveria.Home.Knx.IP.Connections
 {
-
+    /// <summary>
+    /// Provides means to search for KnxNetIP interfaces and routers in the networks the host is connected with.
+    /// (Even though not fully correct, KnxNetIP iterfaces and routers are called servers in here)
+    /// </summary>
     public class KnxNetIPServerDiscoveryAgent
     {
-        #region static members
-        public static readonly IPAddress KNXBROADCASTADDRESS = IPAddress.Parse("224.0.23.12");
-        public static readonly ushort KNXBROADCASTPORT = 3671;
-        private static IPEndPoint KNXBroadcastEndpoint = new IPEndPoint(KNXBROADCASTADDRESS, KNXBROADCASTPORT);
-        #endregion
-
-        #region private members
-        private readonly List<UdpClient> _udpClients = new List<UdpClient>();
-        private readonly List<UdpPacketReceiver> _udpReceivers = new List<UdpPacketReceiver>();
-        private readonly List<KnxNetIPServer> _Servers = new List<KnxNetIPServer>();
-        #endregion
-
         #region public properties
-        public IReadOnlyList<KnxNetIPServer> Servers => _Servers;
+        /// <summary>
+        /// List of Knx interfaces and routers that responded on which IP interface
+        /// </summary>
+        public IReadOnlyList<KeyValuePair<IPAddress, KnxNetIPServer>> Servers => _Servers;
+
+        /// <summary>
+        /// Occurs when a SearchResponse Frame is received
+        /// </summary>
         public event EventHandler<ServerRespondedEventArgs>? ServerResponded;
         #endregion
 
+        #region public methods
+        /// <summary>
+        /// Trigger a search for all Knx interfaces and routers using a standard SearchRequest Frame with ServiceTypeIdentifier 0x0201
+        /// </summary>
+        /// <param name="timeoutms">Time after the async search is canceled</param>
+        /// <returns>true in case at least one KNX interface or router was found. Otherwise false </returns>
         public Task<bool> DiscoverAsync(int timeoutms = 1000)
         {
             return InternalDiscoverAsync(ipendpoint => {
@@ -60,11 +64,14 @@ namespace Tiveria.Home.Knx.IP.Connections
             }, timeoutms);
         }
 
-        public Task<bool> SearchForInterfaceByMacAsync(byte[] macAddress, int timeoutms = 1000)
+        /// <summary>
+        /// Trigger a search for a Knx interface or router that has the specified MAC address. The extended SearchRequest Frame with ServiceTypeIdentifier 0x020B is used
+        /// </summary>
+        /// <param name="macAddress">The MAC address folter</param>
+        /// <param name="timeoutms">Time after the async search is canceled</param>
+        /// <returns>true in case the KNX interface or router responded. Otherwise false </returns>
+        public Task<bool> DiscoverByMacAsync(byte[] macAddress, int timeoutms = 1000)
         {
-            if (macAddress == null || macAddress.Length != 6)
-                throw new ArgumentException(nameof(macAddress));
-
             return InternalDiscoverAsync(ipendpoint =>
             {
                 var frame = new ExtendedSearchRequestFrame(new Hpai(HPAIEndpointType.IPV4_UDP, ipendpoint.Address, (ushort)ipendpoint.Port), new SRP(SrpType.SelectByMacAddress, macAddress));
@@ -72,7 +79,12 @@ namespace Tiveria.Home.Knx.IP.Connections
             }, timeoutms);
         }
 
-        public Task<bool> SearchForInterfacesInProgrammingModeAsync(int timeoutms = 1000)
+        /// <summary>
+        /// Trigger a search for all Knx interfaces and router that are currently in programming mode. The extended SearchRequest Frame with ServiceTypeIdentifier 0x020B is used
+        /// </summary>
+        /// <param name="timeoutms">Time after the async search is canceled</param>
+        /// <returns>true in case at least one KNX interface or router was found. Otherwise false </returns>
+        public Task<bool> DiscoverInProgrammingModeAsync(int timeoutms = 1000)
         {
             return InternalDiscoverAsync(ipendpoint =>
             {
@@ -81,7 +93,43 @@ namespace Tiveria.Home.Knx.IP.Connections
             }, timeoutms);
         }
 
-        #region private methods
+        /// <summary>
+        /// Trigger a search for all Knx interfaces and router that are currently in programming mode. The extended SearchRequest Frame with ServiceTypeIdentifier 0x020B is used
+        /// </summary>
+        /// <param name="timeoutms">Time after the async search is canceled</param>
+        /// <returns>true in case at least one KNX interface or router was found. Otherwise false </returns>
+        public Task<bool> DiscoverByServiceAsync(byte[] service, int timeoutms = 1000)
+        {
+            return InternalDiscoverAsync(ipendpoint =>
+            {
+                var frame = new ExtendedSearchRequestFrame(new Hpai(HPAIEndpointType.IPV4_UDP, ipendpoint.Address, (ushort)ipendpoint.Port), new SRP(SrpType.SelectByService, service));
+                return KnxNetIPFrameSerializerFactory.Instance.Create(frame.ServiceTypeIdentifier).Serialize(frame);
+            }, timeoutms);
+        }
+
+        /// <summary>
+        /// Trigger a search for all Knx interfaces and router that support the requested description (DIB). The extended SearchRequest Frame with ServiceTypeIdentifier 0x020B is used
+        /// </summary>
+        /// <param name="dibFilter">The DIB describing the filter</param>
+        /// <param name="timeoutms">Time after the async search is canceled</param>
+        /// <returns>true in case at least one KNX interface or router was found. Otherwise false </returns>
+        public Task<bool> DiscoverByDIBFilterAsync(byte[] dibFilter, int timeoutms = 1000)
+        {
+            return InternalDiscoverAsync(ipendpoint =>
+            {
+                var frame = new ExtendedSearchRequestFrame(new Hpai(HPAIEndpointType.IPV4_UDP, ipendpoint.Address, (ushort)ipendpoint.Port), new SRP(SrpType.RequestDibs, dibFilter));
+                return KnxNetIPFrameSerializerFactory.Instance.Create(frame.ServiceTypeIdentifier).Serialize(frame);
+            }, timeoutms);
+        }
+        #endregion
+
+        #region private members
+        private readonly List<UdpClient> _udpClients = new();
+        private readonly List<UdpPacketReceiver> _udpReceivers = new();
+        private readonly List<KeyValuePair<IPAddress, KnxNetIPServer>> _Servers = new();
+        #endregion
+
+        #region private implementations
         private async Task<bool> InternalDiscoverAsync(Func<IPEndPoint, byte[]> frameDataGenerator, int timeoutms)
         {
             Initialize();
@@ -131,7 +179,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             var ipendpoint = (IPEndPoint)endpoint;
             var data = generator(ipendpoint);
 
-            await client.SendAsync(data, data.Length, KNXBroadcastEndpoint);
+            await client.SendAsync(data, data.Length, KnxNetIPConstants.DefaultBroadcastEndpoint);
         }
         #endregion
 
@@ -175,7 +223,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             {
                 var sf = ((SearchResponseFrame)frame!);
                 var intf = new KnxNetIPServer(new IPEndPoint(sf.ServiceEndpoint.Ip, sf.ServiceEndpoint.Port), sf.DeviceInfoDIB, sf.ServiceFamiliesDIB);
-                _Servers.Add(intf);
+                _Servers.Add(new KeyValuePair<IPAddress, KnxNetIPServer>(receiver.Address, intf));
                 OnServerResponded(receiver, intf);
             }
         }

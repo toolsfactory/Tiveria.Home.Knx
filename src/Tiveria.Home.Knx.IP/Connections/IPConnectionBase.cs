@@ -1,6 +1,6 @@
 ﻿/*
     Tiveria.Home.Knx - a .Net Core base KNX library
-    Copyright (c) 2018 M. Geissler
+    Copyright (c) 2018-2022 M. Geissler
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -30,28 +30,35 @@ using Tiveria.Home.Knx.Cemi;
 namespace Tiveria.Home.Knx.IP.Connections
 {
     /// <summary>
-    /// Region base class for all ip connections.
+    /// Base class for all ip connections.
     /// This clas provides basic shared functionalities and helper functions.
     /// </summary>
     public abstract class IPConnectionBase : IKnxNetIPConnection
     {
-        #region private fields
-//        protected readonly ILogger _logger;
-        protected byte _channelId;
-
-        private byte _rcvSeqCounter = 0;
-        private byte _sndSeqCounter = 0;
-        private object _seqLock = new object();
-        private ConnectionState _connectionState = ConnectionState.Initialized;
-        #endregion
-
         #region public properties
+        /// <summary>
+        /// Type of the current connection
+        /// </summary>
         public abstract ConnectionType ConnectionType { get; }
 
-        public abstract IPAddress RemoteAddress { get; }
+        /// <summary>
+        /// IP Endpoint of the remote Knx device
+        /// </summary>
+        public IPEndPoint RemoteEndpoint { get; protected set; }
 
+        /// <summary>
+        /// Descriptive name of the connection
+        /// </summary>
         public string ConnectionName => GetConnectionName();
+
+        /// <summary>
+        /// Channel id used between the two endpoints
+        /// </summary>
         public byte ChannelId => _channelId;
+
+        /// <summary>
+        /// State of the connection
+        /// </summary>
         public ConnectionState ConnectionState
         {
             get => _connectionState;
@@ -67,46 +74,86 @@ namespace Tiveria.Home.Knx.IP.Connections
         }
         #endregion
 
-        #region Events
+        #region public events
+        /// <summary>
+        /// Occurs when the state of the connection changes
+        /// </summary>
         public event EventHandler<ConnectionStateChangedEventArgs>? ConnectionStateChanged;
+
+        /// <summary>
+        /// Occurs when a Knx frame was received and parsed
+        /// </summary>
+        public event EventHandler<FrameReceivedEventArgs>? FrameReceived;
+
+        /// <summary>
+        /// Occurs when raw data is received
+        /// </summary>
+        public event EventHandler<DataReceivedArgs>? DataReceived;
+
+        /// <summary>
+        /// Occurs when a connection is established
+        /// </summary>
+        public event EventHandler? Connected;
+
+        /// <summary>
+        /// Occurs when the connection is closed
+        /// </summary>
+        public event EventHandler? DisConnected;
+        #endregion
+
+        #region constructor
+        protected IPConnectionBase(IPEndPoint remoteEndpoint)
+        {
+            //            _logger = Tiveria.Home.Knx.Utils.LogFactory.GetLogger("Tiveria.Home.Knx.IP." + ConnectionName);
+            RemoteEndpoint = remoteEndpoint;
+            ResetRcvSeqCounter();
+            ResetSndSeqCounter();
+        }
+
+        ~IPConnectionBase()
+        {
+            // Dont change this code. Only change the Dispose(bool disposing) one.
+            Dispose(disposing: false);
+        }
+
+        #endregion
+
+        #region private fields
+        //        protected readonly ILogger _logger;
+        protected byte _channelId;
+        private byte _rcvSeqCounter = 0;
+        private byte _sndSeqCounter = 0;
+        private object _seqLock = new object();
+        private ConnectionState _connectionState = ConnectionState.Initialized;
+        #endregion
+
+        #region event handlers
         protected void OnStateChanged(ConnectionState state)
         {
             var args = new ConnectionStateChangedEventArgs(state);
             ConnectionStateChanged?.Invoke(this, args);
         }
 
-        public event EventHandler<FrameReceivedEventArgs>? FrameReceived;
         protected void OnFrameReceived(DateTime timestamp, IKnxNetIPFrame frame, bool handled)
         {
             FrameReceived?.Invoke(this, new FrameReceivedEventArgs(timestamp, frame, handled));
         }
 
-        public event EventHandler<DataReceivedArgs>? DataReceived;
         protected void OnDataReceived(DateTime timestamp, byte[] data)
         {
             DataReceived?.Invoke(this, new DataReceivedArgs(timestamp, data));
         }
 
-        public event EventHandler? Connected;
         protected void OnConnected()
         {
             Connected?.Invoke(this, new EventArgs());
         }
 
-        public event EventHandler? DisConnected;
         protected void OnDisConnected()
         {
             DisConnected?.Invoke(this, new EventArgs());
         }
         #endregion
-
-        protected IPConnectionBase()
-        {
-//            _logger = Tiveria.Home.Knx.Utils.LogFactory.GetLogger("Tiveria.Home.Knx.IP." + ConnectionName);
-            ResetRcvSeqCounter();
-            ResetSndSeqCounter();
-        }
-
 
         #region Sequence Counters
         protected void ResetRcvSeqCounter()
@@ -169,27 +216,27 @@ namespace Tiveria.Home.Knx.IP.Connections
 
         #region abstract base methods
         public abstract Task<bool> SendAsync(IKnxNetIPFrame frame);
-
         public abstract Task CloseAsync();
 
         public abstract Task<bool> ConnectAsync();
 
         protected abstract string GetConnectionName();
 
-        public Task DisconnectAsync()
-        {
-            throw new NotImplementedException();
-        }
+        public abstract Task DisconnectAsync();
 
-        public Task SendAsync(ICemiMessage message)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract Task<bool> SendCemiAsync(ICemiMessage message);
+
+        #region Disposable Pattern
+        protected abstract void Dispose(bool disposing);
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            // Ändern Sie diesen Code nicht. Fügen Sie Bereinigungscode in der Methode "Dispose(bool disposing)" ein.
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
+        #endregion
+
         #endregion
     }
 }

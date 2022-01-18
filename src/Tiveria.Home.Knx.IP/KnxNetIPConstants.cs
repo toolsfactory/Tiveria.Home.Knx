@@ -22,15 +22,14 @@
     combination.
 */
 
-namespace Tiveria.Home.Knx.IP.Enums
+using System.Net;
+
+namespace Tiveria.Home.Knx.IP
 {
-    public enum ConnectionState
+    public static class KnxNetIPConstants
     {
-        Initialized,
-        Opening,
-        Open,
-        Closing,
-        Closed,
-        Invalid
+        public static readonly IPAddress DefaultBroadcastAddress = IPAddress.Parse("224.0.23.12");
+        public static readonly ushort DefaultBroadcastPort = 3671;
+        public static readonly  IPEndPoint DefaultBroadcastEndpoint = new IPEndPoint(DefaultBroadcastAddress, DefaultBroadcastPort);
     }
 }

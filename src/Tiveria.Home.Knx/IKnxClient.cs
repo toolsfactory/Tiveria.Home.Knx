@@ -42,7 +42,7 @@ namespace Tiveria.Home.Knx
         Task<bool> ConnectAsync();
         Task DisconnectAsync();
 
-        Task SendAsync(ICemiMessage message);
+        Task<bool> SendCemiAsync(ICemiMessage message);
     }
 
     public enum ConnectionState

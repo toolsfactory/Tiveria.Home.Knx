@@ -41,9 +41,9 @@ namespace Tiveria.Home.Knx
             finder.ServerResponded += Finder_ServerResponded;
             await finder.DiscoverAsync();
             Console.WriteLine($"Interfaces found: {finder.Servers.Count}");
-            await finder.SearchForInterfacesInProgrammingModeAsync();
+            await finder.DiscoverInProgrammingModeAsync();
             Console.WriteLine($"Interfaces programming: {finder.Servers.Count}");
-            await finder.SearchForInterfaceByMacAsync(new byte[] {0xdc, 0xa6, 0x32, 0xb7, 0x47, 0x1a});
+            await finder.DiscoverByMacAsync(new byte[] {0xdc, 0xa6, 0x32, 0xb7, 0x47, 0x1a});
             Console.WriteLine($"Interfaces MAC: {finder.Servers.Count}");
             Task.Delay(1000).Wait();
 

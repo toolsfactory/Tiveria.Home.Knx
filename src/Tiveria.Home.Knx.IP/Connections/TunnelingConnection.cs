@@ -1,6 +1,6 @@
 ﻿/*
     Tiveria.Home.Knx - a .Net Core base KNX library
-    Copyright (c) 2018 M. Geissler
+    Copyright (c) 2018-2022 M. Geissler
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -22,9 +22,12 @@
     combination.
 */
 
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System.Net;
 using System.Net.Sockets;
 using Tiveria.Common.Extensions;
+using Tiveria.Home.Knx.Cemi;
 using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Home.Knx.IP.Frames;
 using Tiveria.Home.Knx.IP.Structures;
@@ -36,64 +39,88 @@ namespace Tiveria.Home.Knx.IP.Connections
     /// </summary>
     public class TunnelingConnection : IPConnectionBase
     {
-        public static bool ResyncOnSkippedRcvSeq = true;
-
         #region private fields
         private readonly object _lock = new object();
         private readonly ManualResetEvent _closeEvent = new ManualResetEvent(false);
         private readonly ManualResetEvent _ackEvent = new ManualResetEvent(false);
         private readonly IPEndPoint _localEndpoint;
         private readonly IPEndPoint _remoteControlEndpoint;
-        private readonly IPAddress _remoteAddress;
-        private readonly bool _busMonitor;
+        private readonly ILogger<TunnelingConnection> _logger;
         private readonly UdpClient _udpClient;
-        private readonly bool _natAware = false;
         private IPEndPoint? _remoteDataEndpoint;
         private UdpPacketReceiver _packetReceiver;
         private HeartbeatMonitor? _heartbeatMonitor;
-        private ushort _sendRepeats;
         private AckState _ackState = AckState.Ok;
+        private readonly TunnelingConnectionConfiguration _config;
+        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private bool disposedValue;
         #endregion
 
         #region public properties
+        /// <summary>
+        /// 
+        /// </summary>
         public override ConnectionType ConnectionType => ConnectionType.Tunnel;
-        public override IPAddress RemoteAddress => _remoteAddress;
-        public bool NatAware => _natAware;
-
-        public ushort AckTimeout { get; set; }
-        public ushort SendRepeats { get => _sendRepeats; set => _sendRepeats = (value < 0 && value < 10) ? value : (ushort)3; }
         #endregion
 
         #region constructors
-        public TunnelingConnection(IPAddress remoteAddress, ushort remotePort, IPAddress localAddress, ushort localPort, bool busmonitor = false, bool natAware = false)
+        /// <summary>
+        /// Create a new tunneling connection client
+        /// </summary>
+        /// <param name="localEndpoint">The IP endpoint on the local host</param>
+        /// <param name="remoteEndpoint">The IP endpoint to connect to</param>
+        /// <param name="configuration">Additional configuration parameters</param>
+        /// <param name="logger">Instance of a logger object</param>
+        public TunnelingConnection(IPEndPoint localEndpoint, IPEndPoint remoteEndpoint, TunnelingConnectionConfiguration? configuration = null, ILogger<TunnelingConnection>? logger = null)
+            : base(remoteEndpoint)
         {
-            if (remoteAddress == null)
-                throw new ArgumentNullException("RemoteAddress is null");
-            if (localAddress == null)
-                throw new ArgumentNullException("LocalAddress is null");
-            AckTimeout = 500;
-            SendRepeats = 3;
-            _remoteAddress = remoteAddress;
-            _busMonitor = busmonitor;
-            _remoteControlEndpoint = new IPEndPoint(remoteAddress, remotePort);
-            _localEndpoint = new IPEndPoint(localAddress, localPort);
-            _natAware = natAware;
+            _localEndpoint = localEndpoint;
+            _remoteControlEndpoint = remoteEndpoint;
+            _logger = logger ?? NullLogger<TunnelingConnection>.Instance;
+
+            if (configuration != null)
+                _config = configuration;
+            else 
+                _config = new TunnelingConnectionConfiguration();
+
             _udpClient = new UdpClient(_localEndpoint);
             _packetReceiver = new UdpPacketReceiver(_udpClient, PacketReceivedDelegate, KnxFrameReceivedDelegate);
         }
+
+        /// <summary>
+        /// DEPRECATED
+        /// </summary>
+        /// <param name="remoteAddress"></param>
+        /// <param name="remotePort"></param>
+        /// <param name="localAddress"></param>
+        /// <param name="localPort"></param>
+        /// <param name="busmonitor"></param>
+        /// <param name="natAware"></param>
+        [Obsolete]
+        public TunnelingConnection(IPAddress remoteAddress, ushort remotePort, IPAddress localAddress, ushort localPort, bool busmonitor = false, bool natAware = false)
+            : this (new IPEndPoint(localAddress, localPort), new IPEndPoint(remoteAddress, remotePort), new TunnelingConnectionConfiguration() { UseBusMonitorMode = busmonitor, NatAware = natAware })
+        {
+            // ToDo: remove deprecated constructor
+        }
         #endregion
 
+        /// <summary>
+        /// Send a generic KnxNetIPFrame (potentially raw payload)
+        /// </summary>
+        /// <param name="frame">The frame to send</param>
+        /// <returns>true if the frame was sent successfully, otherise false</returns>
         public override async Task<bool> SendAsync(IKnxNetIPFrame frame)
         {
-            lock (_lock)
-            {
-                // check for valid connection
-            }
+            if (ConnectionState != ConnectionState.Open)
+                return false;
+
             var serializer = KnxNetIPFrameSerializerFactory.Instance.Create(frame.ServiceTypeIdentifier);
             var data = serializer.Serialize(frame);
+            var timeoutCTS = new CancellationTokenSource(_config.SendTimeout);
+            var linkedCTS = CancellationTokenSource.CreateLinkedTokenSource(timeoutCTS.Token, _cancellationTokenSource.Token);
             try
             {
-                var bytessent = await _udpClient.SendAsync(data, data.Length, _remoteControlEndpoint);
+                var bytessent = await _udpClient.SendAsync(data, data.Length).WaitAsync(linkedCTS.Token);
                 if (bytessent == 0)
                 {
 //                    _logger.Error("SendFrameAsync: Zero bytes sent");
@@ -110,7 +137,23 @@ namespace Tiveria.Home.Knx.IP.Connections
             }
         }
 
-        public async Task<bool> SendCemiFrameAsync(Cemi.ICemiMessage cemi, bool blocking = true)
+        /// <summary>
+        /// Send a Cemi message to the KnxNetIP server in blocking mode <see cref="SendCemiAsync(Cemi.ICemiMessage cemi, bool blocking = true)"/>. Version & Connection headers are automatically generated.
+        /// </summary>
+        /// <param name="cemi">The cemi message to send</param>
+        /// <returns>true if the message was sent sucessfuly, otherwise false</returns>
+        public override Task<bool> SendCemiAsync(ICemiMessage message)
+        {
+            return SendCemiAsync(message, true);
+        }
+
+        /// <summary>
+        /// Send a Cemi message to the KnxNetIP server. Version & Connection headers are automatically generated.
+        /// </summary>
+        /// <param name="cemi">The cemi message to send</param>
+        /// <param name="blocking">If yes, the message is only sent if no other message is currently being processed. On top, the call only returns then after the Ack was received or timed out.</param>
+        /// <returns>true if the message was sent sucessfuly, otherwise false</returns>
+        public async Task<bool> SendCemiAsync(Cemi.ICemiMessage cemi, bool blocking = true)
         {
             var conheader = new ConnectionHeader(_channelId, SndSeqCounter);
             var frame = new TunnelingRequestFrame(conheader, cemi);
@@ -131,12 +174,14 @@ namespace Tiveria.Home.Knx.IP.Connections
                 {
                     lock (_lock)
                     {
+                        if (_ackState == AckState.Pending)
+                            return false;
                         bool ackReceived = false;
                         InitAckReceiving();
-                        for (var i = 0; i < _sendRepeats; i++)
+                        for (var i = 0; i < _config.SendRepeats; i++)
                         {
-                            _udpClient.Send(data, data.Length, _remoteControlEndpoint);
-                            ackReceived = _ackEvent.WaitOne(AckTimeout);
+                            _udpClient.SendAsync(data, data.Length, _remoteControlEndpoint);
+                            ackReceived = _ackEvent.WaitOne(_config.AcknowledgeTimeout);
                             if (ackReceived)
                                 break;
                         }
@@ -272,7 +317,7 @@ namespace Tiveria.Home.Knx.IP.Connections
 
         private byte[] CreateConnectionRequestFrame()
         {
-            var cri = new CRITunnel(_busMonitor ? TunnelingLayer.TUNNEL_BUSMONITOR : TunnelingLayer.TUNNEL_LINKLAYER);
+            var cri = new CRITunnel(_config.UseBusMonitorMode ? TunnelingLayer.TUNNEL_BUSMONITOR : TunnelingLayer.TUNNEL_LINKLAYER);
             var hpai = new Structures.Hpai(Enums.HPAIEndpointType.IPV4_UDP, _localEndpoint.Address, (ushort)_localEndpoint.Port);
             var frame = new ConnectionRequestFrame(hpai, hpai, cri);
             var data  = KnxNetIPFrameSerializerFactory.
@@ -349,7 +394,7 @@ namespace Tiveria.Home.Knx.IP.Connections
 
         private void VerifyRemoteDataEndpointforNAT(Structures.Hpai remoteHPAI, IPEndPoint remoteEndpoint)
         {
-            if (_natAware && (remoteHPAI.Ip == IPAddress.Any || remoteHPAI.Port == 0))
+            if (_config.NatAware && (remoteHPAI.Ip == IPAddress.Any || remoteHPAI.Port == 0))
             {
                 _remoteDataEndpoint = remoteEndpoint;
                 //_logger.Debug("ConnectionResponse: NAT mode, using socket endpoint " + _remoteDataEndpoint);
@@ -407,7 +452,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             // re-syncs with the sequence of the sender.
             var expSeq = RcvSeqCounter;
             var missed = (expSeq - 1 == expSeq);
-            if (missed && ResyncOnSkippedRcvSeq)
+            if (missed && _config.ResyncSequenceNumbers)
             {
                 //_logger.Error($"tunneling request with rcv-seq '{rcvSeq}', expected '{expSeq}' -> re-sync with server (1 tunneled msg lost)");
                 IncRcvSeqCounter();
@@ -488,7 +533,29 @@ namespace Tiveria.Home.Knx.IP.Connections
 
         protected override string GetConnectionName()
         {
-            return "TunnelingConnection";
+            return "TunnelingConnection - " + (_config.UseBusMonitorMode ? "BusMonitoring" : "Standard");
+        }
+
+        public override Task DisconnectAsync()
+        {
+            return Task.Run(() =>
+            {
+                _cancellationTokenSource.Cancel();
+                _udpClient.Close();
+            });
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: Verwalteten Zustand (verwaltete Objekte) bereinigen
+                }
+                _udpClient.Dispose();
+                disposedValue = true;
+            }
         }
 
         private enum AckState

@@ -89,7 +89,7 @@ namespace Tiveria.Home.Knx
             var ctrl1 = new ControlField1(MessageCode.LDATA_REQ);
             var ctrl2 = new ControlField2();
             var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), GroupAddress.Parse("4/0/0"), ctrl1, ctrl2, apci);
-            await Con.SendCemiFrameAsync(cemi, true);
+            await Con.SendCemiAsync(cemi, true);
         }
 
         private async Task SendReadRequestAsync()

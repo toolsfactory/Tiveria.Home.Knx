@@ -1,6 +1,6 @@
 ﻿/*
     Tiveria.Home.Knx - a .Net Core base KNX library
-    Copyright (c) 2018 M. Geissler
+    Copyright (c) 2018-2022 M. Geissler
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -24,6 +24,9 @@
 
 namespace Tiveria.Home.Knx.IP.Enums
 {
+    /// <summary>
+    /// List of Search Request Parameter types
+    /// </summary>
     public enum SrpType : byte
     {
         /// <summary>

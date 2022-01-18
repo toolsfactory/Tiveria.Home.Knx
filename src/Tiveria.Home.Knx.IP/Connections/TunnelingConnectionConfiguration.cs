@@ -22,15 +22,17 @@
     combination.
 */
 
-namespace Tiveria.Home.Knx.IP.Enums
+namespace Tiveria.Home.Knx.IP.Connections
 {
-    public enum ConnectionState
+    /// <summary>
+    /// Configuration options for a KnxNetIP Tunneling connection
+    /// </summary>
+    public record TunnelingConnectionConfiguration : IPConnectionConfiguration
     {
-        Initialized,
-        Opening,
-        Open,
-        Closing,
-        Closed,
-        Invalid
+        /// <summary>
+        /// De/Activeate the bus monitoring mode of Knx
+        /// </summary>
+        public bool UseBusMonitorMode { get; set; } = false;
+
     }
 }

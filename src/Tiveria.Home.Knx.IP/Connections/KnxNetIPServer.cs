@@ -1,6 +1,6 @@
 ﻿/*
     Tiveria.Home.Knx - a .Net Core base KNX library
-    Copyright (c) 2018 M. Geissler
+    Copyright (c) 2018-2022 M. Geissler
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -27,6 +27,12 @@ using Tiveria.Home.Knx.IP.Structures;
 
 namespace Tiveria.Home.Knx.IP.Connections
 {
+    /// <summary>
+    /// This record represents a single KnxNetIP router or interface found via the <see cref="KnxNetIPServerDiscoveryAgent"/>.
+    /// </summary>
+    /// <param name="ServiceEndpoint">The IP Endpoint at which the server can be reached</param>
+    /// <param name="DeviceInfoDIB">Detailed device informations</param>
+    /// <param name="ServiceFamiliesDIB">Supported service families</param>
     public record KnxNetIPServer (IPEndPoint ServiceEndpoint, DeviceInfoDIB DeviceInfoDIB, ServiceFamiliesDIB ServiceFamiliesDIB);
 
 }
