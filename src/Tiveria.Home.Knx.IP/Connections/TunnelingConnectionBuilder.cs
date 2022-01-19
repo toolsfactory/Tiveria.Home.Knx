@@ -50,7 +50,31 @@ namespace Tiveria.Home.Knx.IP.Connections
             _localEndPoint = localEndPoint;
             _remoteEndPoint = remoteEndPoint;
         }
+
+        /// <summary>
+        /// Initializes the builder with the absolutely required parameters for a <see cref="TunnelingConnection"/>.
+        /// </summary>
+        /// <param name="localIp">IP Address of the local host</param>
+        /// <param name="localPort">Port to be used to communicate from</param>
+        /// <param name="remoteIp">IP Address of the remote KnxNetIp Interface/Router</param>
+        /// <param name="remotePort">Port on the remote endpoint to communicate with <see cref="KnxNetIPConstants.DefaultPort"/></param>
+        public TunnelingConnectionBuilder(IPAddress localIp, ushort localPort, IPAddress remoteIp, ushort remotePort = KnxNetIPConstants.DefaultPort)
+        {
+            _localEndPoint = new IPEndPoint(localIp, localPort);
+            _remoteEndPoint = new IPEndPoint(remoteIp, remotePort);
+        }
+
+        /// <summary>
+        /// Initializes the builder with the absolutely required parameters for a <see cref="TunnelingConnection"/>. LocalPort is set to 0 - so the UdpClient uses the next free port.
+        /// </summary>
+        /// <param name="localIp">IP Address of the local host</param>
+        /// <param name="remoteIp">IP Address of the remote KnxNetIp Interface/Router</param>
+        /// <param name="remotePort">Port on the remote endpoint to communicate with <see cref="KnxNetIPConstants.DefaultPort"/></param>
+        public TunnelingConnectionBuilder(IPAddress localIp, IPAddress remoteIp, ushort remotePort = KnxNetIPConstants.DefaultPort)
+            : this (localIp, 0 , remoteIp, remotePort)
+        {}
         #endregion
+
 
         #region public methods
         /// <summary>

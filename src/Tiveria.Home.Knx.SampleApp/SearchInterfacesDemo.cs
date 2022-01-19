@@ -53,7 +53,12 @@ namespace Tiveria.Home.Knx
 
         private void Finder_ServerResponded(object? sender, ServerRespondedEventArgs e)
         {
-                Console.WriteLine($"SearchResponse on {e.ReceivingEndpoint}: {e.Server.DeviceInfoDIB.FriendlyName} - {e.Server.ServiceEndpoint.Address} - {e.Server.DeviceInfoDIB.IndividualAddress} - {BitConverter.ToString(e.Server.DeviceInfoDIB.MAC)}");
+            Console.WriteLine($"SearchResponse on {e.ReceivingEndpoint}: {e.Server.DeviceInfoDIB.FriendlyName} - {e.Server.ServiceEndpoint.Address} - {e.Server.DeviceInfoDIB.IndividualAddress} - {BitConverter.ToString(e.Server.DeviceInfoDIB.MAC)}");
+            foreach(var family in e.Server.ServiceFamiliesDIB.ServiceFamilies)
+            {
+                Console.WriteLine($"    Family: {family.Family:x2} Version:{family.Version:x2}");
+            }
+
         }
     }
 }

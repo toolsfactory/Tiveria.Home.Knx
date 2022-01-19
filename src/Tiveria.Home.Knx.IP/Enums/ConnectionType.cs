@@ -34,6 +34,7 @@ namespace Tiveria.Home.Knx.IP.Enums
         Tunnel = 0x04,
         RemLog = 0x06,
         RemConf = 0x07,
-        ObjectServer = 0x08
+        ObjectServer = 0x08,
+        Routing = 0xff
     }
 }

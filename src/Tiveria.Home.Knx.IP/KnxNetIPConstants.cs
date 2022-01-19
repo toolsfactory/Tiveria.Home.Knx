@@ -29,7 +29,8 @@ namespace Tiveria.Home.Knx.IP
     public static class KnxNetIPConstants
     {
         public static readonly IPAddress DefaultBroadcastAddress = IPAddress.Parse("224.0.23.12");
-        public static readonly ushort DefaultBroadcastPort = 3671;
-        public static readonly  IPEndPoint DefaultBroadcastEndpoint = new IPEndPoint(DefaultBroadcastAddress, DefaultBroadcastPort);
+        public const ushort DefaultBroadcastPort = 3671;
+        public const ushort DefaultPort = 3671;
+        public static readonly IPEndPoint DefaultBroadcastEndpoint = new IPEndPoint(DefaultBroadcastAddress, DefaultBroadcastPort);
     }
 }

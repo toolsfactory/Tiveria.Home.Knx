@@ -71,8 +71,11 @@ namespace Tiveria.Home.Knx.IP.Connections
 
         public void Stop()
         {
+            if (!_running)
+                return;
             _client.Close();
             _cancellationTokenSource.Cancel();
+            _running=false;
         }
 
         private void StartListen()

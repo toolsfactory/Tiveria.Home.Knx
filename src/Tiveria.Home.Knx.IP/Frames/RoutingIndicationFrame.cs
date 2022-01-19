@@ -28,15 +28,20 @@ using Tiveria.Home.Knx.IP.Structures;
 
 namespace Tiveria.Home.Knx.IP.Frames
 {
-    public class RoutingIndicationFrame : EMIFrameBase, IKnxNetIPFrame
+    public class RoutingIndicationFrame : FrameBase, IKnxNetIPFrame
     {
         public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.RoutingIndication;
-        public RoutingIndicationFrame(ConnectionHeader connectionHeader, ICemiMessage cemi) 
-            : base(ServiceTypeIdentifier.RoutingIndication, connectionHeader, cemi)
-        { }
+        public ICemiMessage CemiMessage { get; init; }
+        public RoutingIndicationFrame(ICemiMessage cemi) 
+            : base(ServiceTypeIdentifier.RoutingIndication, cemi.Size)
+        {
+            CemiMessage = cemi;
+        }
 
-        public RoutingIndicationFrame(FrameHeader frameHeader, ConnectionHeader connectionHeader, ICemiMessage cemi)
-            : base(frameHeader, ServiceTypeIdentifier.RoutingIndication, connectionHeader, cemi)
-        { }
+        public RoutingIndicationFrame(FrameHeader frameHeader, ICemiMessage cemi)
+            : base(frameHeader, ServiceTypeIdentifier.RoutingIndication, cemi.Size)
+        {
+            CemiMessage = cemi;
+        }
     }
 }

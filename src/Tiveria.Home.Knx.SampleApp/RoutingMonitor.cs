@@ -37,14 +37,12 @@ using Tiveria.Home.Knx.IP.Frames;
 
 namespace Tiveria.Home.Knx
 {
-    public class TrafficMonitor
+    public class RoutingMonitor
     {
         // replace the IP Address below with your specific router or tunnel interface IP Address.
         // Port should be correct assuming you have a standard setup
-        private static IPAddress GatewayIPAddress = IPAddress.Parse("192.168.2.150");
-        private static ushort GatewayPort = 3671;
 
-        private IP.Connections.TunnelingConnection? Con;
+        private IP.Connections.RoutingConnection? Con;
 
         public async Task RunAsync()
          {
@@ -55,7 +53,7 @@ namespace Tiveria.Home.Knx
             ConfigureLogging();
 
 
-            Con = new Tiveria.Home.Knx.IP.Connections.TunnelingConnection(GatewayIPAddress, GatewayPort, GetLocalIPAddress(), 55555);
+            Con = new IP.Connections.RoutingConnection(new IPEndPoint(IPAddress.Parse("192.168.2.107"), KnxNetIPConstants.DefaultPort)) ;
             Con.DataReceived += Con_DataReceived;
             Con.FrameReceived += Con_FrameReceived;
             Con.ConnectionStateChanged += Con_StateChanged;
@@ -65,19 +63,7 @@ namespace Tiveria.Home.Knx
             do
             {
                 cki = Console.ReadKey(false);
-                Console.Write(" --- You pressed ");
-                if ((cki.Modifiers & ConsoleModifiers.Alt) != 0) Console.Write("ALT+");
-                if ((cki.Modifiers & ConsoleModifiers.Shift) != 0) Console.Write("SHIFT+");
-                if ((cki.Modifiers & ConsoleModifiers.Control) != 0) Console.Write("CTL+");
-                Console.WriteLine(cki.Key.ToString());
-                switch (cki.Key)
-                {
-                    case ConsoleKey.A: SendReadRequestAsync().Wait(); break;
-                    case ConsoleKey.Escape: Con.CloseAsync().Wait(); break;
-                    case ConsoleKey.D0: SendWriteRequestAsync(false).Wait(); break;
-                    case ConsoleKey.D1: SendWriteRequestAsync(true).Wait(); break;
-                }
-            } while (cki.Key != ConsoleKey.Enter);
+            } while (cki.Key != ConsoleKey.Escape);
             await Con.CloseAsync();
         }
 
@@ -89,7 +75,7 @@ namespace Tiveria.Home.Knx
             var ctrl1 = new ControlField1(MessageCode.LDATA_REQ);
             var ctrl2 = new ControlField2();
             var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), GroupAddress.Parse("4/0/0"), ctrl1, ctrl2, apci);
-            await Con.SendCemiAsync(cemi, true);
+            await Con.SendCemiAsync(cemi);
         }
 
         private async Task SendReadRequestAsync()
@@ -115,9 +101,9 @@ namespace Tiveria.Home.Knx
         private void Con_FrameReceived(object sender, FrameReceivedEventArgs e)
         {
 //            Console.WriteLine($"Frame received. Type: {e.Frame.ServiceType}");
-            if (e.Frame.FrameHeader.ServiceTypeIdentifier == ServiceTypeIdentifier.TunnelingRequest)
+            if (e.Frame.FrameHeader.ServiceTypeIdentifier == ServiceTypeIdentifier.RoutingIndication)
             {
-                var req = ((TunnelingRequestFrame)e.Frame);
+                var req = ((RoutingIndicationFrame)e.Frame);
                 var cemi = (CemiLData)req.CemiMessage;
 
                 if (cemi.DestinationAddress.IsGroupAddress())

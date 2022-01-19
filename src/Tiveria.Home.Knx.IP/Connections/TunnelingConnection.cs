@@ -53,7 +53,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         private AckState _ackState = AckState.Ok;
         private readonly TunnelingConnectionConfiguration _config;
         private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
-        private bool disposedValue;
+        private bool disposedValue = false;
         #endregion
 
         #region public properties
@@ -242,16 +242,8 @@ namespace Tiveria.Home.Knx.IP.Connections
                 await SendDisconnectRequestAsync().ConfigureAwait(false);
                 _closeEvent.WaitOne(1000);
             }
-            await Task.Run(() => Stop()).ConfigureAwait(false);
+            await Task.Run(() => _packetReceiver.Stop()).ConfigureAwait(false);
             ConnectionState = ConnectionState.Closed;
-        }
-
-        private void Stop()
-        {
-            if (_packetReceiver.Running)
-            {
-                _packetReceiver.Stop();
-            }
         }
 
         private byte[] CreateDisconnectFrame()

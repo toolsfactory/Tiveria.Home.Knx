@@ -37,15 +37,13 @@ namespace Tiveria.Home.Knx.IP.Frames.Serializers
         public override RoutingIndicationFrame Deserialize(BigEndianBinaryReader reader)
         {
             var header = FrameHeader.Parse(reader);
-            var conheader = ConnectionHeader.Parse(reader);
             var cemi = new CemiLDataSerializer().Deserialize(reader, -1);
-            return new RoutingIndicationFrame(header, conheader, cemi);
+            return new RoutingIndicationFrame(header, cemi);
         }
 
         public override void Serialize(RoutingIndicationFrame frame, BigEndianBinaryWriter writer)
          {
             frame.FrameHeader.Write(writer);
-            frame.ConnectionHeader.Write(writer);
             new CemiLDataSerializer().Serialize((CemiLData)frame.CemiMessage, writer);
         }
     }

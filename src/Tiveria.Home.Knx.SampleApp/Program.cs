@@ -43,7 +43,8 @@ namespace Tiveria.Home.Knx
                 var menu = new EasyConsole.Menu()
                   .Add("Search KnxNetIP Routers/Tunnels", () => new SearchInterfacesDemo().RunAsync().Wait())
                   .Add("Build some structures", () => new StructureBuildDemo().RunAsync().Wait())
-                  .Add("Connect & listen to traffic", () => new TrafficMonitor().RunAsync().Wait())
+                  .Add("Tunneling Connection Tests", () => new TunnelingMonitor().RunAsync().Wait())
+                  .Add("Routing Connection Tests", () => new RoutingMonitor().RunAsync().Wait())
                   .Add("DescriptionReq sample", () => new DescriptionRequestDemo("192.168.2.154", 3671).SendDescriptionRequest())
                   .Add("Busmonitor", () => new BusmonitorDemo().RunAsync().Wait())
                   .Add("Exit", () => exit = true);
