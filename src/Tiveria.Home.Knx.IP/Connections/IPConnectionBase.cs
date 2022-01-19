@@ -37,11 +37,6 @@ namespace Tiveria.Home.Knx.IP.Connections
     {
         #region public properties
         /// <summary>
-        /// Type of the current connection
-        /// </summary>
-        public abstract ConnectionType ConnectionType { get; }
-
-        /// <summary>
         /// IP Endpoint of the remote Knx device
         /// </summary>
         public IPEndPoint RemoteEndpoint { get; protected set; }
@@ -118,7 +113,7 @@ namespace Tiveria.Home.Knx.IP.Connections
 
         #endregion
 
-        #region private fields
+        #region private members
         //        protected readonly ILogger _logger;
         protected byte _channelId;
         private byte _rcvSeqCounter = 0;
@@ -127,7 +122,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         private ConnectionState _connectionState = ConnectionState.Initialized;
         #endregion
 
-        #region event handlers
+        #region internal event handlers
         protected void OnStateChanged(ConnectionState state)
         {
             var args = new ConnectionStateChangedEventArgs(state);
@@ -155,6 +150,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         }
         #endregion
 
+        #region internal implementations
         #region Sequence Counters
         protected void ResetRcvSeqCounter()
         {
@@ -197,9 +193,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         }
 
         protected byte SndSeqCounter => _sndSeqCounter;
-        #endregion
 
-        #region helper methods
         protected bool isCorrectChannelID(byte channelId, ServiceTypeIdentifier serviceType)
         {
             if (channelId == _channelId)
@@ -214,18 +208,6 @@ namespace Tiveria.Home.Knx.IP.Connections
         }
         #endregion
 
-        #region abstract base methods
-        public abstract Task<bool> SendAsync(IKnxNetIPFrame frame);
-        public abstract Task CloseAsync();
-
-        public abstract Task<bool> ConnectAsync();
-
-        protected abstract string GetConnectionName();
-
-        public abstract Task DisconnectAsync();
-
-        public abstract Task<bool> SendCemiAsync(ICemiMessage message);
-
         #region Disposable Pattern
         protected abstract void Dispose(bool disposing);
 
@@ -237,6 +219,35 @@ namespace Tiveria.Home.Knx.IP.Connections
         }
         #endregion
 
+        protected abstract string GetConnectionName();
+        #endregion
+
+        #region public methods
+        /// <summary>
+        /// Establish a connection to the remote endpoint
+        /// </summary>
+        /// <returns>true in case connection was established, otherwise false</returns>
+        public abstract Task<bool> ConnectAsync();
+
+        /// <summary>
+        /// Shutdown the current connection
+        /// </summary>
+        /// <returns></returns>
+        public abstract Task DisconnectAsync();
+
+        /// <summary>
+        /// Send an <see cref="IKnxNetIPFrame"/> via the IP connection to the remote endpoint
+        /// </summary>
+        /// <param name="frame">The frame to send</param>
+        /// <returns>true in case the frame was sucessfully sent, otherwise false</returns>
+        public abstract Task<bool> SendAsync(IKnxNetIPFrame frame);
+
+        /// <summary>
+        /// Send a Cemi frame to the Knx infrastructure
+        /// </summary>
+        /// <param name="message">The cemi message to send</param>
+        /// <returns>true in case the message was sucessfully sent, otherwise false</returns>
+        public abstract Task<bool> SendCemiAsync(ICemiMessage message);
         #endregion
     }
 }

@@ -92,6 +92,7 @@ namespace Tiveria.Home.Knx.Cemi
             if (info.Length < 1)
                 throw new ArgumentException("Size of data array to small");
             _infoType = infoType;
+            _information = new byte[info[0]];
             SetInfo(info);
             _size = 2 + _infoLength;
         }
@@ -102,7 +103,6 @@ namespace Tiveria.Home.Knx.Cemi
             if (_infoLength != data.Length - 1)
                 throw BufferFieldException.WrongValue("AdditionalInfo - Data", data.Length - 1, _infoLength);
             VerifyLength(_infoType, _infoLength);
-            _information = new byte[_infoLength];
             Array.Copy(data, 1, _information, 0, _infoLength);
         }
         #endregion

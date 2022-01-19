@@ -31,7 +31,6 @@ namespace Tiveria.Home.Knx.IP
     {
         event EventHandler<FrameReceivedEventArgs> FrameReceived;
 
-        ConnectionType ConnectionType { get; }
         IPEndPoint RemoteEndpoint { get; }
 
         Task <bool> SendAsync(IKnxNetIPFrame frame);

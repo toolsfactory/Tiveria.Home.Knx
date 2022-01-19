@@ -64,7 +64,7 @@ namespace Tiveria.Home.Knx
             {
                 cki = Console.ReadKey(false);
             } while (cki.Key != ConsoleKey.Escape);
-            await Con.CloseAsync();
+            await Con.DisconnectAsync();
         }
 
 

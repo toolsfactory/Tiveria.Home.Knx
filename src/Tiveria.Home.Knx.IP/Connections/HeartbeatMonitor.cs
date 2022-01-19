@@ -100,7 +100,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             if (response.Status == Enums.ErrorCodes.NoError)
             {
                 #if DEBUG
-                _logger.Trace($"ConnectionStateResponse OK. ChannelId: {response.ChannelId}");
+//                _logger.Trace($"ConnectionStateResponse OK. ChannelId: {response.ChannelId}");
                 #endif
                 _ReceivedEvent.Set();
             }
@@ -155,11 +155,11 @@ namespace Tiveria.Home.Knx.IP.Connections
         private int WaitForHearbeat()
         {
             #if DEBUG
-            _logger.Trace($"Waiting heartbeat");
+//            _logger.Trace($"Waiting heartbeat");
             #endif
             var result =  WaitHandle.WaitAny(new WaitHandle[] { _ReceivedEvent, _cancelSource.Token.WaitHandle }, _timeoutMS);
             #if DEBUG
-            _logger.Trace($"Wait result: " + result);
+            //_logger.Trace($"Wait result: " + result);
             #endif
             return result;
         }
@@ -167,7 +167,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         private void SendHeartbeat()
         {
             #if DEBUG
-            _logger.Trace($"Sending heartbeat now");
+//            _logger.Trace($"Sending heartbeat now");
             #endif
             _udpClient.Send(_rawPacket, _rawPacket.Length, _remoteEndpoint);
         }

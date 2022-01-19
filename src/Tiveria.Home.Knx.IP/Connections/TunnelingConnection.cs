@@ -26,7 +26,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System.Net;
 using System.Net.Sockets;
-using Tiveria.Common.Extensions;
 using Tiveria.Home.Knx.Cemi;
 using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Home.Knx.IP.Frames;
@@ -39,31 +38,7 @@ namespace Tiveria.Home.Knx.IP.Connections
     /// </summary>
     public class TunnelingConnection : IPConnectionBase
     {
-        #region private fields
-        private readonly object _lock = new object();
-        private readonly ManualResetEvent _closeEvent = new ManualResetEvent(false);
-        private readonly ManualResetEvent _ackEvent = new ManualResetEvent(false);
-        private readonly IPEndPoint _localEndpoint;
-        private readonly IPEndPoint _remoteControlEndpoint;
-        private readonly ILogger<TunnelingConnection> _logger;
-        private readonly UdpClient _udpClient;
-        private IPEndPoint? _remoteDataEndpoint;
-        private UdpPacketReceiver _packetReceiver;
-        private HeartbeatMonitor? _heartbeatMonitor;
-        private AckState _ackState = AckState.Ok;
-        private readonly TunnelingConnectionConfiguration _config;
-        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
-        private bool disposedValue = false;
-        #endregion
-
-        #region public properties
-        /// <summary>
-        /// 
-        /// </summary>
-        public override ConnectionType ConnectionType => ConnectionType.Tunnel;
-        #endregion
-
-        #region constructors
+        #region public constructors
         /// <summary>
         /// Create a new tunneling connection client
         /// </summary>
@@ -80,7 +55,7 @@ namespace Tiveria.Home.Knx.IP.Connections
 
             if (configuration != null)
                 _config = configuration;
-            else 
+            else
                 _config = new TunnelingConnectionConfiguration();
 
             _udpClient = new UdpClient(_localEndpoint);
@@ -98,12 +73,20 @@ namespace Tiveria.Home.Knx.IP.Connections
         /// <param name="natAware"></param>
         [Obsolete]
         public TunnelingConnection(IPAddress remoteAddress, ushort remotePort, IPAddress localAddress, ushort localPort, bool busmonitor = false, bool natAware = false)
-            : this (new IPEndPoint(localAddress, localPort), new IPEndPoint(remoteAddress, remotePort), new TunnelingConnectionConfiguration() { UseBusMonitorMode = busmonitor, NatAware = natAware })
+            : this(new IPEndPoint(localAddress, localPort), new IPEndPoint(remoteAddress, remotePort), new TunnelingConnectionConfiguration() { UseBusMonitorMode = busmonitor, NatAware = natAware })
         {
             // ToDo: remove deprecated constructor
         }
         #endregion
 
+        #region public properties
+        /// <summary>
+        /// Type of the current connection
+        /// </summary>
+        public ConnectionType ConnectionType => ConnectionType.Tunnel;
+        #endregion
+
+        #region public methods
         /// <summary>
         /// Send a generic KnxNetIPFrame (potentially raw payload)
         /// </summary>
@@ -162,7 +145,26 @@ namespace Tiveria.Home.Knx.IP.Connections
             else
                 return await SendAsync(frame);
         }
+        #endregion
 
+        #region private fields
+        private readonly object _lock = new object();
+        private readonly ManualResetEvent _closeEvent = new ManualResetEvent(false);
+        private readonly ManualResetEvent _ackEvent = new ManualResetEvent(false);
+        private readonly IPEndPoint _localEndpoint;
+        private readonly IPEndPoint _remoteControlEndpoint;
+        private readonly ILogger<TunnelingConnection> _logger;
+        private readonly UdpClient _udpClient;
+        private IPEndPoint? _remoteDataEndpoint;
+        private UdpPacketReceiver _packetReceiver;
+        private HeartbeatMonitor? _heartbeatMonitor;
+        private AckState _ackState = AckState.Ok;
+        private readonly TunnelingConnectionConfiguration _config;
+        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private bool disposedValue = false;
+        #endregion
+
+        #region private implementations
         private Task<bool> DoSendCemiBlockingAsync(IKnxNetIPFrame frame)
         {
             var serializer = KnxNetIPFrameSerializerFactory.Instance.Create(frame.ServiceTypeIdentifier);
@@ -219,10 +221,8 @@ namespace Tiveria.Home.Knx.IP.Connections
             return frame;
         }
 
-
-
         #region closing connection
-        public override async Task CloseAsync()
+        public async override Task DisconnectAsync()
         {
             await InternalCloseAsync("User triggered.", false);
         }
@@ -244,6 +244,8 @@ namespace Tiveria.Home.Knx.IP.Connections
             }
             await Task.Run(() => _packetReceiver.Stop()).ConfigureAwait(false);
             ConnectionState = ConnectionState.Closed;
+            _cancellationTokenSource.Cancel();
+            _udpClient.Close();
         }
 
         private byte[] CreateDisconnectFrame()
@@ -377,7 +379,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             {
                 //_logger.Info("Heartbeat failed. " + message);
             }
-            CloseAsync();
+            InternalCloseAsync("Hartbeat failed - " + message, false);
         }
 
         private void HeartbeatOk()
@@ -528,15 +530,6 @@ namespace Tiveria.Home.Knx.IP.Connections
             return "TunnelingConnection - " + (_config.UseBusMonitorMode ? "BusMonitoring" : "Standard");
         }
 
-        public override Task DisconnectAsync()
-        {
-            return Task.Run(() =>
-            {
-                _cancellationTokenSource.Cancel();
-                _udpClient.Close();
-            });
-        }
-
         protected override void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -549,6 +542,7 @@ namespace Tiveria.Home.Knx.IP.Connections
                 disposedValue = true;
             }
         }
+        #endregion
 
         private enum AckState
         {

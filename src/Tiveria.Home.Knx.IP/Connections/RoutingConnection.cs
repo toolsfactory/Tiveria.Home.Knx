@@ -30,23 +30,30 @@ using Tiveria.Home.Knx.IP.Frames;
 
 namespace Tiveria.Home.Knx.IP.Connections
 {
+    /// <summary>
+    /// Class for connecting via KnxNetIP Routing to the Knx infrastructure
+    /// </summary>
     public class RoutingConnection : IPConnectionBase
     {
-        private readonly UdpClient _udpClient;
-        private UdpPacketReceiver _packetReceiver;
-        private bool disposedValue = false;
-        private readonly IPEndPoint _localEndPoint;
-
+        #region public constructors
+        /// <summary>
+        /// Create a routing connection client that connects to the default multicast endpoint <see cref="KnxNetIPConstants.DefaultBroadcastEndpoint"/>
+        /// </summary>
+        /// <param name="localEndPoint">The local endpoint from which to connect.</param>
         public RoutingConnection(IPEndPoint localEndPoint)
             :this (localEndPoint, KnxNetIPConstants.DefaultBroadcastEndpoint)
-        {
-        }
+        { }
 
+        /// <summary>
+        /// Create a routing connection client that connects to the multicast endpoint provided as parameter
+        /// </summary>
+        /// <param name="localEndPoint">The local endpoint from which to connect.</param>
+        /// <param name="remoteEndpoint">The multicast group address to join</param>
         public RoutingConnection(IPEndPoint localEndpoint, IPEndPoint remoteEndpoint) : base(remoteEndpoint)
         {
             _localEndPoint = localEndpoint;
             RemoteEndpoint = remoteEndpoint;
-            _udpClient = new() { 
+            _udpClient = new UdpClient() { 
                 MulticastLoopback = false,
                 ExclusiveAddressUse = false, 
                 DontFragment = true
@@ -54,15 +61,10 @@ namespace Tiveria.Home.Knx.IP.Connections
 
             _packetReceiver = new UdpPacketReceiver(_udpClient, PacketReceivedDelegate, KnxFrameReceivedDelegate);
         }
+        #endregion
 
-        public override ConnectionType ConnectionType => ConnectionType.Routing;
-
-        public override Task CloseAsync()
-        {
-            _udpClient.Close();
-            return Task.CompletedTask;
-        }
-
+        #region public methods
+        /// <inheritdoc/>
         public override Task<bool> ConnectAsync()
         {
             return Task.Run(() =>
@@ -86,14 +88,14 @@ namespace Tiveria.Home.Knx.IP.Connections
             });
         }
 
+        /// <inheritdoc/>
         public override Task DisconnectAsync()
         {
-            return Task.Run(() =>
-            {
-                _udpClient.Close();
-            });
+            _udpClient.Close();
+            return Task.CompletedTask;
         }
 
+        /// <inheritdoc/>
         public async override Task<bool> SendAsync(IKnxNetIPFrame frame)
         {
             if (ConnectionState != ConnectionState.Open)
@@ -120,12 +122,22 @@ namespace Tiveria.Home.Knx.IP.Connections
             }
         }
 
+        /// <inheritdoc/>
         public async override Task<bool> SendCemiAsync(ICemiMessage message)
         {
             var frame = new RoutingIndicationFrame(message);
             return await SendAsync(frame);
         }
+        #endregion
 
+        #region private members
+        private readonly UdpClient _udpClient;
+        private UdpPacketReceiver _packetReceiver;
+        private bool disposedValue = false;
+        private readonly IPEndPoint _localEndPoint;
+        #endregion
+
+        #region private implementations
         protected override void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -141,7 +153,7 @@ namespace Tiveria.Home.Knx.IP.Connections
 
         protected override string GetConnectionName()
         {
-            return "RoutingConnection ";
+            return "RoutingConnection";
         }
 
         #region packet and knx frame receive delegates
@@ -167,5 +179,6 @@ namespace Tiveria.Home.Knx.IP.Connections
         }
         #endregion
 
+        #endregion
     }
 }

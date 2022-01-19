@@ -65,7 +65,7 @@ namespace Tiveria.Home.Knx
                 Console.Write(" --- You pressed ");
                 Console.WriteLine(cki.Key.ToString());
             } while (cki.Key != ConsoleKey.Escape);
-            Con.CloseAsync().Wait();
+            Con.DisconnectAsync().Wait();
         }
 
 

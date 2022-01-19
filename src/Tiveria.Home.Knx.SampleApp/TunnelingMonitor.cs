@@ -73,12 +73,12 @@ namespace Tiveria.Home.Knx
                 switch (cki.Key)
                 {
                     case ConsoleKey.A: SendReadRequestAsync().Wait(); break;
-                    case ConsoleKey.Escape: Con.CloseAsync().Wait(); break;
+                    case ConsoleKey.Escape: Con.DisconnectAsync().Wait(); break;
                     case ConsoleKey.D0: SendWriteRequestAsync(false).Wait(); break;
                     case ConsoleKey.D1: SendWriteRequestAsync(true).Wait(); break;
                 }
             } while (cki.Key != ConsoleKey.Enter);
-            await Con.CloseAsync();
+            await Con.DisconnectAsync();
         }
 
 
