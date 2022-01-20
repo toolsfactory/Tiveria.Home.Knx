@@ -84,7 +84,7 @@ namespace Tiveria.Home.Knx.Cemi.Serializers
             writer.Write((byte)cemiMessage.ControlField2.RawData);
             cemiMessage.SourceAddress.Write(writer);
             cemiMessage.DestinationAddress.Write(writer);
-            writer.Write(cemiMessage.Apci.Size - 1); // Apci structure includes TPCI and therefore Size is NPDULength+1
+            writer.Write((byte)(cemiMessage.Apci.Size - 1)); // Apci structure includes TPCI and therefore Size is NPDULength+1
             cemiMessage.Apci.Write(writer);
         }
     }

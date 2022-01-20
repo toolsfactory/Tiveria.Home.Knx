@@ -114,7 +114,7 @@ namespace Tiveria.Home.Knx.Cemi
         /// </summary>
         private void ToByte()
         {
-            _rawData = 0;
+            _rawData = (byte) (((byte)_priority & 0x03) << 2);
 
             if (!_extendedFrame)
                 _rawData |= 0b1000_0000;

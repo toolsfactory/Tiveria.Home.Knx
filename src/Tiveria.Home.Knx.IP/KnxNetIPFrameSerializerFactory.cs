@@ -54,6 +54,13 @@ namespace Tiveria.Home.Knx.IP
         }
         #endregion
 
+        #region static initialization
+        static KnxNetIPFrameSerializerFactory()
+        {
+            Instance.Initialize();
+        }
+        #endregion
+
         private Dictionary<ServiceTypeIdentifier, Type> _serializersByServiceTypeIdentifier = new();
         private Dictionary<Type, Type> _serializersByFrameType = new();
 

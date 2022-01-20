@@ -57,12 +57,19 @@ namespace Tiveria.Home.Knx
             Con.DataReceived += Con_DataReceived;
             Con.FrameReceived += Con_FrameReceived;
             Con.ConnectionStateChanged += Con_StateChanged;
-            Console.WriteLine("Hello World!");
-           
+
             Con.ConnectAsync().Wait();
+
             do
             {
                 cki = Console.ReadKey(false);
+                switch (cki.Key)
+                {
+                    case ConsoleKey.A: SendReadRequestAsync().Wait(); break;
+                    case ConsoleKey.D0: SendWriteRequestAsync(false).Wait(); break;
+                    case ConsoleKey.D1: SendWriteRequestAsync(true).Wait(); break;
+                }
+
             } while (cki.Key != ConsoleKey.Escape);
             await Con.DisconnectAsync();
         }
@@ -72,9 +79,10 @@ namespace Tiveria.Home.Knx
         {
             var data = (byte)(on ? 0x01 : 0x00);
             var apci = new Cemi.Apci(Cemi.ApciTypes.GroupValue_Write, new byte[] { data });
-            var ctrl1 = new ControlField1(MessageCode.LDATA_REQ);
+//            var ctrl1 = new ControlField1(MessageCode.LDATA_IND, 0xbc);
+            var ctrl1 = new ControlField1(MessageCode.LDATA_IND, priority: Priority.Normal, ack: false, repeat: false, confirm: ConfirmType.NoError);
             var ctrl2 = new ControlField2();
-            var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), GroupAddress.Parse("4/0/0"), ctrl1, ctrl2, apci);
+            var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_IND, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 1), GroupAddress.Parse("4/0/0"), ctrl1, ctrl2, apci);
             await Con.SendCemiAsync(cemi);
         }
 
@@ -82,7 +90,7 @@ namespace Tiveria.Home.Knx
         {
             Console.WriteLine("Sending read request to 22/7/0");
 //            var cemi = Cemi.CemiLData.CreateReadRequestCemi(new IndividualAddress(1, 1, 206), new GroupAddress(22, 7, 0));
-//            await Con.SendCemiFrameAsync(cemi, true);
+            //await Con.SendCemiFrameAsync(cemi, true);
         }
 
         private async Task SendReadAnswerAsync()

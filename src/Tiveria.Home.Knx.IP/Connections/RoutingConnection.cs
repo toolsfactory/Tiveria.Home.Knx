@@ -54,7 +54,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             _localEndPoint = localEndpoint;
             RemoteEndpoint = remoteEndpoint;
             _udpClient = new UdpClient() { 
-                MulticastLoopback = false,
+                MulticastLoopback = true,
                 ExclusiveAddressUse = false, 
                 DontFragment = true
             };
@@ -105,7 +105,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             var data = serializer.Serialize(frame);
             try
             {
-                var bytessent = await _udpClient.SendAsync(data, data.Length);
+                var bytessent = await _udpClient.SendAsync(data, data.Length, RemoteEndpoint);
                 if (bytessent == 0)
                 {
                     //                    _logger.Error("SendFrameAsync: Zero bytes sent");

@@ -7,6 +7,8 @@ using Tiveria.Common.IO;
 using Tiveria.Home.Knx.Datapoint;
 using Tiveria.Home.Knx.Adresses;
 using Tiveria.Home.Knx.Cemi.Serializers;
+using Tiveria.Home.Knx.IP.Frames;
+using Tiveria.Home.Knx.IP;
 
 namespace Tiveria.Home.Knx.Tests
 {
@@ -50,6 +52,9 @@ namespace Tiveria.Home.Knx.Tests
         /// 
         private string withAI = "29_06_080401020304_bcd011cd312f010000";
 
+        [OneTimeSetUp]
+        public void Prepare()
+        { }
 
         [Test]
         public void ParseCemi01_ok()
@@ -122,15 +127,19 @@ namespace Tiveria.Home.Knx.Tests
             var result = new CemiLDataSerializer().Deserialize(data);
             Assert.AreEqual(12, result.Size);
         }
-        /*
         [Test]
-        public void CreateCemi()
+        public void CreateCemi06_ok()
         {
-            var data = DPType7.DPT_TIMEPERIOD_HRS.Encode(4604);
-            var cemi = Cemi.CemiLData.CreateReadAnswerCemi(new IndividualAddress(1, 1, 3), new GroupAddress(6, 1, 47), data);
-            var bytes = cemi.ToBytes();
-            Assert.AreEqual(1, 1);
+            var apci = new Cemi.Apci(Cemi.ApciTypes.GroupValue_Write, new byte[] { 0x00 });
+            var ctrl1 = new ControlField1(MessageCode.LDATA_REQ);
+            var ctrl2 = new ControlField2();
+            var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), GroupAddress.Parse("4/0/0"), ctrl1, ctrl2, apci);
+            var frame = new RoutingIndicationFrame(cemi);
+
+            var serializer = KnxNetIPFrameSerializerFactory.Instance.Create(frame.ServiceTypeIdentifier);
+            var data = serializer.Serialize(frame);
+            Assert.IsNotNull(data);
+            Assert.AreEqual(17, data.Length);
         }
-        */
     }
 }
