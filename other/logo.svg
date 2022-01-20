@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 1241 1749" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
+    <g transform="matrix(1,0,0,1.02899,5,-36.9748)">
+        <path d="M283.465,1275.59L283.465,861.5L201.445,921.689L131.921,850.394L607.173,403.546L607.173,403.239L607.337,403.393L607.5,403.239L607.5,403.546L710.719,500.596L711.017,425.197L843.394,425.197L843.394,625.341L1082.75,850.394L1013.23,921.689L931.209,861.5L931.209,1275.59L283.465,1275.59Z" style="fill:none;stroke:black;stroke-width:12.32px;"/>
+    </g>
+    <g transform="matrix(1,0,0,1,172.071,720.472)">
+        <path d="M271.654,200.787L543.307,200.787" style="fill:none;stroke:black;stroke-width:12.5px;"/>
+    </g>
+    <g transform="matrix(1,0,0,1,172.071,909.472)">
+        <path d="M271.654,200.787L543.307,200.787" style="fill:none;stroke:black;stroke-width:12.5px;"/>
+    </g>
+    <g transform="matrix(1,0,0,1,236.22,814.961)">
+        <path d="M271.654,200.787L543.307,200.787" style="fill:none;stroke:black;stroke-width:12.5px;"/>
+    </g>
+    <g transform="matrix(1,0,0,1,372.047,726.378)">
+        <path d="M129.921,274.606C129.921,266.458 123.306,259.843 115.157,259.843L85.63,259.843C77.482,259.843 70.866,266.458 70.866,274.606L70.866,304.134C70.866,312.282 77.482,318.898 85.63,318.898L115.157,318.898C123.306,318.898 129.921,312.282 129.921,304.134L129.921,274.606Z" style="fill:rgb(0,255,62);stroke:black;stroke-width:12.5px;"/>
+    </g>
+    <g transform="matrix(1,0,0,1,496.874,643.701)">
+        <circle cx="253.937" cy="277.559" r="29.528" style="fill:rgb(100,0,255);stroke:black;stroke-width:12.5px;"/>
+    </g>
+    <g transform="matrix(6.12323e-17,1,-1,6.12323e-17,1857.24,348.449)">
+        <path d="M761.811,1074.8L791.339,1133.86L732.283,1133.86L761.811,1074.8Z" style="fill:rgb(196,8,4);stroke:black;stroke-width:12.5px;"/>
+    </g>
+    <g transform="matrix(1,0,0,1,-278.583,94.4139)">
+        <text x="311.472px" y="1374.12px" style="font-family:'Arial-BoldMT', 'Arial', sans-serif;font-weight:700;font-size:200px;">.Net@Home</text>
+    </g>
+    <g transform="matrix(1,0,0,1,200.904,508.126)">
+        <text x="194.812px" y="295.023px" style="font-family:'Arial-BoldMT', 'Arial', sans-serif;font-weight:700;font-size:200px;">KNX</text>
+    </g>
+</svg>

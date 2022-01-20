@@ -1,16 +1,32 @@
-# Tiveria.Home.Knx
-=============
+![Logo](./other/logo_title_small.png) 
 
-This little library provides basic KNX communication protocols support together with the bility to encode and deode KNX datapoints. It is designed to run in any .NET Core 2.0 environment and is running in my home project on a RasPi 3 with Raspian Linux.
 
+
+This little library provides basic KNX communication protocols support together with the bility to encode and deode KNX datapoints. It is designed to run in any .NET 6.0 environment and is running in my home project on a RasPi 3 with Raspian Linux.
+
+[![Build&Publish Packages](https://github.com/toolsfactory/Tiveria.Home.Knx/actions/workflows/publish-flow.yml/badge.svg)](https://github.com/toolsfactory/Tiveria.Home.Knx/actions/workflows/publish-flow.yml)
+
+Currently there are two packages available at NuGet:
+* [Tiveria.Home.Knx](https://www.nuget.org/packages/Tiveria.Home.Knx/)
+    * Knx basic types
+    * Knx cEMI frame and datafield types
+    * DPT types
+    * anything else that is media agnostic
+    * Interfaces for clients
+* [Tiveria.Home.Knx.IP](https://www.nuget.org/packages/Tiveria.Home.Knx.IP/)
+    * All KnxNetIP frame types supported
+    * Routing client implementation
+    * Tunneling client impementation
+    * Helpers
+
+ `./gradlew build`
 
 Supported Features
 --------
 * KNXnet/IP
     * Tunneling
-    * Routing (under development)
+    * Routing
     * Busmonitor
-    * Device Management (to be tested)
 * KNX IP
 * DPT encoding/decoding 
     * 1.* - Boolean (Switch, Alarm, ..)
