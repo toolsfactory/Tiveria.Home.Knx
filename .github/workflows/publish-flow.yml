@@ -1,4 +1,4 @@
-name: Publish Tiveria.Home.Knx Package
+name: Build & Publish Packages
 
 on: 
   workflow_dispatch:
