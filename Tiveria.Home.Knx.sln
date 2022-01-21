@@ -22,6 +22,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiveria.Home.Knx.IP", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiveria.Home.Knx.ObjectServer", "src\Tiveria.Home.Knx.ObjectServer\Tiveria.Home.Knx.ObjectServer.csproj", "{14EE05E1-652C-4DB7-AA82-B88B4F4189B0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{14DE20B1-7238-45B5-8432-A96D825E6447}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

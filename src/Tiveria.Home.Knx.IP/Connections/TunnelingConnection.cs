@@ -26,6 +26,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System.Net;
 using System.Net.Sockets;
+using Tiveria.Common.Extensions;
 using Tiveria.Home.Knx.Cemi;
 using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Home.Knx.IP.Frames;
@@ -103,7 +104,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             var linkedCTS = CancellationTokenSource.CreateLinkedTokenSource(timeoutCTS.Token, _cancellationTokenSource.Token);
             try
             {
-                var bytessent = await _udpClient.SendAsync(data, data.Length).WaitAsync(linkedCTS.Token);
+                var bytessent = await _udpClient.SendAsync(data, data.Length).WithCancellation(linkedCTS.Token);
                 if (bytessent == 0)
                 {
 //                    _logger.Error("SendFrameAsync: Zero bytes sent");
