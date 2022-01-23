@@ -78,11 +78,11 @@ namespace Tiveria.Home.Knx
         private async Task SendWriteRequestAsync(bool on)
         {
             var data = (byte)(on ? 0x01 : 0x00);
-            var apci = new Cemi.Apci(Cemi.ApciTypes.GroupValue_Write, new byte[] { data });
+            var tpdu = new Apci(ApciTypes.GroupValue_Write, new byte[] { data });
 //            var ctrl1 = new ControlField1(MessageCode.LDATA_IND, 0xbc);
             var ctrl1 = new ControlField1(MessageCode.LDATA_IND, priority: Priority.Normal, ack: false, repeat: false, confirm: ConfirmType.NoError);
             var ctrl2 = new ControlField2();
-            var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_IND, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 1), GroupAddress.Parse("4/0/0"), ctrl1, ctrl2, apci);
+            var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_IND, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 1), GroupAddress.Parse("4/0/0"), ctrl1, ctrl2, tpdu);
             await Con.SendCemiAsync(cemi);
         }
 
@@ -108,7 +108,7 @@ namespace Tiveria.Home.Knx
 
         private void Con_FrameReceived(object sender, FrameReceivedEventArgs e)
         {
-//            Console.WriteLine($"Frame received. Type: {e.Frame.ServiceType}");
+            //            Console.WriteLine($"Frame received. Type: {e.Frame.ServiceType}");
             if (e.Frame.FrameHeader.ServiceTypeIdentifier == ServiceTypeIdentifier.RoutingIndication)
             {
                 var req = ((RoutingIndicationFrame)e.Frame);
@@ -117,54 +117,58 @@ namespace Tiveria.Home.Knx
                 if (cemi.DestinationAddress.IsGroupAddress())
                 {
                     var addr = (cemi.DestinationAddress).ToString();
-                    if (cemi.Apci.Type == Cemi.ApciTypes.GroupValue_Write)
+                    if (cemi.Tpdu.IsApci)
                     {
-                        if (addr.EndsWith("/2/3") || addr.EndsWith("/2/23") || addr.EndsWith("/2/43") || addr.EndsWith("/2/63"))
+                        var apci = (Apci)cemi.Tpdu;
+                        if (apci.Type == ApciTypes.GroupValue_Write)
                         {
-                            var value = DPType5.DPT_SCALING.Decode(cemi.Apci.Data);
-                            Console.WriteLine($"++ {cemi.Apci.Type} for \"{addr}\": {value}%");
+                            if (addr.EndsWith("/2/3") || addr.EndsWith("/2/23") || addr.EndsWith("/2/43") || addr.EndsWith("/2/63"))
+                            {
+                                var value = DPType5.DPT_SCALING.Decode(apci.Data);
+                                Console.WriteLine($"++ {apci.Type} for \"{addr}\": {value}%");
+                            }
+                            else if (addr.EndsWith("/1/12") || addr.EndsWith("/1/22") || addr.EndsWith("/1/32") || addr.EndsWith("/1/42") || addr.EndsWith("/1/52"))
+                            {
+                                var value = DPType14.DPT_ELECTRIC_CURRENT.Decode(apci.Data);
+                                Console.WriteLine($"++ {apci.Type} for \"{addr}\": {value}A");
+                            }
+                            else if (addr.EndsWith("/47"))
+                            {
+                                var value = DPType7.DPT_TIMEPERIOD_HRS.Decode(apci.Data);
+                                Console.WriteLine($"++ {apci.Type} for \"{addr}\": {value}h");
+                            }
+                            else if (addr.EndsWith("5/0") || addr.EndsWith("/2/7") || addr.EndsWith("/2/9"))
+                            {
+                                var value = DPType9.DPT_TEMPERATURE.Decode(apci.Data);
+                                Console.WriteLine($"++ {apci.Type} for \"{addr}\": {value}°C");
+                            }
+                            else if (addr.EndsWith("0/7/0"))
+                            {
+                                var value = DPType11.DPT_DATE.Decode(apci.Data);
+                                Console.WriteLine($"++ {apci.Type} for \"{addr}\": {value}");
+                            }
+                            else if (addr.EndsWith("0/7/1"))
+                            {
+                                var value = DPType10.DPT_TIMEOFDAY.Decode(apci.Data);
+                                Console.WriteLine($"++ {apci.Type} for \"{addr}\": {value}");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"{apci.Type} for \"{addr}\" - ACPI DATA: {apci.Data.ToHex()}");
+                            }
                         }
-                        else if (addr.EndsWith("/1/12") || addr.EndsWith("/1/22") || addr.EndsWith("/1/32") || addr.EndsWith("/1/42") || addr.EndsWith("/1/52"))
+                        else if ((apci.Type == ApciTypes.GroupValue_Read) && addr.EndsWith("29/0/0"))
                         {
-                            var value = DPType14.DPT_ELECTRIC_CURRENT.Decode(cemi.Apci.Data);
-                            Console.WriteLine($"++ {cemi.Apci.Type} for \"{addr}\": {value}A");
+                            SendReadAnswerAsync();
                         }
-                        else if (addr.EndsWith("/47"))
+                        if (apci.Type == ApciTypes.GroupValue_Response)
                         {
-                            var value = DPType7.DPT_TIMEPERIOD_HRS.Decode(cemi.Apci.Data);
-                            Console.WriteLine($"++ {cemi.Apci.Type} for \"{addr}\": {value}h");
-                        }
-                        else if (addr.EndsWith("5/0") || addr.EndsWith("/2/7") || addr.EndsWith("/2/9"))
-                        {
-                            var value = DPType9.DPT_TEMPERATURE.Decode(cemi.Apci.Data);
-                            Console.WriteLine($"++ {cemi.Apci.Type} for \"{addr}\": {value}°C");
-                        }
-                        else if (addr.EndsWith("0/7/0"))
-                        {
-                            var value = DPType11.DPT_DATE.Decode(cemi.Apci.Data);
-                            Console.WriteLine($"++ {cemi.Apci.Type} for \"{addr}\": {value}");
-                        }
-                        else if (addr.EndsWith("0/7/1"))
-                        {
-                            var value = DPType10.DPT_TIMEOFDAY.Decode(cemi.Apci.Data);
-                            Console.WriteLine($"++ {cemi.Apci.Type} for \"{addr}\": {value}");
+                            Console.WriteLine($"--{apci.Type} for \"{addr}\" - ACPI DATA: {apci.Data.ToHex()}");
                         }
                         else
                         {
-                            Console.WriteLine($"{cemi.Apci.Type} for \"{addr}\" - ACPI DATA: {cemi.Apci.Data.ToHex()}");
+                            //Console.WriteLine($"{apci.Type} for \"{addr}\" - ACPI DATA: {apci.Data.ToHexString()} - Payload: {cemi.Payload.ToHexString()}");
                         }
-                    }
-                    else if ((cemi.Apci.Type == Cemi.ApciTypes.GroupValue_Read) && addr.EndsWith("29/0/0"))
-                    {
-                        SendReadAnswerAsync();   
-                    }
-                    if (cemi.Apci.Type == Cemi.ApciTypes.GroupValue_Response)
-                    {
-                        Console.WriteLine($"--{cemi.Apci.Type} for \"{addr}\" - ACPI DATA: {cemi.Apci.Data.ToHex()}");
-                    }
-                    else
-                    {
-                        //Console.WriteLine($"{cemi.Apci.Type} for \"{addr}\" - ACPI DATA: {cemi.Apci.Data.ToHexString()} - Payload: {cemi.Payload.ToHexString()}");
                     }
                 }
             }

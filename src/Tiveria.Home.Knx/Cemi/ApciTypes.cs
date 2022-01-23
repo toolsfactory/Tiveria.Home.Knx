@@ -26,6 +26,7 @@ namespace Tiveria.Home.Knx.Cemi
 {
     public enum ApciTypes : int
     {
+        None = -2,
         Unknown = -1,
 // 3.1 App Layer Services on Multicast
         GroupValue_Read = 0,                          // 0b0000         0  *

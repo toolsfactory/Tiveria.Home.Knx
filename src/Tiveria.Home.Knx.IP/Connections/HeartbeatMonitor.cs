@@ -106,7 +106,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             }
             else
             {
-//                _logger.Warn($"ConnectionStateResponse. ChannelId: {response.ChannelId}, Status: {response.Status}");
+                Console.WriteLine($"ConnectionStateResponse. ChannelId: {response.ChannelId}, Status: {response.Status}");
             }
         }
 

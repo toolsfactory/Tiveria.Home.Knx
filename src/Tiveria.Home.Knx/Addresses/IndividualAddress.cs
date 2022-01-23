@@ -70,7 +70,7 @@ namespace Tiveria.Home.Knx.Adresses
             }
             catch
             {
-                address = new IndividualAddress(0);
+                address = IndividualAddress.Empty();
                 return false;
             }
         }

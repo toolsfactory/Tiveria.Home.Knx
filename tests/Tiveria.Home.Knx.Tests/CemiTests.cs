@@ -80,7 +80,7 @@ namespace Tiveria.Home.Knx.Tests
             Assert.AreEqual(result.SourceAddress.ToString(), "1.1.205");
             Assert.AreEqual(((GroupAddress) result.DestinationAddress).ToString(), "6/1/47");
 
-            Assert.AreEqual(result.Apci.Size, 2);
+            Assert.AreEqual(result.Tpdu.Size, 2);
         }
 
         [Test]
@@ -110,7 +110,7 @@ namespace Tiveria.Home.Knx.Tests
             Assert.AreEqual(result.SourceAddress.ToString(), "1.1.205");
             Assert.AreEqual(((GroupAddress)result.DestinationAddress).ToString(), "6/1/47");
 
-            Assert.AreEqual(result.Apci.Size, 2);
+            Assert.AreEqual(result.Tpdu.Size, 2);
         }
 
         [Test]
@@ -127,6 +127,15 @@ namespace Tiveria.Home.Knx.Tests
             var result = new CemiLDataSerializer().Deserialize(data);
             Assert.AreEqual(12, result.Size);
         }
+
+        [Test]
+        public void Parse_Cemi06_ok()
+        {
+            var data = "29-00-bc-e0-11-a2-8d-00-03-00-80-0c-7e".Replace("-", "").ToByteArray();
+            var result = new CemiLDataSerializer().Deserialize(data);
+            Assert.AreEqual(13, result.Size);
+        }
+
         [Test]
         public void CreateCemi06_ok()
         {
@@ -143,3 +152,4 @@ namespace Tiveria.Home.Knx.Tests
         }
     }
 }
+//var request = "061004200017041300002900bce011a28d000300800c7e".ToByteArray();

@@ -22,6 +22,7 @@
     combination.
 */
 
+using System.Net;
 using System.Net.Sockets;
 using Tiveria.Common.Extensions;
 using Tiveria.Home.Knx.IP;
@@ -35,9 +36,9 @@ namespace Tiveria.Home.Knx
         private UdpClient _client;
         private readonly CancellationTokenSource _cancellationTokenSource;
 
-        public DescriptionRequestDemo(string ip, ushort port)
+        public DescriptionRequestDemo()
         {
-            _client = new UdpClient(ip, port);
+            _client = new UdpClient(new IPEndPoint(Program.GatewayIPAddress, Program.GatewayPort));
             _cancellationTokenSource = new CancellationTokenSource();
             Listen();
         }

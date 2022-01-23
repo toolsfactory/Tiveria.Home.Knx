@@ -96,7 +96,7 @@ namespace Tiveria.Home.Knx.Adresses
             }
             catch
             {
-                address = new GroupAddress(0);
+                address = GroupAddress.Empty();
                 return false;
             }
         }

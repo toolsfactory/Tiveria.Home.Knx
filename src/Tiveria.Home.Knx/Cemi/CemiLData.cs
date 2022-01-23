@@ -68,10 +68,10 @@ namespace Tiveria.Home.Knx.Cemi
         public IKnxAddress DestinationAddress { get; init; }
         public ControlField1 ControlField1 { get; init; }
         public ControlField2 ControlField2 { get; init; }
-        public Apci Apci { get; init; }
+        public ITpdu Tpdu { get; init; }
 
         public CemiLData(MessageCode messageCode, IReadOnlyList<AdditionalInformationField> additionalInfoFields, IndividualAddress srcAddress, IKnxAddress dstAddress, ControlField1 controlField1,
-            ControlField2 controlField2, Apci apci)
+            ControlField2 controlField2, ITpdu tpdu)
         {
             MessageCode = messageCode;
             AdditionalInfoFields = additionalInfoFields;
@@ -79,12 +79,12 @@ namespace Tiveria.Home.Knx.Cemi
             DestinationAddress = dstAddress;
             ControlField1 = controlField1;
             ControlField2 = controlField2;
-            Apci = apci;
+            Tpdu = tpdu;
 
             foreach(var item in additionalInfoFields)
                 AdditionalInfoLength += (byte)item.Size;
 
-            Size = 9 + AdditionalInfoLength + Apci.Size;
+            Size = 9 + AdditionalInfoLength + Tpdu.Size;
         }
 
         public override string ToString()
@@ -105,7 +105,7 @@ namespace Tiveria.Home.Knx.Cemi
                 }
             }
 
-            return $"CemiLData: MC: {MessageCode}, {fields}, Ctrl1_ {ControlField1}, Ctrl2_ {ControlField2}, Src:{SourceAddress}, Dst: {DestinationAddress}, Apci: {Apci}";
+            return $"CemiLData: MC: {MessageCode}, {fields}, Ctrl1_ {ControlField1}, Ctrl2_ {ControlField2}, Src:{SourceAddress}, Dst: {DestinationAddress}, Tpdu: {Tpdu}";
         }
     }
 }

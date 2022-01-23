@@ -23,12 +23,16 @@
 */
 
 using Spectre.Console;
+using System.Net;
 using Tiveria.Home.Knx.IP;
 
 namespace Tiveria.Home.Knx
 {
     public class Program
     {
+        public static IPAddress GatewayIPAddress = IPAddress.Parse("192.168.2.154");
+        public static ushort GatewayPort = 3671;
+
         static void Main(string[] args)
         {
             bool exit = false;
@@ -45,8 +49,9 @@ namespace Tiveria.Home.Knx
                   .Add("Build some structures", () => new StructureBuildDemo().RunAsync().Wait())
                   .Add("Tunneling Connection Tests", () => new TunnelingMonitor().RunAsync().Wait())
                   .Add("Routing Connection Tests", () => new RoutingMonitor().RunAsync().Wait())
-                  .Add("DescriptionReq sample", () => new DescriptionRequestDemo("192.168.2.154", 3671).SendDescriptionRequest())
+                  .Add("DescriptionReq sample", () => new DescriptionRequestDemo().SendDescriptionRequest())
                   .Add("Busmonitor", () => new BusmonitorDemo().RunAsync().Wait())
+                  .Add("DeviceManagement", () => new DeviceManagementDemo().RunAsync().Wait())
                   .Add("Exit", () => exit = true);
                 menu.Display();
             }

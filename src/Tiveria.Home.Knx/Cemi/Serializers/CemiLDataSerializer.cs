@@ -69,9 +69,9 @@ namespace Tiveria.Home.Knx.Cemi.Serializers
             var dstAddr = ReadDestinationAddress(reader, controlField2.DestinationAddressType == Adresses.AddressType.GroupAddress);
             var npduLength = reader.ReadByte();
             var data = reader.ReadBytes(npduLength + 1); // TPCI Octet not included in length field!
-            var apci = Apci.Parse(data);
+            var tpdu = Apci.Parse(data);
 
-            return new CemiLData(msgCode, additionalInfoFields, srcAddr, dstAddr, controlField1, controlField2, apci);
+            return new CemiLData(msgCode, additionalInfoFields, srcAddr, dstAddr, controlField1, controlField2, tpdu);
         }
 
         public override void Serialize(CemiLData cemiMessage, BigEndianBinaryWriter writer)
@@ -84,8 +84,8 @@ namespace Tiveria.Home.Knx.Cemi.Serializers
             writer.Write((byte)cemiMessage.ControlField2.RawData);
             cemiMessage.SourceAddress.Write(writer);
             cemiMessage.DestinationAddress.Write(writer);
-            writer.Write((byte)(cemiMessage.Apci.Size - 1)); // Apci structure includes TPCI and therefore Size is NPDULength+1
-            cemiMessage.Apci.Write(writer);
+            writer.Write((byte)(cemiMessage.Tpdu.Size - 1)); // Apci structure includes TPCI and therefore Size is NPDULength+1
+            cemiMessage.Tpdu.Write(writer);
         }
     }
 }

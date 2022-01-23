@@ -41,13 +41,10 @@ namespace Tiveria.Home.Knx
     {
         // replace the IP Address below with your specific router or tunnel interface IP Address.
         // Port should be correct assuming you have a standard setup
-        private static IPAddress GatewayIPAddress = IPAddress.Parse("192.168.2.150");
-        private static ushort GatewayPort = 3671;
-
         private IP.Connections.TunnelingConnection? Con;
 
         public async Task RunAsync()
-         {
+        {
 
             ConsoleKeyInfo cki;
             // Prevent example from ending if CTL+C is pressed.
@@ -55,12 +52,12 @@ namespace Tiveria.Home.Knx
             ConfigureLogging();
 
 
-            Con = new IP.Connections.TunnelingConnection(GatewayIPAddress, GatewayPort, GetLocalIPAddress(), 55555);
+            Con = new IP.Connections.TunnelingConnection(Program.GatewayIPAddress, Program.GatewayPort, GetLocalIPAddress(), 55555);
             Con.DataReceived += Con_DataReceived;
             Con.FrameReceived += Con_FrameReceived;
             Con.ConnectionStateChanged += Con_StateChanged;
             Console.WriteLine("Hello World!");
-           
+
             Con.ConnectAsync().Wait();
             do
             {
@@ -85,26 +82,26 @@ namespace Tiveria.Home.Knx
         private async Task SendWriteRequestAsync(bool on)
         {
             var data = (byte)(on ? 0x01 : 0x00);
-            var apci = new Cemi.Apci(Cemi.ApciTypes.GroupValue_Write, new byte[] { data });
+            var tpdu = new Cemi.Apci(Cemi.ApciTypes.GroupValue_Write, new byte[] { data });
             var ctrl1 = new ControlField1(MessageCode.LDATA_REQ);
             var ctrl2 = new ControlField2();
-            var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), GroupAddress.Parse("4/0/0"), ctrl1, ctrl2, apci);
+            var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), GroupAddress.Parse("4/0/0"), ctrl1, ctrl2, tpdu);
             await Con.SendCemiAsync(cemi, true);
         }
 
         private async Task SendReadRequestAsync()
         {
             Console.WriteLine("Sending read request to 22/7/0");
-//            var cemi = Cemi.CemiLData.CreateReadRequestCemi(new IndividualAddress(1, 1, 206), new GroupAddress(22, 7, 0));
-//            await Con.SendCemiFrameAsync(cemi, true);
+            //            var cemi = Cemi.CemiLData.CreateReadRequestCemi(new IndividualAddress(1, 1, 206), new GroupAddress(22, 7, 0));
+            //            await Con.SendCemiFrameAsync(cemi, true);
         }
 
         private async Task SendReadAnswerAsync()
         {
             Console.WriteLine("Sending read answer for 29/0/0");
             var data = DPType9.DPT_TEMPERATURE.Encode(12.3);
-//            var cemi = Cemi.CemiLData.CreateReadAnswerCemi(new IndividualAddress(1, 1, 206), new GroupAddress(29, 0, 0), data);
-//            await Con.SendCemiFrameAsync(cemi, true);
+            //            var cemi = Cemi.CemiLData.CreateReadAnswerCemi(new IndividualAddress(1, 1, 206), new GroupAddress(29, 0, 0), data);
+            //            await Con.SendCemiFrameAsync(cemi, true);
         }
 
         private void Con_StateChanged(object sender, ConnectionStateChangedEventArgs e)
@@ -114,7 +111,7 @@ namespace Tiveria.Home.Knx
 
         private void Con_FrameReceived(object sender, FrameReceivedEventArgs e)
         {
-//            Console.WriteLine($"Frame received. Type: {e.Frame.ServiceType}");
+            //            Console.WriteLine($"Frame received. Type: {e.Frame.ServiceType}");
             if (e.Frame.FrameHeader.ServiceTypeIdentifier == ServiceTypeIdentifier.TunnelingRequest)
             {
                 var req = ((TunnelingRequestFrame)e.Frame);
@@ -123,54 +120,58 @@ namespace Tiveria.Home.Knx
                 if (cemi.DestinationAddress.IsGroupAddress())
                 {
                     var addr = (cemi.DestinationAddress).ToString();
-                    if (cemi.Apci.Type == Cemi.ApciTypes.GroupValue_Write)
+                    if (cemi.Tpdu.IsApci)
                     {
-                        if (addr.EndsWith("/2/3") || addr.EndsWith("/2/23") || addr.EndsWith("/2/43") || addr.EndsWith("/2/63"))
+                        var apci = (Apci)cemi.Tpdu;
+                        if (apci.Type == Cemi.ApciTypes.GroupValue_Write)
                         {
-                            var value = DPType5.DPT_SCALING.Decode(cemi.Apci.Data);
-                            Console.WriteLine($"++ {cemi.Apci.Type} for \"{addr}\": {value}%");
+                            if (addr.EndsWith("/2/3") || addr.EndsWith("/2/23") || addr.EndsWith("/2/43") || addr.EndsWith("/2/63"))
+                            {
+                                var value = DPType5.DPT_SCALING.Decode(apci.Data);
+                                Console.WriteLine($"++ {apci.Type} for \"{addr}\": {value}%");
+                            }
+                            else if (addr.EndsWith("/1/12") || addr.EndsWith("/1/22") || addr.EndsWith("/1/32") || addr.EndsWith("/1/42") || addr.EndsWith("/1/52"))
+                            {
+                                var value = DPType14.DPT_ELECTRIC_CURRENT.Decode(apci.Data);
+                                Console.WriteLine($"++ {apci.Type} for \"{addr}\": {value}A");
+                            }
+                            else if (addr.EndsWith("/47"))
+                            {
+                                var value = DPType7.DPT_TIMEPERIOD_HRS.Decode(apci.Data);
+                                Console.WriteLine($"++ {apci.Type} for \"{addr}\": {value}h");
+                            }
+                            else if (addr.EndsWith("5/0") || addr.EndsWith("/2/7") || addr.EndsWith("/2/9"))
+                            {
+                                var value = DPType9.DPT_TEMPERATURE.Decode(apci.Data);
+                                Console.WriteLine($"++ {apci.Type} for \"{addr}\": {value}°C");
+                            }
+                            else if (addr.EndsWith("0/7/0"))
+                            {
+                                var value = DPType11.DPT_DATE.Decode(apci.Data);
+                                Console.WriteLine($"++ {apci.Type} for \"{addr}\": {value}");
+                            }
+                            else if (addr.EndsWith("0/7/1"))
+                            {
+                                var value = DPType10.DPT_TIMEOFDAY.Decode(apci.Data);
+                                Console.WriteLine($"++ {apci.Type} for \"{addr}\": {value}");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"{apci.Type} for \"{addr}\" - ACPI DATA: {apci.Data.ToHex()}");
+                            }
                         }
-                        else if (addr.EndsWith("/1/12") || addr.EndsWith("/1/22") || addr.EndsWith("/1/32") || addr.EndsWith("/1/42") || addr.EndsWith("/1/52"))
+                        else if ((apci.Type == Cemi.ApciTypes.GroupValue_Read) && addr.EndsWith("29/0/0"))
                         {
-                            var value = DPType14.DPT_ELECTRIC_CURRENT.Decode(cemi.Apci.Data);
-                            Console.WriteLine($"++ {cemi.Apci.Type} for \"{addr}\": {value}A");
+                            SendReadAnswerAsync();
                         }
-                        else if (addr.EndsWith("/47"))
+                        if (apci.Type == Cemi.ApciTypes.GroupValue_Response)
                         {
-                            var value = DPType7.DPT_TIMEPERIOD_HRS.Decode(cemi.Apci.Data);
-                            Console.WriteLine($"++ {cemi.Apci.Type} for \"{addr}\": {value}h");
-                        }
-                        else if (addr.EndsWith("5/0") || addr.EndsWith("/2/7") || addr.EndsWith("/2/9"))
-                        {
-                            var value = DPType9.DPT_TEMPERATURE.Decode(cemi.Apci.Data);
-                            Console.WriteLine($"++ {cemi.Apci.Type} for \"{addr}\": {value}°C");
-                        }
-                        else if (addr.EndsWith("0/7/0"))
-                        {
-                            var value = DPType11.DPT_DATE.Decode(cemi.Apci.Data);
-                            Console.WriteLine($"++ {cemi.Apci.Type} for \"{addr}\": {value}");
-                        }
-                        else if (addr.EndsWith("0/7/1"))
-                        {
-                            var value = DPType10.DPT_TIMEOFDAY.Decode(cemi.Apci.Data);
-                            Console.WriteLine($"++ {cemi.Apci.Type} for \"{addr}\": {value}");
+                            Console.WriteLine($"--{apci.Type} for \"{addr}\" - ACPI DATA: {apci.Data.ToHex()}");
                         }
                         else
                         {
-                            Console.WriteLine($"{cemi.Apci.Type} for \"{addr}\" - ACPI DATA: {cemi.Apci.Data.ToHex()}");
+                            //Console.WriteLine($"{apci.Type} for \"{addr}\" - ACPI DATA: {apci.Data.ToHexString()} - Payload: {cemi.Payload.ToHexString()}");
                         }
-                    }
-                    else if ((cemi.Apci.Type == Cemi.ApciTypes.GroupValue_Read) && addr.EndsWith("29/0/0"))
-                    {
-                        SendReadAnswerAsync();   
-                    }
-                    if (cemi.Apci.Type == Cemi.ApciTypes.GroupValue_Response)
-                    {
-                        Console.WriteLine($"--{cemi.Apci.Type} for \"{addr}\" - ACPI DATA: {cemi.Apci.Data.ToHex()}");
-                    }
-                    else
-                    {
-                        //Console.WriteLine($"{cemi.Apci.Type} for \"{addr}\" - ACPI DATA: {cemi.Apci.Data.ToHexString()} - Payload: {cemi.Payload.ToHexString()}");
                     }
                 }
             }
@@ -178,7 +179,7 @@ namespace Tiveria.Home.Knx
 
         private void Con_DataReceived(object sender, DataReceivedArgs e)
         {
-//            Console.WriteLine(e.Data.ToHexString());
+            //            Console.WriteLine(e.Data.ToHexString());
         }
 
         public IPAddress GetLocalIPAddress()
@@ -222,7 +223,7 @@ namespace Tiveria.Home.Knx
 
             // Step 5. Activate the configuration
             LogManager.Configuration = config;
-//            Tiveria.Home.Knx.Utils.LogFactory.LogManager = new NLogLogManager();
+            //            Tiveria.Home.Knx.Utils.LogFactory.LogManager = new NLogLogManager();
 
         }
     }

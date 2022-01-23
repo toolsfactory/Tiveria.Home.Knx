@@ -37,10 +37,10 @@ namespace Tiveria.Home.Knx
         private ushort _gatewayPort;
 
         private IP.Connections.TunnelingConnection? Con;
-        public BusmonitorDemo(string ip = "192.168.2.154", ushort port = 3671)
+        public BusmonitorDemo()
         {
-            _gatewayIPAddress = IPAddress.Parse(ip);
-            _gatewayPort = port;
+            _gatewayIPAddress = Program.GatewayIPAddress;
+            _gatewayPort = Program.GatewayPort; ;
         }
         // replace the IP Address below with your specific router or tunnel interface IP Address.
         // Port should be correct assuming you have a standard setup

@@ -1,6 +1,8 @@
 ﻿using System.Net;
 using NUnit.Framework;
 using Tiveria.Common.Extensions;
+using Tiveria.Home.Knx.IP;
+using Tiveria.Home.Knx.IP.Structures;
 
 namespace Tiveria.Home.Knx.Tests.IP
 {
@@ -16,6 +18,19 @@ namespace Tiveria.Home.Knx.Tests.IP
             var data = tunnelingrequestbody.ToBytes();
             Assert.AreEqual(data, reference);
 */
+        }
+
+        [Test]
+        public void TestMethod2()
+        {
+            var request = "061004200017041300002900bce011a28d000300800c7e".ToByteArray();
+            var reader = new Common.IO.BigEndianBinaryReader(request);
+            var header = FrameHeader.Parse(reader);
+            var parser = KnxNetIPFrameSerializerFactory.Instance.Create(header.ServiceTypeIdentifier);
+            reader.Seek(0);
+            var frame = parser.Deserialize(reader);
+
+            Assert.IsNotNull(frame);
         }
     }
 }
