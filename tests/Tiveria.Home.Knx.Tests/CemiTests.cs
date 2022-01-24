@@ -7,7 +7,7 @@ using Tiveria.Common.IO;
 using Tiveria.Home.Knx.Datapoint;
 using Tiveria.Home.Knx.Adresses;
 using Tiveria.Home.Knx.Cemi.Serializers;
-using Tiveria.Home.Knx.IP.Frames;
+using Tiveria.Home.Knx.IP.Services;
 using Tiveria.Home.Knx.IP;
 
 namespace Tiveria.Home.Knx.Tests
@@ -134,21 +134,6 @@ namespace Tiveria.Home.Knx.Tests
             var data = "29-00-bc-e0-11-a2-8d-00-03-00-80-0c-7e".Replace("-", "").ToByteArray();
             var result = new CemiLDataSerializer().Deserialize(data);
             Assert.AreEqual(13, result.Size);
-        }
-
-        [Test]
-        public void CreateCemi06_ok()
-        {
-            var apci = new Cemi.Apci(Cemi.ApciTypes.GroupValue_Write, new byte[] { 0x00 });
-            var ctrl1 = new ControlField1(MessageCode.LDATA_REQ);
-            var ctrl2 = new ControlField2();
-            var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), GroupAddress.Parse("4/0/0"), ctrl1, ctrl2, apci);
-            var frame = new RoutingIndicationFrame(cemi);
-
-            var serializer = KnxNetIPFrameSerializerFactory.Instance.Create(frame.ServiceTypeIdentifier);
-            var data = serializer.Serialize(frame);
-            Assert.IsNotNull(data);
-            Assert.AreEqual(17, data.Length);
         }
     }
 }

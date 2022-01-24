@@ -26,7 +26,7 @@ using System.Net;
 using Tiveria.Home.Knx.Adresses;
 using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Home.Knx.IP.Structures;
-using Tiveria.Home.Knx.IP.Frames;
+using Tiveria.Home.Knx.IP.Services;
 using Tiveria.Home.Knx.IP;
 using Tiveria.Home.Knx.Cemi;
 using Tiveria.Home.Knx.Cemi.Serializers;
@@ -50,12 +50,12 @@ namespace Tiveria.Home.Knx
                 Console.WriteLine("CEMI: " + BitConverter.ToString(cemibytes));
                 var con = new IP.Structures.ConnectionHeader(11, 22);
                 Console.WriteLine("HEAD: " + BitConverter.ToString(con.ToBytes()));
-                var frame = new TunnelingRequestFrame(con, cemi);
-                var data = KnxNetIPFrameSerializerFactory.
-                    Instance.Create(frame.ServiceTypeIdentifier).Serialize(frame);
+                var service = new TunnelingRequestService(con, cemi);
+                var frame = new KnxNetIPFrame(service);
+                var data = frame.ToBytes();
                 Console.WriteLine("Frame:" + BitConverter.ToString(data));
 
-                var cf = new ConnectionRequestFrame(
+                var cf = new ConnectionRequestService(
                     new Hpai(HPAIEndpointType.IPV4_UDP, IPAddress.Parse("192.168.2.1"), 12233),
                     new Hpai(HPAIEndpointType.IPV4_UDP, IPAddress.Parse("192.168.2.1"), 12233),
                     new CRITunnel(TunnelingLayer.TUNNEL_LINKLAYER));

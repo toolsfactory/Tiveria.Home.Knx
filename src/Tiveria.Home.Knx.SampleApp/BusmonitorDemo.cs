@@ -27,7 +27,7 @@ using System.Net.Sockets;
 using Tiveria.Home.Knx.Cemi;
 using Tiveria.Home.Knx.IP;
 using Tiveria.Home.Knx.IP.Enums;
-using Tiveria.Home.Knx.IP.Frames;
+using Tiveria.Home.Knx.IP.Services;
 
 namespace Tiveria.Home.Knx
 {
@@ -79,7 +79,7 @@ namespace Tiveria.Home.Knx
             //            Console.WriteLine($"Frame received. Type: {e.Frame.ServiceType}");
             if (e.Frame.FrameHeader.ServiceTypeIdentifier == ServiceTypeIdentifier.TunnelingRequest)
             {
-                var req = ((TunnelingRequestFrame)e.Frame);
+                var req = ((TunnelingRequestService)e.Frame);
                 //var cemi = (CemiLData)req.CemiMessage;
             }
         }

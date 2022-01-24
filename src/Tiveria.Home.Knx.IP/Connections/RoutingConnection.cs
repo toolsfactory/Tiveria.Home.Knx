@@ -26,7 +26,7 @@ using System.Net;
 using System.Net.Sockets;
 using Tiveria.Home.Knx.Cemi;
 using Tiveria.Home.Knx.IP.Enums;
-using Tiveria.Home.Knx.IP.Frames;
+using Tiveria.Home.Knx.IP.Services;
 
 namespace Tiveria.Home.Knx.IP.Connections
 {
@@ -96,13 +96,13 @@ namespace Tiveria.Home.Knx.IP.Connections
         }
 
         /// <inheritdoc/>
-        public async override Task<bool> SendAsync(IKnxNetIPFrame frame)
+        public async override Task<bool> SendAsync(IKnxNetIPService service)
         {
             if (ConnectionState != ConnectionState.Open)
                 return false;
 
-            var serializer = KnxNetIPFrameSerializerFactory.Instance.Create(frame.ServiceTypeIdentifier);
-            var data = serializer.Serialize(frame);
+            var frame = new KnxNetIPFrame(service);
+            var data = frame.ToBytes();
             try
             {
                 var bytessent = await _udpClient.SendAsync(data, data.Length, RemoteEndpoint);
@@ -125,7 +125,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         /// <inheritdoc/>
         public async override Task<bool> SendCemiAsync(ICemiMessage message)
         {
-            var frame = new RoutingIndicationFrame(message);
+            var frame = new RoutingIndicationService(message);
             return await SendAsync(frame);
         }
         #endregion

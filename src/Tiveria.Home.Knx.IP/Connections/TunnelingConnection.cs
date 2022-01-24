@@ -29,7 +29,7 @@ using System.Net.Sockets;
 using Tiveria.Common.Extensions;
 using Tiveria.Home.Knx.Cemi;
 using Tiveria.Home.Knx.IP.Enums;
-using Tiveria.Home.Knx.IP.Frames;
+using Tiveria.Home.Knx.IP.Services;
 using Tiveria.Home.Knx.IP.Structures;
 
 namespace Tiveria.Home.Knx.IP.Connections
@@ -89,17 +89,17 @@ namespace Tiveria.Home.Knx.IP.Connections
 
         #region public methods
         /// <summary>
-        /// Send a generic KnxNetIPFrame (potentially raw payload)
+        /// Send a generic IKnxNetIPService (potentially raw payload)
         /// </summary>
         /// <param name="frame">The frame to send</param>
         /// <returns>true if the frame was sent successfully, otherise false</returns>
-        public override async Task<bool> SendAsync(IKnxNetIPFrame frame)
+        public override async Task<bool> SendAsync(IKnxNetIPService service)
         {
             if (ConnectionState != ConnectionState.Open)
                 return false;
 
-            var serializer = KnxNetIPFrameSerializerFactory.Instance.Create(frame.ServiceTypeIdentifier);
-            var data = serializer.Serialize(frame);
+            var frame = new KnxNetIPFrame(service);
+            var data = frame.ToBytes();
             var timeoutCTS = new CancellationTokenSource(_config.SendTimeout);
             var linkedCTS = CancellationTokenSource.CreateLinkedTokenSource(timeoutCTS.Token, _cancellationTokenSource.Token);
             try
@@ -140,11 +140,11 @@ namespace Tiveria.Home.Knx.IP.Connections
         public async Task<bool> SendCemiAsync(Cemi.ICemiMessage cemi, bool blocking = true)
         {
             var conheader = new ConnectionHeader(_channelId, SndSeqCounter);
-            var frame = new TunnelingRequestFrame(conheader, cemi);
+            var service = new TunnelingRequestService(conheader, cemi);
             if (blocking)
-                return await DoSendCemiBlockingAsync(frame);
+                return await DoSendServiceBlockingAsync(service);
             else
-                return await SendAsync(frame);
+                return await SendAsync(service);
         }
         #endregion
 
@@ -166,10 +166,9 @@ namespace Tiveria.Home.Knx.IP.Connections
         #endregion
 
         #region private implementations
-        private Task<bool> DoSendCemiBlockingAsync(IKnxNetIPFrame frame)
+        private Task<bool> DoSendServiceBlockingAsync(IKnxNetIPService service)
         {
-            var serializer = KnxNetIPFrameSerializerFactory.Instance.Create(frame.ServiceTypeIdentifier);
-            var data = serializer.Serialize(frame);
+            var data = new KnxNetIPFrame(service).ToBytes();
 
             return Task.Run(() =>
             {
@@ -216,9 +215,9 @@ namespace Tiveria.Home.Knx.IP.Connections
             InternalCloseAsync("Ack not received", false).Wait();
         }
 
-        private TunnelingRequestFrame CreateTunnelingRequestFrameFromCemi(Cemi.CemiLData cemi)
+        private TunnelingRequestService CreateTunnelingRequestFrameFromCemi(Cemi.CemiLData cemi)
         {
-            var frame = new TunnelingRequestFrame(new Structures.ConnectionHeader(_channelId, SndSeqCounter), cemi);
+            var frame = new TunnelingRequestService(new Structures.ConnectionHeader(_channelId, SndSeqCounter), cemi);
             return frame;
         }
 
@@ -251,11 +250,10 @@ namespace Tiveria.Home.Knx.IP.Connections
 
         private byte[] CreateDisconnectFrame()
         {
-            var hpai = new Structures.Hpai(Enums.HPAIEndpointType.IPV4_UDP, _localEndpoint.Address, (ushort)_localEndpoint.Port);
-            var frame = new DisconnectRequestFrame(_channelId, hpai);
-            var data = KnxNetIPFrameSerializerFactory.
-                        Instance.Create(frame.ServiceTypeIdentifier).Serialize(frame);
-            return data;
+            var hpai = new Hpai(Enums.HPAIEndpointType.IPV4_UDP, _localEndpoint.Address, (ushort)_localEndpoint.Port);
+            var service = new DisconnectRequestService(_channelId, hpai);
+            var frame = new KnxNetIPFrame(service);
+            return frame.ToBytes();
         }
 
         private Task SendDisconnectRequestAsync()
@@ -314,10 +312,9 @@ namespace Tiveria.Home.Knx.IP.Connections
         {
             var cri = new CRITunnel(_config.UseBusMonitorMode ? TunnelingLayer.TUNNEL_BUSMONITOR : TunnelingLayer.TUNNEL_LINKLAYER);
             var hpai = new Structures.Hpai(Enums.HPAIEndpointType.IPV4_UDP, _localEndpoint.Address, (ushort)_localEndpoint.Port);
-            var frame = new ConnectionRequestFrame(hpai, hpai, cri);
-            var data  = KnxNetIPFrameSerializerFactory.
-                Instance.Create(frame.ServiceTypeIdentifier).Serialize(frame);
-            return data;
+            var service = new ConnectionRequestService(hpai, hpai, cri);
+            var frame = new KnxNetIPFrame(service);
+            return frame.ToBytes();
         }
         #endregion
 
@@ -327,12 +324,12 @@ namespace Tiveria.Home.Knx.IP.Connections
         /// </summary>
         /// <param name="frame">The full KNXNetIP Frame</param>
         /// <param name="remoteEndpoint">The remote endpoint that sent the frame</param>
-        private void HandleConnectResponse(ConnectionResponseFrame response, IPEndPoint remoteEndpoint)
+        private void HandleConnectResponse(ConnectionResponseService response, IPEndPoint remoteEndpoint)
         {
             VerifyConnectionResponse(response, remoteEndpoint);
         }
 
-        private bool VerifyConnectionResponse(ConnectionResponseFrame connectionResponse, IPEndPoint remoteEndpoint)
+        private bool VerifyConnectionResponse(ConnectionResponseService connectionResponse, IPEndPoint remoteEndpoint)
         {
             if (connectionResponse.Status == ErrorCodes.NoError)
             {
@@ -403,11 +400,11 @@ namespace Tiveria.Home.Knx.IP.Connections
         #endregion
 
         #region handling disconnect request
-        private void HandleDisconnectRequest(DisconnectRequestFrame request)
+        private void HandleDisconnectRequest(DisconnectRequestService request)
         {
-            var frame = new DisconnectResponseFrame(request.ChannelId);
-            var data = KnxNetIPFrameSerializerFactory.
-                Instance.Create(frame.ServiceTypeIdentifier).Serialize(frame);
+            var service = new DisconnectResponseService(request.ChannelId);
+            var frame = new KnxNetIPFrame(service);
+            var data = frame.ToBytes();
             _udpClient.Send(data, data.Length, _remoteDataEndpoint);
 
             InternalCloseAsync("External request received.", true);
@@ -416,7 +413,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         #endregion
 
         #region handling disconnect response
-        private void HandleDisconnectResponse(DisconnectResponseFrame response)
+        private void HandleDisconnectResponse(DisconnectResponseService response)
         {
             if (response.Status != ErrorCodes.NoError)
             { }
@@ -426,15 +423,15 @@ namespace Tiveria.Home.Knx.IP.Connections
         #endregion
 
         #region handling tunneling requests
-        private void HandleTunnelingRequest(TunnelingRequestFrame request)
+        private void HandleTunnelingRequest(TunnelingRequestService request)
         {
             var seq = request.ConnectionHeader.SequenceCounter;
             if (!ValidateReqSequenceCounter(seq))
                 return;
 
-            var frame = new TunnelingAcknowledgeFrame(request.ConnectionHeader);
-            var data = KnxNetIPFrameSerializerFactory.
-                Instance.Create(frame.ServiceTypeIdentifier).Serialize(frame);
+            var service = new TunnelingAcknowledgeService(request.ConnectionHeader);
+            var frame = new KnxNetIPFrame(service);
+            var data = frame.ToBytes();
             _udpClient.Send(data, data.Length, _remoteDataEndpoint);
         }
 
@@ -457,7 +454,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             return (rcvSeq == expSeq) || (rcvSeq == ++expSeq);
         }
 
-        private void HandleTunnelingAck(TunnelingAcknowledgeFrame serviceType)
+        private void HandleTunnelingAck(TunnelingAcknowledgeService serviceType)
         {
             if (_ackState != AckState.Pending)
                 return;
@@ -472,7 +469,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         #endregion
 
         #region handling ConnectionState response
-        private void HandleConnectionStateResponse(ConnectionStateResponseFrame response)
+        private void HandleConnectionStateResponse(ConnectionStateResponseService response)
         {
             if (_heartbeatMonitor != null)
                 _heartbeatMonitor.HandleResponse(response);
@@ -499,22 +496,22 @@ namespace Tiveria.Home.Knx.IP.Connections
             switch (frame.FrameHeader.ServiceTypeIdentifier)
             {
                 case ServiceTypeIdentifier.ConnectResponse:
-                    HandleConnectResponse((ConnectionResponseFrame)frame, source);
+                    HandleConnectResponse((ConnectionResponseService)frame.Service, source);
                     break;
                 case ServiceTypeIdentifier.DisconnectRequest:
-                    HandleDisconnectRequest((DisconnectRequestFrame)frame);
+                    HandleDisconnectRequest((DisconnectRequestService)frame.Service);
                     break;
                 case ServiceTypeIdentifier.DisconnectResponse:
-                    HandleDisconnectResponse((DisconnectResponseFrame)frame);
+                    HandleDisconnectResponse((DisconnectResponseService)frame.Service);
                     break;
                 case ServiceTypeIdentifier.TunnelingRequest:
-                    HandleTunnelingRequest((TunnelingRequestFrame)frame);
+                    HandleTunnelingRequest((TunnelingRequestService)frame.Service);
                     break;
                 case ServiceTypeIdentifier.TunnelingAcknowledge:
-                    HandleTunnelingAck((TunnelingAcknowledgeFrame)frame);
+                    HandleTunnelingAck((TunnelingAcknowledgeService)frame.Service);
                     break;
                 case ServiceTypeIdentifier.ConnectionStateResponse:
-                    HandleConnectionStateResponse((ConnectionStateResponseFrame)frame);
+                    HandleConnectionStateResponse((ConnectionStateResponseService)frame.Service);
                     break;
                     /*
                 case ServiceTypeIdentifier.UNKNOWN:

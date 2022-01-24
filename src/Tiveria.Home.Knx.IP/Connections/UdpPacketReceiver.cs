@@ -101,21 +101,12 @@ namespace Tiveria.Home.Knx.IP.Connections
 
         private void TryParseKnxFrame(IPEndPoint remoteEndPoint,IPEndPoint receiver, byte[] buffer)
         {
-            IKnxNetIPFrame? frame = null;
-            try
+            if (!KnxNetIPFrame.TryParse(buffer, out var frame))
             {
-                var reader = new Common.IO.BigEndianBinaryReader(buffer);
-                var header = FrameHeader.Parse(reader);
-                var parser = KnxNetIPFrameSerializerFactory.Instance.Create(header.ServiceTypeIdentifier);
-                reader.Seek(0);
-                frame = parser.Deserialize(reader);
-            }
-            catch (Exception e)
-            {
-//                _logger.Warn($"Invalid frame received {BitConverter.ToString(buffer)}", e);
+                // ToDo: Add errorhandling for frames that could not be parsed
                 return;
             }
-            OnKnxFrameReceived(remoteEndPoint, receiver, frame);
+            OnKnxFrameReceived(remoteEndPoint, receiver, frame!);
         }
     }
 }

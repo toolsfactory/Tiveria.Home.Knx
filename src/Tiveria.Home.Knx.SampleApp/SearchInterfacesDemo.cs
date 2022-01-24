@@ -23,7 +23,7 @@
 */
 
 using Tiveria.Home.Knx.IP;
-using Tiveria.Home.Knx.IP.Frames;
+using Tiveria.Home.Knx.IP.Services;
 using Tiveria.Home.Knx.IP.Connections;
 using Spectre.Console;
 

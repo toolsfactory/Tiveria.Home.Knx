@@ -26,8 +26,7 @@ namespace Tiveria.Home.Knx.Tests.IP
         public void ParseIpFrame()
         {
             var data = "0620F080001504000000F006000100010001030101".ToByteArray();
-            var serializer = KnxNetIPFrameSerializerFactory.Instance.Create(ServiceTypeIdentifier.Unknown);
-            var frame = serializer.Deserialize(data);
+            var frame = KnxNetIPFrame.Parse(data);
             Assert.AreEqual(ServiceTypeIdentifier.ObjectServer, frame.FrameHeader.ServiceTypeIdentifier);
             Assert.AreEqual(0xf080, frame.FrameHeader.ServiceTypeIdentifierRaw);
         }

@@ -113,6 +113,34 @@ namespace Tiveria.Home.Knx.IP.Connections
 
         #endregion
 
+        #region public methods
+        /// <summary>
+        /// Establish a connection to the remote endpoint
+        /// </summary>
+        /// <returns>true in case connection was established, otherwise false</returns>
+        public abstract Task<bool> ConnectAsync();
+
+        /// <summary>
+        /// Shutdown the current connection
+        /// </summary>
+        /// <returns></returns>
+        public abstract Task DisconnectAsync();
+
+        /// <summary>
+        /// Send an <see cref="IKnxNetIPFrame"/> via the IP connection to the remote endpoint
+        /// </summary>
+        /// <param name="frame">The frame to send</param>
+        /// <returns>true in case the frame was sucessfully sent, otherwise false</returns>
+        public abstract Task<bool> SendAsync(IKnxNetIPService service);
+
+        /// <summary>
+        /// Send a Cemi frame to the Knx infrastructure
+        /// </summary>
+        /// <param name="message">The cemi message to send</param>
+        /// <returns>true in case the message was sucessfully sent, otherwise false</returns>
+        public abstract Task<bool> SendCemiAsync(ICemiMessage message);
+        #endregion
+
         #region private members
         //        protected readonly ILogger _logger;
         protected byte _channelId;
@@ -220,34 +248,6 @@ namespace Tiveria.Home.Knx.IP.Connections
         #endregion
 
         protected abstract string GetConnectionName();
-        #endregion
-
-        #region public methods
-        /// <summary>
-        /// Establish a connection to the remote endpoint
-        /// </summary>
-        /// <returns>true in case connection was established, otherwise false</returns>
-        public abstract Task<bool> ConnectAsync();
-
-        /// <summary>
-        /// Shutdown the current connection
-        /// </summary>
-        /// <returns></returns>
-        public abstract Task DisconnectAsync();
-
-        /// <summary>
-        /// Send an <see cref="IKnxNetIPFrame"/> via the IP connection to the remote endpoint
-        /// </summary>
-        /// <param name="frame">The frame to send</param>
-        /// <returns>true in case the frame was sucessfully sent, otherwise false</returns>
-        public abstract Task<bool> SendAsync(IKnxNetIPFrame frame);
-
-        /// <summary>
-        /// Send a Cemi frame to the Knx infrastructure
-        /// </summary>
-        /// <param name="message">The cemi message to send</param>
-        /// <returns>true in case the message was sucessfully sent, otherwise false</returns>
-        public abstract Task<bool> SendCemiAsync(ICemiMessage message);
         #endregion
     }
 }

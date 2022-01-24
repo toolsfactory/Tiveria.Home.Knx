@@ -59,10 +59,6 @@ namespace Tiveria.Home.Knx.IP.Structures
         #endregion
 
         #region Constructors
-        public FrameHeader(ServiceTypeIdentifier servicetypeidentifier, int bodyLength)
-            : this(KnxNetIPVersion.Version10, (ushort)servicetypeidentifier, bodyLength)
-        { }
-
         public FrameHeader(KnxNetIPVersion version, ushort servicetypeidentifierRaw, int bodyLength)
         {
             if (!KnxNetIPVersion.IsSupportedVersion(version) && ThrowExceptionOnUnknownVersion)
@@ -79,6 +75,21 @@ namespace Tiveria.Home.Knx.IP.Structures
             ServiceTypeIdentifierRaw = servicetypeidentifierRaw;
         }
 
+        public FrameHeader(KnxNetIPVersion version, ServiceTypeIdentifier servicetypeidentifier, int bodyLength)
+            : this(version, (ushort)servicetypeidentifier, bodyLength)
+        { }
+
+        public FrameHeader(ServiceTypeIdentifier servicetypeidentifier, int bodyLength)
+            : this(KnxNetIPVersion.DefaultVersion, (ushort)servicetypeidentifier, bodyLength)
+        { }
+
+        public FrameHeader(IKnxNetIPService service)
+            : this(KnxNetIPVersion.DefaultVersion, (ushort)service.ServiceTypeIdentifier, service.Size)
+        { }
+
+        public FrameHeader(KnxNetIPVersion version, IKnxNetIPService service)
+            : this(version, (ushort)service.ServiceTypeIdentifier, service.Size)
+        { }
         #endregion
 
         #region Public Methods
@@ -111,10 +122,37 @@ namespace Tiveria.Home.Knx.IP.Structures
             if (totalLength - headersize > reader.Available)
                 throw BufferSizeException.TooSmall("Buffer<Header|TotalLength");
 
-            return new FrameHeader(version, serviceTypeIdRaw, totalLength - headersize);
+            return new FrameHeader(version!, serviceTypeIdRaw, totalLength - headersize);
         }
 
+        public static bool TryParse(BigEndianBinaryReader reader, out FrameHeader? frameHeader)
+        {
+            try
+            {
+                frameHeader = Parse(reader);
+                return true;
+            }
+            catch
+            {
+                frameHeader = null;
+                return false;
+            }
+        }
 
+        public static bool TryParse(byte[] buffer, out FrameHeader? frameHeader)
+        {
+            try
+            {
+                var reader = new BigEndianBinaryReader(buffer);
+                frameHeader = Parse(reader);
+                return true;
+            }
+            catch
+            {
+                frameHeader = null;
+                return false;
+            }
+        }
         /// <summary>
         /// Performs basic validation if the provided buffer starts with a correct KnxNetIP Header.
         /// </summary>

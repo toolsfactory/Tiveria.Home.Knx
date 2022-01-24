@@ -26,7 +26,7 @@ using System.Net;
 using System.Net.Sockets;
 using Tiveria.Common.Extensions;
 using Tiveria.Home.Knx.IP;
-using Tiveria.Home.Knx.IP.Frames;
+using Tiveria.Home.Knx.IP.Services;
 using Tiveria.Home.Knx.IP.Structures;
 
 namespace Tiveria.Home.Knx
@@ -45,8 +45,9 @@ namespace Tiveria.Home.Knx
 
         public void SendDescriptionRequest()
         {
-            var frame = new DescriptionRequestFrame(new Hpai(IP.Enums.HPAIEndpointType.IPV4_UDP, System.Net.IPAddress.Parse("0.0.0.0"), 0));
-            var data = KnxNetIPFrameSerializerFactory.Instance.Create(frame.ServiceTypeIdentifier).Serialize(frame);
+            var service = new DescriptionRequestService(new Hpai(IP.Enums.HPAIEndpointType.IPV4_UDP, System.Net.IPAddress.Parse("0.0.0.0"), 0));
+            var frame = new KnxNetIPFrame(service);
+            var data = frame.ToBytes();
             _client.Send(data, data.Length);
         }
 
@@ -71,21 +72,11 @@ namespace Tiveria.Home.Knx
 
         private void HandleData(byte[] buffer)
         {
-            try
+            var ok = KnxNetIPFrame.TryParse(buffer, out var frame);
+            if (ok && frame!.Service is DescriptionResponseService)
             {
-                var reader = new Common.IO.BigEndianBinaryReader(buffer);
-                var header = FrameHeader.Parse(reader);
-                Console.WriteLine(header);
-                var parser = KnxNetIPFrameSerializerFactory.Instance.Create(header.ServiceTypeIdentifier);
-                reader.Seek(0);
-                var frame = parser.Deserialize(reader);
-                Console.WriteLine(frame.ToString());
-            }
-            catch (Exceptions.BufferException be)
-            {
-            }
-            catch (ArgumentException ae)
-            {
+                var descr = (DescriptionResponseService)frame!.Service;
+                Console.WriteLine(descr);
             }
         }
     }

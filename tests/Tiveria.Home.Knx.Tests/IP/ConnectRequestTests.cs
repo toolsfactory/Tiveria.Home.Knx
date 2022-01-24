@@ -24,11 +24,7 @@ namespace Tiveria.Home.Knx.Tests.IP
         public void TestMethod2()
         {
             var request = "061004200017041300002900bce011a28d000300800c7e".ToByteArray();
-            var reader = new Common.IO.BigEndianBinaryReader(request);
-            var header = FrameHeader.Parse(reader);
-            var parser = KnxNetIPFrameSerializerFactory.Instance.Create(header.ServiceTypeIdentifier);
-            reader.Seek(0);
-            var frame = parser.Deserialize(reader);
+            var frame = KnxNetIPFrame.Parse(request);
 
             Assert.IsNotNull(frame);
         }

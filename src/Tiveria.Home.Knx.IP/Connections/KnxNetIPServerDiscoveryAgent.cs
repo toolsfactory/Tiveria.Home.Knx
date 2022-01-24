@@ -26,8 +26,8 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using Tiveria.Home.Knx.IP.Enums;
-using Tiveria.Home.Knx.IP.Frames;
-using Tiveria.Home.Knx.IP.Frames.Serializers;
+using Tiveria.Home.Knx.IP.Services;
+using Tiveria.Home.Knx.IP.Services.Serializers;
 using Tiveria.Home.Knx.IP.Structures;
 
 namespace Tiveria.Home.Knx.IP.Connections
@@ -59,8 +59,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         public Task<bool> DiscoverAsync(int timeoutms = 1000)
         {
             return InternalDiscoverAsync(ipendpoint => {
-                var frame = new SearchRequestFrame(new Hpai(HPAIEndpointType.IPV4_UDP, ipendpoint.Address, (ushort)ipendpoint.Port));
-                return KnxNetIPFrameSerializerFactory.Instance.Create(frame.ServiceTypeIdentifier).Serialize(frame);
+                return new SearchRequestService(new Hpai(HPAIEndpointType.IPV4_UDP, ipendpoint.Address, (ushort)ipendpoint.Port));
             }, timeoutms);
         }
 
@@ -74,8 +73,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         {
             return InternalDiscoverAsync(ipendpoint =>
             {
-                var frame = new ExtendedSearchRequestFrame(new Hpai(HPAIEndpointType.IPV4_UDP, ipendpoint.Address, (ushort)ipendpoint.Port), new SRP(SrpType.SelectByMacAddress, macAddress));
-                return KnxNetIPFrameSerializerFactory.Instance.Create(frame.ServiceTypeIdentifier).Serialize(frame);
+                return new ExtendedSearchRequestService(new Hpai(HPAIEndpointType.IPV4_UDP, ipendpoint.Address, (ushort)ipendpoint.Port), new SRP(SrpType.SelectByMacAddress, macAddress));
             }, timeoutms);
         }
 
@@ -88,8 +86,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         {
             return InternalDiscoverAsync(ipendpoint =>
             {
-                var frame = new ExtendedSearchRequestFrame(new Hpai(HPAIEndpointType.IPV4_UDP, ipendpoint.Address, (ushort)ipendpoint.Port), new SRP(SrpType.SelectByProgrammingMode, Array.Empty<byte>()));
-                return KnxNetIPFrameSerializerFactory.Instance.Create(frame.ServiceTypeIdentifier).Serialize(frame);
+                return new ExtendedSearchRequestService(new Hpai(HPAIEndpointType.IPV4_UDP, ipendpoint.Address, (ushort)ipendpoint.Port), new SRP(SrpType.SelectByProgrammingMode, Array.Empty<byte>()));
             }, timeoutms);
         }
 
@@ -102,8 +99,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         {
             return InternalDiscoverAsync(ipendpoint =>
             {
-                var frame = new ExtendedSearchRequestFrame(new Hpai(HPAIEndpointType.IPV4_UDP, ipendpoint.Address, (ushort)ipendpoint.Port), new SRP(SrpType.SelectByService, service));
-                return KnxNetIPFrameSerializerFactory.Instance.Create(frame.ServiceTypeIdentifier).Serialize(frame);
+                return new ExtendedSearchRequestService(new Hpai(HPAIEndpointType.IPV4_UDP, ipendpoint.Address, (ushort)ipendpoint.Port), new SRP(SrpType.SelectByService, service));
             }, timeoutms);
         }
 
@@ -117,8 +113,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         {
             return InternalDiscoverAsync(ipendpoint =>
             {
-                var frame = new ExtendedSearchRequestFrame(new Hpai(HPAIEndpointType.IPV4_UDP, ipendpoint.Address, (ushort)ipendpoint.Port), new SRP(SrpType.RequestDibs, dibFilter));
-                return KnxNetIPFrameSerializerFactory.Instance.Create(frame.ServiceTypeIdentifier).Serialize(frame);
+                return new ExtendedSearchRequestService(new Hpai(HPAIEndpointType.IPV4_UDP, ipendpoint.Address, (ushort)ipendpoint.Port), new SRP(SrpType.RequestDibs, dibFilter));
             }, timeoutms);
         }
         #endregion
@@ -130,7 +125,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         #endregion
 
         #region private implementations
-        private async Task<bool> InternalDiscoverAsync(Func<IPEndPoint, byte[]> frameDataGenerator, int timeoutms)
+        private async Task<bool> InternalDiscoverAsync(Func<IPEndPoint, IKnxNetIPService> frameDataGenerator, int timeoutms)
         {
             Initialize();
             foreach (var receiver in _udpReceivers)
@@ -162,7 +157,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             }
         }
 
-        private void BroadcastSearchRequest(Func<IPEndPoint, byte[]> generator)
+        private void BroadcastSearchRequest(Func<IPEndPoint, IKnxNetIPService> generator)
         {
             _Servers.Clear();
             foreach (var client in _udpClients)
@@ -171,13 +166,15 @@ namespace Tiveria.Home.Knx.IP.Connections
             }
         }
 
-        private async Task SendSearchMessageAsync(UdpClient client, Func<IPEndPoint, byte[]> generator)
+        private async Task SendSearchMessageAsync(UdpClient client, Func<IPEndPoint, IKnxNetIPService> generator)
         {
             var endpoint = client.Client.LocalEndPoint;
             if (endpoint == null) return;
 
             var ipendpoint = (IPEndPoint)endpoint;
-            var data = generator(ipendpoint);
+            var service = generator(ipendpoint);
+            var frame = new KnxNetIPFrame(service);
+            var data = frame.ToBytes();
 
             await client.SendAsync(data, data.Length, KnxNetIPConstants.DefaultBroadcastEndpoint);
         }
@@ -218,14 +215,15 @@ namespace Tiveria.Home.Knx.IP.Connections
         #region Reacting on search responses
         private void PacketReceivedDelegate(DateTime timestamp, IPEndPoint source, IPEndPoint receiver, byte[] data)
         {
-            var parser = new SearchResponseFrameSerializer();
-            if (parser.TryDeserialize(data, out var frame))
-            {
-                var sf = ((SearchResponseFrame)frame!);
-                var intf = new KnxNetIPServer(new IPEndPoint(sf.ServiceEndpoint.Ip, sf.ServiceEndpoint.Port), sf.DeviceInfoDIB, sf.ServiceFamiliesDIB);
-                _Servers.Add(new KeyValuePair<IPAddress, KnxNetIPServer>(receiver.Address, intf));
-                OnServerResponded(receiver, intf);
-            }
+            if (!KnxNetIPFrame.TryParse(data, out var frame))
+                return;
+            if (frame!.FrameHeader.ServiceTypeIdentifier != ServiceTypeIdentifier.SearchResponse)
+                return;
+
+            var sf = ((SearchResponseService)frame!.Service);
+            var intf = new KnxNetIPServer(new IPEndPoint(sf.ServiceEndpoint.Ip, sf.ServiceEndpoint.Port), sf.DeviceInfoDIB, sf.ServiceFamiliesDIB);
+            _Servers.Add(new KeyValuePair<IPAddress, KnxNetIPServer>(receiver.Address, intf));
+            OnServerResponded(receiver, intf);
         }
 
         protected void OnServerResponded(IPEndPoint receiver, KnxNetIPServer server)

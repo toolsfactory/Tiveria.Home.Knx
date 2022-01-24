@@ -33,7 +33,7 @@ using NLog;
 using NLog.Config;
 using NLog.Targets;
 using Tiveria.Home.Knx.Cemi;
-using Tiveria.Home.Knx.IP.Frames;
+using Tiveria.Home.Knx.IP.Services;
 
 namespace Tiveria.Home.Knx
 {
@@ -111,10 +111,11 @@ namespace Tiveria.Home.Knx
 
         private void Con_FrameReceived(object sender, FrameReceivedEventArgs e)
         {
+            
             //            Console.WriteLine($"Frame received. Type: {e.Frame.ServiceType}");
             if (e.Frame.FrameHeader.ServiceTypeIdentifier == ServiceTypeIdentifier.TunnelingRequest)
             {
-                var req = ((TunnelingRequestFrame)e.Frame);
+                var req = ((TunnelingRequestService)e.Frame.Service);
                 var cemi = (CemiLData)req.CemiMessage;
 
                 if (cemi.DestinationAddress.IsGroupAddress())
@@ -179,7 +180,7 @@ namespace Tiveria.Home.Knx
 
         private void Con_DataReceived(object sender, DataReceivedArgs e)
         {
-            //            Console.WriteLine(e.Data.ToHexString());
+            Console.WriteLine(BitConverter.ToString(e.Data));
         }
 
         public IPAddress GetLocalIPAddress()

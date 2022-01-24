@@ -25,7 +25,7 @@
 using System.Net;
 using System.Net.Sockets;
 using Tiveria.Home.Knx.IP.Structures;
-using Tiveria.Home.Knx.IP.Frames;
+using Tiveria.Home.Knx.IP.Services;
 using Tiveria.Common.Logging;
 
 namespace Tiveria.Home.Knx.IP.Connections
@@ -78,9 +78,8 @@ namespace Tiveria.Home.Knx.IP.Connections
             _intervalMS = intervalSeconds * 1000;
             _timeoutMS = timeoutSeconds * 1000;
             _retries = retries;
-            var frame = new ConnectionStateRequestFrame(channelId, endpointHpai);
-            _rawPacket = KnxNetIPFrameSerializerFactory.
-                Instance.Create(frame.ServiceTypeIdentifier).Serialize(frame);
+            var service = new ConnectionStateRequestService(channelId, endpointHpai);
+            _rawPacket = new KnxNetIPFrame(service).ToBytes();
         }
         #endregion
 
@@ -95,7 +94,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             _cancelSource.Cancel();
         }
 
-        public void HandleResponse(ConnectionStateResponseFrame response)
+        public void HandleResponse(ConnectionStateResponseService response)
         {
             if (response.Status == Enums.ErrorCodes.NoError)
             {

@@ -27,10 +27,10 @@ using Tiveria.Home.Knx.IP.Structures;
 
 namespace Tiveria.Home.Knx.IP
 {
-    public interface IKnxNetIPFrame
+    public interface IKnxNetIPFrame : IKnxDataElement
     {
-        int Size { get; }
-        ServiceTypeIdentifier ServiceTypeIdentifier { get; }
         FrameHeader FrameHeader { get; }
+
+        IKnxNetIPService Service { get; }
     }
 }

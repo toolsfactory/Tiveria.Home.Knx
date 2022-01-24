@@ -36,8 +36,6 @@ namespace Tiveria.Home.Knx
         static void Main(string[] args)
         {
             bool exit = false;
-
-            KnxNetIPFrameSerializerFactory.Instance.Initialize();
             while (!exit)
             {
                 Console.Clear();

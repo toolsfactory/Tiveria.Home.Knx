@@ -26,7 +26,7 @@ using System.Net;
 using System.Net.Sockets;
 using Tiveria.Home.Knx.Adresses;
 using Tiveria.Home.Knx.Cemi;
-using Tiveria.Home.Knx.IP.Frames;
+using Tiveria.Home.Knx.IP.Services;
 using Tiveria.Home.Knx.IP.Structures;
 
 namespace Tiveria.Home.Knx

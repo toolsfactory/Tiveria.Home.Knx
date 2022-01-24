@@ -29,18 +29,24 @@ namespace Tiveria.Home.Knx.IP
     /// </summary>
     public class KnxNetIPVersion
     {
+        #region static defaults
         /// <summary>
         /// Constant representing Version 1.0 of KnxNetIP
         /// </summary>
         public static readonly KnxNetIPVersion Version10 = new KnxNetIPVersion("KnxNetIP Version 1.0", 0x10, 0x06);
         /// <summary>
-        /// Constant representing Version 1.0 of KnxNetIP
+        /// Constant representing Version 2.0 of KnxNetIP
         /// </summary>
         public static readonly KnxNetIPVersion Version20 = new KnxNetIPVersion("KnxNetIP Version 2.0", 0x20, 0x06);
         /// <summary>
         /// List of versions supported by this library 
         /// </summary>
         public static readonly KnxNetIPVersion[] SupportedVersions = new KnxNetIPVersion[2] { Version10, Version20 };
+        /// <summary>
+        /// Default Version used in Frames when not specified otherwise
+        /// </summary>
+        public static KnxNetIPVersion DefaultVersion = Version10;
+        #endregion
 
         private readonly string _name;
         private readonly byte _identifier;
