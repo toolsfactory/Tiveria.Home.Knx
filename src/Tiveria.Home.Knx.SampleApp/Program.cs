@@ -38,7 +38,7 @@ namespace Tiveria.Home.Knx
             bool exit = false;
 
             KnxNetIPFrameSerializerFactory.Instance.Initialize();
-            while (!exit)
+            do
             {
                 Console.Clear();
                 AnsiConsole.MarkupLine("[underline green]  KnxNetIP Demo  [/]");
@@ -54,7 +54,7 @@ namespace Tiveria.Home.Knx
                   .Add("DeviceManagement", () => new DeviceManagementDemo().RunAsync().Wait())
                   .Add("Exit", () => exit = true);
                 menu.Display();
-            }
+            } while (!exit);
         }
     }
 }
