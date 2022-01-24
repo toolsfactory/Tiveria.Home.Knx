@@ -23,6 +23,7 @@
 */
 
 using Tiveria.Common.IO;
+using Tiveria.Home.Knx.Exceptions;
 
 namespace Tiveria.Home.Knx.Cemi
 {
@@ -91,6 +92,13 @@ namespace Tiveria.Home.Knx.Cemi
         public void Write(BigEndianBinaryWriter writer)
         {
             writer.Write(Raw);
+        }
+
+        public static Tpci Parse(Span<byte> buffer)
+        {
+            if (buffer == null || buffer.Length != 1)
+                throw BufferSizeException.WrongSize("Tpci", 0);
+            return new Tpci(buffer[0]);
         }
     }
 }

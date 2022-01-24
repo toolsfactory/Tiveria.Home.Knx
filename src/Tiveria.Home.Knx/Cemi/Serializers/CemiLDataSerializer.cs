@@ -69,7 +69,7 @@ namespace Tiveria.Home.Knx.Cemi.Serializers
             var dstAddr = ReadDestinationAddress(reader, controlField2.DestinationAddressType == Adresses.AddressType.GroupAddress);
             var npduLength = reader.ReadByte();
             var data = reader.ReadBytes(npduLength + 1); // TPCI Octet not included in length field!
-            var tpdu = Apci.Parse(data);
+            ITpdu tpdu = (npduLength == 0) ? Tpci.Parse(data) : Apci.Parse(data);
 
             return new CemiLData(msgCode, additionalInfoFields, srcAddr, dstAddr, controlField1, controlField2, tpdu);
         }
