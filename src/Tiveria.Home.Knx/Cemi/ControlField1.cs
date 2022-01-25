@@ -123,7 +123,7 @@ namespace Tiveria.Home.Knx.Cemi
             if (repflag)
                 _rawData |= 0b0010_0000;
 
-            if (_broadcast == BroadcastType.System)
+            if (_broadcast == BroadcastType.Normal)
                 _rawData |= 0x10;
 
             if (_acknowledgeRequest)

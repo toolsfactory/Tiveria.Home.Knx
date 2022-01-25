@@ -30,7 +30,7 @@ using Tiveria.Home.Knx.Cemi;
 
 namespace Tiveria.Home.Knx.DeviceManagement
 {
-    public class ManagementClient : IManagementClient
+    public class ManagementClient //: IManagementClient
     {
         private IKnxClient _client;
 
@@ -43,9 +43,9 @@ namespace Tiveria.Home.Knx.DeviceManagement
         public async Task ConnectAsync()
         {
             var tpdu = new Tpci(PacketType.Control, SequenceType.UnNumbered, 0, ControlType.Connect);
-            var ctrl1 = new ControlField1(MessageCode.LDATA_REQ);
-            var ctrl2 = new ControlField2();
-            var cemi = new CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), GroupAddress.Parse("4/0/0"), ctrl1, ctrl2, tpdu);
+            var ctrl1 = new ControlField1(MessageCode.LDATA_REQ, priority: Priority.System, broadcast: BroadcastType.Normal, ack: false);
+            var ctrl2 = new ControlField2(groupAddress: false); 
+            var cemi = new CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), IndividualAddress.Parse("1.1.2"), ctrl1, ctrl2, tpdu);
             await _client.SendCemiAsync(cemi);
         }
 
@@ -53,14 +53,30 @@ namespace Tiveria.Home.Knx.DeviceManagement
         {
             var tpdu = new Tpci(Cemi.PacketType.Control, Cemi.SequenceType.UnNumbered, 0, ControlType.Disconnect);
             var ctrl1 = new ControlField1(MessageCode.LDATA_REQ);
-            var ctrl2 = new ControlField2();
-            var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), GroupAddress.Parse("4/0/0"), ctrl1, ctrl2, tpdu);
+            var ctrl2 = new ControlField2(groupAddress: false);
+            var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), IndividualAddress.Parse("1.1.2"), ctrl1, ctrl2, tpdu);
             await _client.SendCemiAsync(cemi);
         }
 
-        public Task<T> ReadPropertyAsync<T>(byte objIdx, byte propId)
+        public async Task ReadPropertyAsync(byte objIdx, byte propId)
         {
-            throw new NotImplementedException();
+            var tpdu = new Apci(ApciTypes.Property_Read,new byte[] { objIdx, propId , 0x10, 0x01});
+            var ctrl1 = new ControlField1(MessageCode.LDATA_REQ, priority: Priority.Low);
+            var ctrl2 = new ControlField2(groupAddress: false);
+            var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), IndividualAddress.Parse("1.1.2"), ctrl1, ctrl2, tpdu);
+            await _client.SendCemiAsync(cemi);
         }
+    }
+
+    public class DeviceConnectionSession
+    {
+        public DeviceConnectionSession(IndividualAddress address, bool keepAlive)
+        {
+            Address = address;
+            KeepAlive = keepAlive;
+        }
+
+        public IndividualAddress Address { get; }
+        public bool KeepAlive { get; }
     }
 }

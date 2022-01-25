@@ -58,9 +58,12 @@ namespace Tiveria.Home.Knx.Cemi
     {
         public static readonly Dictionary<int,ApciTypeDetail> RelevantAPCITypes = new ()
         {
-            { (int)ApciTypes.GroupValue_Read, new (ApciTypes.GroupValue_Read, 0b000000_00, 0b00_000000, 0, ApciFieldLength.Bits_4, false, DataMode.None) },
-            { (int)ApciTypes.GroupValue_Response, new (ApciTypes.GroupValue_Response, 0b000000_00, 0b01_000000, 1, ApciFieldLength.Bits_4, true, DataMode.Required) },
-            { (int)ApciTypes.GroupValue_Write, new (ApciTypes.GroupValue_Write, 0b000000_00, 0b10_000000, 2, ApciFieldLength.Bits_4, true, DataMode.Required) },
+            { (int)ApciTypes.GroupValue_Read, new (ApciTypes.GroupValue_Read, 0b000000_00, 0b00_000000, ApciFieldLength.Bits_4, false, DataMode.None) },
+            { (int)ApciTypes.GroupValue_Response, new (ApciTypes.GroupValue_Response, 0b000000_00, 0b01_000000, ApciFieldLength.Bits_4, true, DataMode.Required) },
+            { (int)ApciTypes.GroupValue_Write, new (ApciTypes.GroupValue_Write, 0b000000_00, 0b10_000000, ApciFieldLength.Bits_4, true, DataMode.Required) },
+            { (int)ApciTypes.Property_Read, new(ApciTypes.Property_Read, 0b000000_11, 0b11010101, ApciFieldLength.Bits_10, true, DataMode.Required) },
+            { (int)ApciTypes.Property_Response, new(ApciTypes.Property_Response, 0b000000_11, 0b11010110, ApciFieldLength.Bits_10, true, DataMode.None) },
+            { (int)ApciTypes.Property_Write, new(ApciTypes.Property_Write, 0b000000_11, 0b11010111, ApciFieldLength.Bits_10, true, DataMode.Required) },
         };
 
         public static readonly byte DataMask6 = 0b00_111111;  //0x3f

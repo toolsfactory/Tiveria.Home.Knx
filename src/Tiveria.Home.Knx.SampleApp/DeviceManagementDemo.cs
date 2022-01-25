@@ -40,17 +40,14 @@ namespace Tiveria.Home.Knx
             Con = new IP.Connections.TunnelingConnection(Program.GatewayIPAddress, Program.GatewayPort, GetLocalIPAddress(), 55555);
             await Con.ConnectAsync();
 
-            var tpdu = new Tpci(Cemi.PacketType.Control, Cemi.SequenceType.UnNumbered, 0, ControlType.Connect);
-            var ctrl1 = new ControlField1(MessageCode.LDATA_REQ);
-            var ctrl2 = new ControlField2();
-            var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), GroupAddress.Parse("4/0/0"), ctrl1, ctrl2, tpdu);
-
-            await Con.SendCemiAsync(cemi);
+            var mngt = new DeviceManagement.ManagementClient(Con);
             await Task.Delay(1000);
-
-            tpdu = new Tpci(Cemi.PacketType.Control, Cemi.SequenceType.UnNumbered, 0, ControlType.Disconnect);
-            cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), GroupAddress.Parse("4/0/0"), ctrl1, ctrl2, tpdu);
-            await Con.SendCemiAsync(cemi);
+            await mngt.ConnectAsync();    
+            await Task.Delay(1000);
+            await mngt.ReadPropertyAsync(0, 56);
+            await Task.Delay(1000);
+            await mngt.DisconnectAsync();
+            await Con.DisconnectAsync();
         }
 
         public IPAddress GetLocalIPAddress()

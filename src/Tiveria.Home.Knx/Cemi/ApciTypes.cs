@@ -71,7 +71,13 @@ namespace Tiveria.Home.Knx.Cemi
         Authorize_Request = 977,                      // 0b1111 010001  15 977
         Authorize_Response = 978,                     // 0b1111 010010  15 978
         Key_Write = 979,                              // 0b1111 010011  15 979
-        Key_Response = 980                            // 0b1111 010100  15 980
+        Key_Response = 980,                           // 0b1111 010100  15 980
+// Management 
+        Property_Read = 0x03d5,
+        Property_Response = 0x03d6,
+        Property_Write = 0x03d7,
+        PropertyDescription_Read = 0x03d8, 
+        PropertyDescription_Response = 0x03d9
     } 
 
     public enum ApciFieldLength
@@ -86,6 +92,6 @@ namespace Tiveria.Home.Knx.Cemi
         Required
     }
 
-    public record struct ApciTypeDetail(ApciTypes Type, byte HighBits, byte LowBits, int Id, ApciFieldLength Length, bool CanOptimize, DataMode Mode);
+    public record struct ApciTypeDetail(ApciTypes Type, byte HighBits, byte LowBits, ApciFieldLength Length, bool CanOptimize, DataMode Mode);
     }
 
