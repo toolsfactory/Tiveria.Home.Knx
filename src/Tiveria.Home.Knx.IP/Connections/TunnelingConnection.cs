@@ -53,12 +53,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             _localEndpoint = localEndpoint;
             _remoteControlEndpoint = remoteEndpoint;
             _logger = logger ?? NullLogger<TunnelingConnection>.Instance;
-
-            if (configuration != null)
-                _config = configuration;
-            else
-                _config = new TunnelingConnectionConfiguration();
-
+            _config = configuration ?? new TunnelingConnectionConfiguration();
             _udpClient = new UdpClient(_localEndpoint);
             _packetReceiver = new UdpPacketReceiver(_udpClient, PacketReceivedDelegate, KnxFrameReceivedDelegate);
         }
@@ -152,6 +147,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         private readonly object _lock = new object();
         private readonly ManualResetEvent _closeEvent = new ManualResetEvent(false);
         private readonly ManualResetEvent _ackEvent = new ManualResetEvent(false);
+        private readonly ManualResetEvent _connectEvent = new ManualResetEvent(false);
         private readonly IPEndPoint _localEndpoint;
         private readonly IPEndPoint _remoteControlEndpoint;
         private readonly ILogger<TunnelingConnection> _logger;
@@ -281,28 +277,24 @@ namespace Tiveria.Home.Knx.IP.Connections
         #region sending connection request
         public override async Task<bool> ConnectAsync()
         {
+            _connectEvent.Reset();
             ConnectionState = ConnectionState.Opening;
             var data = CreateConnectionRequestFrame();
-            //_logger.Trace("ConnectAsync: Sending connection request to " + _remoteControlEndpoint + " with data " + data.ToHex());
             try
             {
                 _packetReceiver.Start();
                 var bytessent = await _udpClient.SendAsync(data, data.Length, _remoteControlEndpoint).ConfigureAwait(false);
                 if (bytessent == 0)
                 {
-                    //_logger.Error("ConnectAsync: Zero bytes sent");
                     ConnectionState = ConnectionState.Invalid;
                     return false;
                 }
-                else
-                {
-                    //_logger.Trace("ConnectAsync: Connection request sucessfully sent");
-                    return true;
-                }
+                var result = _connectEvent.WaitOne(_config.ConnectTimeout);
+                if (!result) ConnectionState = ConnectionState.Invalid;
+                return result;
             }
-            catch (SocketException se)
+            catch
             {
-                //_logger.Error("ConnectAsync: SocketException raised", se);
                 ConnectionState = ConnectionState.Invalid;
                 return false;
             }
@@ -310,10 +302,10 @@ namespace Tiveria.Home.Knx.IP.Connections
 
         private byte[] CreateConnectionRequestFrame()
         {
-            var cri = new CRITunnel(_config.UseBusMonitorMode ? TunnelingLayer.TUNNEL_BUSMONITOR : TunnelingLayer.TUNNEL_LINKLAYER);
-            var hpai = new Structures.Hpai(Enums.HPAIEndpointType.IPV4_UDP, _localEndpoint.Address, (ushort)_localEndpoint.Port);
+            var cri     = new CRITunnel(_config.UseBusMonitorMode ? TunnelingLayer.TUNNEL_BUSMONITOR : TunnelingLayer.TUNNEL_LINKLAYER);
+            var hpai    = new Structures.Hpai(Enums.HPAIEndpointType.IPV4_UDP, _localEndpoint.Address, (ushort)_localEndpoint.Port);
             var service = new ConnectionRequestService(hpai, hpai, cri);
-            var frame = new KnxNetIPFrame(service);
+            var frame   = new KnxNetIPFrame(service);
             return frame.ToBytes();
         }
         #endregion
@@ -326,36 +318,23 @@ namespace Tiveria.Home.Knx.IP.Connections
         /// <param name="remoteEndpoint">The remote endpoint that sent the frame</param>
         private void HandleConnectResponse(ConnectionResponseService response, IPEndPoint remoteEndpoint)
         {
-            VerifyConnectionResponse(response, remoteEndpoint);
-        }
-
-        private bool VerifyConnectionResponse(ConnectionResponseService connectionResponse, IPEndPoint remoteEndpoint)
-        {
-            if (connectionResponse.Status == ErrorCodes.NoError)
+            // to be sure, chack again that HPAI is for UDP in IPv4
+            if ((response.Status == ErrorCodes.NoError) &&
+                (response.DataEndpoint.EndpointType == HPAIEndpointType.IPV4_UDP))
             {
-                // to be sure, chack again that HPAI is for UDP in IPv4
-                if (connectionResponse.DataEndpoint.EndpointType == HPAIEndpointType.IPV4_UDP)
-                {
-                    //Everything ok. Lets fill all fields
-                    var ep = connectionResponse.DataEndpoint;
-                    VerifyRemoteDataEndpointforNAT(ep, remoteEndpoint);
-                    _channelId = connectionResponse.ChannelId;
-                    ConnectionState = ConnectionState.Open;
-                    SetupHeartbeatMonitor();
-                    return true;
-                }
-                else
-                {
-                    // Endpoint type is not IPv4/UDP
-                    //_logger.Error("Server requested endpoint type that is not IPv4/UDP!");
-                    return false;
-                }
+                //Everything ok. Lets fill all fields
+                var ep = response.DataEndpoint;
+                VerifyRemoteDataEndpointforNAT(ep, remoteEndpoint);
+                _channelId = response.ChannelId;
+                ConnectionState = ConnectionState.Open;
+                SetupHeartbeatMonitor();
             }
             else
             {
-                //_logger.Error(String.Format("Server sent statuscode {0}: '{1}'", connectionResponse.Status, connectionResponse.Status.ToDescription()));
-                return false;
+                _channelId = 0;
+                ConnectionState = ConnectionState.Invalid;
             }
+            _connectEvent.Set();
         }
 
         private void SetupHeartbeatMonitor()
