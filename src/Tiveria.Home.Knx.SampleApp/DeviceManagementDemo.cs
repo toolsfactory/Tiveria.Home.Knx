@@ -41,7 +41,6 @@ namespace Tiveria.Home.Knx
             await Con.ConnectAsync();
 
             var mngt = new DeviceManagement.ManagementClient(Con);
-            await Task.Delay(1000);
             await mngt.ConnectAsync();    
             await Task.Delay(1000);
             await mngt.ReadPropertyAsync(0, 56);
