@@ -82,7 +82,7 @@ namespace Tiveria.Home.Knx
         private async Task SendWriteRequestAsync(bool on)
         {
             var data = (byte)(on ? 0x01 : 0x00);
-            var tpdu = new Cemi.Apci(Cemi.ApciTypes.GroupValue_Write, new byte[] { data });
+            var tpdu = new Cemi.Apci(Cemi.ApciType.GroupValue_Write, new byte[] { data });
             var ctrl1 = new ControlField1(MessageCode.LDATA_REQ);
             var ctrl2 = new ControlField2();
             var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), GroupAddress.Parse("4/0/0"), ctrl1, ctrl2, tpdu);
@@ -124,7 +124,7 @@ namespace Tiveria.Home.Knx
                     if (cemi.Tpdu.IsApci)
                     {
                         var apci = (Apci)cemi.Tpdu;
-                        if (apci.Type == Cemi.ApciTypes.GroupValue_Write)
+                        if (apci.Type == Cemi.ApciType.GroupValue_Write)
                         {
                             if (addr.EndsWith("/2/3") || addr.EndsWith("/2/23") || addr.EndsWith("/2/43") || addr.EndsWith("/2/63"))
                             {
@@ -161,11 +161,11 @@ namespace Tiveria.Home.Knx
                                 Console.WriteLine($"{apci.Type} for \"{addr}\" - ACPI DATA: {apci.Data.ToHex()}");
                             }
                         }
-                        else if ((apci.Type == Cemi.ApciTypes.GroupValue_Read) && addr.EndsWith("29/0/0"))
+                        else if ((apci.Type == Cemi.ApciType.GroupValue_Read) && addr.EndsWith("29/0/0"))
                         {
                             SendReadAnswerAsync();
                         }
-                        if (apci.Type == Cemi.ApciTypes.GroupValue_Response)
+                        if (apci.Type == Cemi.ApciType.GroupValue_Response)
                         {
                             Console.WriteLine($"--{apci.Type} for \"{addr}\" - ACPI DATA: {apci.Data.ToHex()}");
                         }

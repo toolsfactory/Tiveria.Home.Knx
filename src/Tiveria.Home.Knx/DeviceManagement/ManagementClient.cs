@@ -60,7 +60,7 @@ namespace Tiveria.Home.Knx.DeviceManagement
 
         public async Task ReadPropertyAsync(byte objIdx, byte propId)
         {
-            var tpdu = new Apci(ApciTypes.PropertyValue_Read,new byte[] { objIdx, propId , 0x10, 0x01});
+            var tpdu = new Apci(ApciType.PropertyValue_Read,new byte[] { objIdx, propId , 0x10, 0x01});
             var ctrl1 = new ControlField1(MessageCode.LDATA_REQ, priority: Priority.Low);
             var ctrl2 = new ControlField2(groupAddress: false);
             var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), IndividualAddress.Parse("1.1.2"), ctrl1, ctrl2, tpdu);

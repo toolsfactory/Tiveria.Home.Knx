@@ -62,33 +62,48 @@ namespace Tiveria.Home.Knx.Cemi
         #region public properties
         public int Size { get; private set; } = 2;
         public byte[] Data { get; private set; } = Array.Empty<byte>();
-        public int Type { get; private set; } = ApciTypes.GroupValue_Read;
+        public int Type { get; private set; } = ApciType.GroupValue_Read;
 
         public bool IsApci { get; private set; } = true;
         public bool IsTpci => false;
         public TpduType TpduType => TpduType.ApciOnly;
         #endregion
 
-        #region private members
-        private byte[] _raw = new byte[0];
-        #endregion
-
         #region constructors
-        public Apci(int type, byte[] data, bool optimizationAllowed = true)
+
+        /// <summary>
+        /// Create a new APCI structure from an <see cref="ApciType"/> wit attached data.
+        /// </summary>
+        /// <param name="type">The Apci service type</param>
+        /// <param name="data">Data to be inserted. In case the Apci Service has a 4 bit identifier and the lower 6 bits are used for data already, this information has to be the first byte in this parameter</param>
+        /// <exception cref="ArgumentException">Thrown in case the Apci Type is out of range or data size doesnt fit the type</exception>
+        public Apci(int type, byte[] data)
         {
             if (Type < 0 || Type > 0b1111111111)
                 throw new ArgumentException("Apci type out of range!");
 
             Type = type;
             Data = data ?? Array.Empty<byte>();
+            ValidateDataSize();
             CalculateSize();
             BuildRaw();
         }
 
+        /// <summary>
+        /// Create a new APCI structure from an <see cref="ApciType"/> wit enpty data.
+        /// </summary>
+        /// <param name="type">The Apci service type</param>
+        /// <exception cref="ArgumentException">Thrown in case the Apci Type is out of range or data size doesnt fit the type</exception>
         public Apci(int type)
             : this(type, Array.Empty<byte>())
         { }
 
+        /// <summary>
+        /// Creates an Apci structure from a byte array.
+        /// When parsing the buffer, no extended validations are applied so that receiving unknown apci services dont cause issues
+        /// </summary>
+        /// <param name="buffer">The byte array to parse</param>
+        /// <exception cref="ArgumentNullException">Thrown if buffer is null</exception>
         public Apci(Span<byte> buffer)
         {
             if (buffer == null)
@@ -119,71 +134,70 @@ namespace Tiveria.Home.Knx.Cemi
         }
         #endregion
 
+        #region private members
+        private byte[] _raw = new byte[0];
+        #endregion
+
         #region private implementation
-        #region parsing the buffer
 
         private void ParseApci(Span<byte> buffer)
         {
             var apci4 = ((buffer[0] & 0b000000_11) << 2) | (buffer[1] >> 6);
             var apci6 = (buffer[1] & 0b00_111111);
-            Type = GetApciType((apci4, apci6, buffer.Length));
-            var loc = GetASDUMaskAndOffset((Type, buffer.Length));
+            Type = ApciType.GetApciType((apci4, apci6, buffer.Length));
+            var loc = ApciType.GetASDUMaskAndOffset((Type, buffer.Length));
             Data = buffer.Slice(loc.offset).ToArray();
             if (Data.Length > 0)
                 Data[0] &= (byte)loc.mask;
         }
 
-        private int GetApciType((int apci4, int apci6, int len) apci) => apci switch
+        private void ValidateDataSize()
         {
-            { apci4: 0, apci6: 0 }           => ApciTypes.GroupValue_Read,
-            { apci4: 1 }                     => ApciTypes.GroupValue_Response,
-            { apci4: 2 }                     => ApciTypes.GroupValue_Write,
-            { apci4: 3, apci6: 0 }           => ApciTypes.GroupValue_Write,
-            { apci4: 4, apci6: 0 }           => ApciTypes.GroupValue_Read,
-            { apci4: 5, apci6: 0 }           => ApciTypes.GroupValue_Response,
-            { apci4: 6 }                     => ApciTypes.ADC_Read,
-            { apci4: 7, len: 5 }             => ApciTypes.ADC_Response,
-            { apci4: 7, apci6: 8, len: > 5 } => ApciTypes.SystemNetworkParameter_Read,
-            { apci4: 7, apci6: 9, len: > 5 } => ApciTypes.SystemNetworkParameter_Response,
-            { apci4: 7, apci6:10, len: > 5 } => ApciTypes.SystemNetworkParameter_Write,
-            { apci4: 8 }                     => ApciTypes.Memory_Read,
-            { apci4: 9 }                     => ApciTypes.Memory_Response,
-            { apci4: 10 }                    => ApciTypes.Memory_Write,
-            _ => apci.apci4 << 6 | apci.apci6
-        };
-
-        private const int mask = 0b00_111111;
-        private (int offset, int mask) GetASDUMaskAndOffset((int apci, int len) x) => x switch
-        {
-            { apci: ApciTypes.GroupValue_Response, len: <= 2 }          => (1, mask),
-            { apci: ApciTypes.GroupValue_Write   , len: <= 2 }          => (1, mask),
-            { apci: ApciTypes.ADC_Read }                                => (1, mask),
-            { apci: ApciTypes.ADC_Response }                            => (1, mask),
-            { apci: ApciTypes.Memory_Read }                             => (1, mask),
-            { apci: ApciTypes.Memory_Response }                         => (1, mask),
-            { apci: ApciTypes.Memory_Write }                            => (1, mask),
-            { apci: ApciTypes.DeviceDescriptor_Read }                   => (1, mask),
-            { apci: ApciTypes.DeviceDescriptor_Response }               => (1, mask),
-            { apci: ApciTypes.IndividualAddress_Read }                  => (1, mask),
-            { apci: ApciTypes.IndividualAddress_Response }              => (1, mask),
-            _ => (2, 0b_11111111)
-        };
-        #endregion
-
+            if (ApciType.IsKnown(Type))
+            {
+                var details = ApciType.GetRequiredDataDetails(Type);
+                if ((details.Mode == DataMode.None) && Data.Length > 0)
+                    throw new ArgumentException($"Data must empty for APCI Type {ApciType.ToString(Type)}");
+                if (details.Mode != DataMode.None && details.Mode != DataMode.Unknown)
+                {
+                    if ((details.Mode == DataMode.Exact) && Data.Length != details.MinOrExact)
+                        throw new ArgumentException($"Data too small for APCI Type {ApciType.ToString(Type)}");
+                    if (Data.Length < details.MinOrExact)
+                        throw new ArgumentException($"Data too small for APCI Type {ApciType.ToString(Type)}");
+                    if ((details.Mode == DataMode.MinMax) && Data.Length > details.Max)
+                        throw new ArgumentException($"Data too big for APCI Type {ApciType.ToString(Type)}");
+                }
+            }
+        }
         private void CalculateSize()
         {
-            Size = ((Type == ApciTypes.GroupValue_Write || Type == ApciTypes.GroupValue_Response)
-                 && (Data.Length == 1) && (Data[0] <= 63)) ? 2 : Data.Length + 2;
+            if (Type == ApciType.GroupValue_Write || Type == ApciType.GroupValue_Response)
+                Size = ((Data.Length == 1) && (Data[0] <= 63)) ? 2 : Data.Length + 2;
+            else
+                if (Type == ApciType.ADC_Read || Type == ApciType.ADC_Response ||
+                Type == ApciType.Memory_Read || Type == ApciType.Memory_Response || Type == ApciType.Memory_Write ||
+                Type == ApciType.DeviceDescriptor_Read || Type == ApciType.DeviceDescriptor_Response)
+                    Size = Data.Length + 1;
+            else
+                Size = Data.Length + 2;
         }
         private void BuildRaw()
         {
             _raw = new byte[Size];
-            _raw[0] = (byte)(Type >> 8);
-            _raw[1] = (byte)(Type & 0xff);
+            _raw[0] = (byte) ((Type <= 0b1111) ? Type >> 2 : Type >> 8 );
+            _raw[1] = (byte) ((Type <= 0b1111) ? (Type & 0b0011) << 6 : Type & 0b11111111);
 
-            if((Type == ApciTypes.GroupValue_Write || Type == ApciTypes.GroupValue_Response) 
+            if((Type == ApciType.GroupValue_Write || Type == ApciType.GroupValue_Response) 
                 && Data.Length == 1 && Data[0] <= 63)
                 _raw[1] |= Data[0];
+            else if (Type == ApciType.ADC_Read || Type == ApciType.ADC_Response || 
+                Type == ApciType.Memory_Read ||Type == ApciType.Memory_Response || Type == ApciType.Memory_Write ||
+                Type == ApciType.DeviceDescriptor_Read || Type == ApciType.DeviceDescriptor_Response)
+            {
+                _raw[1] |= Data[0];
+                if (Data.Length > 1)
+                    Array.Copy(Data, 1, _raw, 2, Data.Length - 1);
+            }
             else
                 Data.CopyTo(_raw, 2);
         }
