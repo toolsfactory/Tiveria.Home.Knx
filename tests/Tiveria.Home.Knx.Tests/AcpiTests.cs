@@ -10,6 +10,52 @@ namespace Tiveria.Home.Knx.Tests
     [TestFixture]
     class AcpiTests
     {
+        static object[] TestDataCompressed =
+        {
+            new object[] { ApciTypes.GroupValue_Response, new byte[] { 0x00 }, new byte[] { 0x00, 0x40 } },
+            new object[] { ApciTypes.GroupValue_Response, new byte[] { 0x01 }, new byte[] { 0x00, 0x41 } },
+            new object[] { ApciTypes.GroupValue_Response, new byte[] { 0x3f }, new byte[] { 0x00, 0x7f } },
+        };
+
+        [TestCaseSource(nameof(TestDataCompressed))]
+        public void BuildApciCompressed_Many(int type, byte[] data, byte[] raw)
+        {
+            var result = new Apci(type, data);
+            var resultRaw = result.ToBytes();
+            Assert.AreEqual(type, result.Type);
+            Assert.IsNotNull(result.Data);
+            Assert.AreEqual(2, resultRaw.Length);
+            Assert.AreEqual(1, result.Data.Length);
+            Assert.AreEqual(raw[0], resultRaw[0]);
+            Assert.AreEqual(raw[1], resultRaw[1]);
+        }
+
+        static object[] TestData =
+{
+            new object[] { ApciTypes.GroupValue_Read, new byte[] {  }, new byte[] { 0x00, 0x00 } },
+            new object[] { ApciTypes.GroupValue_Response, new byte[] { 0x40 }, new byte[] { 0x00, 0x40, 0x40 } },
+            new object[] { ApciTypes.GroupValue_Response, new byte[] { 0xff }, new byte[] { 0x00, 0x40, 0xff } },
+            new object[] { ApciTypes.GroupValue_Response, new byte[] { 0xaa, 0xbb }, new byte[] { 0x00, 0x40, 0xaa, 0xbb } },
+        };
+
+        [TestCaseSource(nameof(TestData))]
+        public void BuildApci_Many(int type, byte[] data, byte[] raw)
+        {
+            var result = new Apci(type, data);
+            var resultRaw = result.ToBytes();
+            Assert.AreEqual(type, result.Type);
+            Assert.IsNotNull(result.Data);
+            Assert.AreEqual(raw.Length, resultRaw.Length);
+            Assert.AreEqual(data.Length, result.Data.Length);
+            Assert.AreEqual(raw[0], resultRaw[0]);
+            Assert.AreEqual(raw[1], resultRaw[1]);
+            if (raw.Length > 2) Assert.AreEqual(raw[2], resultRaw[2]);
+            if (raw.Length > 3) Assert.AreEqual(raw[3], resultRaw[3]);
+            if (raw.Length > 4) Assert.AreEqual(raw[4], resultRaw[4]);
+            if (raw.Length > 5) Assert.AreEqual(raw[5], resultRaw[5]);
+            if (raw.Length > 6) Assert.AreEqual(raw[6], resultRaw[6]);
+        }
+
         /* At the moment no check for data size implemented
         [Test]
         public void ParseGroupValue_Read1()
