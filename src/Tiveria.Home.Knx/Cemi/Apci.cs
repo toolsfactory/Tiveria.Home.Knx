@@ -74,13 +74,20 @@ namespace Tiveria.Home.Knx.Cemi
         #endregion
 
         #region constructors
-        public Apci(int type, byte[] data, bool optimizationAllowed = true)
+        public Apci(int type, byte[] data)
         {
             if (Type < 0 || Type > 0b1111111111)
                 throw new ArgumentException("Apci type out of range!");
 
             Type = type;
             Data = data ?? Array.Empty<byte>();
+            if (ApciTypes.IsKnown(Type))
+            {
+                if (ApciTypes.RequiresData(Type) && Data.Length == 0)
+                    throw new ArgumentException($"Data cannot be empty for APCI Type {ApciTypes.ToString(type)}");
+                if (!ApciTypes.RequiresData(Type) && Data.Length > 0)
+                    throw new ArgumentException($"Data must empty for APCI Type {ApciTypes.ToString(type)}");
+            }
             CalculateSize();
             BuildRaw();
         }
@@ -120,55 +127,16 @@ namespace Tiveria.Home.Knx.Cemi
         #endregion
 
         #region private implementation
-        #region parsing the buffer
-
         private void ParseApci(Span<byte> buffer)
         {
             var apci4 = ((buffer[0] & 0b000000_11) << 2) | (buffer[1] >> 6);
             var apci6 = (buffer[1] & 0b00_111111);
-            Type = GetApciType((apci4, apci6, buffer.Length));
-            var loc = GetASDUMaskAndOffset((Type, buffer.Length));
+            Type = ApciTypes.GetApciType((apci4, apci6, buffer.Length));
+            var loc = ApciTypes.GetASDUMaskAndOffset((Type, buffer.Length));
             Data = buffer.Slice(loc.offset).ToArray();
             if (Data.Length > 0)
                 Data[0] &= (byte)loc.mask;
         }
-
-        private int GetApciType((int apci4, int apci6, int len) apci) => apci switch
-        {
-            { apci4: 0, apci6: 0 }           => ApciTypes.GroupValue_Read,
-            { apci4: 1 }                     => ApciTypes.GroupValue_Response,
-            { apci4: 2 }                     => ApciTypes.GroupValue_Write,
-            { apci4: 3, apci6: 0 }           => ApciTypes.GroupValue_Write,
-            { apci4: 4, apci6: 0 }           => ApciTypes.GroupValue_Read,
-            { apci4: 5, apci6: 0 }           => ApciTypes.GroupValue_Response,
-            { apci4: 6 }                     => ApciTypes.ADC_Read,
-            { apci4: 7, len: 5 }             => ApciTypes.ADC_Response,
-            { apci4: 7, apci6: 8, len: > 5 } => ApciTypes.SystemNetworkParameter_Read,
-            { apci4: 7, apci6: 9, len: > 5 } => ApciTypes.SystemNetworkParameter_Response,
-            { apci4: 7, apci6:10, len: > 5 } => ApciTypes.SystemNetworkParameter_Write,
-            { apci4: 8 }                     => ApciTypes.Memory_Read,
-            { apci4: 9 }                     => ApciTypes.Memory_Response,
-            { apci4: 10 }                    => ApciTypes.Memory_Write,
-            _ => apci.apci4 << 6 | apci.apci6
-        };
-
-        private const int mask = 0b00_111111;
-        private (int offset, int mask) GetASDUMaskAndOffset((int apci, int len) x) => x switch
-        {
-            { apci: ApciTypes.GroupValue_Response, len: <= 2 }          => (1, mask),
-            { apci: ApciTypes.GroupValue_Write   , len: <= 2 }          => (1, mask),
-            { apci: ApciTypes.ADC_Read }                                => (1, mask),
-            { apci: ApciTypes.ADC_Response }                            => (1, mask),
-            { apci: ApciTypes.Memory_Read }                             => (1, mask),
-            { apci: ApciTypes.Memory_Response }                         => (1, mask),
-            { apci: ApciTypes.Memory_Write }                            => (1, mask),
-            { apci: ApciTypes.DeviceDescriptor_Read }                   => (1, mask),
-            { apci: ApciTypes.DeviceDescriptor_Response }               => (1, mask),
-            { apci: ApciTypes.IndividualAddress_Read }                  => (1, mask),
-            { apci: ApciTypes.IndividualAddress_Response }              => (1, mask),
-            _ => (2, 0b_11111111)
-        };
-        #endregion
 
         private void CalculateSize()
         {
@@ -178,8 +146,8 @@ namespace Tiveria.Home.Knx.Cemi
         private void BuildRaw()
         {
             _raw = new byte[Size];
-            _raw[0] = (byte)(Type >> 8);
-            _raw[1] = (byte)(Type & 0xff);
+            _raw[0] = (byte) ((Type <= 0b1111) ? Type >> 2 : Type >> 8 );
+            _raw[1] = (byte) ((Type <= 0b1111) ? (Type & 0b0011) << 6 : Type & 0b11111111);
 
             if((Type == ApciTypes.GroupValue_Write || Type == ApciTypes.GroupValue_Response) 
                 && Data.Length == 1 && Data[0] <= 63)

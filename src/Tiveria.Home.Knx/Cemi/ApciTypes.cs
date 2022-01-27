@@ -26,6 +26,7 @@ namespace Tiveria.Home.Knx.Cemi
 {
     public static class ApciTypes
     {
+        #region Public APCI Type Constants
         public const int GroupValue_Read                        = 0b0000;
         public const int GroupValue_Response                    = 0b0001;
         public const int GroupValue_Write                       = 0b0010;
@@ -118,97 +119,138 @@ namespace Tiveria.Home.Knx.Cemi
         public const int DomainAddressSerialNumber_Write        = 0b1111_101110;
 
         public const int FileStream_InfoReport                  = 0b1111_110000;
+        #endregion
 
-        static ApciTypes()
-        {
-        Register(GroupValue_Read, "GroupValue_Read", false);
-        Register(GroupValue_Response, "GroupValue_Response", true, true);
-        Register(GroupValue_Write, "GroupValue_Write", true, true);
-        Register(IndividualAddress_Write, "IndividualAddress_Write", true);
-        Register(IndividualAddress_Read, "IndividualAddress_Read", false);
-        Register(IndividualAddress_Response, "IndividualAddress_Response", false);
-        Register(ADC_Read, "ADC_Read", true);
-        Register(ADC_Response, "ADC_Response", true);
-        Register(SystemNetworkParameter_Read, "SystemNetworkParameter_Read", true);
-        Register(SystemNetworkParameter_Response, "SystemNetworkParameter_Response", true);
-        Register(SystemNetworkParameter_Write, "SystemNetworkParameter_Write", true);
-        Register(Memory_Read, "Memory_Read", true);
-        Register(Memory_Response, "Memory_Response", true);
-        Register(Memory_Write, "Memory_Write", true);
-        Register(UserMemory_Read, "UserMemory_Read", true);
-        Register(UserMemory_Response, "UserMemory_Response", true);
-        Register(UserMemory_Write, "UserMemory_Write", true);
-        Register(UserMemoryBit_Write, "UserMemoryBit_Write", true);
-        Register(UserManufacturerInfo_Read, "UserManufacturerInfo_Read", false);
-        Register(UserManufacturerInfo_Response, "UserManufacturerInfo_Response", true);
-        Register(FunctionPropertyCommand, "FunctionPropertyCommand", true);
-        Register(FunctionPropertyState_Read, "FunctionPropertyState_Read", true);
-        Register(FunctionPropertyState_Write, "FunctionPropertyState_Write", true);
-        Register(DeviceDescriptor_Read, "DeviceDescriptor_Read", true, true);
-        Register(DeviceDescriptor_Response, "DeviceDescriptor_Response", true);
-        Register(Restart_Request, "Restart_Request", false);
-        Register(RestartMasterReset_Request, "RestartMasterReset_Request", true);
-        Register(RestartMasterReset_Response, "RestartMasterReset_Response", true);
-        Register(Open_Routing_Table_Request, "Open_Routing_Table_Request", false);
-        Register(Read_Routing_Table_Request, "Read_Routing_Table_Request", false);
-        Register(Read_Routing_Table_Response, "Read_Routing_Table_Response", false);
-        Register(Write_Routing_Table_Request, "Write_Routing_Table_Request", false);
-        Register(Read_Router_Memory_Request, "Read_Router_Memory_Request", false);
-        Register(Read_Router_Memory_Response, "Read_Router_Memory_Response", false);
-        Register(Write_Router_Memory_Request, "Write_Router_Memory_Request", false);
-        Register(Read_Router_Status_Request, "Read_Router_Status_Request", false);
-        Register(Read_Router_Status_Response, "Read_Router_Status_Response", false);
-        Register(Write_Router_Status_Request, "Write_Router_Status_Request", false);
-        Register(MemoryBit_Write, "MemoryBit_Write", true);
-        Register(Authorize_Request, "Authorize_Request", true);
-        Register(Authorize_Response, "Authorize_Response", true);
-        Register(Key_Write, "Key_Write", true);
-        Register(Key_Response, "Key_Response", true);
-        Register(PropertyValue_Read, "PropertyValue_Read", true);
-        Register(PropertyValue_Response, "PropertyValue_Response", true);
-        Register(PropertyValue_Write, "PropertyValue_Write", false);
-        Register(PropertyDescription_Read, "PropertyDescription_Read", true);
-        Register(PropertyDescription_Response, "PropertyDescription_Response", true);
-        Register(NetworkParameter_Read, "NetworkParameter_Read", true);
-        Register(NetworkParameter_Response, "NetworkParameter_Response", true);
-        Register(IndividualAddressSerialNumber_Read, "IndividualAddressSerialNumber_Read", true);
-        Register(IndividualAddressSerialNumber_Response, "IndividualAddressSerialNumber_Response", true);
-        Register(IndividualAddressSerialNumber_Write, "IndividualAddressSerialNumber_Write", true);
-        Register(DomainAddress_Write, "DomainAddress_Write", true);
-        Register(DomainAddress_Read, "DomainAddress_Read", false);
-        Register(DomainAddress_Response, "DomainAddress_Response", true);
-        Register(DomainAddressSelective_Read, "DomainAddressSelective_Read", true);
-        Register(NetworkParameter_Write, "NetworkParameter_Write", true);
-        Register(Link_Read, "Link_Read", true);
-        Register(Link_Response, "Link_Response", true);
-        Register(Link_Write, "Link_Write", true);
-        Register(GroupPropertyValue_Read, "GroupPropertyValue_Read", false);
-        Register(GroupPropertyValue_Response, "GroupPropertyValue_Response", false);
-        Register(GroupPropertyValue_Write, "GroupPropertyValue_Write", false);
-        Register(GroupPropertyValue_InfoReport, "GroupPropertyValue_InfoReport", false);
-        Register(DomainAddressSerialNumber_Read, "DomainAddressSerialNumber_Read", true);
-        Register(DomainAddressSerialNumber_Response, "DomainAddressSerialNumber_Response", true);
-        Register(DomainAddressSerialNumber_Write, "DomainAddressSerialNumber_Write", true);
-        Register(FileStream_InfoReport, "FileStream_InfoReport", true);
-    }
-
-    public static void Register(int value, string name, bool dataRequired, bool canOptimize = false)
+        #region Public helpers
+        public static void Register(int value, string name, bool dataRequired, bool canOptimize = false)
         {
             var len = (value <= 0b1111) ? ApciFieldLength.Bits_4 : ApciFieldLength.Bits_10;
             var high = (byte) (len == ApciFieldLength.Bits_4 ? value >> 2 : value >> 8);
             var low  = (byte) (len == ApciFieldLength.Bits_4 ? value << 6 : value & 0xff);
-            _knowApciTypes.Add(value, new ApciTypeDetail2(name, high, low, len, dataRequired, canOptimize));
+            _knowApciTypes.Add(value, new ApciTypeDetail(name, high, low, len, dataRequired, canOptimize));
         }  
 
         public static bool IsKnown(int id) => _knowApciTypes.ContainsKey(id);
-        
-        public static ApciTypeDetail2? GetDetails(int id)
-        {
-            return IsKnown(id) ? _knowApciTypes[id] : null;
-        }
-        public static string ToString(int id) => IsKnown(id) ? _knowApciTypes[id].Name : "Unknown";
 
-        private static Dictionary<int, ApciTypeDetail2> _knowApciTypes = new Dictionary<int, ApciTypeDetail2>(50);
+        public static bool RequiresData(int id) => IsKnown(id) ? _knowApciTypes[id].DataRequired : false;
+
+        public static int GetApciType((int apci4, int apci6, int len) apci) => apci switch
+        {
+            { apci4: 0, apci6: 0 } => ApciTypes.GroupValue_Read,
+            { apci4: 1 } => ApciTypes.GroupValue_Response,
+            { apci4: 2 } => ApciTypes.GroupValue_Write,
+            { apci4: 3, apci6: 0 } => ApciTypes.GroupValue_Write,
+            { apci4: 4, apci6: 0 } => ApciTypes.GroupValue_Read,
+            { apci4: 5, apci6: 0 } => ApciTypes.GroupValue_Response,
+            { apci4: 6 } => ApciTypes.ADC_Read,
+            { apci4: 7, len: 5 } => ApciTypes.ADC_Response,
+            { apci4: 7, apci6: 8, len: > 5 } => ApciTypes.SystemNetworkParameter_Read,
+            { apci4: 7, apci6: 9, len: > 5 } => ApciTypes.SystemNetworkParameter_Response,
+            { apci4: 7, apci6: 10, len: > 5 } => ApciTypes.SystemNetworkParameter_Write,
+            { apci4: 8 } => ApciTypes.Memory_Read,
+            { apci4: 9 } => ApciTypes.Memory_Response,
+            { apci4: 10 } => ApciTypes.Memory_Write,
+            _ => apci.apci4 << 6 | apci.apci6
+        };
+
+        public static (int offset, int mask) GetASDUMaskAndOffset((int apci, int len) x) => x switch
+        {
+            { apci: ApciTypes.GroupValue_Response, len: <= 2 } => (1, CompressedDataMask),
+            { apci: ApciTypes.GroupValue_Write, len: <= 2 } => (1, CompressedDataMask),
+            { apci: ApciTypes.ADC_Read } => (1, CompressedDataMask),
+            { apci: ApciTypes.ADC_Response } => (1, CompressedDataMask),
+            { apci: ApciTypes.Memory_Read } => (1, CompressedDataMask),
+            { apci: ApciTypes.Memory_Response } => (1, CompressedDataMask),
+            { apci: ApciTypes.Memory_Write } => (1, CompressedDataMask),
+            { apci: ApciTypes.DeviceDescriptor_Read } => (1, CompressedDataMask),
+            { apci: ApciTypes.DeviceDescriptor_Response } => (1, CompressedDataMask),
+            { apci: ApciTypes.IndividualAddress_Read } => (1, CompressedDataMask),
+            { apci: ApciTypes.IndividualAddress_Response } => (1, CompressedDataMask),
+            _ => (2, 0b_11111111)
+        };
+
+        public static string ToString(int id) => IsKnown(id) ? _knowApciTypes[id].Name : "Unknown";
+        #endregion
+
+        #region internal helpers
+        static ApciTypes()
+        {
+            Register(GroupValue_Read, "GroupValue_Read", false);
+            Register(GroupValue_Response, "GroupValue_Response", true, true);
+            Register(GroupValue_Write, "GroupValue_Write", true, true);
+            Register(IndividualAddress_Write, "IndividualAddress_Write", true);
+            Register(IndividualAddress_Read, "IndividualAddress_Read", false);
+            Register(IndividualAddress_Response, "IndividualAddress_Response", false);
+            Register(ADC_Read, "ADC_Read", true);
+            Register(ADC_Response, "ADC_Response", true);
+            Register(SystemNetworkParameter_Read, "SystemNetworkParameter_Read", true);
+            Register(SystemNetworkParameter_Response, "SystemNetworkParameter_Response", true);
+            Register(SystemNetworkParameter_Write, "SystemNetworkParameter_Write", true);
+            Register(Memory_Read, "Memory_Read", true);
+            Register(Memory_Response, "Memory_Response", true);
+            Register(Memory_Write, "Memory_Write", true);
+            Register(UserMemory_Read, "UserMemory_Read", true);
+            Register(UserMemory_Response, "UserMemory_Response", true);
+            Register(UserMemory_Write, "UserMemory_Write", true);
+            Register(UserMemoryBit_Write, "UserMemoryBit_Write", true);
+            Register(UserManufacturerInfo_Read, "UserManufacturerInfo_Read", false);
+            Register(UserManufacturerInfo_Response, "UserManufacturerInfo_Response", true);
+            Register(FunctionPropertyCommand, "FunctionPropertyCommand", true);
+            Register(FunctionPropertyState_Read, "FunctionPropertyState_Read", true);
+            Register(FunctionPropertyState_Write, "FunctionPropertyState_Write", true);
+            Register(DeviceDescriptor_Read, "DeviceDescriptor_Read", true, true);
+            Register(DeviceDescriptor_Response, "DeviceDescriptor_Response", true);
+            Register(Restart_Request, "Restart_Request", false);
+            Register(RestartMasterReset_Request, "RestartMasterReset_Request", true);
+            Register(RestartMasterReset_Response, "RestartMasterReset_Response", true);
+            Register(Open_Routing_Table_Request, "Open_Routing_Table_Request", false);
+            Register(Read_Routing_Table_Request, "Read_Routing_Table_Request", false);
+            Register(Read_Routing_Table_Response, "Read_Routing_Table_Response", false);
+            Register(Write_Routing_Table_Request, "Write_Routing_Table_Request", false);
+            Register(Read_Router_Memory_Request, "Read_Router_Memory_Request", false);
+            Register(Read_Router_Memory_Response, "Read_Router_Memory_Response", false);
+            Register(Write_Router_Memory_Request, "Write_Router_Memory_Request", false);
+            Register(Read_Router_Status_Request, "Read_Router_Status_Request", false);
+            Register(Read_Router_Status_Response, "Read_Router_Status_Response", false);
+            Register(Write_Router_Status_Request, "Write_Router_Status_Request", false);
+            Register(MemoryBit_Write, "MemoryBit_Write", true);
+            Register(Authorize_Request, "Authorize_Request", true);
+            Register(Authorize_Response, "Authorize_Response", true);
+            Register(Key_Write, "Key_Write", true);
+            Register(Key_Response, "Key_Response", true);
+            Register(PropertyValue_Read, "PropertyValue_Read", true);
+            Register(PropertyValue_Response, "PropertyValue_Response", true);
+            Register(PropertyValue_Write, "PropertyValue_Write", false);
+            Register(PropertyDescription_Read, "PropertyDescription_Read", true);
+            Register(PropertyDescription_Response, "PropertyDescription_Response", true);
+            Register(NetworkParameter_Read, "NetworkParameter_Read", true);
+            Register(NetworkParameter_Response, "NetworkParameter_Response", true);
+            Register(IndividualAddressSerialNumber_Read, "IndividualAddressSerialNumber_Read", true);
+            Register(IndividualAddressSerialNumber_Response, "IndividualAddressSerialNumber_Response", true);
+            Register(IndividualAddressSerialNumber_Write, "IndividualAddressSerialNumber_Write", true);
+            Register(DomainAddress_Write, "DomainAddress_Write", true);
+            Register(DomainAddress_Read, "DomainAddress_Read", false);
+            Register(DomainAddress_Response, "DomainAddress_Response", true);
+            Register(DomainAddressSelective_Read, "DomainAddressSelective_Read", true);
+            Register(NetworkParameter_Write, "NetworkParameter_Write", true);
+            Register(Link_Read, "Link_Read", true);
+            Register(Link_Response, "Link_Response", true);
+            Register(Link_Write, "Link_Write", true);
+            Register(GroupPropertyValue_Read, "GroupPropertyValue_Read", false);
+            Register(GroupPropertyValue_Response, "GroupPropertyValue_Response", false);
+            Register(GroupPropertyValue_Write, "GroupPropertyValue_Write", false);
+            Register(GroupPropertyValue_InfoReport, "GroupPropertyValue_InfoReport", false);
+            Register(DomainAddressSerialNumber_Read, "DomainAddressSerialNumber_Read", true);
+            Register(DomainAddressSerialNumber_Response, "DomainAddressSerialNumber_Response", true);
+            Register(DomainAddressSerialNumber_Write, "DomainAddressSerialNumber_Write", true);
+            Register(FileStream_InfoReport, "FileStream_InfoReport", true);
+        }
+
+        private const int CompressedDataMask = 0b00_111111;
+
+        private static Dictionary<int, ApciTypeDetail> _knowApciTypes = new Dictionary<int, ApciTypeDetail>(50);
+
+        #endregion
     }
 
     public enum ApciFieldLength
@@ -217,6 +259,6 @@ namespace Tiveria.Home.Knx.Cemi
         Bits_10
     }
 
-    public record struct ApciTypeDetail2(string Name, byte HighBits, byte LowBits, ApciFieldLength Length, bool DataRequired, bool CanOptimize);
+    public record struct ApciTypeDetail(string Name, byte HighBits, byte LowBits, ApciFieldLength Length, bool DataRequired, bool CanOptimize);
 
 }

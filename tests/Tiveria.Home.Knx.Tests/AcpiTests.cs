@@ -10,18 +10,12 @@ namespace Tiveria.Home.Knx.Tests
     [TestFixture]
     class AcpiTests
     {
-        /* At the moment no check for data size implemented
         [Test]
         public void ParseGroupValue_Read1()
         {
             var data = "0000".ToByteArray(); // Type:GroupValue_Read, Data:None
-            var result = new Apci(ApciTypes.GroupValue_Read, data);
-
-            Assert.AreEqual(ApciTypes.GroupValue_Read, result.Type);
-            Assert.IsNotNull(result.Data);
-            Assert.Zero(result.Data.Length);
+            Assert.Throws<ArgumentException>(() =>new Apci(ApciTypes.GroupValue_Read, data));
         }
-        */
 
         [Test]
         public void ParseGroupValue_Write1()
@@ -125,6 +119,13 @@ namespace Tiveria.Home.Knx.Tests
             Assert.IsNotNull(result.Data);
             Assert.AreEqual(4, result.Data.Length);
             Assert.AreEqual(0x3d, result.Data[0]);
+        }
+
+        [Test]
+        public void BuildGroupValueRead()
+        {
+            var tpdu = new Apci(ApciTypes.GroupValue_Write, new byte[] { 0x01 });
+            Assert.AreEqual(new byte [] { 0, 129 }, tpdu.ToBytes());
         }
     }
 }
