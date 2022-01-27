@@ -80,6 +80,17 @@ namespace Tiveria.Home.Knx.Datapoint
         private byte _dayOfMonth;
         private byte _hour;
 
+        public ComplexDateTime(DateTime dt) : this()
+        {
+            _year = (byte)dt.Year;
+            _month = (byte)dt.Month;
+            _dayOfMonth = (byte)dt.Day;
+            _hour = (byte)dt.Hour;
+            _minute = (byte)dt.Minute;
+            _second = (byte)dt.Second;
+            DayOfWeek = (DayOfWeek)dt.DayOfWeek;
+        }
+
         public short Year { get => _year; set => _year = value; }
         public byte Month { get => _month; set => _month = value; }
         public byte DayOfMonth { get => _dayOfMonth; set => _dayOfMonth = value; }
