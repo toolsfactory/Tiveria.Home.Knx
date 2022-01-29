@@ -80,7 +80,7 @@ namespace Tiveria.Home.Knx.Tests
             Assert.AreEqual(result.SourceAddress.ToString(), "1.1.205");
             Assert.AreEqual(((GroupAddress) result.DestinationAddress).ToString(), "6/1/47");
 
-            Assert.AreEqual(result.Tpdu.Size, 2);
+            Assert.AreEqual(result.Apdu.Size, 2);
         }
 
         [Test]
@@ -110,7 +110,7 @@ namespace Tiveria.Home.Knx.Tests
             Assert.AreEqual(result.SourceAddress.ToString(), "1.1.205");
             Assert.AreEqual(((GroupAddress)result.DestinationAddress).ToString(), "6/1/47");
 
-            Assert.AreEqual(result.Tpdu.Size, 2);
+            Assert.AreEqual(result.Apdu.Size, 2);
         }
 
         [Test]

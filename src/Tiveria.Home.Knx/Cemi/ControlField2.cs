@@ -46,20 +46,15 @@ namespace Tiveria.Home.Knx.Cemi
     ///                     0b0000 = for standard frame(long frames, APDU > 15 octet)
     ///                     0b01xx = for LTE frames (NOT FULLY SUPPORTED!)
     /// </summary>
-    public class ControlField2
+    public struct ControlField2
     {
-        #region private fields
-        private byte _rawData;
-        private AddressType _destinationAddressType;
-        private byte _hopCount;
-        private byte _extendedFrameFormat;
-        #endregion
+        private byte _hopCount = 6;
+        private byte extendedFrameFormat = 0;
 
         #region public properties
-        public byte RawData => _rawData;
-        public AddressType DestinationAddressType => _destinationAddressType;
-        public byte HopCount => _hopCount;
-        public byte ExtendedFrameFormat => _extendedFrameFormat;
+        public AddressType DestinationAddressType { get; set; } = AddressType.GroupAddress;
+        public byte HopCount { get => _hopCount; set => _hopCount = (byte)((value > 7) ? 7 : value); }
+        public byte ExtendedFrameFormat { get => extendedFrameFormat; set => extendedFrameFormat = (byte)((value > 0b1111) ? 0b1111 : value); }
         #endregion
 
         #region constructors
@@ -69,8 +64,9 @@ namespace Tiveria.Home.Knx.Cemi
         /// <param name="data">Raw represenation of the cemi controlfield 2</param>
         public ControlField2(byte data)
         {
-            _rawData = data;
-            ParseData();
+            HopCount = (byte)((data & 0b0111_0000) >> 4);
+            DestinationAddressType = ((data & 0b1000_0000) == 0) ? AddressType.IndividualAddress : AddressType.GroupAddress;
+            ExtendedFrameFormat = (byte)(data & 0b0000_1111);
         }
 
         /// <summary>
@@ -81,36 +77,21 @@ namespace Tiveria.Home.Knx.Cemi
         /// <param name="extendedFrameFormat">Format of the extended  frame. 0=default, 0b0100-0b0111 LTE frames (not fully supported in here)</param>
         public ControlField2(bool groupAddress = true, int hopCount = 6, int extendedFrameFormat = 0)
         {
-            if (hopCount < 0 || hopCount > 0b0111)
-                throw new ArgumentOutOfRangeException("hop count out of range 0..7");
-            if (extendedFrameFormat < 0 || extendedFrameFormat > 0b0111)
-                throw new ArgumentOutOfRangeException("extended frame format out of range 0..7");
-            _hopCount = (byte)hopCount;
-            _destinationAddressType = groupAddress ? AddressType.GroupAddress : AddressType.IndividualAddress;
-            _extendedFrameFormat = (byte)extendedFrameFormat;
-            ToByte();
+            HopCount = (byte)hopCount;
+            DestinationAddressType = groupAddress ? AddressType.GroupAddress : AddressType.IndividualAddress;
+            ExtendedFrameFormat = (byte)extendedFrameFormat;
         }
         #endregion
 
-        #region private methods
-        private void ToByte()
+        #region public implementations
+        public byte ToByte()
         {
-            _rawData = 0;
-            _rawData = (byte)(_hopCount << 4);
-
-            _rawData |= _extendedFrameFormat;
-
-            if (_destinationAddressType == AddressType.GroupAddress)
-                _rawData |= 0b1000_0000;
+            var raw = (byte)(HopCount << 4);
+            raw |= ExtendedFrameFormat;
+            if (DestinationAddressType == AddressType.GroupAddress)
+                raw |= 0b1000_0000;
+            return raw;
         }
-
-        private void ParseData()
-        {
-            _hopCount = (byte)((_rawData & 0b0111_0000) >> 4);
-            _destinationAddressType = ((_rawData & 0b1000_0000) == 0) ? AddressType.IndividualAddress : AddressType.GroupAddress;
-            _extendedFrameFormat = (byte) (_rawData & 0b0000_1111);
-        }
-        #endregion
 
         public string ToDescription(int padding)
         {
@@ -119,5 +100,6 @@ namespace Tiveria.Home.Knx.Cemi
             var spaces = new String(' ', padding);
             return $"{spaces}Ctrl2: DestinationAddressType = {DestinationAddressType}, HopCount = {HopCount}, ExtendedFrameFormat = {effbin}";
         }
+        #endregion
     }
 }

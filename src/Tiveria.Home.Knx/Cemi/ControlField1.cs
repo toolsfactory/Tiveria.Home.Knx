@@ -50,27 +50,19 @@ namespace Tiveria.Home.Knx.Cemi
     ///                     0 = no error, 1 = error
     /// </summary>
 
-    public class ControlField1
+    public struct ControlField1
     {
         #region private fields
-        private readonly MessageCode _messageCode;
-        private byte _rawData;
-        private bool _extendedFrame;
-        private bool _repeat;
-        private BroadcastType _broadcast;
-        private Priority _priority;
-        private bool _acknowledgeRequest;
-        private ConfirmType _confirm;
+        private readonly MessageCode _messageCode = MessageCode.LDATA_IND;
         #endregion
 
         #region public properties
-        public byte RawData => _rawData;
-        public bool ExtendedFrame => _extendedFrame;
-        public bool Repeat => _repeat;
-        public BroadcastType Broadcast => _broadcast;
-        public Priority Priority => _priority;
-        public bool AcknowledgeRequest => _acknowledgeRequest; 
-        public ConfirmType Confirm => _confirm; 
+        public bool ExtendedFrame { get; set; } = false;
+        public bool Repeat { get; set; } = false;
+        public BroadcastType Broadcast { get; set; } = BroadcastType.Normal;
+        public Priority Priority { get; set; } = Priority.Normal;
+        public bool AcknowledgeRequest { get; set; } = false;
+        public ConfirmType Confirm { get; set; } = ConfirmType.NoError;
         #endregion
 
         #region constructors
@@ -82,8 +74,20 @@ namespace Tiveria.Home.Knx.Cemi
         public ControlField1(MessageCode messageCode, byte data)
         {
             _messageCode = messageCode;
-            _rawData = data;
-            ParseData();
+            Broadcast = (data & 0x10) == 0x10 ? BroadcastType.Normal : BroadcastType.System;
+            Confirm = (data & 0x01) == 0 ? ConfirmType.NoError : ConfirmType.Error;
+            ExtendedFrame = (data & 0x80) == 0;
+            AcknowledgeRequest = (data & 0x02) != 0;
+
+            if (_messageCode == MessageCode.LDATA_IND)
+                // ind: flag 0 = repeated frame, 1 = not repeated
+                Repeat = (data & 0x20) == 0;
+            else
+                // req, (con): flag 0 = do not repeat, 1 = default behavior
+                Repeat = (data & 0x20) == 0x20;
+
+            var bits = data >> 2 & 0x03;
+            Priority = (Priority)bits;
         }
 
         /// <summary>
@@ -98,67 +102,44 @@ namespace Tiveria.Home.Knx.Cemi
         public ControlField1(MessageCode mc, bool extendedFrame =false, Priority priority = Priority.Normal, bool repeat = true, BroadcastType broadcast = BroadcastType.Normal, bool ack = true, ConfirmType confirm = ConfirmType.NoError)
         {
             _messageCode = mc;
-            _extendedFrame = extendedFrame;
-            _repeat = repeat;
-            _broadcast = broadcast;
-            _priority = priority;
-            _acknowledgeRequest = ack;
-            _confirm = confirm;
-            ToByte();
+            ExtendedFrame = extendedFrame;
+            Repeat = repeat;
+            Broadcast = broadcast;
+            Priority = priority;
+            AcknowledgeRequest = ack;
+            Confirm = confirm;
         }
         #endregion
 
-        #region private methods
         /// <summary>
         /// Convert the properties to the corresponding byte representation
         /// </summary>
-        private void ToByte()
+        public byte ToByte()
         {
-            _rawData = (byte) (((byte)_priority & 0x03) << 2);
+            var raw = (byte) (((byte)Priority & 0x03) << 2);
 
-            if (!_extendedFrame)
-                _rawData |= 0b1000_0000;
+            if (!ExtendedFrame)
+                raw |= 0b1000_0000;
 
             var repflag = _messageCode == MessageCode.LDATA_IND ? !Repeat : Repeat;
             if (repflag)
-                _rawData |= 0b0010_0000;
+                raw |= 0b0010_0000;
 
-            if (_broadcast == BroadcastType.Normal)
-                _rawData |= 0x10;
+            if (Broadcast == BroadcastType.Normal)
+                raw |= 0x10;
 
-            if (_acknowledgeRequest)
-                _rawData |= 0x02;
+            if (AcknowledgeRequest)
+                raw |= 0x02;
 
-            if (_confirm == ConfirmType.Error)
-                _rawData |= 0x01;
+            if (Confirm == ConfirmType.Error)
+                raw |= 0x01;
+            return raw;
         }
-        /// <summary>
-        /// Parse the byte and set the properties accordingly
-        /// </summary>
-        private void ParseData()
-        {
-            _broadcast = (_rawData & 0x10) == 0x10 ? BroadcastType.Normal : BroadcastType.System;
-            _confirm = (_rawData & 0x01) == 0 ? ConfirmType.NoError : ConfirmType.Error;
-            _extendedFrame = (_rawData & 0x80) == 0;
-            _acknowledgeRequest = (_rawData & 0x02) != 0;
-
-            if (_messageCode == MessageCode.LDATA_IND)
-                // ind: flag 0 = repeated frame, 1 = not repeated
-                _repeat = (_rawData & 0x20) == 0;
-            else
-                // req, (con): flag 0 = do not repeat, 1 = default behavior
-                _repeat = (_rawData & 0x20) == 0x20;
-
-            var bits = _rawData >> 2 & 0x03;
-            _priority = (Priority)bits;
-        }
-        #endregion
 
         public string ToDescription(int padding)
         {
             var spaces = new String(' ', padding);
             return $"{spaces}Ctrl1: ExtendedFrame = {ExtendedFrame}, Repeat = {Repeat}, Broadcast = {Broadcast}, Priority = {Priority}, Acknowledge = {AcknowledgeRequest}, Confirm = {Confirm}";
         }
-
     }
 }

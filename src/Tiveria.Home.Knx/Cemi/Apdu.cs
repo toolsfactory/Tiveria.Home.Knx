@@ -57,16 +57,12 @@ namespace Tiveria.Home.Knx.Cemi
     /// 4 bits: APDU Byte 1 bits 6+7 and APDU Byte 2 bits 0+1
     /// 10 bits: 4 bits as above and APDU byte 2 bits 2+3+4+5+6+7
     /// </summary>
-    public class Apci : ITpdu
+    public class Apdu
     {
         #region public properties
         public int Size { get; private set; } = 2;
         public byte[] Data { get; private set; } = Array.Empty<byte>();
         public int Type { get; private set; } = ApciType.GroupValue_Read;
-
-        public bool IsApci { get; private set; } = true;
-        public bool IsTpci => false;
-        public TpduType TpduType => TpduType.ApciOnly;
         #endregion
 
         #region constructors
@@ -77,7 +73,7 @@ namespace Tiveria.Home.Knx.Cemi
         /// <param name="type">The Apci service type</param>
         /// <param name="data">Data to be inserted. In case the Apci Service has a 4 bit identifier and the lower 6 bits are used for data already, this information has to be the first byte in this parameter</param>
         /// <exception cref="ArgumentException">Thrown in case the Apci Type is out of range or data size doesnt fit the type</exception>
-        public Apci(int type, byte[] data)
+        public Apdu(int type, byte[] data)
         {
             if (Type < 0 || Type > 0b1111111111)
                 throw new ArgumentException("Apci type out of range!");
@@ -94,7 +90,7 @@ namespace Tiveria.Home.Knx.Cemi
         /// </summary>
         /// <param name="type">The Apci service type</param>
         /// <exception cref="ArgumentException">Thrown in case the Apci Type is out of range or data size doesnt fit the type</exception>
-        public Apci(int type)
+        public Apdu(int type)
             : this(type, Array.Empty<byte>())
         { }
 
@@ -104,7 +100,7 @@ namespace Tiveria.Home.Knx.Cemi
         /// </summary>
         /// <param name="buffer">The byte array to parse</param>
         /// <exception cref="ArgumentNullException">Thrown if buffer is null</exception>
-        public Apci(Span<byte> buffer)
+        public Apdu(Span<byte> buffer)
         {
             if (buffer == null)
                 throw new ArgumentNullException("data");
@@ -123,9 +119,10 @@ namespace Tiveria.Home.Knx.Cemi
             return _raw;
         }
 
-        public void Write(BigEndianBinaryWriter writer)
+        public void Write(BigEndianBinaryWriter writer, byte tpciFlags = 0)
         {
-            writer.Write(_raw);
+            writer.Write((byte)((_raw[0] & 0b00000011) | (tpciFlags & 0b11111100)));
+            writer.Write(_raw.AsSpan().Slice(1));
         }
 
         public override string? ToString()
@@ -204,9 +201,9 @@ namespace Tiveria.Home.Knx.Cemi
         #endregion
 
         #region static helpers
-        public static Apci Parse(Span<byte> buffer)
+        public static Apdu Parse(Span<byte> buffer)
         {
-            return new Apci(buffer);
+            return new Apdu(buffer);
         }
         #endregion
     }

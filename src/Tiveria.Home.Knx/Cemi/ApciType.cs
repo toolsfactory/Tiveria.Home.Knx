@@ -27,98 +27,98 @@ namespace Tiveria.Home.Knx.Cemi
     public static class ApciType
     {
         #region Public APCI Type Constants
-        public const int GroupValue_Read                        = 0b0000;
-        public const int GroupValue_Response                    = 0b0001;
-        public const int GroupValue_Write                       = 0b0010;
+        public const int GroupValue_Read                        = 0b00_00;
+        public const int GroupValue_Response                    = 0b00_01;
+        public const int GroupValue_Write                       = 0b00_10;
 
-        public const int IndividualAddress_Write                = 0b0011;
-        public const int IndividualAddress_Read                 = 0b0100;
-        public const int IndividualAddress_Response             = 0b0101;
+        public const int IndividualAddress_Write                = 0b00_11;
+        public const int IndividualAddress_Read                 = 0b01_00;
+        public const int IndividualAddress_Response             = 0b01_01;
 
-        public const int ADC_Read                               = 0b0110;
-        public const int ADC_Response                           = 0b0111;
+        public const int ADC_Read                               = 0b01_10;
+        public const int ADC_Response                           = 0b01_11;
 
-        public const int SystemNetworkParameter_Read            = 0b0111_001000;
-        public const int SystemNetworkParameter_Response        = 0b0111_001001;
-        public const int SystemNetworkParameter_Write           = 0b0111_001010;
-        // Reserved for future use                              = 0b0111_001011
+        public const int SystemNetworkParameter_Read            = 0b01_11001000;
+        public const int SystemNetworkParameter_Response        = 0b01_11001001;
+        public const int SystemNetworkParameter_Write           = 0b01_11001010;
+        // Reserved for future use                              = 0b01_11001011
 
-        public const int Memory_Read                            = 0b1000;
-        public const int Memory_Response                        = 0b1001;
-        public const int Memory_Write                           = 0b1010;
+        public const int Memory_Read                            = 0b10_00;
+        public const int Memory_Response                        = 0b10_01;
+        public const int Memory_Write                           = 0b10_10;
 
-        public const int UserMemory_Read                        = 0b1011_000000;
-        public const int UserMemory_Response                    = 0b1011_000001;
-        public const int UserMemory_Write                       = 0b1011_000010;
+        public const int UserMemory_Read                        = 0b10_11000000;
+        public const int UserMemory_Response                    = 0b10_11000001;
+        public const int UserMemory_Write                       = 0b10_11000010;
 
-        public const int UserMemoryBit_Write                    = 0b1011_000100;
+        public const int UserMemoryBit_Write                    = 0b10_11000100;
 
-        public const int UserManufacturerInfo_Read              = 0b1011_000101;
-        public const int UserManufacturerInfo_Response          = 0b1011_000110;
+        public const int UserManufacturerInfo_Read              = 0b10_11000101;
+        public const int UserManufacturerInfo_Response          = 0b10_11000110;
 
-        public const int FunctionPropertyCommand                = 0b1011_000111;
-        public const int FunctionPropertyState_Read             = 0b1011_001000;
-        public const int FunctionPropertyState_Response         = 0b1011_001001;
+        public const int FunctionPropertyCommand                = 0b10_11000111;
+        public const int FunctionPropertyState_Read             = 0b10_11001000;
+        public const int FunctionPropertyState_Response         = 0b10_11001001;
 
-        public const int DeviceDescriptor_Read                  = 0b1100_000000;
-        public const int DeviceDescriptor_Response              = 0b1101_000000;  // Indentical to DeviceDescriptor Inforeport
-        public const int Restart_Request                        = 0b1110_000000;  // No reponse forseen in protocol
-        public const int RestartMasterReset_Request             = 0b1110_000001;  // subtype of Restart with extra flag set
-        public const int RestartMasterReset_Response            = 0b1110_100001;  // subtype of Restart with extra flag set
+        public const int DeviceDescriptor_Read                  = 0b11_00000000;
+        public const int DeviceDescriptor_Response              = 0b11_01000000;  // Indentical to DeviceDescriptor Inforeport
+        public const int Restart_Request                        = 0b11_10000000;  // No reponse forseen in protocol
+        public const int RestartMasterReset_Request             = 0b11_10000001;  // subtype of Restart with extra flag set
+        public const int RestartMasterReset_Response            = 0b11_10100001;  // subtype of Restart with extra flag set
 
-        public const int Open_Routing_Table_Request             = 0b1111_000000;
-        public const int Read_Routing_Table_Request             = 0b1111_000001;
-        public const int Read_Routing_Table_Response            = 0b1111_000010;
-        public const int Write_Routing_Table_Request            = 0b1111_000011;
-        public const int Read_Router_Memory_Request             = 0b1111_001000;
-        public const int Read_Router_Memory_Response            = 0b1111_001001;
-        public const int Write_Router_Memory_Request            = 0b1111_001010;
-        public const int Read_Router_Status_Request             = 0b1111_001101;
-        public const int Read_Router_Status_Response            = 0b1111_001110;
-        public const int Write_Router_Status_Request            = 0b1111_001111;
+        public const int Open_Routing_Table_Request             = 0b11_11000000;
+        public const int Read_Routing_Table_Request             = 0b11_11000001;
+        public const int Read_Routing_Table_Response            = 0b11_11000010;
+        public const int Write_Routing_Table_Request            = 0b11_11000011;
+        public const int Read_Router_Memory_Request             = 0b11_11001000;
+        public const int Read_Router_Memory_Response            = 0b11_11001001;
+        public const int Write_Router_Memory_Request            = 0b11_11001010;
+        public const int Read_Router_Status_Request             = 0b11_11001101;
+        public const int Read_Router_Status_Response            = 0b11_11001110;
+        public const int Write_Router_Status_Request            = 0b11_11001111;
 
-        public const int MemoryBit_Write                        = 0b1111_010000;
+        public const int MemoryBit_Write                        = 0b11_11010000;
 
-        public const int Authorize_Request                      = 0b1111_010001;
-        public const int Authorize_Response                     = 0b1111_010010;
-        public const int Key_Write                              = 0b1111_010011;
-        public const int Key_Response                           = 0b1111_010100;
+        public const int Authorize_Request                      = 0b11_11010001;
+        public const int Authorize_Response                     = 0b11_11010010;
+        public const int Key_Write                              = 0b11_11010011;
+        public const int Key_Response                           = 0b11_11010100;
 
-        public const int PropertyValue_Read                     = 0b1111_010101;
-        public const int PropertyValue_Response                 = 0b1111_010110;
-        public const int PropertyValue_Write                    = 0b1111_010111;
-        public const int PropertyDescription_Read               = 0b1111_011000;
-        public const int PropertyDescription_Response           = 0b1111_011001;
+        public const int PropertyValue_Read                     = 0b11_11010101;
+        public const int PropertyValue_Response                 = 0b11_11010110;
+        public const int PropertyValue_Write                    = 0b11_11010111;
+        public const int PropertyDescription_Read               = 0b11_11011000;
+        public const int PropertyDescription_Response           = 0b11_11011001;
 
-        public const int NetworkParameter_Read                  = 0b1111_011010;
-        public const int NetworkParameter_Response              = 0b1111_011011;
+        public const int NetworkParameter_Read                  = 0b11_11011010;
+        public const int NetworkParameter_Response              = 0b11_11011011;
 
-        public const int IndividualAddressSerialNumber_Read     = 0b1111_011100;
-        public const int IndividualAddressSerialNumber_Response = 0b1111_011101;
-        public const int IndividualAddressSerialNumber_Write    = 0b1111_011110;
-        // Reserved for future use                              = 0b1111_011111;
+        public const int IndividualAddressSerialNumber_Read     = 0b11_11011100;
+        public const int IndividualAddressSerialNumber_Response = 0b11_11011101;
+        public const int IndividualAddressSerialNumber_Write    = 0b11_11011110;
+        // Reserved for future use                              = 0b11_11011111;
 
-        public const int DomainAddress_Write                    = 0b1111_100000;
-        public const int DomainAddress_Read                     = 0b1111_100001;
-        public const int DomainAddress_Response                 = 0b1111_100010;
-        public const int DomainAddressSelective_Read            = 0b1111_100011;
+        public const int DomainAddress_Write                    = 0b11_11100000;
+        public const int DomainAddress_Read                     = 0b11_11100001;
+        public const int DomainAddress_Response                 = 0b11_11100010;
+        public const int DomainAddressSelective_Read            = 0b11_11100011;
 
-        public const int NetworkParameter_Write                 = 0b1111_100100;
+        public const int NetworkParameter_Write                 = 0b11_11100100;
 
-        public const int Link_Read                              = 0b1111_100101;
-        public const int Link_Response                          = 0b1111_100110;
-        public const int Link_Write                             = 0b1111_100111;
+        public const int Link_Read                              = 0b11_11_100101;
+        public const int Link_Response                          = 0b11_11_100110;
+        public const int Link_Write                             = 0b11_11_100111;
 
-        public const int GroupPropertyValue_Read                = 0b1111_101000;
-        public const int GroupPropertyValue_Response            = 0b1111_101001;
-        public const int GroupPropertyValue_Write               = 0b1111_101010;
-        public const int GroupPropertyValue_InfoReport          = 0b1111_101011;
+        public const int GroupPropertyValue_Read                = 0b11_11_101000;
+        public const int GroupPropertyValue_Response            = 0b11_11_101001;
+        public const int GroupPropertyValue_Write               = 0b11_11_101010;
+        public const int GroupPropertyValue_InfoReport          = 0b11_11_101011;
 
-        public const int DomainAddressSerialNumber_Read         = 0b1111_101100;
-        public const int DomainAddressSerialNumber_Response     = 0b1111_101101;
-        public const int DomainAddressSerialNumber_Write        = 0b1111_101110;
+        public const int DomainAddressSerialNumber_Read         = 0b11_11_101100;
+        public const int DomainAddressSerialNumber_Response     = 0b11_11_101101;
+        public const int DomainAddressSerialNumber_Write        = 0b11_11_101110;
 
-        public const int FileStream_InfoReport                  = 0b1111_110000;
+        public const int FileStream_InfoReport                  = 0b11_11_110000;
         #endregion
 
         #region Public helpers

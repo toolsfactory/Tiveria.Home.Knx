@@ -69,23 +69,34 @@ namespace Tiveria.Home.Knx.Cemi.Serializers
             var dstAddr = ReadDestinationAddress(reader, controlField2.DestinationAddressType == Adresses.AddressType.GroupAddress);
             var npduLength = reader.ReadByte();
             var data = reader.ReadBytes(npduLength + 1); // TPCI Octet not included in length field!
-            ITpdu tpdu = (npduLength == 0) ? Tpci.Parse(data) : Apci.Parse(data);
+            var tpci = Tpci.Parse(data[0]);
+            var apdu = (npduLength == 0) ? null : Apdu.Parse(data);
 
-            return new CemiLData(msgCode, additionalInfoFields, srcAddr, dstAddr, controlField1, controlField2, tpdu);
+            return new CemiLData(msgCode, additionalInfoFields, srcAddr, dstAddr, controlField1, controlField2, tpci, apdu);
         }
 
         public override void Serialize(CemiLData cemiMessage, BigEndianBinaryWriter writer)
         {
             writer.Write((byte)cemiMessage.MessageCode);
             writer.Write((byte)cemiMessage.AdditionalInfoLength);
-            foreach (var info in cemiMessage.AdditionalInfoFields)
+            foreach (var info in cemiMessage.AdditionalInfoFields) 
                 info.Write(writer);
-            writer.Write((byte)cemiMessage.ControlField1.RawData);
-            writer.Write((byte)cemiMessage.ControlField2.RawData);
+            writer.Write((byte)cemiMessage.ControlField1.ToByte());
+            writer.Write((byte)cemiMessage.ControlField2.ToByte());
             cemiMessage.SourceAddress.Write(writer);
             cemiMessage.DestinationAddress.Write(writer);
-            writer.Write((byte)(cemiMessage.Tpdu.Size - 1)); // Apci structure includes TPCI and therefore Size is NPDULength+1
-            cemiMessage.Tpdu.Write(writer);
+            if (cemiMessage.Apdu == null)
+            {
+                writer.Write((byte)0); // Field with TPCI mask not counted
+                writer.Write(cemiMessage.Tpci.ToByte());
+            }
+            else
+            {
+                var apdu = cemiMessage.Apdu.ToBytes();
+                apdu[0] = (byte)((apdu[0] & 0b000000_11) | cemiMessage.Tpci.ToByte());
+                writer.Write((byte)(cemiMessage.Apdu.Size - 1)); // Field with TPCI mask and upper apci bits not counted 
+                writer.Write(apdu); // Apci structure includes TPCI and therefore Size is NPDULength+1
+            }
         }
     }
 }

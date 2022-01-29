@@ -30,13 +30,13 @@ namespace Tiveria.Home.Knx.Cemi
     public enum Priority : byte
     {
         //System priority, reserved for high priority management and system configuration.
-        System = 0x00,
+        System = 0b00,
         // Normal priority, the default for short frames.
-	    Normal = 0x01,
+	    Normal = 0b01,
         // Urgent priority, for urgent frames.
-	    Urgent = 0x02,
+	    Urgent = 0b10,
         // Low priority, used for long frames.
-	    Low = 0x03
+	    Low = 0b11
     }
 
     public static partial class EnumExtensions

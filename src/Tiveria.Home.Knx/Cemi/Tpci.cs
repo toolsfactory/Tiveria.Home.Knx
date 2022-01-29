@@ -45,37 +45,22 @@ namespace Tiveria.Home.Knx.Cemi
     /// 
     /// </summary>
     /// 
-    public class Tpci : ITpdu
+    public struct Tpci
     {
-        public int Size => 1;
         public PacketType PacketType { get; init; } = PacketType.Data;
         public SequenceType SequenceType { get; init; } = SequenceType.UnNumbered;
         public byte SequenceNumber { get; init; } = 0;
         public ControlType ControlType { get; init; } = ControlType.Connect;
-        public byte Raw { get; private set; } = 0;
-        public bool IsApci => false;
-        public bool IsTpci => true;
-        public TpduType TpduType => TpduType.TpciOnly;
-
         public Tpci(PacketType packetType, SequenceType sequenceType = SequenceType.UnNumbered, byte sequenceNumber = 0, ControlType controlType = ControlType.Connect)
         {
             PacketType = packetType;
             SequenceType = sequenceType;
             SequenceNumber = (byte)(sequenceNumber & 0b0000_1111);
             ControlType = controlType;
-
-            Raw = 0x00;
-            Raw |= (byte)PacketType;
-            Raw |= (byte)SequenceType;
-            if (SequenceType == SequenceType.Numbered)
-                Raw |= (byte)(SequenceNumber << 2 & 0b00_1111_00);
-            if (packetType == PacketType.Control)
-                Raw |= (byte)ControlType;
         }
 
         public Tpci(byte raw)
         {
-            Raw = (byte)(raw & 0b111111_00);
             PacketType = (PacketType)(raw & 0b1_0000000);
             SequenceType = (SequenceType)(raw & 0b0_1_000000);
             SequenceNumber = (SequenceType == SequenceType.Numbered) ? 
@@ -84,21 +69,20 @@ namespace Tiveria.Home.Knx.Cemi
                 (ControlType)(raw & 0b000000_11) : ControlType.None;
         }
 
-        public byte[] ToBytes()
+        public byte ToByte()
         {
-            return new byte[1] { Raw };
+            var raw = (byte)PacketType;
+            raw |= (byte)SequenceType;
+            if (SequenceType == SequenceType.Numbered)
+                raw |= (byte)(SequenceNumber << 2 & 0b00_1111_00);
+            if (PacketType == PacketType.Control)
+                raw |= (byte)ControlType;
+            return (byte) (raw & 0b111111_00);  // sanitize the byte just to be sure
         }
 
-        public void Write(BigEndianBinaryWriter writer)
+        public static Tpci Parse(byte data)
         {
-            writer.Write(Raw);
-        }
-
-        public static Tpci Parse(Span<byte> buffer)
-        {
-            if (buffer == null || buffer.Length != 1)
-                throw BufferSizeException.WrongSize("Tpci", 0);
-            return new Tpci(buffer[0]);
+            return new Tpci(data);
         }
     }
 }

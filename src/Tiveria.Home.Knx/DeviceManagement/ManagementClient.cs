@@ -33,6 +33,7 @@ namespace Tiveria.Home.Knx.DeviceManagement
     public class ManagementClient //: IManagementClient
     {
         private IKnxClient _client;
+        private int _sequenceNo = 0;
 
         public ManagementClient(IKnxClient client)
         {
@@ -42,29 +43,37 @@ namespace Tiveria.Home.Knx.DeviceManagement
 
         public async Task ConnectAsync()
         {
-            var tpdu = new Tpci(PacketType.Control, SequenceType.UnNumbered, 0, ControlType.Connect);
+            var tpci = new Tpci(PacketType.Control, SequenceType.UnNumbered, 0, ControlType.Connect);
             var ctrl1 = new ControlField1(MessageCode.LDATA_REQ, priority: Priority.System, broadcast: BroadcastType.Normal, ack: false);
             var ctrl2 = new ControlField2(groupAddress: false); 
-            var cemi = new CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), IndividualAddress.Parse("1.1.2"), ctrl1, ctrl2, tpdu);
+            var cemi = new CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), IndividualAddress.Parse("1.1.2"), ctrl1, ctrl2, tpci, null);
             await _client.SendCemiAsync(cemi);
+            _sequenceNo = 0;
         }
 
         public async Task DisconnectAsync()
         {
-            var tpdu = new Tpci(Cemi.PacketType.Control, Cemi.SequenceType.UnNumbered, 0, ControlType.Disconnect);
+            var tpci = new Tpci(Cemi.PacketType.Control, Cemi.SequenceType.UnNumbered, 0, ControlType.Disconnect);
             var ctrl1 = new ControlField1(MessageCode.LDATA_REQ);
             var ctrl2 = new ControlField2(groupAddress: false);
-            var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), IndividualAddress.Parse("1.1.2"), ctrl1, ctrl2, tpdu);
+            var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), IndividualAddress.Parse("1.1.2"), ctrl1, ctrl2, tpci, null);
             await _client.SendCemiAsync(cemi);
         }
 
         public async Task ReadPropertyAsync(byte objIdx, byte propId)
         {
-            var tpdu = new Apci(ApciType.PropertyValue_Read,new byte[] { objIdx, propId , 0x10, 0x01});
+            GetNextSequenceNumber();
+            var apdu = new Apdu(ApciType.PropertyValue_Read,new byte[] { objIdx, propId , 0x10, 0x01});
             var ctrl1 = new ControlField1(MessageCode.LDATA_REQ, priority: Priority.Low);
             var ctrl2 = new ControlField2(groupAddress: false);
-            var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), IndividualAddress.Parse("1.1.2"), ctrl1, ctrl2, tpdu);
+            var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), IndividualAddress.Parse("1.1.2"), ctrl1, ctrl2, new Tpci(), apdu);
             await _client.SendCemiAsync(cemi);
+        }
+
+        private int GetNextSequenceNumber()
+        {
+            _sequenceNo = (_sequenceNo == 15) ? 0 : _sequenceNo + 1;
+            return _sequenceNo;
         }
     }
 
@@ -74,9 +83,38 @@ namespace Tiveria.Home.Knx.DeviceManagement
         {
             Address = address;
             KeepAlive = keepAlive;
+
+            _timer = new System.Timers.Timer(KnxConstants.DeviceConnectionTimeout);
+            _timer.AutoReset = false;
+            _timer.Elapsed += _timer_Elapsed;
         }
 
+        public int SeqNoSend { get; private set; } = 0;
+        public int SeqNoReceive { get; private set; } = 0;
         public IndividualAddress Address { get; }
         public bool KeepAlive { get; }
+        public DeviceConnectionState State { get; private set; } = DeviceConnectionState.Closed;
+
+        public void IncSeqNoSend() => SeqNoSend = ++SeqNoSend & 0x0f;
+        public void IncSeqNoReceive() => SeqNoReceive = ++SeqNoReceive & 0x0f;
+
+        private System.Timers.Timer _timer;
+
+        private void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+    }
+
+    /// <summary>
+    /// see Chapter 5.1 of 3.3.4 Transport Layer Communication in Knx Specs
+    /// </summary>
+    public enum DeviceConnectionState
+    {
+        Closed,
+        OpenIdle,
+        OPenWait,
+        Connecting
     }
 }

@@ -30,29 +30,6 @@ namespace Tiveria.Home.Knx.Tests
             new object[] { ApciType.Memory_Write, 4 }, //min
             new object[] { ApciType.GroupValue_Response, DataMode.MinMax, true, 1, 14}, //minmax
             new object[] { ApciType.GroupValue_Write, DataMode.MinMax, true, 1, 14}, //minmax
-
-
-            new object[] { ApciType.NetworkParameter_Response, DataMode.MinMax, false, 4, 14},
-            new object[] { ApciType.DomainAddress_Write, DataMode.MinMax, false, 2, 6},
-            new object[] { ApciType.DomainAddress_Response, DataMode.MinMax, false, 2, 6},
-            new object[] { ApciType.Link_Response, DataMode.MinMax, false, 2, 14},
-
-            new object[] { ApciType.SystemNetworkParameter_Read, DataMode.Min, false, 4},
-            new object[] { ApciType.SystemNetworkParameter_Response, DataMode.Min, false, 6},
-            new object[] { ApciType.SystemNetworkParameter_Write, DataMode.Min, false, 4},
-            new object[] { ApciType.UserMemory_Response, DataMode.Min, false, 3},
-            new object[] { ApciType.UserMemory_Write, DataMode.Min, false, 3},
-            new object[] { ApciType.UserMemoryBit_Write, DataMode.Min, false, 5},
-            new object[] { ApciType.FunctionPropertyCommand, DataMode.Min, false, 3},
-            new object[] { ApciType.FunctionPropertyState_Read, DataMode.Min, false, 3},
-            new object[] { ApciType.FunctionPropertyState_Response, DataMode.Min, false, 3},
-            new object[] { ApciType.MemoryBit_Write, DataMode.Min, false, 6},
-            new object[] { ApciType.PropertyValue_Response, DataMode.Min, false, 4},
-            new object[] { ApciType.PropertyValue_Write, DataMode.Min, false, 4},
-            new object[] { ApciType.NetworkParameter_Read, DataMode.Min, false, 4},
-            new object[] { ApciType.DomainAddressSelective_Read, DataMode.Min, false, 1},
-            new object[] { ApciType.NetworkParameter_Write, DataMode.Min, false, 4},
-            new object[] { ApciType.FileStream_InfoReport, DataMode.Min, false, 1},
         };
 
         static object[] TestDataCompressed =
@@ -65,7 +42,7 @@ namespace Tiveria.Home.Knx.Tests
         [TestCaseSource(nameof(TestDataCompressed))]
         public void BuildApciCompressed_Many(int type, byte[] data, byte[] raw)
         {
-            var result = new Apci(type, data);
+            var result = new Apdu(type, data);
             var resultRaw = result.ToBytes();
             Assert.AreEqual(type, result.Type);
             Assert.IsNotNull(result.Data);
@@ -86,7 +63,7 @@ namespace Tiveria.Home.Knx.Tests
         [TestCaseSource(nameof(TestDataO))]
         public void BuildApci_Many(int type, byte[] data, byte[] raw)
         {
-            var result = new Apci(type, data);
+            var result = new Apdu(type, data);
             var resultRaw = result.ToBytes();
             Assert.AreEqual(type, result.Type);
             Assert.IsNotNull(result.Data);
@@ -104,31 +81,31 @@ namespace Tiveria.Home.Knx.Tests
         #region testing Acpi types without data
         static object[] TestDataApciNoData =
         {
-            new object[] { ApciType.GroupValue_Read,                new byte[] { 0x00, 0x00} },
-            new object[] { ApciType.IndividualAddress_Read,         new byte[] { 0x01, 0x00} },
-            new object[] { ApciType.IndividualAddress_Response,     new byte[] { 0x02, 0x40} },
-            new object[] { ApciType.UserManufacturerInfo_Read,      new byte[] { 0x0b, 0xc5} },
-            new object[] { ApciType.Restart_Request,                new byte[] { 0x03, 0x80} },
-            new object[] { ApciType.Open_Routing_Table_Request,     new byte[] { 0x03, 0xc0} },
-            new object[] { ApciType.Read_Routing_Table_Request,     new byte[] { 0x03, 0xc1} },
-            new object[] { ApciType.Read_Routing_Table_Response,    new byte[] { 0x03, 0xc2} },
-            new object[] { ApciType.Write_Routing_Table_Request,    new byte[] { 0x03, 0xc3} },
-            new object[] { ApciType.Read_Router_Memory_Request,     new byte[] { 0x03, 0xc8} },
-            new object[] { ApciType.Read_Router_Memory_Response,    new byte[] { 0x03, 0xc9} },
-            new object[] { ApciType.Write_Router_Memory_Request,    new byte[] { 0x03, 0xca} },
-            new object[] { ApciType.Read_Router_Status_Request,     new byte[] { 0x03, 0xcd} },
-            new object[] { ApciType.Read_Router_Status_Response,    new byte[] { 0x03, 0xce} },
-            new object[] { ApciType.Write_Router_Status_Request,    new byte[] { 0x03, 0xcf} },
-            new object[] { ApciType.DomainAddress_Read,             new byte[] { 0b11, 0b11100000 } },
-            new object[] { ApciType.GroupPropertyValue_Read,        new byte[] { 0b11, 0b11101000 } },
-            new object[] { ApciType.GroupPropertyValue_Response,    new byte[] { 0b11, 0b11101001 } },
-            new object[] { ApciType.GroupPropertyValue_Write,       new byte[] { 0b11, 0b11101010 } },
-            new object[] { ApciType.GroupPropertyValue_InfoReport,  new byte[] { 0b11, 0b11101011 } },
+            new object[] { ApciType.GroupValue_Read,                new byte[] { 0b00000000, 0b00000000 } },
+            new object[] { ApciType.IndividualAddress_Read,         new byte[] { 0b00000001, 0b00000000 } },
+            new object[] { ApciType.IndividualAddress_Response,     new byte[] { 0b00000001, 0b01000000 } },
+            new object[] { ApciType.UserManufacturerInfo_Read,      new byte[] { 0b00000010, 0b11000101 } },
+            new object[] { ApciType.Restart_Request,                new byte[] { 0b00000011, 0b10000000 } },
+            new object[] { ApciType.Open_Routing_Table_Request,     new byte[] { 0b00000011, 0b11000000 } },
+            new object[] { ApciType.Read_Routing_Table_Request,     new byte[] { 0b00000011, 0b11000001 } },
+            new object[] { ApciType.Read_Routing_Table_Response,    new byte[] { 0b00000011, 0b11000010 } },
+            new object[] { ApciType.Write_Routing_Table_Request,    new byte[] { 0b00000011, 0b11000011 } },
+            new object[] { ApciType.Read_Router_Memory_Request,     new byte[] { 0b00000011, 0b11001000 } },
+            new object[] { ApciType.Read_Router_Memory_Response,    new byte[] { 0b00000011, 0b11001001 } },
+            new object[] { ApciType.Write_Router_Memory_Request,    new byte[] { 0b00000011, 0b11001010 } },
+            new object[] { ApciType.Read_Router_Status_Request,     new byte[] { 0b00000011, 0b11001101 } },
+            new object[] { ApciType.Read_Router_Status_Response,    new byte[] { 0b00000011, 0b11001110 } },
+            new object[] { ApciType.Write_Router_Status_Request,    new byte[] { 0b00000011, 0b11001111 } },
+            new object[] { ApciType.DomainAddress_Read,             new byte[] { 0b00000011, 0b11100001 } },
+            new object[] { ApciType.GroupPropertyValue_Read,        new byte[] { 0b00000011, 0b11101000 } },
+            new object[] { ApciType.GroupPropertyValue_Response,    new byte[] { 0b00000011, 0b11101001 } },
+            new object[] { ApciType.GroupPropertyValue_Write,       new byte[] { 0b00000011, 0b11101010 } },
+            new object[] { ApciType.GroupPropertyValue_InfoReport,  new byte[] { 0b00000011, 0b11101011 } },
         };
         [TestCaseSource(nameof(TestDataApciNoData))]
         public void Build_NoData_Ok(int type, byte[] raw)
         {
-            var result = new Apci(type);
+            var result = new Apdu(type);
             var resultRaw = result.ToBytes();
             Assert.AreEqual(type, result.Type);
             Assert.IsNotNull(result.Data);
@@ -142,7 +119,7 @@ namespace Tiveria.Home.Knx.Tests
         [TestCaseSource(nameof(TestDataApciNoData))]
         public void Build_NoData_DataParameterNotEmpty(int type, byte[] raw)
         {
-            Assert.Throws<ArgumentException>(() => new Apci(type, new byte[1]));
+            Assert.Throws<ArgumentException>(() => new Apdu(type, new byte[1]));
         }
         #endregion
 
@@ -174,7 +151,7 @@ namespace Tiveria.Home.Knx.Tests
         [TestCaseSource(nameof(TestDataExactSize))]
         public void Build_ExactData_Ok(int type, int len)
         {
-            var result = new Apci(type, GetRandomData(len));
+            var result = new Apdu(type, GetRandomData(len));
             var resultRaw = result.ToBytes();
             Assert.AreEqual(type, result.Type);
             Assert.IsNotNull(result.Data);
@@ -185,8 +162,8 @@ namespace Tiveria.Home.Knx.Tests
         [TestCaseSource(nameof(TestDataExactSize))]
         public void Build_ExactData_WrongDataSize(int type, int len)
         {
-            Assert.Throws<ArgumentException>(() => new Apci(type, GetRandomData(len - 1)));
-            Assert.Throws<ArgumentException>(() => new Apci(type, GetRandomData(len + 1)));
+            Assert.Throws<ArgumentException>(() => new Apdu(type, GetRandomData(len - 1)));
+            Assert.Throws<ArgumentException>(() => new Apdu(type, GetRandomData(len + 1)));
         }
         #endregion
 
@@ -214,7 +191,7 @@ namespace Tiveria.Home.Knx.Tests
         [TestCaseSource(nameof(TestDataMinimalSize))]
         public void Build_MinimalData_Ok(int type, int len)
         {
-            var result = new Apci(type, GetRandomData(len));
+            var result = new Apdu(type, GetRandomData(len));
             var resultRaw = result.ToBytes();
             Assert.AreEqual(type, result.Type);
             Assert.IsNotNull(result.Data);
@@ -225,7 +202,38 @@ namespace Tiveria.Home.Knx.Tests
         [TestCaseSource(nameof(TestDataMinimalSize))]
         public void Build_MinimalData_WrongDataSize(int type, int len)
         {
-            Assert.Throws<ArgumentException>(() => new Apci(type, GetRandomData(len - 1)));
+            Assert.Throws<ArgumentException>(() => new Apdu(type, GetRandomData(len - 1)));
+        }
+        #endregion
+
+        #region testing Apci types with at least a minimal size
+        static object[] TestDataMinMaxSize =
+        {
+            new object[] { ApciType.NetworkParameter_Response,  4, 14},
+            new object[] { ApciType.DomainAddress_Write,  2, 6},
+            new object[] { ApciType.DomainAddress_Response,  2, 6},
+            new object[] { ApciType.Link_Response,  2, 14},
+        };
+
+        [TestCaseSource(nameof(TestDataMinMaxSize))]
+        public void Build_MinMaxData_Ok(int type, int min, int max)
+        {
+            for (int i = min; i <= max; i++)
+            {
+                var result = new Apdu(type, GetRandomData(i));
+                var resultRaw = result.ToBytes();
+                Assert.AreEqual(type, result.Type);
+                Assert.IsNotNull(result.Data);
+                Assert.AreEqual(i, result.Data.Length);
+                Assert.AreEqual(i + 2, result.Size);
+            }
+        }
+
+        [TestCaseSource(nameof(TestDataMinMaxSize))]
+        public void Build_MinMaxData_WrongDataSize(int type, int min, int max)
+        {
+            Assert.Throws<ArgumentException>(() => new Apdu(type, GetRandomData(min - 1)));
+            Assert.Throws<ArgumentException>(() => new Apdu(type, GetRandomData(max + 1)));
         }
         #endregion
 
@@ -234,7 +242,7 @@ namespace Tiveria.Home.Knx.Tests
         public void ParseGroupValue_Read1()
         {
             var data = "0000".ToByteArray(); // Type:GroupValue_Read, Data:None
-            var result = new Apci(ApciType.GroupValue_Read, data);
+            var result = new Apdu(ApciType.GroupValue_Read, data);
 
             Assert.AreEqual(ApciType.GroupValue_Read, result.Type);
             Assert.IsNotNull(result.Data);
@@ -246,7 +254,7 @@ namespace Tiveria.Home.Knx.Tests
         public void ParseGroupValue_Write1()
         {
             var data = "00800c56".ToByteArray(); // Type:GroupValue_Write, Data:0c56
-            var result = Apci.Parse(data);
+            var result = Apdu.Parse(data);
 
             Assert.AreEqual(ApciType.GroupValue_Write, result.Type);
             Assert.IsNotNull(result.Data);
@@ -259,7 +267,7 @@ namespace Tiveria.Home.Knx.Tests
         public void ParseGroupValue_Write2()
         {
             var data = "00800d".ToByteArray(); // Type:GroupValue_Write, Data:0d
-            var result = Apci.Parse(data);
+            var result = Apdu.Parse(data);
 
             Assert.AreEqual(ApciType.GroupValue_Write, result.Type);
             Assert.AreEqual(3, result.Size);
@@ -272,7 +280,7 @@ namespace Tiveria.Home.Knx.Tests
         public void ParseGroupValue_Response1()
         {
             var data = "00400abc".ToByteArray(); // Type:GroupValue_Response, Data:0abc
-            var result = Apci.Parse(data);
+            var result = Apdu.Parse(data);
 
             Assert.AreEqual(ApciType.GroupValue_Response, result.Type);
             Assert.IsNotNull(result.Data);
@@ -285,7 +293,7 @@ namespace Tiveria.Home.Knx.Tests
         public void ParseGroupValue_Response2()
         {
             var data = "00404d".ToByteArray(); // Type:GroupValue_Response, Data:4d
-            var result = Apci.Parse(data);
+            var result = Apdu.Parse(data);
 
             Assert.AreEqual(ApciType.GroupValue_Response, result.Type);
             Assert.AreEqual(3, result.Size);
@@ -298,7 +306,7 @@ namespace Tiveria.Home.Knx.Tests
         public void ParseGroupValue_Response3()
         {
             var data = "0041".ToByteArray(); // Type:GroupValue_Response, Data: low 6 bits = 0b000001 = 0x01
-            var result = Apci.Parse(data);
+            var result = Apdu.Parse(data);
 
             Assert.AreEqual(ApciType.GroupValue_Response, result.Type);
             Assert.IsNotNull(result.Data);
@@ -311,7 +319,7 @@ namespace Tiveria.Home.Knx.Tests
         public void ParseGroupValue_Response4()
         {
             var data = "006A".ToByteArray(); // Type:GroupValue_Response, Data: low 6 bits = 0b101010 = 0x2a
-            var result = Apci.Parse(data);
+            var result = Apdu.Parse(data);
 
             Assert.AreEqual(ApciType.GroupValue_Response, result.Type);
             Assert.IsNotNull(result.Data);
@@ -323,7 +331,7 @@ namespace Tiveria.Home.Knx.Tests
         public void ParseGroupValue_Response5()
         {
             var data = "00-40-00".Replace("-", "").ToByteArray();
-            var result = Apci.Parse(data);
+            var result = Apdu.Parse(data);
             var buffer = result.ToBytes();
 
             Assert.AreEqual(3, buffer.Length);
@@ -337,7 +345,7 @@ namespace Tiveria.Home.Knx.Tests
         public void ParseGroupValue_Write3()
         {
             var data = "00-80-3D-30-20-C5".Replace("-", null).ToByteArray(); // Type:GroupValue_Response, Data: low 6 bits = 0b101010 = 0x2a
-            var result = Apci.Parse(data);
+            var result = Apdu.Parse(data);
 
             Assert.AreEqual(ApciType.GroupValue_Write, result.Type);
             Assert.AreEqual(6, result.Size);
@@ -346,4 +354,5 @@ namespace Tiveria.Home.Knx.Tests
             Assert.AreEqual(0x3d, result.Data[0]);
         }
     }
+
 }

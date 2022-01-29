@@ -22,24 +22,13 @@
     combination.
 */
 
-using Tiveria.Common.IO;
-
-namespace Tiveria.Home.Knx.Cemi
+namespace Tiveria.Home.Knx
 {
-    public interface ITpdu : IKnxDataElement
+    public static class KnxConstants
     {
-        bool IsApci { get; }
-        bool IsTpci { get; }
-        TpduType TpduType { get; }
-        int Size { get; }
-
-        byte[] ToBytes();
-        void Write(BigEndianBinaryWriter writer);
-    }
-
-    public enum TpduType
-    {
-        TpciOnly,
-        ApciOnly
+        /// <summary>
+        /// Timeout of transport layer stateful connections to devices
+        /// </summary>
+        public const int DeviceConnectionTimeout = 6000;
     }
 }
