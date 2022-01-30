@@ -32,15 +32,15 @@ namespace Tiveria.Home.Knx.Exceptions
         {
         }
 
-        protected BufferException(string message) : base(message)
+        public BufferException(string message) : base(message)
         {
         }
 
-        protected BufferException(string message, Exception innerException) : base(message, innerException)
+        public BufferException(string message, Exception innerException) : base(message, innerException)
         {
         }
 
-        protected BufferException(SerializationInfo info, StreamingContext context) : base(info, context)
+        public BufferException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
     }

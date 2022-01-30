@@ -82,7 +82,6 @@ namespace Tiveria.Home.Knx.Cemi
             Data = data ?? Array.Empty<byte>();
             ValidateDataSize();
             CalculateSize();
-            BuildRaw();
         }
 
         /// <summary>
@@ -108,7 +107,6 @@ namespace Tiveria.Home.Knx.Cemi
                 throw BufferSizeException.TooSmall("Apci");
 
             Size = buffer.Length;
-            _raw = buffer.ToArray();
             ParseApci(buffer);
         }
         #endregion
@@ -116,23 +114,18 @@ namespace Tiveria.Home.Knx.Cemi
         #region public methods
         public byte[] ToBytes()
         {
-            return _raw;
+            return BuildRaw();
         }
 
-        public void Write(BigEndianBinaryWriter writer, byte tpciFlags = 0)
+        public void Write(BigEndianBinaryWriter writer)
         {
-            writer.Write((byte)((_raw[0] & 0b00000011) | (tpciFlags & 0b11111100)));
-            writer.Write(_raw.AsSpan().Slice(1));
+            writer.Write(BuildRaw());
         }
 
         public override string? ToString()
         {
             return $"APCI: Size {Size} / Type {Type} / Data {BitConverter.ToString(Data)}";
         }
-        #endregion
-
-        #region private members
-        private byte[] _raw = new byte[0];
         #endregion
 
         #region private implementation
@@ -178,25 +171,26 @@ namespace Tiveria.Home.Knx.Cemi
             else
                 Size = Data.Length + 2;
         }
-        private void BuildRaw()
+        private byte[] BuildRaw()
         {
-            _raw = new byte[Size];
-            _raw[0] = (byte) ((Type <= 0b1111) ? Type >> 2 : Type >> 8 );
-            _raw[1] = (byte) ((Type <= 0b1111) ? (Type & 0b0011) << 6 : Type & 0b11111111);
+            var raw = new byte[Size];
+            raw[0] = (byte) ((Type <= 0b1111) ? Type >> 2 : Type >> 8 );
+            raw[1] = (byte) ((Type <= 0b1111) ? (Type & 0b0011) << 6 : Type & 0b11111111);
 
             if((Type == ApciType.GroupValue_Write || Type == ApciType.GroupValue_Response) 
                 && Data.Length == 1 && Data[0] <= 63)
-                _raw[1] |= Data[0];
+                raw[1] |= Data[0];
             else if (Type == ApciType.ADC_Read || Type == ApciType.ADC_Response || 
                 Type == ApciType.Memory_Read ||Type == ApciType.Memory_Response || Type == ApciType.Memory_Write ||
                 Type == ApciType.DeviceDescriptor_Read || Type == ApciType.DeviceDescriptor_Response)
             {
-                _raw[1] |= Data[0];
+                raw[1] |= Data[0];
                 if (Data.Length > 1)
-                    Array.Copy(Data, 1, _raw, 2, Data.Length - 1);
+                    Array.Copy(Data, 1, raw, 2, Data.Length - 1);
             }
             else
-                Data.CopyTo(_raw, 2);
+                Data.CopyTo(raw, 2);
+            return raw;
         }
         #endregion
 

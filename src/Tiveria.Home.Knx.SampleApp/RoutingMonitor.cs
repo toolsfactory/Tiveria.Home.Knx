@@ -80,7 +80,7 @@ namespace Tiveria.Home.Knx
             var data = (byte)(on ? 0x01 : 0x00);
             var tpdu = new Apdu(ApciType.GroupValue_Write, new byte[] { data });
 //            var ctrl1 = new ControlField1(MessageCode.LDATA_IND, 0xbc);
-            var ctrl1 = new ControlField1(MessageCode.LDATA_IND, priority: Priority.Normal, ack: false, repeat: false, confirm: ConfirmType.NoError);
+            var ctrl1 = new ControlField1(priority: Priority.Normal, ack: false, repeat: false, confirm: ConfirmType.NoError);
             var ctrl2 = new ControlField2();
             var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_IND, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 1), GroupAddress.Parse("4/0/0"), ctrl1, ctrl2, default(Tpci), tpdu);
             await Con.SendCemiAsync(cemi);

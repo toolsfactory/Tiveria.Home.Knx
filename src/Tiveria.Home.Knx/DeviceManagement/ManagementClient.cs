@@ -44,7 +44,7 @@ namespace Tiveria.Home.Knx.DeviceManagement
         public async Task ConnectAsync()
         {
             var tpci = new Tpci(PacketType.Control, SequenceType.UnNumbered, 0, ControlType.Connect);
-            var ctrl1 = new ControlField1(MessageCode.LDATA_REQ, priority: Priority.System, broadcast: BroadcastType.Normal, ack: false);
+            var ctrl1 = new ControlField1(priority: Priority.System, broadcast: BroadcastType.Normal, ack: false);
             var ctrl2 = new ControlField2(groupAddress: false); 
             var cemi = new CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), IndividualAddress.Parse("1.1.2"), ctrl1, ctrl2, tpci, null);
             await _client.SendCemiAsync(cemi);
@@ -54,7 +54,7 @@ namespace Tiveria.Home.Knx.DeviceManagement
         public async Task DisconnectAsync()
         {
             var tpci = new Tpci(Cemi.PacketType.Control, Cemi.SequenceType.UnNumbered, 0, ControlType.Disconnect);
-            var ctrl1 = new ControlField1(MessageCode.LDATA_REQ);
+            var ctrl1 = new ControlField1();
             var ctrl2 = new ControlField2(groupAddress: false);
             var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), IndividualAddress.Parse("1.1.2"), ctrl1, ctrl2, tpci, null);
             await _client.SendCemiAsync(cemi);
@@ -64,7 +64,7 @@ namespace Tiveria.Home.Knx.DeviceManagement
         {
             GetNextSequenceNumber();
             var apdu = new Apdu(ApciType.PropertyValue_Read,new byte[] { objIdx, propId , 0x10, 0x01});
-            var ctrl1 = new ControlField1(MessageCode.LDATA_REQ, priority: Priority.Low);
+            var ctrl1 = new ControlField1(priority: Priority.Low);
             var ctrl2 = new ControlField2(groupAddress: false);
             var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), IndividualAddress.Parse("1.1.2"), ctrl1, ctrl2, new Tpci(), apdu);
             await _client.SendCemiAsync(cemi);

@@ -23,6 +23,7 @@
 */
 
 using Tiveria.Common.IO;
+using Tiveria.Home.Knx.Exceptions;
 
 namespace Tiveria.Home.Knx.Cemi.Serializers
 {
@@ -81,7 +82,7 @@ namespace Tiveria.Home.Knx.Cemi.Serializers
             writer.Write((byte)cemiMessage.AdditionalInfoLength);
             foreach (var info in cemiMessage.AdditionalInfoFields) 
                 info.Write(writer);
-            writer.Write((byte)cemiMessage.ControlField1.ToByte());
+            writer.Write((byte)cemiMessage.ControlField1.ToByte(cemiMessage.MessageCode));
             writer.Write((byte)cemiMessage.ControlField2.ToByte());
             cemiMessage.SourceAddress.Write(writer);
             cemiMessage.DestinationAddress.Write(writer);
@@ -92,8 +93,10 @@ namespace Tiveria.Home.Knx.Cemi.Serializers
             }
             else
             {
+                if (cemiMessage.Tpci.PacketType != PacketType.Data)
+                    throw new BufferException("Cannot serialize cemi with Tpci Flag 'Control' and APDU Data!");
                 var apdu = cemiMessage.Apdu.ToBytes();
-                apdu[0] = (byte)((apdu[0] & 0b000000_11) | cemiMessage.Tpci.ToByte());
+                apdu[0] = (byte)((apdu[0] & 0b000000_11) | (cemiMessage.Tpci.ToByte() & 0b111111_00));
                 writer.Write((byte)(cemiMessage.Apdu.Size - 1)); // Field with TPCI mask and upper apci bits not counted 
                 writer.Write(apdu); // Apci structure includes TPCI and therefore Size is NPDULength+1
             }

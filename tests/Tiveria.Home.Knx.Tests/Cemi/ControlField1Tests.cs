@@ -43,8 +43,8 @@ namespace Tiveria.Home.Knx.Tests
         [Test]
         public void Build(MessageCode mc, bool extFrame, bool repeat, BroadcastType brdcst, Priority prio, bool ack, ConfirmType confirm, int expected)
         {
-            var ctrl1 = new ControlField1(mc, extFrame, prio, repeat, brdcst, ack, confirm);
-            var data = ctrl1.ToByte();
+            var ctrl1 = new ControlField1(extFrame, prio, repeat, brdcst, ack, confirm);
+            var data = ctrl1.ToByte(mc);
             Assert.AreEqual((byte)expected, data);
         }
 
@@ -52,8 +52,8 @@ namespace Tiveria.Home.Knx.Tests
         [Test]
         public void Parse(MessageCode mc, bool extFrame, bool repeat, BroadcastType brdcst, Priority prio, bool ack, ConfirmType confirm, int expected)
         {
-            var ctrl1 = new ControlField1(mc, (byte)expected);
-            var data = ctrl1.ToByte();
+            var ctrl1 = new ControlField1(mc,(byte)expected);
+            var data = ctrl1.ToByte(mc);
             Assert.AreEqual(extFrame, ctrl1.ExtendedFrame);
             Assert.AreEqual(prio, ctrl1.Priority);
             Assert.AreEqual(repeat, ctrl1.Repeat);
@@ -62,5 +62,20 @@ namespace Tiveria.Home.Knx.Tests
             Assert.AreEqual(confirm, ctrl1.Confirm);
             Assert.AreEqual((byte)expected, data);
         }
+
+        [Test]
+        public void Default()
+        {
+            var ctrl1 = new ControlField1();
+            var data = ctrl1.ToByte();
+            Assert.AreEqual(false, ctrl1.ExtendedFrame);
+            Assert.AreEqual(Priority.System, ctrl1.Priority);
+            Assert.AreEqual(false, ctrl1.Repeat);
+            Assert.AreEqual(BroadcastType.Normal, ctrl1.Broadcast);
+            Assert.AreEqual(false, ctrl1.AcknowledgeRequest);
+            Assert.AreEqual(ConfirmType.NoError, ctrl1.Confirm);
+            Assert.AreEqual(0b10_01_00_00, data);
+        }
+
     }
 }

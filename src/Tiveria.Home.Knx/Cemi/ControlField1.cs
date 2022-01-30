@@ -50,11 +50,8 @@ namespace Tiveria.Home.Knx.Cemi
     ///                     0 = no error, 1 = error
     /// </summary>
 
-    public struct ControlField1
+    public class ControlField1
     {
-        #region private fields
-        private readonly MessageCode _messageCode = MessageCode.LDATA_IND;
-        #endregion
 
         #region public properties
         public bool ExtendedFrame { get; set; } = false;
@@ -73,13 +70,12 @@ namespace Tiveria.Home.Knx.Cemi
         /// <param name="data">ControlField1 as byte representation</param>
         public ControlField1(MessageCode messageCode, byte data)
         {
-            _messageCode = messageCode;
             Broadcast = (data & 0x10) == 0x10 ? BroadcastType.Normal : BroadcastType.System;
             Confirm = (data & 0x01) == 0 ? ConfirmType.NoError : ConfirmType.Error;
             ExtendedFrame = (data & 0x80) == 0;
             AcknowledgeRequest = (data & 0x02) != 0;
 
-            if (_messageCode == MessageCode.LDATA_IND)
+            if (messageCode == MessageCode.LDATA_IND)
                 // ind: flag 0 = repeated frame, 1 = not repeated
                 Repeat = (data & 0x20) == 0;
             else
@@ -93,15 +89,13 @@ namespace Tiveria.Home.Knx.Cemi
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="mc"></param>
         /// <param name="priority"></param>
         /// <param name="repeat"></param>
         /// <param name="broadcast"></param>
         /// <param name="ack"></param>
         /// <param name="confirm"></param>
-        public ControlField1(MessageCode mc, bool extendedFrame =false, Priority priority = Priority.Normal, bool repeat = true, BroadcastType broadcast = BroadcastType.Normal, bool ack = true, ConfirmType confirm = ConfirmType.NoError)
+        public ControlField1(bool extendedFrame =false, Priority priority = Priority.Normal, bool repeat = true, BroadcastType broadcast = BroadcastType.Normal, bool ack = true, ConfirmType confirm = ConfirmType.NoError)
         {
-            _messageCode = mc;
             ExtendedFrame = extendedFrame;
             Repeat = repeat;
             Broadcast = broadcast;
@@ -114,14 +108,14 @@ namespace Tiveria.Home.Knx.Cemi
         /// <summary>
         /// Convert the properties to the corresponding byte representation
         /// </summary>
-        public byte ToByte()
+        public byte ToByte(MessageCode messageCode = MessageCode.LDATA_REQ)
         {
             var raw = (byte) (((byte)Priority & 0x03) << 2);
 
             if (!ExtendedFrame)
                 raw |= 0b1000_0000;
 
-            var repflag = _messageCode == MessageCode.LDATA_IND ? !Repeat : Repeat;
+            var repflag = messageCode == MessageCode.LDATA_IND ? !Repeat : Repeat;
             if (repflag)
                 raw |= 0b0010_0000;
 

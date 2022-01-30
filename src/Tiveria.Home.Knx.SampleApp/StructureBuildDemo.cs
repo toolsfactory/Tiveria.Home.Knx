@@ -43,7 +43,7 @@ namespace Tiveria.Home.Knx
                 var input = (byte)(on ? 0x01 : 0x00);
                 var apci = new Cemi.Apdu(Cemi.ApciType.GroupValue_Write, new byte[] { input });
                 Console.WriteLine("APCI: " + BitConverter.ToString(apci.ToBytes()));
-                var ctrl1 = new ControlField1(MessageCode.LDATA_REQ);
+                var ctrl1 = new ControlField1();
                 var ctrl2 = new ControlField2();
                 var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), GroupAddress.Parse("4/0/0"), ctrl1, ctrl2, new Tpci(), apci);
                 var cemibytes = new CemiLDataSerializer().Serialize(cemi);

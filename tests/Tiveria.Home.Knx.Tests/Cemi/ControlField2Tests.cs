@@ -43,5 +43,16 @@ namespace Tiveria.Home.Knx.Tests
             Assert.AreEqual(hops, ctrl2.HopCount);
             Assert.AreEqual((byte)expected, data);
         }
+
+        [Test]
+        public void Default()
+        {
+            var ctrl2 = new ControlField2();
+            var data = ctrl2.ToByte();
+            Assert.AreEqual(Adresses.AddressType.IndividualAddress, ctrl2.DestinationAddressType);
+            Assert.AreEqual(0, ctrl2.ExtendedFrameFormat);
+            Assert.AreEqual(0, ctrl2.HopCount);
+            Assert.AreEqual(0b0_000_0000, data);
+        }
     }
-}
+ }

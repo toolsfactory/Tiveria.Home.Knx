@@ -35,10 +35,10 @@ namespace Tiveria.Home.Knx.Cemi
     /// +--------+--------+--------+--------+--------+--------+--------+--------+
     /// | bit 0  | bit 1  | bit 2  | bit 3  | bit 4  | bit 5  | bit 6  | bit 7  |
     /// +--------+--------+--------+--------+--------+--------+--------+--------+
-    /// |                       TPCI Data                     |    APCI         |
+    /// |                       TPCI Data                     |    APCI/ TPCI   |
     /// +--------+--------+--------+--------+--------+--------+--------+--------+
-    /// | Packet | Sequ-  |          Sequence Number          |                 |
-    /// | Type   | encing |                                   |                 |
+    /// | Packet | Sequ-  |          Sequence Number          |  TPCI:          |
+    /// | Type   | encing |                                   |    ControlType  |
     /// | Flag   | Flag   |                                   |                 |
     /// +--------+--------+--------+--------+--------+--------+--------+--------+
     /// </code>
@@ -50,7 +50,7 @@ namespace Tiveria.Home.Knx.Cemi
         public PacketType PacketType { get; init; } = PacketType.Data;
         public SequenceType SequenceType { get; init; } = SequenceType.UnNumbered;
         public byte SequenceNumber { get; init; } = 0;
-        public ControlType ControlType { get; init; } = ControlType.Connect;
+        public ControlType ControlType { get; init; } = ControlType.None;
         public Tpci(PacketType packetType, SequenceType sequenceType = SequenceType.UnNumbered, byte sequenceNumber = 0, ControlType controlType = ControlType.Connect)
         {
             PacketType = packetType;
@@ -77,7 +77,7 @@ namespace Tiveria.Home.Knx.Cemi
                 raw |= (byte)(SequenceNumber << 2 & 0b00_1111_00);
             if (PacketType == PacketType.Control)
                 raw |= (byte)ControlType;
-            return (byte) (raw & 0b111111_00);  // sanitize the byte just to be sure
+            return raw;
         }
 
         public static Tpci Parse(byte data)
