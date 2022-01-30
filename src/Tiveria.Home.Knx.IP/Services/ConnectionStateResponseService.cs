@@ -40,13 +40,13 @@ namespace Tiveria.Home.Knx.IP.Services
     /// </summary>
     public class ConnectionStateResponseService : ServiceBase
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.ConnectionStateResponse;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.ConnectionStateResponse;
         public static readonly byte STRUCTURE_SIZE = 0x02;
         public ErrorCodes Status { get; init; }
         public byte ChannelId { get; init; }
 
         public ConnectionStateResponseService(byte channelId, ErrorCodes status = ErrorCodes.NoError)
-            : base(ServiceTypeIdentifier.ConnectionStateResponse, STRUCTURE_SIZE)
+            : base(Enums.ServiceTypeIdentifier.ConnectionStateResponse, STRUCTURE_SIZE)
         {
             ChannelId = channelId;
             Status = status;

@@ -40,12 +40,12 @@ namespace Tiveria.Home.Knx.IP.Services
     /// </summary>
     public class DisconnectRequestService : ServiceBase
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DisconnectRequest;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.DisconnectRequest;
         public Hpai ControlEndpoint { get; init; }
         public byte ChannelId { get; init; }
 
         public DisconnectRequestService(byte channelId, Hpai controlEndpoint)
-            : base( ServiceTypeIdentifier.DisconnectRequest, 2 + controlEndpoint.Size)
+            : base(Enums.ServiceTypeIdentifier.DisconnectRequest, 2 + controlEndpoint.Size)
         {
             ChannelId = channelId;
             ControlEndpoint = controlEndpoint;

@@ -30,9 +30,9 @@ namespace Tiveria.Home.Knx.IP.Services
 {
     public class DeviceConfigurationRequestService : EMIServiceBase
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DeviceConfigurationRequest;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.DeviceConfigurationRequest;
         public DeviceConfigurationRequestService(ConnectionHeader connectionHeader, ICemiMessage cemi)
-            : base(ServiceTypeIdentifier.DeviceConfigurationRequest, connectionHeader, cemi)
+            : base(Enums.ServiceTypeIdentifier.DeviceConfigurationRequest, connectionHeader, cemi)
         { }
     }
 }

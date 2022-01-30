@@ -29,7 +29,7 @@ namespace Tiveria.Home.Knx.IP
 {
     public interface IKnxNetIPServiceSerializer
     {
-        ServiceTypeIdentifier ServiceTypeIdentifier { get; }
+        ushort ServiceTypeIdentifier { get; }
         Type ServiceType { get; }
 
         IKnxNetIPService Deserialize(byte[] buffer);

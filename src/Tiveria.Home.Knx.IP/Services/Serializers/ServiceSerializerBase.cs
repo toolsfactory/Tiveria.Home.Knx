@@ -31,7 +31,7 @@ namespace Tiveria.Home.Knx.IP.Services.Serializers
     {
 
         public Type ServiceType => typeof(T);
-        public abstract ServiceTypeIdentifier ServiceTypeIdentifier { get; }
+        public abstract ushort ServiceTypeIdentifier { get; }
 
         public abstract T Deserialize(BigEndianBinaryReader reader);
         public abstract void Serialize(T service, BigEndianBinaryWriter writer);

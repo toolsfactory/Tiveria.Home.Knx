@@ -23,9 +23,10 @@
 */
 
 using Tiveria.Common.IO;
+using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Home.Knx.IP.Structures;
 
-namespace Tiveria.Home.Knx.IP.Services
+namespace Tiveria.Home.Knx.IP.Services.Serializers
 {
     /// <summary>
     /// <code>
@@ -33,24 +34,31 @@ namespace Tiveria.Home.Knx.IP.Services
     /// +--------+--------+--------+--------+--------+--------+
     /// | byte 7 | byte 8 | byte 9 | byte 10| byte 11| byte 12|
     /// +--------+--------+--------+--------+--------+--------+
-    /// | HPAI            | HPAI            | CRI Connection  |
-    /// | Control Endpoint| Data Endpoint   | Request Info    |
+    /// | Channel|Status  | HPAI            | CRD Connection  |
+    /// | Id     |        | Data Endpoint   | Response Data   |
     /// +-----------------+-----------------+-----------------+
     /// </code>
     /// </summary>
-    public class ConnectionRequestService : ServiceBase
+    public class ConnectionResponseServiceSerializer : ServiceSerializerBase<ConnectionResponseService>
     {
-        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.ConnectRequest;
-        public Hpai ControlEndpoint { get; init; }
-        public Hpai DataEndpoint { get; init; }
-        public CRITunnel Cri { get; init; }
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.ConnectResponse;
 
-        public ConnectionRequestService(Hpai control, Hpai data, CRITunnel cri)
-            : base(Enums.ServiceTypeIdentifier.ConnectRequest, control.Size + data.Size + cri.Size)
+        public override ConnectionResponseService Deserialize(BigEndianBinaryReader reader)
         {
-            ControlEndpoint = control;
-            DataEndpoint = data;
-            Cri = cri;
+            var channelId = reader.ReadByte();
+            var status = reader.ReadByteEnum<ErrorCodes>("ConnectionResponse.Status");
+            var endpoint = Hpai.Parse(reader);
+            var crd = CRDTunnel.Parse(reader);
+            return new ConnectionResponseService(channelId, status, endpoint, crd);
+        }
+
+        public override void Serialize(ConnectionResponseService service, BigEndianBinaryWriter writer)
+        {
+            writer.Write(service.ChannelId);
+            writer.Write((byte)service.Status);
+            service.DataEndpoint.Write(writer);
+            service.Crd.Write(writer);
         }
     }
+
 }

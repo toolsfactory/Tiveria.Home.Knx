@@ -29,13 +29,13 @@ namespace Tiveria.Home.Knx.IP.Services
 {
     public class ExtendedSearchRequestService : ServiceBase
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.ExtendedSearchRequest;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.ExtendedSearchRequest;
         public Hpai DiscoveryEndpoint { get; init; }
         public SRP SearchRequestParameter { get; init; }
 
 
         public ExtendedSearchRequestService(Hpai discoveryEndpoint, SRP searchRequestParameter)
-            : base(ServiceTypeIdentifier.ExtendedSearchRequest, discoveryEndpoint.Size + searchRequestParameter.Size)
+            : base(Enums.ServiceTypeIdentifier.ExtendedSearchRequest, discoveryEndpoint.Size + searchRequestParameter.Size)
         {
             DiscoveryEndpoint = discoveryEndpoint;
             SearchRequestParameter = searchRequestParameter;

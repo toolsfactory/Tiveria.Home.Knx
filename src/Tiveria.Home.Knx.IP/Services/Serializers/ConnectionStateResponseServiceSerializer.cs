@@ -30,36 +30,29 @@ namespace Tiveria.Home.Knx.IP.Services.Serializers
 {
     /// <summary>
     /// <code>
-    /// +--------+--------+--------+--------+
-    /// | byte 7 | byte 8 | byte 9 | byte 10|
-    /// +--------+--------+--------+--------+
-    /// | Header |Channel |Sequence|Status  |
-    /// | Length |ID      |Counter |Code    |
-    /// +--------+--------+--------+--------+
-    /// | 0x04   |        |        |        |
-    /// +--------+--------+-----------------+
-    ///
-    /// Serice Type:  <see cref="Tiveria.Home.Knx.IP.Enums.ServiceTypeIdentifier"/>
+    /// +--------+--------+
+    /// | byte 7 | byte 8 |
+    /// +--------+--------+
+    /// | Channel|Status  |
+    /// | ID     | 0x00   |
+    /// +--------+--------+
     /// </code>
     /// </summary>
-    public class DeviceConfigurationAcknowledgeServiceSerializer : ServiceSerializerBase<DeviceConfigurationAcknowledgeService>
+    public class ConnectionStateResponseServiceSerializer : ServiceSerializerBase<ConnectionStateResponseService>
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DeviceConfigurationResponse;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.ConnectionStateResponse;
 
-        public override DeviceConfigurationAcknowledgeService Deserialize(BigEndianBinaryReader reader)
+        public override ConnectionStateResponseService Deserialize(BigEndianBinaryReader reader)
         {
             var channelId = reader.ReadByte();
-            var seqCounter = reader.ReadByte();
             var status = reader.ReadByteEnum<ErrorCodes>("ConnectionStateResponseFrame.Status");
-            return new DeviceConfigurationAcknowledgeService(channelId, seqCounter, status);
+            return new ConnectionStateResponseService(channelId, status);
         }
 
-        public override void Serialize(DeviceConfigurationAcknowledgeService service, BigEndianBinaryWriter writer)
+        public override void Serialize(ConnectionStateResponseService frame, BigEndianBinaryWriter writer)
         {
-            writer.Write(service.Size);
-            writer.Write(service.ChannelId);
-            writer.Write(service.SequenceCounter);
-            writer.Write((byte)service.Status);
+            writer.Write(frame.ChannelId);
+            writer.Write((byte)frame.Status);
         }
     }
 }

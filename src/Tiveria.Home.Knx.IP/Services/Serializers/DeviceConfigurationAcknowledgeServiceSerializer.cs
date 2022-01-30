@@ -26,12 +26,12 @@ using Tiveria.Common.IO;
 using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Home.Knx.IP.Structures;
 
-namespace Tiveria.Home.Knx.IP.Services
+namespace Tiveria.Home.Knx.IP.Services.Serializers
 {
     /// <summary>
     /// <code>
     /// +--------+--------+--------+--------+
-    /// | byte 1 | byte 2 | byte 3 | byte 4 |
+    /// | byte 7 | byte 8 | byte 9 | byte 10|
     /// +--------+--------+--------+--------+
     /// | Header |Channel |Sequence|Status  |
     /// | Length |ID      |Counter |Code    |
@@ -42,15 +42,24 @@ namespace Tiveria.Home.Knx.IP.Services
     /// Serice Type:  <see cref="Tiveria.Home.Knx.IP.Enums.ServiceTypeIdentifier"/>
     /// </code>
     /// </summary>
-    public class TunnelingAcknowledgeService : ServiceBase
+    public class DeviceConfigurationAcknowledgeServiceSerializer : ServiceSerializerBase<DeviceConfigurationAcknowledgeService>
     {
-        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.TunnelingAcknowledge;
-        public ConnectionHeader ConnectionHeader { get; init; }
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.DeviceConfigurationResponse;
 
-        public TunnelingAcknowledgeService(ConnectionHeader connectionHeader)
-            : base(Enums.ServiceTypeIdentifier.TunnelingAcknowledge, ConnectionHeader.STRUCTURE_SIZE)
+        public override DeviceConfigurationAcknowledgeService Deserialize(BigEndianBinaryReader reader)
         {
-            ConnectionHeader = connectionHeader;
+            var channelId = reader.ReadByte();
+            var seqCounter = reader.ReadByte();
+            var status = reader.ReadByteEnum<ErrorCodes>("ConnectionStateResponseFrame.Status");
+            return new DeviceConfigurationAcknowledgeService(channelId, seqCounter, status);
+        }
+
+        public override void Serialize(DeviceConfigurationAcknowledgeService service, BigEndianBinaryWriter writer)
+        {
+            writer.Write(service.Size);
+            writer.Write(service.ChannelId);
+            writer.Write(service.SequenceCounter);
+            writer.Write((byte)service.Status);
         }
     }
 }

@@ -30,10 +30,10 @@ namespace Tiveria.Home.Knx.IP.Services
 {
     public class RoutingIndicationService : ServiceBase
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.RoutingIndication;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.RoutingIndication;
         public ICemiMessage CemiMessage { get; init; }
         public RoutingIndicationService(ICemiMessage cemi) 
-            : base(ServiceTypeIdentifier.RoutingIndication, cemi.Size)
+            : base(Enums.ServiceTypeIdentifier.RoutingIndication, cemi.Size)
         {
             CemiMessage = cemi;
         }

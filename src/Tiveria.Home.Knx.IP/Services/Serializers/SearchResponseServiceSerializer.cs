@@ -28,29 +28,23 @@ using Tiveria.Home.Knx.IP.Structures;
 
 namespace Tiveria.Home.Knx.IP.Services.Serializers
 {
-    /// <summary>
-    /// <code>
-    /// Device Hardware DIB, Supported Families DIB, Other DIB
-    /// </code>
-    /// </summary>
-    // TODO: fix description
-    public class DescriptionResponseServiceSerializer : ServiceSerializerBase<DescriptionResponseService>
+    public class SearchResponseServiceSerializer : ServiceSerializerBase<SearchResponseService>
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DescriptionResponse;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.SearchResponse;
 
-        public override DescriptionResponseService Deserialize(BigEndianBinaryReader reader)
+        public override SearchResponseService Deserialize(BigEndianBinaryReader reader)
         {
+            var serviceEndpoint = Hpai.Parse(reader);
             var deviceInfoDIB = DeviceInfoDIB.Parse(reader);
-            var serviceFamiliesDIB = ServiceFamiliesDIB.Parse(reader);  
-            var otherDIB = (reader.Available > 0) ? OtherDIB.Parse(reader) : null;
-            return new DescriptionResponseService(deviceInfoDIB, serviceFamiliesDIB, otherDIB);   
+            var serviceFamiliesDIB = ServiceFamiliesDIB.Parse(reader);
+            return new SearchResponseService(serviceEndpoint, deviceInfoDIB, serviceFamiliesDIB);
         }
 
-        public override void Serialize(DescriptionResponseService frame, BigEndianBinaryWriter writer)
+        public override void Serialize(SearchResponseService service, BigEndianBinaryWriter writer)
         {
-            frame.DeviceInfoDIB.Write(writer);
-            frame.ServiceFamiliesDIB.Write(writer);
-            frame.OtherDIB?.Write(writer);
+            service.ServiceEndpoint.Write(writer);
+            service.DeviceInfoDIB.Write(writer);
+            service.ServiceFamiliesDIB.Write(writer);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Tiveria.Home.Knx.Tests.IP
             var reader = new BigEndianBinaryReader(new MemoryStream(data));
             var result = FrameHeader.Parse(reader);
             Assert.AreEqual(result.Size, KnxNetIPVersion.Version10.HeaderLength);
-            Assert.AreEqual(result.Version, KnxNetIPVersion.Version10.Identifier);
+            Assert.AreEqual(result.Version, KnxNetIPVersion.Version10);
             Assert.AreEqual(result.ServiceTypeIdentifier, ServiceTypeIdentifier.ConnectRequest);
             Assert.AreEqual(result.TotalLength, 18 + KnxNetIPVersion.Version10.HeaderLength);
         }
@@ -61,8 +61,7 @@ namespace Tiveria.Home.Knx.Tests.IP
             var data = "061000ff00180801c0a80278e1f60801c0a80278e1f70203".ToByteArray();
             var reader = new BigEndianBinaryReader(new MemoryStream(data));
             var result = FrameHeader.Parse(reader);
-            Assert.AreEqual(ServiceTypeIdentifier.Unknown, result.ServiceTypeIdentifier);
-            Assert.AreEqual(0x00ff, result.ServiceTypeIdentifierRaw);
+            Assert.IsFalse(ServiceTypeIdentifier.IsKnown(result.ServiceTypeIdentifier));
         }
 
         [Test]
@@ -71,7 +70,7 @@ namespace Tiveria.Home.Knx.Tests.IP
             var result = new FrameHeader(ServiceTypeIdentifier.ConnectRequest, 18);
 
             Assert.AreEqual(result.Size, KnxNetIPVersion.Version10.HeaderLength);
-            Assert.AreEqual(result.Version, KnxNetIPVersion.Version10.Identifier);
+            Assert.AreEqual(result.Version, KnxNetIPVersion.Version10);
             Assert.AreEqual(result.ServiceTypeIdentifier, ServiceTypeIdentifier.ConnectRequest);
             Assert.AreEqual(result.TotalLength, 18 + KnxNetIPVersion.Version10.HeaderLength);
         }

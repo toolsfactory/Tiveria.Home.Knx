@@ -42,7 +42,7 @@ namespace Tiveria.Home.Knx.IP.Services.Serializers
     /// </summary>
     public class DisconnectRequestServiceSerializer : ServiceSerializerBase<DisconnectRequestService>
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DisconnectRequest;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.DisconnectRequest;
 
         public override DisconnectRequestService Deserialize(BigEndianBinaryReader reader)
         {

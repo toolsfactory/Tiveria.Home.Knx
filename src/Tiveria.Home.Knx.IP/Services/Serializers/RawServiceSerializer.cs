@@ -28,31 +28,19 @@ using Tiveria.Home.Knx.IP.Structures;
 
 namespace Tiveria.Home.Knx.IP.Services.Serializers
 {
-    /// <summary>
-    /// <code>
-    /// +--------+--------+
-    /// | byte 7 | byte 8 |
-    /// +--------+--------+
-    /// | Channel|Status  |
-    /// | ID     | 0x00   |
-    /// +--------+--------+
-    /// </code>
-    /// </summary>
-    public class ConnectionStateResponseServiceSerializer : ServiceSerializerBase<ConnectionStateResponseService>
+    public class RawServiceSerializer : ServiceSerializerBase<RawService>
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.ConnectionStateResponse;
+        public override ushort ServiceTypeIdentifier => 0xFFFF;
 
-        public override ConnectionStateResponseService Deserialize(BigEndianBinaryReader reader)
+        public override RawService Deserialize(BigEndianBinaryReader reader)
         {
-            var channelId = reader.ReadByte();
-            var status = reader.ReadByteEnum<ErrorCodes>("ConnectionStateResponseFrame.Status");
-            return new ConnectionStateResponseService(channelId, status);
+            var payload = reader.ReadBytesFull();
+            return new RawService(ServiceTypeIdentifier, payload);
         }
 
-        public override void Serialize(ConnectionStateResponseService frame, BigEndianBinaryWriter writer)
+        public override void Serialize(RawService frame, BigEndianBinaryWriter writer)
         {
-            writer.Write(frame.ChannelId);
-            writer.Write((byte)frame.Status);
+            writer.Write(frame.Payload);
         }
     }
 }

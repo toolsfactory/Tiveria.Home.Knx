@@ -19,7 +19,7 @@ namespace Tiveria.Home.Knx.Tests.IP
             var reader = new BigEndianBinaryReader(new MemoryStream(data));
             var result = FrameHeader.Parse(reader);
             Assert.AreEqual(ServiceTypeIdentifier.ObjectServer, result.ServiceTypeIdentifier);
-            Assert.AreEqual(0xf080, result.ServiceTypeIdentifierRaw);
+            Assert.AreEqual(0xf080, result.ServiceTypeIdentifier);
         }
 
         [Test]
@@ -28,7 +28,7 @@ namespace Tiveria.Home.Knx.Tests.IP
             var data = "0620F080001504000000F006000100010001030101".ToByteArray();
             var frame = KnxNetIPFrame.Parse(data);
             Assert.AreEqual(ServiceTypeIdentifier.ObjectServer, frame.FrameHeader.ServiceTypeIdentifier);
-            Assert.AreEqual(0xf080, frame.FrameHeader.ServiceTypeIdentifierRaw);
+            Assert.AreEqual(0xf080, frame.FrameHeader.ServiceTypeIdentifier);
         }
 
         /*

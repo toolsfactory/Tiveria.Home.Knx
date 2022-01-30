@@ -222,7 +222,8 @@ namespace Tiveria.Home.Knx.IP.Connections
 
         protected byte SndSeqCounter => _sndSeqCounter;
 
-        protected bool isCorrectChannelID(byte channelId, ServiceTypeIdentifier serviceType)
+/*
+        protected bool isCorrectChannelID(byte channelId)
         {
             if (channelId == _channelId)
             {
@@ -234,6 +235,7 @@ namespace Tiveria.Home.Knx.IP.Connections
                 return false;
             }
         }
+*/
         #endregion
 
         #region Disposable Pattern

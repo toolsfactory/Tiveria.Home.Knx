@@ -23,29 +23,24 @@
 */
 
 using Tiveria.Common.IO;
-using Tiveria.Home.Knx.Cemi;
 using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Home.Knx.IP.Structures;
 
 namespace Tiveria.Home.Knx.IP.Services.Serializers
 {
-    public class TunnelingRequestServiceSerializer : ServiceSerializerBase<TunnelingRequestService>
+    public class SearchRequestServiceSerializer : ServiceSerializerBase<SearchRequestService>
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.TunnelingRequest;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.SearchRequest;
 
-        public override TunnelingRequestService Deserialize(BigEndianBinaryReader reader)
+        public override SearchRequestService Deserialize(BigEndianBinaryReader reader)
         {
-            var conheader = ConnectionHeader.Parse(reader);
-            var messageCode = reader.ReadByteEnum<MessageCode>("TunnelingRequest.Cemi.MessageCode");
-            reader.Seek(reader.Position - 1); // move one back again as Cemi parsers also read the messagecode
-            var cemi = KnxCemiSerializerFactory.Instance.Create(messageCode).Deserialize(reader);
-            return new TunnelingRequestService(conheader, cemi);
+            var discoveryEndpoint = Hpai.Parse(reader);
+            return new SearchRequestService(discoveryEndpoint);
         }
 
-        public override void Serialize(TunnelingRequestService service, BigEndianBinaryWriter writer)
+        public override void Serialize(SearchRequestService service, BigEndianBinaryWriter writer)
         {
-            service.ConnectionHeader.Write(writer);
-            KnxCemiSerializerFactory.Instance.Create(service.CemiMessage.MessageCode).Serialize(service.CemiMessage, writer);
+            service.DiscoveryEndpoint.Write(writer);
         }
     }
 }

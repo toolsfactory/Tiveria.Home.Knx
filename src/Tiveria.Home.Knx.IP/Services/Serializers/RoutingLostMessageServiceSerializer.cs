@@ -23,28 +23,24 @@
 */
 
 using Tiveria.Common.IO;
-using Tiveria.Home.Knx.Cemi;
-using Tiveria.Home.Knx.Cemi.Serializers;
 using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Home.Knx.IP.Structures;
 
 namespace Tiveria.Home.Knx.IP.Services.Serializers
 {
-    public class DeviceConfigurationRequestServiceSerializer : ServiceSerializerBase<DeviceConfigurationRequestService>
+    public class RoutingLostMessageServiceSerializer : ServiceSerializerBase<RoutingLostMessageService>
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DeviceConfigurationRequest;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.RoutingLostMessage;
 
-        public override DeviceConfigurationRequestService Deserialize(BigEndianBinaryReader reader)
+        public override RoutingLostMessageService Deserialize(BigEndianBinaryReader reader)
         {
-            var conheader = ConnectionHeader.Parse(reader);
-            var cemi = new CemiLDataSerializer().Deserialize(reader, -1);
-            return new DeviceConfigurationRequestService(conheader, cemi);
+            var lostMessageInfo = LostMessageInfo.Parse(reader);
+            return new RoutingLostMessageService(lostMessageInfo);
         }
 
-        public override void Serialize(DeviceConfigurationRequestService service, BigEndianBinaryWriter writer)
+        public override void Serialize(RoutingLostMessageService service, BigEndianBinaryWriter writer)
         {
-            service.ConnectionHeader.Write(writer);
-            new CemiLDataSerializer().Serialize((CemiLData)service.CemiMessage, writer);
+            service.LostMessageInfo.Write(writer);
         }
     }
 }

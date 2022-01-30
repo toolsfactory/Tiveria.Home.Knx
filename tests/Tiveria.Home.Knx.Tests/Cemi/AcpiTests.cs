@@ -10,6 +10,7 @@ namespace Tiveria.Home.Knx.Tests
     [TestFixture]
     class AcpiTests
     {
+        #region data creation helpers
         private static byte[] GetRandomData(int len)
         {
             byte[] data = new byte[len];
@@ -17,66 +18,16 @@ namespace Tiveria.Home.Knx.Tests
             rnd.NextBytes(data);
             return data;
         }
-
-        static object[] TestData =
+        private static byte[] GetSequenceData(int len)
         {
-            // compressed ones
-            new object[] { ApciType.DeviceDescriptor_Read,                   1 }, //exact
-            new object[] { ApciType.DeviceDescriptor_Response,               2 }, //min
-            new object[] { ApciType.ADC_Read,                                2 }, //exact
-            new object[] { ApciType.ADC_Response,                            4 }, //exact
-            new object[] { ApciType.Memory_Read,                             3 }, //exact
-            new object[] { ApciType.Memory_Response, 3 }, //min
-            new object[] { ApciType.Memory_Write, 4 }, //min
-            new object[] { ApciType.GroupValue_Response, DataMode.MinMax, true, 1, 14}, //minmax
-            new object[] { ApciType.GroupValue_Write, DataMode.MinMax, true, 1, 14}, //minmax
-        };
-
-        static object[] TestDataCompressed =
-        {
-            new object[] { ApciType.GroupValue_Response, new byte[] { 0x00 }, new byte[] { 0x00, 0x40 } },
-            new object[] { ApciType.GroupValue_Response, new byte[] { 0x01 }, new byte[] { 0x00, 0x41 } },
-            new object[] { ApciType.GroupValue_Response, new byte[] { 0x3f }, new byte[] { 0x00, 0x7f } },
-        };
-
-        [TestCaseSource(nameof(TestDataCompressed))]
-        public void BuildApciCompressed_Many(int type, byte[] data, byte[] raw)
-        {
-            var result = new Apdu(type, data);
-            var resultRaw = result.ToBytes();
-            Assert.AreEqual(type, result.Type);
-            Assert.IsNotNull(result.Data);
-            Assert.AreEqual(2, resultRaw.Length);
-            Assert.AreEqual(1, result.Data.Length);
-            Assert.AreEqual(raw[0], resultRaw[0]);
-            Assert.AreEqual(raw[1], resultRaw[1]);
+            byte[] data = new byte[len];
+            for(var i= 0; i < len; i++)
+                data[i] = (byte)i;
+            return data;
         }
+        #endregion
 
-        static object[] TestDataO =
-{
-            new object[] { ApciType.GroupValue_Read, new byte[] {  }, new byte[] { 0x00, 0x00 } },
-            new object[] { ApciType.GroupValue_Response, new byte[] { 0x40 }, new byte[] { 0x00, 0x40, 0x40 } },
-            new object[] { ApciType.GroupValue_Response, new byte[] { 0xff }, new byte[] { 0x00, 0x40, 0xff } },
-            new object[] { ApciType.GroupValue_Response, new byte[] { 0xaa, 0xbb }, new byte[] { 0x00, 0x40, 0xaa, 0xbb } },
-        };
 
-        [TestCaseSource(nameof(TestDataO))]
-        public void BuildApci_Many(int type, byte[] data, byte[] raw)
-        {
-            var result = new Apdu(type, data);
-            var resultRaw = result.ToBytes();
-            Assert.AreEqual(type, result.Type);
-            Assert.IsNotNull(result.Data);
-            Assert.AreEqual(raw.Length, resultRaw.Length);
-            Assert.AreEqual(data.Length, result.Data.Length);
-            Assert.AreEqual(raw[0], resultRaw[0]);
-            Assert.AreEqual(raw[1], resultRaw[1]);
-            if (raw.Length > 2) Assert.AreEqual(raw[2], resultRaw[2]);
-            if (raw.Length > 3) Assert.AreEqual(raw[3], resultRaw[3]);
-            if (raw.Length > 4) Assert.AreEqual(raw[4], resultRaw[4]);
-            if (raw.Length > 5) Assert.AreEqual(raw[5], resultRaw[5]);
-            if (raw.Length > 6) Assert.AreEqual(raw[6], resultRaw[6]);
-        }
 
         #region testing Acpi types without data
         static object[] TestDataApciNoData =
@@ -237,18 +188,71 @@ namespace Tiveria.Home.Knx.Tests
         }
         #endregion
 
-        /* At the moment no check for data size implemented
-        [Test]
-        public void ParseGroupValue_Read1()
-        {
-            var data = "0000".ToByteArray(); // Type:GroupValue_Read, Data:None
-            var result = new Apdu(ApciType.GroupValue_Read, data);
+        // ToDo: cleanup below this line
 
-            Assert.AreEqual(ApciType.GroupValue_Read, result.Type);
+        static object[] TestData =
+        {
+            // compressed ones
+            new object[] { ApciType.DeviceDescriptor_Read,                   1 }, //exact
+            new object[] { ApciType.DeviceDescriptor_Response,               2 }, //min
+            new object[] { ApciType.ADC_Read,                                2 }, //exact
+            new object[] { ApciType.ADC_Response,                            4 }, //exact
+            new object[] { ApciType.Memory_Read,                             3 }, //exact
+            new object[] { ApciType.Memory_Response, 3 }, //min
+            new object[] { ApciType.Memory_Write, 4 }, //min
+            new object[] { ApciType.GroupValue_Response, DataMode.MinMax, true, 1, 14}, //minmax
+            new object[] { ApciType.GroupValue_Write, DataMode.MinMax, true, 1, 14}, //minmax
+        };
+
+        static object[] TestDataCompressed =
+        {
+            new object[] { ApciType.GroupValue_Response, new byte[] { 0x00 }, new byte[] { 0x00, 0x40 } },
+            new object[] { ApciType.GroupValue_Response, new byte[] { 0x01 }, new byte[] { 0x00, 0x41 } },
+            new object[] { ApciType.GroupValue_Response, new byte[] { 0x3f }, new byte[] { 0x00, 0x7f } },
+        };
+
+        [TestCaseSource(nameof(TestDataCompressed))]
+        public void BuildApciCompressed_Many(int type, byte[] data, byte[] raw)
+        {
+            var result = new Apdu(type, data);
+            var resultRaw = result.ToBytes();
+            Assert.AreEqual(type, result.Type);
             Assert.IsNotNull(result.Data);
-            Assert.Zero(result.Data.Length);
+            Assert.AreEqual(2, resultRaw.Length);
+            Assert.AreEqual(1, result.Data.Length);
+            Assert.AreEqual(raw[0], resultRaw[0]);
+            Assert.AreEqual(raw[1], resultRaw[1]);
         }
-        */
+
+        static object[] TestDataO =
+{
+            new object[] { ApciType.GroupValue_Read, new byte[] {  }, new byte[] { 0x00, 0x00 } },
+            new object[] { ApciType.GroupValue_Response, new byte[] { 0x40 }, new byte[] { 0x00, 0x40, 0x40 } },
+            new object[] { ApciType.GroupValue_Response, new byte[] { 0xff }, new byte[] { 0x00, 0x40, 0xff } },
+            new object[] { ApciType.GroupValue_Response, new byte[] { 0xaa, 0xbb }, new byte[] { 0x00, 0x40, 0xaa, 0xbb } },
+        };
+
+        [TestCaseSource(nameof(TestDataO))]
+        public void BuildApci_Many(int type, byte[] data, byte[] raw)
+        {
+            var result = new Apdu(type, data);
+            var resultRaw = result.ToBytes();
+            Assert.AreEqual(type, result.Type);
+            Assert.IsNotNull(result.Data);
+            Assert.AreEqual(raw.Length, resultRaw.Length);
+            Assert.AreEqual(data.Length, result.Data.Length);
+            Assert.AreEqual(raw[0], resultRaw[0]);
+            Assert.AreEqual(raw[1], resultRaw[1]);
+            if (raw.Length > 2) Assert.AreEqual(raw[2], resultRaw[2]);
+            if (raw.Length > 3) Assert.AreEqual(raw[3], resultRaw[3]);
+            if (raw.Length > 4) Assert.AreEqual(raw[4], resultRaw[4]);
+            if (raw.Length > 5) Assert.AreEqual(raw[5], resultRaw[5]);
+            if (raw.Length > 6) Assert.AreEqual(raw[6], resultRaw[6]);
+        }
+
+
+
+
 
         [Test]
         public void ParseGroupValue_Write1()
@@ -354,5 +358,4 @@ namespace Tiveria.Home.Knx.Tests
             Assert.AreEqual(0x3d, result.Data[0]);
         }
     }
-
 }

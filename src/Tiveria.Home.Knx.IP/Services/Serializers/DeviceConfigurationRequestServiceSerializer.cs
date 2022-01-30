@@ -23,36 +23,28 @@
 */
 
 using Tiveria.Common.IO;
+using Tiveria.Home.Knx.Cemi;
+using Tiveria.Home.Knx.Cemi.Serializers;
 using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Home.Knx.IP.Structures;
 
 namespace Tiveria.Home.Knx.IP.Services.Serializers
 {
-    /// <summary>
-    /// <code>
-    /// +--------+--------+
-    /// | byte 7 | byte 8 |
-    /// +--------+--------+
-    /// | Channel|Status  |
-    /// | ID     | 0x00   |
-    /// +--------+--------+
-    /// </code>
-    /// </summary>
-    public class DisconnectResponseServiceSerializer : ServiceSerializerBase<DisconnectResponseService>
+    public class DeviceConfigurationRequestServiceSerializer : ServiceSerializerBase<DeviceConfigurationRequestService>
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DisconnectResponse;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.DeviceConfigurationRequest;
 
-        public override DisconnectResponseService Deserialize(BigEndianBinaryReader reader)
+        public override DeviceConfigurationRequestService Deserialize(BigEndianBinaryReader reader)
         {
-            var channelId = reader.ReadByte();
-            var status = reader.ReadByteEnum<ErrorCodes>("ConnectionStateResponseFrame.Status");
-            return new DisconnectResponseService(channelId, status);
+            var conheader = ConnectionHeader.Parse(reader);
+            var cemi = new CemiLDataSerializer().Deserialize(reader, -1);
+            return new DeviceConfigurationRequestService(conheader, cemi);
         }
 
-        public override void Serialize(DisconnectResponseService service, BigEndianBinaryWriter writer)
+        public override void Serialize(DeviceConfigurationRequestService service, BigEndianBinaryWriter writer)
         {
-            writer.Write(service.ChannelId);
-            writer.Write((byte)service.Status);
+            service.ConnectionHeader.Write(writer);
+            new CemiLDataSerializer().Serialize((CemiLData)service.CemiMessage, writer);
         }
     }
 }

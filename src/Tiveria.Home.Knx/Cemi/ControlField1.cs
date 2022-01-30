@@ -54,12 +54,12 @@ namespace Tiveria.Home.Knx.Cemi
     {
 
         #region public properties
-        public bool ExtendedFrame { get; set; } = false;
-        public bool Repeat { get; set; } = false;
-        public BroadcastType Broadcast { get; set; } = BroadcastType.Normal;
-        public Priority Priority { get; set; } = Priority.Normal;
-        public bool AcknowledgeRequest { get; set; } = false;
-        public ConfirmType Confirm { get; set; } = ConfirmType.NoError;
+        public bool ExtendedFrame { get; set; }
+        public bool Repeat { get; set; }
+        public BroadcastType Broadcast { get; set; }
+        public Priority Priority { get; set; }
+        public bool AcknowledgeRequest { get; set; }
+        public ConfirmType Confirm { get; set; }
         #endregion
 
         #region constructors
@@ -94,7 +94,7 @@ namespace Tiveria.Home.Knx.Cemi
         /// <param name="broadcast"></param>
         /// <param name="ack"></param>
         /// <param name="confirm"></param>
-        public ControlField1(bool extendedFrame =false, Priority priority = Priority.Normal, bool repeat = true, BroadcastType broadcast = BroadcastType.Normal, bool ack = true, ConfirmType confirm = ConfirmType.NoError)
+        public ControlField1(bool extendedFrame = false, Priority priority = Priority.Normal, bool repeat = true, BroadcastType broadcast = BroadcastType.Normal, bool ack = true, ConfirmType confirm = ConfirmType.NoError)
         {
             ExtendedFrame = extendedFrame;
             Repeat = repeat;

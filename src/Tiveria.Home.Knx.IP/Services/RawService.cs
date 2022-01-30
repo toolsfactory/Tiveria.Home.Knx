@@ -8,10 +8,10 @@ namespace Tiveria.Home.Knx.IP.Services
     {
         public int Size { get; init; }
         public byte[] Payload { get; init; }
-        public ServiceTypeIdentifier ServiceTypeIdentifier { get; init; }
+        public ushort ServiceTypeIdentifier { get; init; }
 
 
-        public RawService(ServiceTypeIdentifier serviceTypeIdentifier, byte[]? body)
+        public RawService(ushort serviceTypeIdentifier, byte[]? body)
         {
             ServiceTypeIdentifier = serviceTypeIdentifier;
             Payload = body ?? Array.Empty<byte>();

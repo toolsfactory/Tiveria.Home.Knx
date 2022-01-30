@@ -30,35 +30,27 @@ namespace Tiveria.Home.Knx.IP.Services.Serializers
 {
     /// <summary>
     /// <code>
-    /// Frame Header not shown here.
-    /// +--------+--------+--------+--------+--------+--------+
-    /// | byte 7 | byte 8 | byte 9 | byte 10| byte 11| byte 12|
-    /// +--------+--------+--------+--------+--------+--------+
-    /// | Channel|Status  | HPAI            | CRD Connection  |
-    /// | Id     |        | Data Endpoint   | Response Data   |
-    /// +-----------------+-----------------+-----------------+
+    /// Device Hardware DIB, Supported Families DIB, Other DIB
     /// </code>
     /// </summary>
-    public class ConnectionResponseServiceSerializer : ServiceSerializerBase<ConnectionResponseService>
+    // TODO: fix description
+    public class DescriptionResponseServiceSerializer : ServiceSerializerBase<DescriptionResponseService>
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.ConnectResponse;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.DescriptionResponse;
 
-        public override ConnectionResponseService Deserialize(BigEndianBinaryReader reader)
+        public override DescriptionResponseService Deserialize(BigEndianBinaryReader reader)
         {
-            var channelId = reader.ReadByte();
-            var status = reader.ReadByteEnum<ErrorCodes>("ConnectionResponse.Status");
-            var endpoint = Hpai.Parse(reader);
-            var crd = CRDTunnel.Parse(reader);
-            return new ConnectionResponseService(channelId, status, endpoint, crd);
+            var deviceInfoDIB = DeviceInfoDIB.Parse(reader);
+            var serviceFamiliesDIB = ServiceFamiliesDIB.Parse(reader);  
+            var otherDIB = (reader.Available > 0) ? OtherDIB.Parse(reader) : null;
+            return new DescriptionResponseService(deviceInfoDIB, serviceFamiliesDIB, otherDIB);   
         }
 
-        public override void Serialize(ConnectionResponseService service, BigEndianBinaryWriter writer)
+        public override void Serialize(DescriptionResponseService frame, BigEndianBinaryWriter writer)
         {
-            writer.Write(service.ChannelId);
-            writer.Write((byte)service.Status);
-            service.DataEndpoint.Write(writer);
-            service.Crd.Write(writer);
+            frame.DeviceInfoDIB.Write(writer);
+            frame.ServiceFamiliesDIB.Write(writer);
+            frame.OtherDIB?.Write(writer);
         }
     }
-
 }

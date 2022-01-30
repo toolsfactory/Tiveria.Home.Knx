@@ -28,19 +28,33 @@ using Tiveria.Home.Knx.IP.Structures;
 
 namespace Tiveria.Home.Knx.IP.Services.Serializers
 {
-    public class RoutingBusyServiceSerializer : ServiceSerializerBase<RoutingBusyService>
+    /// <summary>
+    /// <code>
+    /// +--------+--------+--------+--------+
+    /// | byte 1 | byte 2 | byte 3 | byte 4 |
+    /// +--------+--------+--------+--------+
+    /// | Header |Channel |Sequence|Status  |
+    /// | Length |ID      |Counter |Code    |
+    /// +--------+--------+--------+--------+
+    /// | 0x04   |        |        |        |
+    /// +--------+--------+-----------------+
+    ///
+    /// Serice Type:  <see cref="Tiveria.Home.Knx.IP.Enums.ServiceTypeIdentifier"/>
+    /// </code>
+    /// </summary>
+    public class TunnelingAcknowledgeServiceSerializer : ServiceSerializerBase<TunnelingAcknowledgeService>
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.ROURoutingBusyING_BUSY;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.TunnelingAcknowledge;
 
-        public override RoutingBusyService Deserialize(BigEndianBinaryReader reader)
+        public override TunnelingAcknowledgeService Deserialize(BigEndianBinaryReader reader)
         {
-            var busyInfo = BusyInfo.Parse(reader);
-            return new RoutingBusyService(busyInfo);
+            var connectionHeader = ConnectionHeader.Parse(reader);
+            return new TunnelingAcknowledgeService(connectionHeader);
         }
 
-        public override void Serialize(RoutingBusyService service, BigEndianBinaryWriter writer)
+        public override void Serialize(TunnelingAcknowledgeService service, BigEndianBinaryWriter writer)
         {
-            service.BusyInfo.Write(writer);
+            service.ConnectionHeader.Write(writer);
         }
     }
 }

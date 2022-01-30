@@ -28,19 +28,34 @@ using Tiveria.Home.Knx.IP.Structures;
 
 namespace Tiveria.Home.Knx.IP.Services.Serializers
 {
-    public class RawServiceSerializer : ServiceSerializerBase<RawService>
+    /// <summary>
+    /// <code>
+    /// Frame Header not shown here.
+    /// +--------+--------+--------+--------+--------+--------+
+    /// | byte 7 | byte 8 | byte 9 | byte 10| byte 11| byte 12|
+    /// +--------+--------+--------+--------+--------+--------+
+    /// | HPAI            | HPAI            | CRI Connection  |
+    /// | Control Endpoint| Data Endpoint   | Request Info    |
+    /// +-----------------+-----------------+-----------------+
+    /// </code>
+    /// </summary>
+    public class ConnectionRequestServiceSerializer : ServiceSerializerBase<ConnectionRequestService>
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.Unknown;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.ConnectRequest;
 
-        public override RawService Deserialize(BigEndianBinaryReader reader)
+        public override ConnectionRequestService Deserialize(BigEndianBinaryReader reader)
         {
-            var payload = reader.ReadBytesFull();
-            return new RawService(ServiceTypeIdentifier, payload);
+            var dataEndpoint = Hpai.Parse(reader);
+            var controlEndpoint = Hpai.Parse(reader);
+            var cri = CRITunnel.Parse(reader);
+            return new ConnectionRequestService(dataEndpoint, controlEndpoint, cri);
         }
 
-        public override void Serialize(RawService frame, BigEndianBinaryWriter writer)
+        public override void Serialize(ConnectionRequestService service, BigEndianBinaryWriter writer)
         {
-            writer.Write(frame.Payload);
+            service.DataEndpoint.Write(writer);
+            service.ControlEndpoint.Write(writer);
+            service.Cri.Write(writer);
         }
     }
 }

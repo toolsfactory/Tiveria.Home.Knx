@@ -28,29 +28,21 @@ using Tiveria.Home.Knx.IP.Structures;
 
 namespace Tiveria.Home.Knx.IP.Services.Serializers
 {
-    /// <summary>
-    /// <code>
-    /// +--------+--------+--------+--------+--------+--------+--------+--------+
-    /// | byte 7 | byte 8 | byte 9 | byte 10| byte 11| byte 12| byte 13| byte 14|
-    /// +--------+--------+--------+--------+--------+--------+--------+--------+
-    /// |  Size  |Endpoint|        Endpoint IP Address        |  Endpoint Port  |
-    /// |  (8)   | Type   |                                   |                 |
-    /// +--------+--------+--------+--------+--------+--------+--------+--------+
-    /// </code>
-    /// </summary>
-    public class DescriptionRequestServiceSerializer : ServiceSerializerBase<DescriptionRequestService>
+    public class ExtendedSearchRequestServiceSerializer : ServiceSerializerBase<ExtendedSearchRequestService>
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DescriptionRequest;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.ExtendedSearchRequest;
 
-        public override DescriptionRequestService Deserialize(BigEndianBinaryReader reader)
+        public override ExtendedSearchRequestService Deserialize(BigEndianBinaryReader reader)
         {
-            var controlEndpoint = Hpai.Parse(reader); 
-            return new DescriptionRequestService(controlEndpoint);
+            var discoveryEndpoint = Hpai.Parse(reader);
+            var searchRequestParameter = SRP.Parse(reader);
+            return new ExtendedSearchRequestService(discoveryEndpoint, searchRequestParameter);
         }
 
-        public override void Serialize(DescriptionRequestService frame, BigEndianBinaryWriter writer)
+        public override void Serialize(ExtendedSearchRequestService service, BigEndianBinaryWriter writer)
         {
-            frame.ControlEndpoint.Write(writer);
+            service.DiscoveryEndpoint.Write(writer);
+            service.SearchRequestParameter.Write(writer);
         }
     }
 }

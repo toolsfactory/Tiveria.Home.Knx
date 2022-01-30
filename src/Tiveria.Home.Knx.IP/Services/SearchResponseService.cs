@@ -30,13 +30,13 @@ namespace Tiveria.Home.Knx.IP.Services
 {
     public class SearchResponseService : ServiceBase
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.SearchResponse;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.SearchResponse;
         public Hpai ServiceEndpoint { get; init; }
         public DeviceInfoDIB DeviceInfoDIB { get; init; }
         public ServiceFamiliesDIB ServiceFamiliesDIB { get; init; }
 
         public SearchResponseService(Hpai serviceEndpoint, DeviceInfoDIB deviceInfoDIB, ServiceFamiliesDIB serviceFamiliesDIB)
-            : base(ServiceTypeIdentifier.SearchResponse, serviceEndpoint.Size + deviceInfoDIB.Size + serviceFamiliesDIB.Size)
+            : base(Enums.ServiceTypeIdentifier.SearchResponse, serviceEndpoint.Size + deviceInfoDIB.Size + serviceFamiliesDIB.Size)
         {
             ServiceEndpoint = serviceEndpoint;
             DeviceInfoDIB = deviceInfoDIB;

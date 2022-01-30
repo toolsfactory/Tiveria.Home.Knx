@@ -23,38 +23,29 @@
 */
 
 using Tiveria.Common.IO;
+using Tiveria.Home.Knx.Cemi;
 using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Home.Knx.IP.Structures;
 
 namespace Tiveria.Home.Knx.IP.Services.Serializers
 {
-    /// <summary>
-    /// <code>
-    /// +--------+--------+--------+--------+
-    /// | byte 1 | byte 2 | byte 3 | byte 4 |
-    /// +--------+--------+--------+--------+
-    /// | Header |Channel |Sequence|Status  |
-    /// | Length |ID      |Counter |Code    |
-    /// +--------+--------+--------+--------+
-    /// | 0x04   |        |        |        |
-    /// +--------+--------+-----------------+
-    ///
-    /// Serice Type:  <see cref="Tiveria.Home.Knx.IP.Enums.ServiceTypeIdentifier"/>
-    /// </code>
-    /// </summary>
-    public class TunnelingAcknowledgeServiceSerializer : ServiceSerializerBase<TunnelingAcknowledgeService>
+    public class TunnelingRequestServiceSerializer : ServiceSerializerBase<TunnelingRequestService>
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.TunnelingAcknowledge;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.TunnelingRequest;
 
-        public override TunnelingAcknowledgeService Deserialize(BigEndianBinaryReader reader)
+        public override TunnelingRequestService Deserialize(BigEndianBinaryReader reader)
         {
-            var connectionHeader = ConnectionHeader.Parse(reader);
-            return new TunnelingAcknowledgeService(connectionHeader);
+            var conheader = ConnectionHeader.Parse(reader);
+            var messageCode = reader.ReadByteEnum<MessageCode>("TunnelingRequest.Cemi.MessageCode");
+            reader.Seek(reader.Position - 1); // move one back again as Cemi parsers also read the messagecode
+            var cemi = KnxCemiSerializerFactory.Instance.Create(messageCode).Deserialize(reader);
+            return new TunnelingRequestService(conheader, cemi);
         }
 
-        public override void Serialize(TunnelingAcknowledgeService service, BigEndianBinaryWriter writer)
+        public override void Serialize(TunnelingRequestService service, BigEndianBinaryWriter writer)
         {
             service.ConnectionHeader.Write(writer);
+            KnxCemiSerializerFactory.Instance.Create(service.CemiMessage.MessageCode).Serialize(service.CemiMessage, writer);
         }
     }
 }

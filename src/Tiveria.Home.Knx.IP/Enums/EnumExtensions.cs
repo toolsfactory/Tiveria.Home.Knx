@@ -86,53 +86,6 @@ namespace Tiveria.Home.Knx.IP.Enums
             }
         }
 
-        /// <summary>
-        /// translate <see cref="ServiceTypeIdentifier"/> to a readable string
-        /// </summary>
-        /// <returns>the string representation of the enum value</returns>
-        public static String ToDescription(this ServiceTypeIdentifier serviceTypeIdentifier)
-        {
-            switch (serviceTypeIdentifier)
-            {
-                case ServiceTypeIdentifier.ConnectRequest:
-                    return "Connect.req";
-                case ServiceTypeIdentifier.ConnectResponse:
-                    return "Connect.res";
-                case ServiceTypeIdentifier.ConnectionStateRequest:
-                    return "Connectionstate.req";
-                case ServiceTypeIdentifier.ConnectionStateResponse:
-                    return "Connectionstate.res";
-                case ServiceTypeIdentifier.DisconnectRequest:
-                    return "Disconnect.req";
-                case ServiceTypeIdentifier.DisconnectResponse:
-                    return "Disconnect.res";
-                case ServiceTypeIdentifier.DescriptionRequest:
-                    return "Description.req";
-                case ServiceTypeIdentifier.DescriptionResponse:
-                    return "Description.res";
-                case ServiceTypeIdentifier.SearchRequest:
-                    return "Search.req";
-                case ServiceTypeIdentifier.SearchResponse:
-                    return "Search.res";
-                case ServiceTypeIdentifier.DeviceConfigurationRequest:
-                    return "DeviceConfiguration.req";
-                case ServiceTypeIdentifier.DeviceConfigurationResponse:
-                    return "DeviceConfiguration.ack";
-                case ServiceTypeIdentifier.TunnelingRequest:
-                    return "Tunneling.req";
-                case ServiceTypeIdentifier.TunnelingAcknowledge:
-                    return "Tunneling.ack";
-                case ServiceTypeIdentifier.RoutingIndication:
-                    return "Routing.ind";
-                case ServiceTypeIdentifier.RoutingLostMessage:
-                    return "RoutingLost.msg";
-                case ServiceTypeIdentifier.ROURoutingBusyING_BUSY:
-                    return "RoutingBusy.ind";
-                default:
-                    return "Unknown";
-            }
-        }
-
         public static string ToDescription(this ErrorCodes ec)
         {
             switch (ec)

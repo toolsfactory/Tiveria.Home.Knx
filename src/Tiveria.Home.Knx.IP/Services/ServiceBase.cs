@@ -31,9 +31,9 @@ namespace Tiveria.Home.Knx.IP.Services
     public abstract class ServiceBase : IKnxNetIPService
     {
         public int Size { get; init; }
-        public abstract ServiceTypeIdentifier ServiceTypeIdentifier { get; }
+        public abstract ushort ServiceTypeIdentifier { get; }
 
-        protected ServiceBase(ServiceTypeIdentifier serviceTypeIdentifier, int bodySize)
+        protected ServiceBase(ushort serviceTypeIdentifier, int bodySize)
         {
             Size = bodySize;
         }

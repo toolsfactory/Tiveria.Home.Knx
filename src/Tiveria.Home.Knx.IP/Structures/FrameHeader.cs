@@ -50,45 +50,40 @@ namespace Tiveria.Home.Knx.IP.Structures
         #endregion
 
         #region public properties
-        public byte Version { get; init; }
-        public int VersionMajor => Version / 0x10; 
-        public int VersionMinor => Version % 0x10; 
-        public ServiceTypeIdentifier ServiceTypeIdentifier { get; init; } 
-        public ushort ServiceTypeIdentifierRaw { get; init; }
+        /// <summary>
+        /// Version information embedded in the header
+        /// </summary>
+        public KnxNetIPVersion Version { get; init; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public ushort ServiceTypeIdentifier { get; init; } 
         public ushort TotalLength { get; init; }
         #endregion
 
         #region Constructors
-        public FrameHeader(KnxNetIPVersion version, ushort servicetypeidentifierRaw, int bodyLength)
+        public FrameHeader(KnxNetIPVersion version, ushort servicetypeidentifier, int bodyLength)
         {
             if (!KnxNetIPVersion.IsSupportedVersion(version) && ThrowExceptionOnUnknownVersion)
                 throw new BufferFieldException($"Unknown KnxNetIPVersion {version.Identifier} with header size {version.HeaderLength}");
 
-            if (Enum.IsDefined(typeof(ServiceTypeIdentifier), servicetypeidentifierRaw))
-                ServiceTypeIdentifier = (ServiceTypeIdentifier)servicetypeidentifierRaw;
-            else
-                ServiceTypeIdentifier = ServiceTypeIdentifier.Unknown;
-
             Size = version.HeaderLength;
-            Version = version.Identifier;
+            Version = version;
             TotalLength = (ushort)(Size + bodyLength);
-            ServiceTypeIdentifierRaw = servicetypeidentifierRaw;
+            ServiceTypeIdentifier = servicetypeidentifier;
         }
 
-        public FrameHeader(KnxNetIPVersion version, ServiceTypeIdentifier servicetypeidentifier, int bodyLength)
-            : this(version, (ushort)servicetypeidentifier, bodyLength)
-        { }
 
-        public FrameHeader(ServiceTypeIdentifier servicetypeidentifier, int bodyLength)
-            : this(KnxNetIPVersion.DefaultVersion, (ushort)servicetypeidentifier, bodyLength)
+        public FrameHeader(ushort servicetypeidentifier, int bodyLength)
+            : this(KnxNetIPVersion.DefaultVersion, servicetypeidentifier, bodyLength)
         { }
 
         public FrameHeader(IKnxNetIPService service)
-            : this(KnxNetIPVersion.DefaultVersion, (ushort)service.ServiceTypeIdentifier, service.Size)
+            : this(KnxNetIPVersion.DefaultVersion, service.ServiceTypeIdentifier, service.Size)
         { }
 
         public FrameHeader(KnxNetIPVersion version, IKnxNetIPService service)
-            : this(version, (ushort)service.ServiceTypeIdentifier, service.Size)
+            : this(version, service.ServiceTypeIdentifier, service.Size)
         { }
         #endregion
 
@@ -97,14 +92,14 @@ namespace Tiveria.Home.Knx.IP.Structures
         public override void Write(BigEndianBinaryWriter writer)
         {
             writer.Write((byte)Size);
-            writer.Write(Version);
+            writer.Write(Version.Identifier);
             writer.Write((ushort)ServiceTypeIdentifier);
             writer.Write((ushort)TotalLength);
         }
 
         public override String ToString()
         {
-            return String.Format("KNXnet/IP {0}.{1} - {2} (0x{3:x}) - {4} bytes / {5} bytes", VersionMajor, VersionMinor, ServiceTypeIdentifier.ToDescription(), (byte)ServiceTypeIdentifier, Size, TotalLength);
+            return String.Format($"KNXnet/IP {Version.VersionString} - {Enums.ServiceTypeIdentifier.ToDescription(ServiceTypeIdentifier)} ({(byte)ServiceTypeIdentifier:x}0x) - {Size} bytes / {TotalLength} bytes");
         }
         #endregion
 
@@ -113,16 +108,14 @@ namespace Tiveria.Home.Knx.IP.Structures
         {
             var headersize = reader.ReadByte();
             var versionidentifier = reader.ReadByte();
-            if (!KnxNetIPVersion.TryGetFindSupportedVersion(versionidentifier, headersize, out var version))
+            if (!KnxNetIPVersion.FindSupportedVersion(versionidentifier, headersize, out var version))
                 version = new KnxNetIPVersion("Custom Version", versionidentifier, headersize);
-
-            var serviceTypeIdRaw = reader.ReadUInt16();
-
+            var serviceTypeId = reader.ReadUInt16();
             var totalLength = reader.ReadUInt16();
             if (totalLength - headersize > reader.Available)
                 throw BufferSizeException.TooSmall("Buffer<Header|TotalLength");
 
-            return new FrameHeader(version!, serviceTypeIdRaw, totalLength - headersize);
+            return new FrameHeader(version!, serviceTypeId, totalLength - headersize);
         }
 
         public static bool TryParse(BigEndianBinaryReader reader, out FrameHeader? frameHeader)

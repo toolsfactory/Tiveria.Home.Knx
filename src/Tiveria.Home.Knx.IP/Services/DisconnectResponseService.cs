@@ -41,12 +41,12 @@ namespace Tiveria.Home.Knx.IP.Services
     public class DisconnectResponseService : ServiceBase
     {
         public static readonly byte STRUCTURE_SIZE = 2;
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DisconnectResponse;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.DisconnectResponse;
         public ErrorCodes Status { get; init; }
         public byte ChannelId { get; init; }
 
         public DisconnectResponseService(byte channelId, ErrorCodes status = ErrorCodes.NoError)
-            : base(ServiceTypeIdentifier.DisconnectResponse, STRUCTURE_SIZE)
+            : base(Enums.ServiceTypeIdentifier.DisconnectResponse, STRUCTURE_SIZE)
         {
             ChannelId = channelId;
             Status = status;

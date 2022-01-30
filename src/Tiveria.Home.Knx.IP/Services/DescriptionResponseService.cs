@@ -31,13 +31,13 @@ namespace Tiveria.Home.Knx.IP.Services
     // TODO: Add byte description
     public class DescriptionResponseService : ServiceBase
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DescriptionResponse;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.DescriptionResponse;
         public DeviceInfoDIB DeviceInfoDIB { get; init; }
         public ServiceFamiliesDIB ServiceFamiliesDIB { get; init; }
         public OtherDIB? OtherDIB { get; init; }
 
         public DescriptionResponseService(DeviceInfoDIB deviceInfoDIB, ServiceFamiliesDIB serviceFamiliesDIB, OtherDIB? otherDIB)
-            : base(ServiceTypeIdentifier.DescriptionResponse,  deviceInfoDIB.Size + serviceFamiliesDIB.Size + (otherDIB == null ? 0 : otherDIB.Size))
+            : base(Enums.ServiceTypeIdentifier.DescriptionResponse,  deviceInfoDIB.Size + serviceFamiliesDIB.Size + (otherDIB == null ? 0 : otherDIB.Size))
         {
             DeviceInfoDIB = deviceInfoDIB;
             ServiceFamiliesDIB = serviceFamiliesDIB;

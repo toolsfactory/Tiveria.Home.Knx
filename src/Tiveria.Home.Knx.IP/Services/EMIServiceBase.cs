@@ -34,7 +34,7 @@ namespace Tiveria.Home.Knx.IP.Services
         public ConnectionHeader ConnectionHeader { get; init; }
         public ICemiMessage CemiMessage { get; init; }
 
-        protected EMIServiceBase(ServiceTypeIdentifier serviceTypeIdentifier, ConnectionHeader connectionHeader, ICemiMessage cemi)
+        protected EMIServiceBase(ushort serviceTypeIdentifier, ConnectionHeader connectionHeader, ICemiMessage cemi)
             : base(serviceTypeIdentifier, connectionHeader.Size + cemi.Size)
         {
             ConnectionHeader = connectionHeader;

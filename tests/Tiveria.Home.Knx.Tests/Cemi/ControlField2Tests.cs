@@ -8,7 +8,7 @@ namespace Tiveria.Home.Knx.Tests
     {
         static object[] TestDataOk =
         {
-            // Groupaddress, Hopcount, ExtendeFrameFormat
+            // Groupaddress, Hopcount, ExtendeFrameFormat, expected bits
             new object[] { true,  0, 0, 0b1_000_0000 },
             new object[] { true,  2, 0, 0b1_010_0000 },
             new object[] { true,  6, 0, 0b1_110_0000 },
@@ -23,9 +23,22 @@ namespace Tiveria.Home.Knx.Tests
             new object[] { false, 7,15, 0b0_111_1111 },
         };
 
+        static object[] TestDataOutOfBounds =
+{
+            // Groupaddress, Hopcount, hop returned, ExtendeFrameFormat, format returned, expected bits
+            new object[] { true,  8, 7, 0, 0, 0b1_111_0000 },
+            new object[] { true,  9, 7, 0, 0, 0b1_111_0000 },
+            new object[] { true,  7, 7,16,15, 0b1_111_1111 },
+            new object[] { true,  8, 7,22,15, 0b1_111_1111 },
+            new object[] { false, 8, 7, 0, 0, 0b0_111_0000 },
+            new object[] { false, 9, 7, 0, 0, 0b0_111_0000 },
+            new object[] { false, 7, 7,16,15, 0b0_111_1111 },
+            new object[] { false, 8, 7,22,15, 0b0_111_1111 },
+        };
+
         [TestCaseSource(nameof(TestDataOk))]
         [Test]
-        public void Build(bool groupadd, int hops, int ext, int expected)
+        public void Build_Ok(bool groupadd, int hops, int ext, int expected)
         {
             var ctrl2 = new ControlField2(groupadd, hops, ext);
             var data = ctrl2.ToByte();
@@ -44,15 +57,26 @@ namespace Tiveria.Home.Knx.Tests
             Assert.AreEqual((byte)expected, data);
         }
 
+        [TestCaseSource(nameof(TestDataOutOfBounds))]
+        [Test]
+        public void Build_OutOfBounds(bool groupadd, int hops, int hopsreturned, int ext, int extreturned,  int expected)
+        {
+            var ctrl2 = new ControlField2(groupadd, hops, ext);
+            var data = ctrl2.ToByte();
+            Assert.AreEqual(ctrl2.HopCount, hopsreturned);
+            Assert.AreEqual(ctrl2.ExtendedFrameFormat, extreturned);
+            Assert.AreEqual((byte)expected, data);
+        }
+
         [Test]
         public void Default()
         {
             var ctrl2 = new ControlField2();
             var data = ctrl2.ToByte();
-            Assert.AreEqual(Adresses.AddressType.IndividualAddress, ctrl2.DestinationAddressType);
+            Assert.AreEqual(Adresses.AddressType.GroupAddress, ctrl2.DestinationAddressType);
             Assert.AreEqual(0, ctrl2.ExtendedFrameFormat);
-            Assert.AreEqual(0, ctrl2.HopCount);
-            Assert.AreEqual(0b0_000_0000, data);
+            Assert.AreEqual(6, ctrl2.HopCount);
+            Assert.AreEqual(0b1_110_0000, data);
         }
     }
  }

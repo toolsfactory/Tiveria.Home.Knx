@@ -61,14 +61,14 @@ namespace Tiveria.Home.Knx.IP
         }
         #endregion
 
-        private Dictionary<ServiceTypeIdentifier, Type> _serializersByServiceTypeIdentifier = new();
+        private Dictionary<ushort, Type> _serializersByServiceTypeIdentifier = new();
         private Dictionary<Type, Type> _serializersByServiceType = new();
 
         private KnxNetIPServiceSerializerFactory()
         {
         }
 
-        public void Initialize()
+        private void Initialize()
         {
             _serializersByServiceTypeIdentifier.Clear();
             _serializersByServiceType.Clear();
@@ -101,7 +101,7 @@ namespace Tiveria.Home.Knx.IP
             _serializersByServiceType.Add(serializer.ServiceType, typeof(T));
         }
 
-        public IKnxNetIPServiceSerializer Create(ServiceTypeIdentifier service)
+        public IKnxNetIPServiceSerializer Create(ushort service)
         {
             if (_serializersByServiceTypeIdentifier.TryGetValue(service, out var parserType))
                 return (IKnxNetIPServiceSerializer) Activator.CreateInstance(parserType)!;

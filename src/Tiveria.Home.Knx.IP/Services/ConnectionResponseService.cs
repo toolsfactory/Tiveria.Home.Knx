@@ -41,7 +41,7 @@ namespace Tiveria.Home.Knx.IP.Services
     /// </summary>
     public class ConnectionResponseService : ServiceBase
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.ConnectResponse;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.ConnectResponse;
 
         public Hpai DataEndpoint { get; init; }
         public CRD Crd { get; init; }
@@ -49,7 +49,7 @@ namespace Tiveria.Home.Knx.IP.Services
         public byte ChannelId { get; init; }
 
         public ConnectionResponseService(byte channelId, ErrorCodes status, Hpai dataEndpoint, CRD crd)
-            : base(ServiceTypeIdentifier.ConnectResponse, 2 + dataEndpoint.Size + crd.Size)
+            : base(Enums.ServiceTypeIdentifier.ConnectResponse, 2 + dataEndpoint.Size + crd.Size)
         {
             ChannelId = channelId;
             Status = status;

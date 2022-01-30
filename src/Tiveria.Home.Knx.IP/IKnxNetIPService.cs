@@ -29,6 +29,6 @@ namespace Tiveria.Home.Knx.IP
     public interface IKnxNetIPService
     {
         int Size { get; }
-        ServiceTypeIdentifier ServiceTypeIdentifier { get; }
+        ushort ServiceTypeIdentifier { get; }
     }
 }

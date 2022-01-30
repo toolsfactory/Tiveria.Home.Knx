@@ -30,11 +30,11 @@ namespace Tiveria.Home.Knx.IP.Services
 {
     public class SearchRequestService : ServiceBase
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.SearchRequest;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.SearchRequest;
         public Hpai DiscoveryEndpoint { get; init; }
 
         public SearchRequestService(Hpai discoveryEndpoint)
-            : base(ServiceTypeIdentifier.SearchRequest, discoveryEndpoint.Size)
+            : base(Enums.ServiceTypeIdentifier.SearchRequest, discoveryEndpoint.Size)
         {
             DiscoveryEndpoint = discoveryEndpoint;
         }

@@ -28,19 +28,19 @@ using Tiveria.Home.Knx.IP.Structures;
 
 namespace Tiveria.Home.Knx.IP.Services.Serializers
 {
-    public class SearchRequestServiceSerializer : ServiceSerializerBase<SearchRequestService>
+    public class RoutingBusyServiceSerializer : ServiceSerializerBase<RoutingBusyService>
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.SearchRequest;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.RoutingBusy;
 
-        public override SearchRequestService Deserialize(BigEndianBinaryReader reader)
+        public override RoutingBusyService Deserialize(BigEndianBinaryReader reader)
         {
-            var discoveryEndpoint = Hpai.Parse(reader);
-            return new SearchRequestService(discoveryEndpoint);
+            var busyInfo = BusyInfo.Parse(reader);
+            return new RoutingBusyService(busyInfo);
         }
 
-        public override void Serialize(SearchRequestService service, BigEndianBinaryWriter writer)
+        public override void Serialize(RoutingBusyService service, BigEndianBinaryWriter writer)
         {
-            service.DiscoveryEndpoint.Write(writer);
+            service.BusyInfo.Write(writer);
         }
     }
 }

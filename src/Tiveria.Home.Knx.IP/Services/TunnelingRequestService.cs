@@ -30,9 +30,9 @@ namespace Tiveria.Home.Knx.IP.Services
 {
     public class TunnelingRequestService : EMIServiceBase
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.TunnelingRequest;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.TunnelingRequest;
         public TunnelingRequestService(ConnectionHeader connectionHeader, ICemiMessage cemi)
-             : base(ServiceTypeIdentifier.TunnelingRequest, connectionHeader, cemi)
+             : base(Enums.ServiceTypeIdentifier.TunnelingRequest, connectionHeader, cemi)
         { }
     }
 }

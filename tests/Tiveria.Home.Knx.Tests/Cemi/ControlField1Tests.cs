@@ -69,12 +69,12 @@ namespace Tiveria.Home.Knx.Tests
             var ctrl1 = new ControlField1();
             var data = ctrl1.ToByte();
             Assert.AreEqual(false, ctrl1.ExtendedFrame);
-            Assert.AreEqual(Priority.System, ctrl1.Priority);
-            Assert.AreEqual(false, ctrl1.Repeat);
+            Assert.AreEqual(Priority.Normal, ctrl1.Priority);
+            Assert.AreEqual(true, ctrl1.Repeat);
             Assert.AreEqual(BroadcastType.Normal, ctrl1.Broadcast);
-            Assert.AreEqual(false, ctrl1.AcknowledgeRequest);
+            Assert.AreEqual(true, ctrl1.AcknowledgeRequest);
             Assert.AreEqual(ConfirmType.NoError, ctrl1.Confirm);
-            Assert.AreEqual(0b10_01_00_00, data);
+            Assert.AreEqual(0b10_11_01_10, data);
         }
 
     }

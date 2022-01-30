@@ -46,13 +46,16 @@ namespace Tiveria.Home.Knx.Cemi
     ///                     0b0000 = for standard frame(long frames, APDU > 15 octet)
     ///                     0b01xx = for LTE frames (NOT FULLY SUPPORTED!)
     /// </summary>
-    public struct ControlField2
+    public class ControlField2
     {
-        private byte _hopCount = 6;
-        private byte extendedFrameFormat = 0;
 
         #region public properties
-        public AddressType DestinationAddressType { get; set; } = AddressType.GroupAddress;
+        #region private backing fields
+        private byte _hopCount = 6;
+        private byte extendedFrameFormat = 0;
+        #endregion
+
+        public AddressType DestinationAddressType { get; set; }
         public byte HopCount { get => _hopCount; set => _hopCount = (byte)((value > 7) ? 7 : value); }
         public byte ExtendedFrameFormat { get => extendedFrameFormat; set => extendedFrameFormat = (byte)((value > 0b1111) ? 0b1111 : value); }
         #endregion
@@ -64,7 +67,7 @@ namespace Tiveria.Home.Knx.Cemi
         /// <param name="data">Raw represenation of the cemi controlfield 2</param>
         public ControlField2(byte data)
         {
-            HopCount = (byte)((data & 0b0111_0000) >> 4);
+            HopCount = (byte)((data & 0b0_111_0000) >> 4);
             DestinationAddressType = ((data & 0b1000_0000) == 0) ? AddressType.IndividualAddress : AddressType.GroupAddress;
             ExtendedFrameFormat = (byte)(data & 0b0000_1111);
         }

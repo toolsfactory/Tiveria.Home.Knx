@@ -23,26 +23,26 @@
 */
 
 using Tiveria.Common.IO;
+using Tiveria.Home.Knx.Cemi;
+using Tiveria.Home.Knx.Cemi.Serializers;
 using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Home.Knx.IP.Structures;
 
 namespace Tiveria.Home.Knx.IP.Services.Serializers
 {
-    public class ExtendedSearchRequestServiceSerializer : ServiceSerializerBase<ExtendedSearchRequestService>
+    public class RoutingIndicationServiceSerializer : ServiceSerializerBase<RoutingIndicationService>
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.ExtendedSearchRequest;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.RoutingIndication;
 
-        public override ExtendedSearchRequestService Deserialize(BigEndianBinaryReader reader)
+        public override RoutingIndicationService Deserialize(BigEndianBinaryReader reader)
         {
-            var discoveryEndpoint = Hpai.Parse(reader);
-            var searchRequestParameter = SRP.Parse(reader);
-            return new ExtendedSearchRequestService(discoveryEndpoint, searchRequestParameter);
+            var cemi = new CemiLDataSerializer().Deserialize(reader, -1);
+            return new RoutingIndicationService(cemi);
         }
 
-        public override void Serialize(ExtendedSearchRequestService service, BigEndianBinaryWriter writer)
-        {
-            service.DiscoveryEndpoint.Write(writer);
-            service.SearchRequestParameter.Write(writer);
+        public override void Serialize(RoutingIndicationService service, BigEndianBinaryWriter writer)
+         {
+            new CemiLDataSerializer().Serialize((CemiLData)service.CemiMessage, writer);
         }
     }
 }

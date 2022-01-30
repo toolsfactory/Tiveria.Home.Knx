@@ -45,13 +45,13 @@ namespace Tiveria.Home.Knx.Cemi
     /// 
     /// </summary>
     /// 
-    public struct Tpci
+    public class Tpci
     {
-        public PacketType PacketType { get; init; } = PacketType.Data;
-        public SequenceType SequenceType { get; init; } = SequenceType.UnNumbered;
-        public byte SequenceNumber { get; init; } = 0;
-        public ControlType ControlType { get; init; } = ControlType.None;
-        public Tpci(PacketType packetType, SequenceType sequenceType = SequenceType.UnNumbered, byte sequenceNumber = 0, ControlType controlType = ControlType.Connect)
+        public PacketType PacketType { get; set; }
+        public SequenceType SequenceType { get; set; }
+        public byte SequenceNumber { get; set; }
+        public ControlType ControlType { get; set; }
+        public Tpci(PacketType packetType = PacketType.Data, SequenceType sequenceType = SequenceType.UnNumbered, byte sequenceNumber = 0, ControlType controlType = ControlType.None)
         {
             PacketType = packetType;
             SequenceType = sequenceType;

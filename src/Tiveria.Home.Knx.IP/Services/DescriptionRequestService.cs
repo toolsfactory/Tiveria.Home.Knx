@@ -40,11 +40,11 @@ namespace Tiveria.Home.Knx.IP.Services
     /// </summary>
     public class DescriptionRequestService : ServiceBase
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DescriptionRequest;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.DescriptionRequest;
         public Hpai ControlEndpoint { get; init; }
 
         public DescriptionRequestService(Hpai controlEndpoint)
-            : base  (ServiceTypeIdentifier.DescriptionRequest, controlEndpoint.Size)
+            : base(Enums.ServiceTypeIdentifier.DescriptionRequest, controlEndpoint.Size)
         {
             ControlEndpoint = controlEndpoint;
         }

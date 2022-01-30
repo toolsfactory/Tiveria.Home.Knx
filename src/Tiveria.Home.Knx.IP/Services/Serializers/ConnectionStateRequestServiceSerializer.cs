@@ -40,7 +40,7 @@ namespace Tiveria.Home.Knx.IP.Services.Serializers
     /// </summary>
     public class ConnectionStateRequestServiceSerializer : ServiceSerializerBase<ConnectionStateRequestService>
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.ConnectionStateRequest;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.ConnectionStateRequest;
 
         public override ConnectionStateRequestService Deserialize(BigEndianBinaryReader reader)
         {

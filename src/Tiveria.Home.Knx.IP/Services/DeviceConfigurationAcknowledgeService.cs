@@ -45,13 +45,13 @@ namespace Tiveria.Home.Knx.IP.Services
     public class DeviceConfigurationAcknowledgeService : ServiceBase
     {
         public static readonly byte STRUCTURE_SIZE = 0x04;
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.DeviceConfigurationResponse;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.DeviceConfigurationResponse;
         public ErrorCodes Status { get; init; }
         public byte ChannelId { get; init; }
         public byte SequenceCounter { get; init; }
 
         public DeviceConfigurationAcknowledgeService(byte channelId, byte sequenceCounter, ErrorCodes status)
-            : base(ServiceTypeIdentifier.DeviceConfigurationResponse, STRUCTURE_SIZE)
+            : base(Enums.ServiceTypeIdentifier.DeviceConfigurationResponse, STRUCTURE_SIZE)
         {
             ChannelId = channelId;
             SequenceCounter = sequenceCounter;

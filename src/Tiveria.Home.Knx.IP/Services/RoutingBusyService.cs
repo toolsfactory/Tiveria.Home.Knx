@@ -30,11 +30,11 @@ namespace Tiveria.Home.Knx.IP.Services
 {
     public class RoutingBusyService : ServiceBase
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.ROURoutingBusyING_BUSY;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.RoutingBusy;
         public BusyInfo BusyInfo { get; init; }
 
         public RoutingBusyService(BusyInfo busyInfo)
-            : base( ServiceTypeIdentifier.RoutingLostMessage, busyInfo.Size)
+            : base(Enums.ServiceTypeIdentifier.RoutingLostMessage, busyInfo.Size)
         {
             BusyInfo = busyInfo;
         }

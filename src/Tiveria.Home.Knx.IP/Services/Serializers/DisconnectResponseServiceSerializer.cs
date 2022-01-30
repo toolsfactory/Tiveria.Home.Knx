@@ -30,32 +30,29 @@ namespace Tiveria.Home.Knx.IP.Services.Serializers
 {
     /// <summary>
     /// <code>
-    /// Frame Header not shown here.
-    /// +--------+--------+--------+--------+--------+--------+
-    /// | byte 7 | byte 8 | byte 9 | byte 10| byte 11| byte 12|
-    /// +--------+--------+--------+--------+--------+--------+
-    /// | HPAI            | HPAI            | CRI Connection  |
-    /// | Control Endpoint| Data Endpoint   | Request Info    |
-    /// +-----------------+-----------------+-----------------+
+    /// +--------+--------+
+    /// | byte 7 | byte 8 |
+    /// +--------+--------+
+    /// | Channel|Status  |
+    /// | ID     | 0x00   |
+    /// +--------+--------+
     /// </code>
     /// </summary>
-    public class ConnectionRequestServiceSerializer : ServiceSerializerBase<ConnectionRequestService>
+    public class DisconnectResponseServiceSerializer : ServiceSerializerBase<DisconnectResponseService>
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.ConnectRequest;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.DisconnectResponse;
 
-        public override ConnectionRequestService Deserialize(BigEndianBinaryReader reader)
+        public override DisconnectResponseService Deserialize(BigEndianBinaryReader reader)
         {
-            var dataEndpoint = Hpai.Parse(reader);
-            var controlEndpoint = Hpai.Parse(reader);
-            var cri = CRITunnel.Parse(reader);
-            return new ConnectionRequestService(dataEndpoint, controlEndpoint, cri);
+            var channelId = reader.ReadByte();
+            var status = reader.ReadByteEnum<ErrorCodes>("ConnectionStateResponseFrame.Status");
+            return new DisconnectResponseService(channelId, status);
         }
 
-        public override void Serialize(ConnectionRequestService service, BigEndianBinaryWriter writer)
+        public override void Serialize(DisconnectResponseService service, BigEndianBinaryWriter writer)
         {
-            service.DataEndpoint.Write(writer);
-            service.ControlEndpoint.Write(writer);
-            service.Cri.Write(writer);
+            writer.Write(service.ChannelId);
+            writer.Write((byte)service.Status);
         }
     }
 }

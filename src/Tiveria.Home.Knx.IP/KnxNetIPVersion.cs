@@ -48,14 +48,34 @@ namespace Tiveria.Home.Knx.IP
         public static KnxNetIPVersion DefaultVersion = Version10;
         #endregion
 
-        private readonly string _name;
-        private readonly byte _identifier;
-        private readonly byte _length;
+        #region public properties
+        /// <summary>
+        /// The descriptive name of that version
+        /// </summary>
+        public string Name { get; init; }
+        /// <summary>
+        /// KNX Identifier of that version
+        /// </summary>
+        public byte Identifier { get; init; }
+        /// <summary>
+        /// Headerlength of that version
+        /// </summary>
+        public byte HeaderLength { get; init; }
+        /// <summary>
+        /// Main version number based on the Knx standard scheme
+        /// </summary>
+        public int VersionMajor => Identifier / 0x10;
+        /// <summary>
+        /// Sub version number based on the Knx standard scheme
+        /// </summary>
+        public int VersionMinor => Identifier % 0x10;
+        /// <summary>
+        /// String representation of this version based on the Knx standard scheme
+        /// </summary>
+        public string VersionString => $"{VersionMajor}.{VersionMinor}";
+        #endregion
 
-        public string Name { get => _name; }
-        public byte Identifier { get => _identifier; }
-        public byte HeaderLength { get => _length; }
-
+        #region constructors
         /// <summary>
         /// Creates a new KNX Version object
         /// </summary>
@@ -64,10 +84,11 @@ namespace Tiveria.Home.Knx.IP
         /// <param name="headerlength">Size of the KnxNetIP header in this version</param>
         public KnxNetIPVersion(string name, byte identifier, byte headerlength)
         {
-            _name = name;
-            _identifier = identifier;
-            _length = headerlength;
+            Name = name;
+            Identifier = identifier;
+            HeaderLength = headerlength;
         }
+        #endregion
 
         #region static helpers
         /// <summary>
@@ -77,7 +98,7 @@ namespace Tiveria.Home.Knx.IP
         /// <returns></returns>
         public static bool IsSupportedVersion(KnxNetIPVersion ver)
         {
-            return TryGetFindSupportedVersion(ver.Identifier, ver.HeaderLength, out _);
+            return FindSupportedVersion(ver.Identifier, ver.HeaderLength, out _);
         }
 
         /// <summary>
@@ -87,7 +108,7 @@ namespace Tiveria.Home.Knx.IP
         /// <param name="headersize">Size of the header</param>
         /// <param name="version">The version object that matches</param>
         /// <returns>true in case a matching version was found. false in all other cases </returns>
-        public static bool TryGetFindSupportedVersion(byte identifier, byte headersize, out KnxNetIPVersion? version)
+        public static bool FindSupportedVersion(byte identifier, byte headersize, out KnxNetIPVersion? version)
         {
             version = SupportedVersions
                 .Where(x => (x.Identifier == identifier) && (x.HeaderLength == headersize))
@@ -95,14 +116,13 @@ namespace Tiveria.Home.Knx.IP
             return version != null; 
         }
 
-
         /// <summary>
         /// Try to find a supported version that matches the provided criteria
         /// </summary>
         /// <param name="identifier">Identifier in the header</param>
         /// <param name="version">The version object that matches</param>
         /// <returns>true in case a matching version was found. false in all other cases </returns>
-        public static bool TryGetFindSupportedVersion(byte identifier, out KnxNetIPVersion? version)
+        public static bool FindSupportedVersion(byte identifier, out KnxNetIPVersion? version)
         {
             version = SupportedVersions
                 .Where(x => (x.Identifier == identifier))

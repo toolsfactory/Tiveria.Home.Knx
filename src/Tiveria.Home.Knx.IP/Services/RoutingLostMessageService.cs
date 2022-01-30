@@ -30,11 +30,11 @@ namespace Tiveria.Home.Knx.IP.Services
 {
     public class RoutingLostMessageService : ServiceBase
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.RoutingLostMessage;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.RoutingLostMessage;
         public LostMessageInfo LostMessageInfo { get; init; }
 
         public RoutingLostMessageService(LostMessageInfo lostMessageInfo)
-            : base(ServiceTypeIdentifier.RoutingLostMessage, lostMessageInfo.Size)
+            : base(Enums.ServiceTypeIdentifier.RoutingLostMessage, lostMessageInfo.Size)
         {
             LostMessageInfo = lostMessageInfo;
         }

@@ -28,23 +28,29 @@ using Tiveria.Home.Knx.IP.Structures;
 
 namespace Tiveria.Home.Knx.IP.Services.Serializers
 {
-    public class SearchResponseServiceSerializer : ServiceSerializerBase<SearchResponseService>
+    /// <summary>
+    /// <code>
+    /// +--------+--------+--------+--------+--------+--------+--------+--------+
+    /// | byte 7 | byte 8 | byte 9 | byte 10| byte 11| byte 12| byte 13| byte 14|
+    /// +--------+--------+--------+--------+--------+--------+--------+--------+
+    /// |  Size  |Endpoint|        Endpoint IP Address        |  Endpoint Port  |
+    /// |  (8)   | Type   |                                   |                 |
+    /// +--------+--------+--------+--------+--------+--------+--------+--------+
+    /// </code>
+    /// </summary>
+    public class DescriptionRequestServiceSerializer : ServiceSerializerBase<DescriptionRequestService>
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.SearchResponse;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.DescriptionRequest;
 
-        public override SearchResponseService Deserialize(BigEndianBinaryReader reader)
+        public override DescriptionRequestService Deserialize(BigEndianBinaryReader reader)
         {
-            var serviceEndpoint = Hpai.Parse(reader);
-            var deviceInfoDIB = DeviceInfoDIB.Parse(reader);
-            var serviceFamiliesDIB = ServiceFamiliesDIB.Parse(reader);
-            return new SearchResponseService(serviceEndpoint, deviceInfoDIB, serviceFamiliesDIB);
+            var controlEndpoint = Hpai.Parse(reader); 
+            return new DescriptionRequestService(controlEndpoint);
         }
 
-        public override void Serialize(SearchResponseService service, BigEndianBinaryWriter writer)
+        public override void Serialize(DescriptionRequestService frame, BigEndianBinaryWriter writer)
         {
-            service.ServiceEndpoint.Write(writer);
-            service.DeviceInfoDIB.Write(writer);
-            service.ServiceFamiliesDIB.Write(writer);
+            frame.ControlEndpoint.Write(writer);
         }
     }
 }

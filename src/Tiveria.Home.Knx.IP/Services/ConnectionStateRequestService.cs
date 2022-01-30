@@ -40,12 +40,12 @@ namespace Tiveria.Home.Knx.IP.Services
     /// </summary>
     public class ConnectionStateRequestService : ServiceBase
     {
-        public override ServiceTypeIdentifier ServiceTypeIdentifier => ServiceTypeIdentifier.ConnectionStateRequest;
+        public override ushort ServiceTypeIdentifier => Enums.ServiceTypeIdentifier.ConnectionStateRequest;
         public Hpai ControlEndpoint { get; init; }
         public byte ChannelId { get; init; }
 
         public ConnectionStateRequestService(byte channelId, Hpai controlEndpoint)
-            : base(ServiceTypeIdentifier.ConnectionStateRequest, 2 + controlEndpoint.Size)
+            : base(Enums.ServiceTypeIdentifier.ConnectionStateRequest, 2 + controlEndpoint.Size)
         {
             ChannelId = channelId;
             ControlEndpoint = controlEndpoint;
