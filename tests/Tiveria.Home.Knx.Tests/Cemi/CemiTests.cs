@@ -5,7 +5,7 @@ using Tiveria.Home.Knx.Cemi;
 using Tiveria.Common.Extensions;
 using Tiveria.Common.IO;
 using Tiveria.Home.Knx.Datapoint;
-using Tiveria.Home.Knx.Adresses;
+using Tiveria.Home.Knx.BaseTypes;
 using Tiveria.Home.Knx.Cemi.Serializers;
 using Tiveria.Home.Knx.IP.Services;
 using Tiveria.Home.Knx.IP;
@@ -137,18 +137,29 @@ namespace Tiveria.Home.Knx.Tests
         }
 
         [Test]
-        public void Build_Cemi91_ok()
+        public void Build_Cemi01_ok()
         {
             // cemi LData.Req request from 0.0.0 to 4/0/0 with GroupValueWrite and data = 0x01
             var expected = "11-00-b6-e0-00-00-20-00-01-00-81".Replace("-", "").ToByteArray();
 
-            var apdu = new Cemi.Apdu(Cemi.ApciType.GroupValue_Write, new byte[] { 0x01 });
+            var apdu = new Cemi.Apdu(Cemi.ApduType.GroupValue_Write, new byte[] { 0x01 });
             var ctrl1 = new ControlField1();
             var ctrl2 = new ControlField2(groupAddress: true);
             var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), GroupAddress.Parse("4/0/0"), ctrl1, ctrl2, new Tpci(), apdu);
 
             var data = new CemiLDataSerializer().Serialize(cemi);
             Assert.AreEqual(expected, data);
+        }
+
+        [Test]
+        public void Build_Cemi02_ok()
+        {
+            var tpci = new Tpci(PacketType.Control, SequenceType.UnNumbered, 0, ControlType.Connect);
+            var ctrl1 = new ControlField1(priority: Priority.System, broadcast: BroadcastType.Normal, ack: false);
+            var ctrl2 = new ControlField2(groupAddress: false);
+            var cemi = new CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), IndividualAddress.Parse("1.1.2"), ctrl1, ctrl2, tpci, null);
+
+            var data = new CemiLDataSerializer().Serialize(cemi);
         }
     }
 }

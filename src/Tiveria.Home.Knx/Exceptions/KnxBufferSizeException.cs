@@ -23,11 +23,21 @@
 */
 
 
-namespace Tiveria.Home.Knx.Adresses
+namespace Tiveria.Home.Knx.Exceptions
 {
-    public enum AddressType
+    /// <summary>
+    /// Exception raised when the raw buffer provided to create a structure from doesn't fit in size
+    /// </summary>
+    public class KnxBufferSizeException : KnxBufferException
     {
-        IndividualAddress,
-        GroupAddress
+        public KnxBufferSizeException(string message) : base(message)
+        { }
+
+        public static KnxBufferSizeException TooSmall(string structure) => new KnxBufferSizeException($"Buffer too small for structure '{structure}'");
+        public static KnxBufferSizeException TooBig(string structure) => new KnxBufferSizeException($"Buffer too big for structure '{structure}'");
+        public static KnxBufferSizeException WrongSize(string structure, int expected, int actual) => new KnxBufferSizeException($"Buffer for structure '{structure}' has wrong size {actual}. Expected: {expected}");
+        public static KnxBufferSizeException WrongSize(string structure, int actual) => new KnxBufferSizeException($"Buffer for structure '{structure}' has wrong size {actual}. See specs for expected values.");
     }
+
+
 }

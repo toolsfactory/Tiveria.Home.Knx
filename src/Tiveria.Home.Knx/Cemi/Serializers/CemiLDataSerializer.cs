@@ -67,7 +67,7 @@ namespace Tiveria.Home.Knx.Cemi.Serializers
             var controlField1 = new ControlField1(msgCode, reader.ReadByte());
             var controlField2 = new ControlField2(reader.ReadByte());
             var srcAddr = ReadSourceAddress(reader);
-            var dstAddr = ReadDestinationAddress(reader, controlField2.DestinationAddressType == Adresses.AddressType.GroupAddress);
+            var dstAddr = ReadDestinationAddress(reader, controlField2.DestinationAddressType == BaseTypes.AddressType.GroupAddress);
             var npduLength = reader.ReadByte();
             var data = reader.ReadBytes(npduLength + 1); // TPCI Octet not included in length field!
             var tpci = Tpci.Parse(data[0]);
@@ -94,7 +94,7 @@ namespace Tiveria.Home.Knx.Cemi.Serializers
             else
             {
                 if (cemiMessage.Tpci.PacketType != PacketType.Data)
-                    throw new BufferException("Cannot serialize cemi with Tpci Flag 'Control' and APDU Data!");
+                    throw new KnxBufferException("Cannot serialize cemi with Tpci Flag 'Control' and APDU Data!");
                 var apdu = cemiMessage.Apdu.ToBytes();
                 apdu[0] = (byte)((apdu[0] & 0b000000_11) | (cemiMessage.Tpci.ToByte() & 0b111111_00));
                 writer.Write((byte)(cemiMessage.Apdu.Size - 1)); // Field with TPCI mask and upper apci bits not counted 

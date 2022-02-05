@@ -26,6 +26,7 @@ using System.Net;
 using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Common.Logging;
 using Tiveria.Home.Knx.Cemi;
+using Tiveria.Home.Knx.Exceptions;
 
 namespace Tiveria.Home.Knx.IP.Connections
 {
@@ -130,15 +131,15 @@ namespace Tiveria.Home.Knx.IP.Connections
         /// Send an <see cref="IKnxNetIPFrame"/> via the IP connection to the remote endpoint
         /// </summary>
         /// <param name="frame">The frame to send</param>
-        /// <returns>true in case the frame was sucessfully sent, otherwise false</returns>
-        public abstract Task<bool> SendAsync(IKnxNetIPService service);
+        /// <exception cref="KnxCommunicationException">Thrown when sending the message failed</exception>
+        public abstract Task SendAsync(IKnxNetIPService service);
 
         /// <summary>
         /// Send a Cemi frame to the Knx infrastructure
         /// </summary>
         /// <param name="message">The cemi message to send</param>
-        /// <returns>true in case the message was sucessfully sent, otherwise false</returns>
-        public abstract Task<bool> SendCemiAsync(ICemiMessage message);
+        /// <exception cref="KnxCommunicationException">Thrown when sending the message failed</exception>
+        public abstract Task SendCemiAsync(ICemiMessage message);
         #endregion
 
         #region private members

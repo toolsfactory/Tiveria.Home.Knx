@@ -23,7 +23,7 @@
 */
 
 using System.Net;
-using Tiveria.Home.Knx.Adresses;
+using Tiveria.Home.Knx.BaseTypes;
 using Tiveria.Home.Knx.IP;
 using Tiveria.Common.Extensions;
 using Tiveria.Home.Knx.IP.Enums;
@@ -78,7 +78,7 @@ namespace Tiveria.Home.Knx
         private async Task SendWriteRequestAsync(bool on)
         {
             var data = (byte)(on ? 0x01 : 0x00);
-            var tpdu = new Apdu(ApciType.GroupValue_Write, new byte[] { data });
+            var tpdu = new Apdu(ApduType.GroupValue_Write, new byte[] { data });
 //            var ctrl1 = new ControlField1(MessageCode.LDATA_IND, 0xbc);
             var ctrl1 = new ControlField1(priority: Priority.Normal, ack: false, repeat: false, confirm: ConfirmType.NoError);
             var ctrl2 = new ControlField2();
@@ -119,50 +119,50 @@ namespace Tiveria.Home.Knx
                     var addr = (cemi.DestinationAddress).ToString();
                     if (cemi.Apdu != null)
                     {
-                        if (cemi.Apdu.Type == ApciType.GroupValue_Write)
+                        if (cemi.Apdu.ApduType == ApduType.GroupValue_Write)
                         {
                             if (addr.EndsWith("/2/3") || addr.EndsWith("/2/23") || addr.EndsWith("/2/43") || addr.EndsWith("/2/63"))
                             {
                                 var value = DPType5.DPT_SCALING.Decode(cemi.Apdu.Data);
-                                Console.WriteLine($"++ {cemi.Apdu.Type} for \"{addr}\": {value}%");
+                                Console.WriteLine($"++ {cemi.Apdu.ApduType} for \"{addr}\": {value}%");
                             }
                             else if (addr.EndsWith("/1/12") || addr.EndsWith("/1/22") || addr.EndsWith("/1/32") || addr.EndsWith("/1/42") || addr.EndsWith("/1/52"))
                             {
                                 var value = DPType14.DPT_ELECTRIC_CURRENT.Decode(cemi.Apdu.Data);
-                                Console.WriteLine($"++ {cemi.Apdu.Type} for \"{addr}\": {value}A");
+                                Console.WriteLine($"++ {cemi.Apdu.ApduType} for \"{addr}\": {value}A");
                             }
                             else if (addr.EndsWith("/47"))
                             {
                                 var value = DPType7.DPT_TIMEPERIOD_HRS.Decode(cemi.Apdu.Data);
-                                Console.WriteLine($"++ {cemi.Apdu.Type} for \"{addr}\": {value}h");
+                                Console.WriteLine($"++ {cemi.Apdu.ApduType} for \"{addr}\": {value}h");
                             }
                             else if (addr.EndsWith("5/0") || addr.EndsWith("/2/7") || addr.EndsWith("/2/9"))
                             {
                                 var value = DPType9.DPT_TEMPERATURE.Decode(cemi.Apdu.Data);
-                                Console.WriteLine($"++ {cemi.Apdu.Type} for \"{addr}\": {value}°C");
+                                Console.WriteLine($"++ {cemi.Apdu.ApduType} for \"{addr}\": {value}°C");
                             }
                             else if (addr.EndsWith("0/7/0"))
                             {
                                 var value = DPType11.DPT_DATE.Decode(cemi.Apdu.Data);
-                                Console.WriteLine($"++ {cemi.Apdu.Type} for \"{addr}\": {value}");
+                                Console.WriteLine($"++ {cemi.Apdu.ApduType} for \"{addr}\": {value}");
                             }
                             else if (addr.EndsWith("0/7/1"))
                             {
                                 var value = DPType10.DPT_TIMEOFDAY.Decode(cemi.Apdu.Data);
-                                Console.WriteLine($"++ {cemi.Apdu.Type} for \"{addr}\": {value}");
+                                Console.WriteLine($"++ {cemi.Apdu.ApduType} for \"{addr}\": {value}");
                             }
                             else
                             {
-                                Console.WriteLine($"{cemi.Apdu.Type} for \"{addr}\" - ACPI DATA: {cemi.Apdu.Data.ToHex()}");
+                                Console.WriteLine($"{cemi.Apdu.ApduType} for \"{addr}\" - ACPI DATA: {cemi.Apdu.Data.ToHex()}");
                             }
                         }
-                        else if ((cemi.Apdu.Type == ApciType.GroupValue_Read) && addr.EndsWith("29/0/0"))
+                        else if ((cemi.Apdu.ApduType == ApduType.GroupValue_Read) && addr.EndsWith("29/0/0"))
                         {
                             SendReadAnswerAsync();
                         }
-                        if (cemi.Apdu.Type == ApciType.GroupValue_Response)
+                        if (cemi.Apdu.ApduType == ApduType.GroupValue_Response)
                         {
-                            Console.WriteLine($"--{cemi.Apdu.Type} for \"{addr}\" - ACPI DATA: {cemi.Apdu.Data.ToHex()}");
+                            Console.WriteLine($"--{cemi.Apdu.ApduType} for \"{addr}\" - ACPI DATA: {cemi.Apdu.Data.ToHex()}");
                         }
                         else
                         {

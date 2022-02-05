@@ -29,16 +29,16 @@ namespace Tiveria.Home.Knx.ObjectServer
         private void ParseHeader(Span<byte> rawdata)
         {
             if (rawdata.Length < 6)
-                BufferSizeException.TooSmall("SetDatapointReqService");
+                KnxBufferSizeException.TooSmall("SetDatapointReqService");
 
             if (rawdata[0] != MainService || rawdata[1] != SubService)
-                BufferFieldException.WrongValueAt("SetDatapointReqService", "Main/Subervice", 0);
+                KnxBufferFieldException.WrongValueAt("SetDatapointReqService", "Main/Subervice", 0);
 
             StartDataPoint = (ushort)((rawdata[2] << 8) + rawdata[3]);
             NumberOfDataPoints = (ushort)((rawdata[4] << 8) + rawdata[5]);
 
             if (NumberOfDataPoints != 0)
-                BufferFieldException.WrongValue("NumberOfDataPoints in SetDatapointValue.Res", 0, NumberOfDataPoints);
+                KnxBufferFieldException.WrongValue("NumberOfDataPoints in SetDatapointValue.Res", 0, NumberOfDataPoints);
             ErrorCode = rawdata[6];
         }
 

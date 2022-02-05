@@ -22,7 +22,7 @@
     combination.
 */
 
-using Tiveria.Home.Knx.Adresses;
+using Tiveria.Home.Knx.BaseTypes;
 using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Home.Knx.Exceptions;
 using Tiveria.Common.IO;
@@ -87,7 +87,7 @@ namespace Tiveria.Home.Knx.IP.Structures
             var assignedAddress = new IndividualAddress(reader.ReadUInt16());
 
             if (contype != ConnectionType.Tunnel)
-                throw BufferFieldException.WrongValue("CRDTunnel", (byte)ConnectionType.Tunnel, (byte)contype);
+                throw KnxBufferFieldException.WrongValue("CRDTunnel", (byte)ConnectionType.Tunnel, (byte)contype);
 
             return new CRDTunnel(contype, assignedAddress);
         }

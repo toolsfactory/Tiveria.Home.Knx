@@ -27,7 +27,9 @@ namespace Tiveria.Home.Knx.Datapoint
     public class DPType5 : DPType<ushort>
     {
         public DPType5(string id, string name, ushort min = 0, ushort max = 0, string unit = "", string description = "") : base(id, name, min, max, unit, description)
-        { }
+        {
+            DataSize = 1;
+        }
 
         public override byte[] Encode(ushort value)
         {

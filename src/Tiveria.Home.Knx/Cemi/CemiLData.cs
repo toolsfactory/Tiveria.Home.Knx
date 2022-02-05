@@ -24,7 +24,7 @@
 
 using System.Text;
 using Tiveria.Common.Extensions;
-using Tiveria.Home.Knx.Adresses;
+using Tiveria.Home.Knx.BaseTypes;
 
 namespace Tiveria.Home.Knx.Cemi
 {
@@ -86,7 +86,7 @@ namespace Tiveria.Home.Knx.Cemi
             foreach(var item in additionalInfoFields)
                 AdditionalInfoLength += (byte)item.Size;
 
-            Size = 9 + AdditionalInfoLength + (Apdu!=null ? Apdu.Size : 0);
+            Size = 9 + AdditionalInfoLength + (Apdu!=null ? Apdu.Size : 1);
         }
 
         public override string ToString()

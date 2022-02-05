@@ -106,7 +106,7 @@ namespace Tiveria.Home.Knx.Cemi
             }
             else
             {
-                throw BufferFieldException.TypeUnknown("MessageCode", messageCode);
+                throw KnxBufferFieldException.TypeUnknown("MessageCode", messageCode);
             }
         }
 

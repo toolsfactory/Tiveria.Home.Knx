@@ -39,7 +39,7 @@ namespace Tiveria.Home.Knx.Datapoint
         public override byte[] Encode(string value)
         {
             if (value.Length > StringLength)
-                throw new TranslationException("maximum KNX string length is 14 characters");
+                throw new KnxTranslationException("maximum KNX string length is 14 characters");
             var data = new byte[StringLength];
             char rangeMax = '\u007f';
             if (this == DPT_STRING_8859_1)
@@ -55,7 +55,7 @@ namespace Tiveria.Home.Knx.Datapoint
         public override string Decode(byte[] dptData, int offset = 0)
         {
             if (dptData.Length - offset < 1)
-                throw BufferSizeException.TooSmall("DPType16/String");
+                throw KnxBufferSizeException.TooSmall("DPType16/String");
             var characters = new char[StringLength];
             int i = 0;
             for (i = offset; (i < (offset + StringLength)) & dptData[i] != 0; i++)

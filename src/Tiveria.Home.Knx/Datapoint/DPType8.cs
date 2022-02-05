@@ -44,7 +44,7 @@ namespace Tiveria.Home.Knx.Datapoint
         public override byte[] Encode(int value)
         {
             if (value < Minimum || value > Maximum)
-                throw new TranslationException($"value out of range [{Minimum}..{Maximum}]");
+                throw new KnxTranslationException($"value out of range [{Minimum}..{Maximum}]");
             if (this == DPT_DELTATIME_10MS)
                 return InternalEncode((short)(value / 10));
             if (this == DPT_DELTATIME_100MS)
@@ -77,7 +77,7 @@ namespace Tiveria.Home.Knx.Datapoint
         public override int Decode(byte[] dptData, int offset = 0)
         {
             if (dptData.Length - offset < DataSize)
-                throw new Exceptions.TranslationException("Data size invalid");
+                throw new Exceptions.KnxTranslationException("Data size invalid");
             var value = (int)(dptData[0] << 8 + dptData[1]);
             if (this == DPT_DELTATIME_10MS)
                 return value * 10;
@@ -123,6 +123,5 @@ namespace Tiveria.Home.Knx.Datapoint
             DatapointTypesList.AddOrReplace(DPT_ROTATION_ANGLE);
         }
         #endregion
-
     }
 }

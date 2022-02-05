@@ -31,6 +31,7 @@ using Tiveria.Home.Knx.Cemi;
 using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Home.Knx.IP.Services;
 using Tiveria.Home.Knx.IP.Structures;
+using Tiveria.Home.Knx.Exceptions;
 
 namespace Tiveria.Home.Knx.IP.Connections
 {
@@ -87,11 +88,11 @@ namespace Tiveria.Home.Knx.IP.Connections
         /// Send a generic IKnxNetIPService (potentially raw payload)
         /// </summary>
         /// <param name="frame">The frame to send</param>
-        /// <returns>true if the frame was sent successfully, otherise false</returns>
-        public override async Task<bool> SendAsync(IKnxNetIPService service)
+        /// <exception cref="KnxCommunicationException">Thrown when sending the message failed</exception>
+        public override async Task SendAsync(IKnxNetIPService service)
         {
             if (ConnectionState != ConnectionState.Open)
-                return false;
+                throw new KnxCommunicationException("Connection is not open");
 
             var frame = new KnxNetIPFrame(service);
             var data = frame.ToBytes();
@@ -101,18 +102,12 @@ namespace Tiveria.Home.Knx.IP.Connections
             {
                 var bytessent = await _udpClient.SendAsync(data, data.Length).WithCancellation(linkedCTS.Token);
                 if (bytessent == 0)
-                {
-//                    _logger.Error("SendFrameAsync: Zero bytes sent");
-                    return false;
-                }
-                else
-                    return true;
+                    throw new KnxCommunicationException("sending data failed");
             }
             catch (SocketException se)
             {
-                //_logger.Error("SendFrameAsync: SocketException raised", se);
                 ConnectionState = ConnectionState.Invalid;
-                return false;
+                throw new KnxCommunicationException("sending data failed", se);
             }
         }
 
@@ -120,8 +115,8 @@ namespace Tiveria.Home.Knx.IP.Connections
         /// Send a Cemi message to the KnxNetIP server in blocking mode <see cref="SendCemiAsync(Cemi.ICemiMessage cemi, bool blocking = true)"/>. Version & Connection headers are automatically generated.
         /// </summary>
         /// <param name="cemi">The cemi message to send</param>
-        /// <returns>true if the message was sent sucessfuly, otherwise false</returns>
-        public override Task<bool> SendCemiAsync(ICemiMessage message)
+        /// <exception cref="KnxCommunicationException">Thrown when sending the message failed</exception>
+        public override Task SendCemiAsync(ICemiMessage message)
         {
             return SendCemiAsync(message, true);
         }
@@ -131,22 +126,22 @@ namespace Tiveria.Home.Knx.IP.Connections
         /// </summary>
         /// <param name="cemi">The cemi message to send</param>
         /// <param name="blocking">If yes, the message is only sent if no other message is currently being processed. On top, the call only returns then after the Ack was received or timed out.</param>
-        /// <returns>true if the message was sent sucessfuly, otherwise false</returns>
-        public async Task<bool> SendCemiAsync(Cemi.ICemiMessage cemi, bool blocking = true)
+        /// <exception cref="KnxCommunicationException">Thrown when sending the message failed</exception>
+        public async Task SendCemiAsync(Cemi.ICemiMessage cemi, bool blocking = true)
         {
             var conheader = new ConnectionHeader(_channelId, SndSeqCounter);
             var service = new TunnelingRequestService(conheader, cemi);
             if (blocking)
-                return await DoSendServiceBlockingAsync(service);
+                await DoSendServiceBlockingAsync(service);
             else
-                return await SendAsync(service);
+                await SendAsync(service);
         }
         #endregion
 
         #region private fields
         private readonly object _lock = new object();
         private readonly ManualResetEvent _closeEvent = new ManualResetEvent(false);
-        private readonly ManualResetEvent _ackEvent = new ManualResetEvent(false);
+        private readonly ManualResetEventSlim _ackEvent = new ManualResetEventSlim(false);
         private readonly ManualResetEvent _connectEvent = new ManualResetEvent(false);
         private readonly IPEndPoint _localEndpoint;
         private readonly IPEndPoint _remoteControlEndpoint;
@@ -179,7 +174,7 @@ namespace Tiveria.Home.Knx.IP.Connections
                         for (var i = 0; i < _config.SendRepeats; i++)
                         {
                             _udpClient.SendAsync(data, data.Length, _remoteControlEndpoint);
-                            ackReceived = _ackEvent.WaitOne(_config.AcknowledgeTimeout);
+                            ackReceived = _ackEvent.Wait(_config.AcknowledgeTimeout, _cancellationTokenSource.Token);
                             if (ackReceived)
                                 break;
                         }
@@ -209,12 +204,6 @@ namespace Tiveria.Home.Knx.IP.Connections
         {
             _ackState = AckState.Error;
             InternalCloseAsync("Ack not received", false).Wait();
-        }
-
-        private TunnelingRequestService CreateTunnelingRequestFrameFromCemi(Cemi.CemiLData cemi)
-        {
-            var frame = new TunnelingRequestService(new Structures.ConnectionHeader(_channelId, SndSeqCounter), cemi);
-            return frame;
         }
 
         #region closing connection

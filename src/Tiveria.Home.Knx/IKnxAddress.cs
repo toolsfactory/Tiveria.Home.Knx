@@ -22,7 +22,7 @@
     combination.
 */
 
-using Tiveria.Home.Knx.Adresses;
+using Tiveria.Home.Knx.BaseTypes;
 
 namespace Tiveria.Home.Knx
 {

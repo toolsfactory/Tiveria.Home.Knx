@@ -25,6 +25,7 @@
 using System.Net;
 using System.Net.Sockets;
 using Tiveria.Home.Knx.Cemi;
+using Tiveria.Home.Knx.Exceptions;
 using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Home.Knx.IP.Services;
 
@@ -96,10 +97,10 @@ namespace Tiveria.Home.Knx.IP.Connections
         }
 
         /// <inheritdoc/>
-        public async override Task<bool> SendAsync(IKnxNetIPService service)
+        public async override Task SendAsync(IKnxNetIPService service)
         {
             if (ConnectionState != ConnectionState.Open)
-                return false;
+                throw new KnxCommunicationException("Connection is not open");
 
             var frame = new KnxNetIPFrame(service);
             var data = frame.ToBytes();
@@ -107,26 +108,20 @@ namespace Tiveria.Home.Knx.IP.Connections
             {
                 var bytessent = await _udpClient.SendAsync(data, data.Length, RemoteEndpoint);
                 if (bytessent == 0)
-                {
-                    //                    _logger.Error("SendFrameAsync: Zero bytes sent");
-                    return false;
-                }
-                else
-                    return true;
+                    throw new KnxCommunicationException("sending data failed");
             }
             catch (SocketException se)
             {
-                //_logger.Error("SendFrameAsync: SocketException raised", se);
                 ConnectionState = ConnectionState.Invalid;
-                return false;
+                throw new KnxCommunicationException("sending data failed", se);
             }
         }
 
         /// <inheritdoc/>
-        public async override Task<bool> SendCemiAsync(ICemiMessage message)
+        public override Task SendCemiAsync(ICemiMessage message)
         {
             var frame = new RoutingIndicationService(message);
-            return await SendAsync(frame);
+            return SendAsync(frame);
         }
         #endregion
 

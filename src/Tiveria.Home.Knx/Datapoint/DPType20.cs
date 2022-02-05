@@ -90,7 +90,7 @@ namespace Tiveria.Home.Knx.Datapoint
         public override byte[] Encode(byte value)
         {
             if (value < Minimum || value > Maximum)
-                throw new Exceptions.TranslationException($"translation error, value '{value}' not allowed for {Id}");
+                throw new Exceptions.KnxTranslationException($"translation error, value '{value}' not allowed for {Id}");
             return new byte[1] { value };
         }
 

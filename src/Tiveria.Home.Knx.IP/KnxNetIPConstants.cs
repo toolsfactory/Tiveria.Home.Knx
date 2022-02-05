@@ -31,6 +31,7 @@ namespace Tiveria.Home.Knx.IP
         public static readonly IPAddress DefaultBroadcastAddress = IPAddress.Parse("224.0.23.12");
         public const ushort DefaultBroadcastPort = 3671;
         public const ushort DefaultPort = 3671;
+        public const ushort ResponseTimeoutMS = 3000;
         public static readonly IPEndPoint DefaultBroadcastEndpoint = new IPEndPoint(DefaultBroadcastAddress, DefaultBroadcastPort);
     }
 }

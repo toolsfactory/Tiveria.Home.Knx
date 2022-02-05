@@ -65,7 +65,7 @@ namespace Tiveria.Home.Knx.IP.Structures
         public FrameHeader(KnxNetIPVersion version, ushort servicetypeidentifier, int bodyLength)
         {
             if (!KnxNetIPVersion.IsSupportedVersion(version) && ThrowExceptionOnUnknownVersion)
-                throw new BufferFieldException($"Unknown KnxNetIPVersion {version.Identifier} with header size {version.HeaderLength}");
+                throw new KnxBufferFieldException($"Unknown KnxNetIPVersion {version.Identifier} with header size {version.HeaderLength}");
 
             Size = version.HeaderLength;
             Version = version;
@@ -113,7 +113,7 @@ namespace Tiveria.Home.Knx.IP.Structures
             var serviceTypeId = reader.ReadUInt16();
             var totalLength = reader.ReadUInt16();
             if (totalLength - headersize > reader.Available)
-                throw BufferSizeException.TooSmall("Buffer<Header|TotalLength");
+                throw KnxBufferSizeException.TooSmall("Buffer<Header|TotalLength");
 
             return new FrameHeader(version!, serviceTypeId, totalLength - headersize);
         }

@@ -26,7 +26,7 @@ using Tiveria.Home.Knx.Exceptions;
 using Tiveria.Common.IO;
 
 
-namespace Tiveria.Home.Knx.Adresses
+namespace Tiveria.Home.Knx.BaseTypes
 {
     /// <summary>
     /// Class representing both a 2-level or a 3-level Group Address 
@@ -120,7 +120,7 @@ namespace Tiveria.Home.Knx.Adresses
         public static GroupAddress FromBytes(byte[] buffer, int offset = 0)
         {
             if (buffer.Length - offset < 2)
-                throw BufferSizeException.TooSmall("GroupAddress");
+                throw KnxBufferSizeException.TooSmall("GroupAddress");
             return new GroupAddress((ushort)(buffer[offset] << 8 + buffer[offset + 1]));
         }
 

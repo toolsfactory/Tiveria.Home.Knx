@@ -44,7 +44,7 @@ namespace Tiveria.Home.Knx.Datapoint
         public override byte[] Encode(uint value)
         {
             if (value < Minimum || value > Maximum)
-                throw new TranslationException($"value out of range [{Minimum}..{Maximum}]");
+                throw new KnxTranslationException($"value out of range [{Minimum}..{Maximum}]");
             if (this == DPT_TIMEPERIOD_10MS)
                 return InternalEncode((ushort)(value / 10));
             if (this == DPT_TIMEPERIOD_100MS)
@@ -77,7 +77,7 @@ namespace Tiveria.Home.Knx.Datapoint
         public override uint Decode(byte[] dptData, int offset = 0)
         {
             if (dptData.Length - offset < DataSize)
-                throw new Exceptions.TranslationException("Data size invalid");
+                throw new Exceptions.KnxTranslationException("Data size invalid");
             var value = (uint)((dptData[0] << 8) + dptData[1]);
             if (this == DPT_TIMEPERIOD_10MS)
                 return value * 10;

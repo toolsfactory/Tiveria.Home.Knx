@@ -22,26 +22,12 @@
     combination.
 */
 
-using System.Runtime.Serialization;
 
-namespace Tiveria.Home.Knx.Exceptions
+namespace Tiveria.Home.Knx.BaseTypes
 {
-    public class BufferException : KnxBaseException
+    public enum AddressType
     {
-        protected BufferException()
-        {
-        }
-
-        public BufferException(string message) : base(message)
-        {
-        }
-
-        public BufferException(string message, Exception innerException) : base(message, innerException)
-        {
-        }
-
-        public BufferException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
+        IndividualAddress,
+        GroupAddress
     }
 }

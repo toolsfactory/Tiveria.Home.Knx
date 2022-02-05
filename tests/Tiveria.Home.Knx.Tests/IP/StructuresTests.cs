@@ -35,7 +35,7 @@ namespace Tiveria.Home.Knx.Tests.IP
         {
             var data = "0822c0a80278e1f6".ToByteArray(); // EnpointType byte set to 0x22
             var reader = new BigEndianBinaryReader(new MemoryStream(data));
-            Assert.Catch<BufferFieldException>(() => Hpai.Parse(reader));
+            Assert.Catch<KnxBufferFieldException>(() => Hpai.Parse(reader));
         }
 
         [Test]
@@ -43,7 +43,7 @@ namespace Tiveria.Home.Knx.Tests.IP
         {
             var data = "0701c0a80278e1f6".ToByteArray(); // Size set to 0x07 (first byte)
             var reader = new BigEndianBinaryReader(new MemoryStream(data));
-            Assert.Catch<BufferFieldException>(() => Hpai.Parse(reader));
+            Assert.Catch<KnxBufferFieldException>(() => Hpai.Parse(reader));
         }
 
         [Test]
@@ -104,7 +104,7 @@ namespace Tiveria.Home.Knx.Tests.IP
         {
             var buffer = "04ff0200".ToByteArray(); // Size: 4, Type byte set to 0xff
             var reader = new BigEndianBinaryReader(new MemoryStream(buffer));
-            Assert.Catch<BufferFieldException>(() => CRI.Parse(reader));
+            Assert.Catch<KnxBufferFieldException>(() => CRI.Parse(reader));
         }
     }
 }

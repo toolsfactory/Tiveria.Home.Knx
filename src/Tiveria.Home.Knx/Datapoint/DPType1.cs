@@ -64,7 +64,7 @@ namespace Tiveria.Home.Knx.Datapoint
         public override object DecodeObject(byte[] dptData, int offset = 0)
         {
             if (dptData.Length - offset < 1)
-                throw new TranslationException("Data can not be translated to 1bit value");
+                throw new KnxTranslationException("Data can not be translated to 1bit value");
             return (dptData[offset] & 0x01) != 0;
         }
         #endregion
@@ -81,7 +81,7 @@ namespace Tiveria.Home.Knx.Datapoint
                 return EncodeFromBool(false);
             if (value == 1)
                 return EncodeFromBool(true);
-            throw new Exceptions.TranslationException("translation error, value not recognized");
+            throw new Exceptions.KnxTranslationException("translation error, value not recognized");
         }
 
         protected override byte[] EncodeFromULong(long value)
@@ -90,7 +90,7 @@ namespace Tiveria.Home.Knx.Datapoint
                 return EncodeFromBool(false);
             if (value == 1)
                 return EncodeFromBool(true);
-            throw new Exceptions.TranslationException("translation error, value not recognized");
+            throw new Exceptions.KnxTranslationException("translation error, value not recognized");
         }
 
         protected override byte[] EncodeFromBool(bool value)
@@ -104,7 +104,7 @@ namespace Tiveria.Home.Knx.Datapoint
                 return EncodeFromBool(false);
             if (value == 1)
                 return EncodeFromBool(true);
-            throw new Exceptions.TranslationException("translation error, value not recognized");
+            throw new Exceptions.KnxTranslationException("translation error, value not recognized");
         }
 
         protected override byte[] EncodeFromString(string value)
@@ -113,7 +113,7 @@ namespace Tiveria.Home.Knx.Datapoint
                 return EncodeFromBool(true);
             if (value.ToLower() == _allowedFalse)
                 return EncodeFromBool(false);
-            throw new Exceptions.TranslationException("translation error, value not recognized");
+            throw new Exceptions.KnxTranslationException("translation error, value not recognized");
         }
         #endregion
 

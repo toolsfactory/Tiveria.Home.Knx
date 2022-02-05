@@ -24,7 +24,7 @@
 
 using System.Net;
 using Tiveria.Home.Knx.IP.Enums;
-using Tiveria.Home.Knx.Adresses;
+using Tiveria.Home.Knx.BaseTypes;
 using Tiveria.Common.IO;
 using Tiveria.Home.Knx.Exceptions;
 
@@ -129,7 +129,7 @@ namespace Tiveria.Home.Knx.IP.Structures
         internal DeviceInfoDIB Parse(BigEndianBinaryReader reader)
         {
             if (reader.Available < DeviceInfoDIB.DEVICEINFODIB_SIZE)
-                throw BufferSizeException.TooSmall("DEVICEINFODIB");
+                throw KnxBufferSizeException.TooSmall("DEVICEINFODIB");
 
             var size = ParseSize(reader);
             var type = ParseType(reader);
@@ -158,7 +158,7 @@ namespace Tiveria.Home.Knx.IP.Structures
         {
             var type = reader.ReadByte();
             if (type != DeviceInfoDIB.DIB_TYPE)
-                throw BufferFieldException.WrongValue("DIBTYPE", DeviceInfoDIB.DIB_TYPE, type);
+                throw KnxBufferFieldException.WrongValue("DIBTYPE", DeviceInfoDIB.DIB_TYPE, type);
             return type;
         }
 
@@ -166,7 +166,7 @@ namespace Tiveria.Home.Knx.IP.Structures
         {
             var size = reader.ReadByte();
             if (size != DeviceInfoDIB.DEVICEINFODIB_SIZE)
-                throw BufferSizeException.WrongSize("DEVICEINFODIB", DeviceInfoDIB.DEVICEINFODIB_SIZE, size);
+                throw KnxBufferSizeException.WrongSize("DEVICEINFODIB", DeviceInfoDIB.DEVICEINFODIB_SIZE, size);
             return size;
         }
 

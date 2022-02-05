@@ -22,7 +22,7 @@
     combination.
 */
 
-using Tiveria.Home.Knx.Adresses;
+using Tiveria.Home.Knx.BaseTypes;
 using Tiveria.Home.Knx.Cemi;
 
 namespace Tiveria.Home.Knx
@@ -42,7 +42,7 @@ namespace Tiveria.Home.Knx
         Task<bool> ConnectAsync();
         Task DisconnectAsync();
 
-        Task<bool> SendCemiAsync(ICemiMessage message);
+        Task SendCemiAsync(ICemiMessage message);
     }
 
     public enum ConnectionState

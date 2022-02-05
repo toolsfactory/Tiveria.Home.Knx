@@ -54,11 +54,11 @@ namespace Tiveria.Home.Knx.IP.Structures
         {
             var size = reader.ReadByte();
             if ((size < 2) || (size % 2 == 1))
-                throw BufferSizeException.WrongSize("ServiceFamiliesDIB.Size", size);
+                throw KnxBufferSizeException.WrongSize("ServiceFamiliesDIB.Size", size);
 
             var type = reader.ReadByte();
             if (type != ServiceFamiliesDIB.DIB_TYPE)
-                throw BufferFieldException.WrongValue("DIBTYPE", ServiceFamiliesDIB.DIB_TYPE, type);
+                throw KnxBufferFieldException.WrongValue("DIBTYPE", ServiceFamiliesDIB.DIB_TYPE, type);
 
             var families = ParseFamilies(reader, (size - 2));
             return new ServiceFamiliesDIB(families);

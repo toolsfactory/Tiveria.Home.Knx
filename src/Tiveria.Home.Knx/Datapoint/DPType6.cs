@@ -27,7 +27,9 @@ namespace Tiveria.Home.Knx.Datapoint
     public class DPType6 : DPType<sbyte>
     {
         protected DPType6(string id, string name, sbyte min, sbyte max, string unit = "", string description = "") : base(id, name, min, max, unit, description)
-        {  }
+        {
+            DataSize = 1;
+        }
 
         public override sbyte Decode(byte[] dptData, int offset = 0)
         {

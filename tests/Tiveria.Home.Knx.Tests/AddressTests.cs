@@ -1,7 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Tiveria.Home.Knx;
-using Tiveria.Home.Knx.Adresses;
+using Tiveria.Home.Knx.BaseTypes;
 
 namespace Tiveria.Home.Knx.Tests
 {
@@ -123,4 +123,4 @@ namespace Tiveria.Home.Knx.Tests
             Assert.AreEqual(group.ToBytes(), new byte[2] { 0x31, 0x2f });
         }
     }
-}
+    }

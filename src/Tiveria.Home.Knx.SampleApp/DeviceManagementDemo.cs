@@ -24,7 +24,7 @@
 
 using System.Net;
 using System.Net.Sockets;
-using Tiveria.Home.Knx.Adresses;
+using Tiveria.Home.Knx.BaseTypes;
 using Tiveria.Home.Knx.Cemi;
 using Tiveria.Home.Knx.IP.Services;
 using Tiveria.Home.Knx.IP.Structures;
@@ -40,13 +40,31 @@ namespace Tiveria.Home.Knx
             Con = new IP.Connections.TunnelingConnection(Program.GatewayIPAddress, Program.GatewayPort, GetLocalIPAddress(), 55555);
             await Con.ConnectAsync();
 
-            var mngt = new DeviceManagement.ManagementClient(Con);
-            await mngt.ConnectAsync();    
-            await Task.Delay(1000);
-            await mngt.ReadPropertyAsync(0, 56);
+            var mngt = new IP.DeviceManagement.ManagementClient(Con, IndividualAddress.Parse("1.1.3"));
+            await mngt.ConnectAsync();
+            await mngt.ReadDeviceDescriptorAsync();
+            await mngt.ReadPropertyAsync(5, 1);
+            await mngt.ReadPropertyAsync(6, 1);
+            await mngt.ReadPropertyAsync(0, 15);
+            var mem = await mngt.ReadMemoryAsync(0x170, 12);
+            Console.WriteLine("Memory read: {0}", mem != null ? BitConverter.ToString(mem) : "none");
+
+            var data = await mngt.ReadPropertyAsync(0, 56);
+            if (data != null)
+                Console.WriteLine("zz: " + BitConverter.ToString(data));
+            else
+                Console.WriteLine("zz: Null returned");
+
+            var propdesc = await mngt.ReadPropertyDescriptionAsync(0, 56);
+            if (propdesc != null)
+                Console.WriteLine($"Type: {propdesc.PropertyType}, Writeable: {propdesc.WriteEnabled}, WriteLevel: {propdesc.WriteLevel}, ReadLevel: {propdesc.ReadLevel}");
+            else
+                Console.WriteLine("**: Null returned");
+
             await Task.Delay(1000);
             await mngt.DisconnectAsync();
             await Con.DisconnectAsync();
+            Console.ReadLine();
         }
 
         public IPAddress GetLocalIPAddress()

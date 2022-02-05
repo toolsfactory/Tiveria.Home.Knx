@@ -27,7 +27,9 @@ namespace Tiveria.Home.Knx.Datapoint
     public class DPType4 : DPType<char>
     {
         protected DPType4(string id, string name, char min, char max, string unit = "", string description = "") : base(id, name, min, max, unit, description)
-        { }
+        {
+            DataSize = 1;
+        }
 
         #region decoding DPT
         public override char Decode(byte[] dptData, int offset = 0)

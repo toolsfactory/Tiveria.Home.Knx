@@ -24,9 +24,9 @@
 
 namespace Tiveria.Home.Knx.Cemi
 {
-    public static class ApciType
+    public static class ApduType
     {
-        #region Public APCI Type Constants
+        #region Public Apdu Type Constants
         public const int GroupValue_Read                        = 0b00_00;
         public const int GroupValue_Response                    = 0b00_01;
         public const int GroupValue_Write                       = 0b00_10;
@@ -127,56 +127,56 @@ namespace Tiveria.Home.Knx.Cemi
             var len = (value <= 0b1111) ? ApciFieldLength.Bits_4 : ApciFieldLength.Bits_10;
             var high = (byte) (len == ApciFieldLength.Bits_4 ? value >> 2 : value >> 8);
             var low  = (byte) (len == ApciFieldLength.Bits_4 ? value << 6 : value & 0xff);
-            _knowApciType.Add(value, new ApciTypeDetail(name, high, low, len, dataMode, canOptimize, exactormin, max));
+            _knowApduType.Add(value, new ApduTypeDetail(name, high, low, len, dataMode, canOptimize, exactormin, max));
         }  
 
-        public static bool IsKnown(int id) => _knowApciType.ContainsKey(id);
+        public static bool IsKnown(int id) => _knowApduType.ContainsKey(id);
 
-        public static bool RequiresData(int id) => IsKnown(id) ? _knowApciType[id].DataMode != DataMode.None : false;
+        public static bool RequiresData(int id) => IsKnown(id) ? _knowApduType[id].DataMode != DataMode.None : false;
 
         public static (DataMode Mode, int MinOrExact, int Max) GetRequiredDataDetails(int id)
-            => IsKnown(id) ? (_knowApciType[id].DataMode, _knowApciType[id].ExactOrMin, _knowApciType[id].Max) : (DataMode.Unknown, -1, -1);
+            => IsKnown(id) ? (_knowApduType[id].DataMode, _knowApduType[id].ExactOrMin, _knowApduType[id].Max) : (DataMode.Unknown, -1, -1);
 
-        public static int GetApciType((int apci4, int apci6, int len) apci) => apci switch
+        public static int GetApduType((int apci4, int apci6, int len) apci) => apci switch
         {
-            { apci4: 0, apci6: 0 } => ApciType.GroupValue_Read,
-            { apci4: 1 } => ApciType.GroupValue_Response,
-            { apci4: 2 } => ApciType.GroupValue_Write,
-            { apci4: 3, apci6: 0 } => ApciType.GroupValue_Write,
-            { apci4: 4, apci6: 0 } => ApciType.GroupValue_Read,
-            { apci4: 5, apci6: 0 } => ApciType.GroupValue_Response,
-            { apci4: 6 } => ApciType.ADC_Read,
-            { apci4: 7, len: 5 } => ApciType.ADC_Response,
-            { apci4: 7, apci6: 8, len: > 5 } => ApciType.SystemNetworkParameter_Read,
-            { apci4: 7, apci6: 9, len: > 5 } => ApciType.SystemNetworkParameter_Response,
-            { apci4: 7, apci6: 10, len: > 5 } => ApciType.SystemNetworkParameter_Write,
-            { apci4: 8 } => ApciType.Memory_Read,
-            { apci4: 9 } => ApciType.Memory_Response,
-            { apci4: 10 } => ApciType.Memory_Write,
+            { apci4: 0, apci6: 0 } => ApduType.GroupValue_Read,
+            { apci4: 1 } => ApduType.GroupValue_Response,
+            { apci4: 2 } => ApduType.GroupValue_Write,
+            { apci4: 3, apci6: 0 } => ApduType.GroupValue_Write,
+            { apci4: 4, apci6: 0 } => ApduType.GroupValue_Read,
+            { apci4: 5, apci6: 0 } => ApduType.GroupValue_Response,
+            { apci4: 6 } => ApduType.ADC_Read,
+            { apci4: 7, len: 5 } => ApduType.ADC_Response,
+            { apci4: 7, apci6: 8, len: > 5 } => ApduType.SystemNetworkParameter_Read,
+            { apci4: 7, apci6: 9, len: > 5 } => ApduType.SystemNetworkParameter_Response,
+            { apci4: 7, apci6: 10, len: > 5 } => ApduType.SystemNetworkParameter_Write,
+            { apci4: 8 } => ApduType.Memory_Read,
+            { apci4: 9 } => ApduType.Memory_Response,
+            { apci4: 10 } => ApduType.Memory_Write,
             _ => apci.apci4 << 6 | apci.apci6
         };
 
         public static (int offset, int mask) GetASDUMaskAndOffset((int apci, int len) x) => x switch
         {
-            { apci: ApciType.GroupValue_Response, len: <= 2 } => (1, CompressedDataMask),
-            { apci: ApciType.GroupValue_Write, len: <= 2 } => (1, CompressedDataMask),
-            { apci: ApciType.ADC_Read } => (1, CompressedDataMask),
-            { apci: ApciType.ADC_Response } => (1, CompressedDataMask),
-            { apci: ApciType.Memory_Read } => (1, CompressedDataMask),
-            { apci: ApciType.Memory_Response } => (1, CompressedDataMask),
-            { apci: ApciType.Memory_Write } => (1, CompressedDataMask),
-            { apci: ApciType.DeviceDescriptor_Read } => (1, CompressedDataMask),
-            { apci: ApciType.DeviceDescriptor_Response } => (1, CompressedDataMask),
-            { apci: ApciType.IndividualAddress_Read } => (1, CompressedDataMask),
-            { apci: ApciType.IndividualAddress_Response } => (1, CompressedDataMask),
+            { apci: ApduType.GroupValue_Response, len: <= 2 } => (1, CompressedDataMask),
+            { apci: ApduType.GroupValue_Write, len: <= 2 } => (1, CompressedDataMask),
+            { apci: ApduType.ADC_Read } => (1, CompressedDataMask),
+            { apci: ApduType.ADC_Response } => (1, CompressedDataMask),
+            { apci: ApduType.Memory_Read } => (1, CompressedDataMask),
+            { apci: ApduType.Memory_Response } => (1, CompressedDataMask),
+            { apci: ApduType.Memory_Write } => (1, CompressedDataMask),
+            { apci: ApduType.DeviceDescriptor_Read } => (1, CompressedDataMask),
+            { apci: ApduType.DeviceDescriptor_Response } => (1, CompressedDataMask),
+            { apci: ApduType.IndividualAddress_Read } => (1, CompressedDataMask),
+            { apci: ApduType.IndividualAddress_Response } => (1, CompressedDataMask),
             _ => (2, 0b_11111111)
         };
 
-        public static string ToString(int id) => IsKnown(id) ? _knowApciType[id].Name : "Unknown";
+        public static string ToString(int id) => IsKnown(id) ? _knowApduType[id].Name : "Unknown";
         #endregion
 
         #region internal helpers
-        static ApciType()
+        static ApduType()
         {
             Register(GroupValue_Read, "GroupValue_Read", DataMode.None);
             Register(GroupValue_Response, "GroupValue_Response", DataMode.MinMax, true, 1, 14);
@@ -251,7 +251,7 @@ namespace Tiveria.Home.Knx.Cemi
 
         private const int CompressedDataMask = 0b00_111111;
 
-        private static Dictionary<int, ApciTypeDetail> _knowApciType = new Dictionary<int, ApciTypeDetail>(50);
+        private static Dictionary<int, ApduTypeDetail> _knowApduType = new Dictionary<int, ApduTypeDetail>(50);
 
         #endregion
     }
@@ -271,6 +271,6 @@ namespace Tiveria.Home.Knx.Cemi
         Unknown
     }
 
-    public record struct ApciTypeDetail(string Name, byte HighBits, byte LowBits, ApciFieldLength Length, DataMode DataMode, bool CanOptimize, int ExactOrMin, int Max);
+    public record struct ApduTypeDetail(string Name, byte HighBits, byte LowBits, ApciFieldLength Length, DataMode DataMode, bool CanOptimize, int ExactOrMin, int Max);
 
 }

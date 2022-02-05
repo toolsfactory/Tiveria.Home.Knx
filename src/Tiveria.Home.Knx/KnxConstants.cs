@@ -30,5 +30,7 @@ namespace Tiveria.Home.Knx
         /// Timeout of transport layer stateful connections to devices
         /// </summary>
         public const int DeviceConnectionTimeout = 6000;
+        public const int ExtMemoryAccess_MaxStartAddress = 0xff_ffff;
+        public const int ExtMemoryAccess_MemoryMaxBytes = 248;
     }
 }

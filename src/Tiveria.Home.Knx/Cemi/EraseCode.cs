@@ -22,30 +22,20 @@
     combination.
 */
 
-using Tiveria.Common.IO;
-using Tiveria.Home.Knx.Exceptions;
-
-namespace Tiveria.Home.Knx
+namespace Tiveria.Home.Knx.Cemi
 {
-    public static class BigEndianBinaryReaderExtensions
+    /// <summary>
+    /// Erase codes used when sending a master reset restart apci code. <see cref="ApduType.RestartMasterReset_Request"/>
+    /// </summary>
+    public enum EraseCode : byte
     {
-        public static T ReadByteEnum<T>(this BigEndianBinaryReader reader, string structure) where T : Enum
-        {
-            var value = reader.ReadByte();
-            if (!Enum.IsDefined(typeof(T), value))
-                throw KnxBufferFieldException.TypeUnknown($"{structure}-{nameof(T)}", value);
-            return (T)Enum.ToObject(typeof(T), value);
-        }
-
-        public static byte ReadSizeAndCheck(this BigEndianBinaryReader reader, string structure, int expected)
-        {
-            var size = reader.ReadByte();
-            if (size != expected)
-                throw KnxBufferFieldException.WrongSize(structure, expected, size);
-            if (reader.Available < (size - 2))
-                throw KnxBufferSizeException.TooSmall(structure);
-            return size;
-        }
+        ConfirmedRestart = 0x01,
+        FactoryReset = 0x02,
+        ResetIA = 0x03,
+        ResetAP = 0x04,
+        ResetParam = 0x05,
+        ResetLinks = 0x06,
+        FactoryResetwithoutIA = 0x07
     }
 
 }

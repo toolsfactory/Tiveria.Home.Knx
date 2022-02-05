@@ -22,13 +22,52 @@
     combination.
 */
 
+using Tiveria.Home.Knx.BaseTypes;
+using Tiveria.Home.Knx.Cemi;
+
 namespace Tiveria.Home.Knx.DeviceManagement
 {
     public interface IManagementClient
     {
+        bool IsConnected { get; }
+        ManagementConnectionState State { get; }
+        public IndividualAddress RemoteAddress { get; }
         Task ConnectAsync();
         Task DisconnectAsync();
 
-        Task<T> ReadPropertyAsync<T>(byte objIdx, byte propId);
+        Task<byte[]> ReadDeviceDescriptorAsync(byte descriptorType = 0);
+        Task RestartDeviceAsync();
+        Task<(byte ErrorCode, int ProcessTime)> ResetDeviceAsync(EraseCode code, int channelid, bool areYouSure);
+
+        Task<PropertyDescription> ReadPropertyDescriptionAsync(byte objIdx, byte propId);
+        Task<PropertyDescription> ReadPropertyDescriptionByIndexAsync(byte objIdx, byte index);
+        Task<byte[]> ReadPropertyAsync(byte objIdx, byte propId);
+        Task<byte[]> ReadPropertiesAsync(byte objIdx, byte propId, int start, int count);
+        Task WritePropertyAsync(byte objIdx, byte propId, int startIndex, int elements, byte[] data);
+
+        Task<byte[]> ReadMemoryAsync(int offset, int count);
+        Task WriteMemoryAsync(int offset, byte[] data);
+
+        Task<int> ReadADCAsync(byte channel, byte repeats);
+
+        Task<IndividualAddress> ReadIndividualAddressAsync();
+        Task<IndividualAddress> ReadAddressAsync(SerialNumber serialNumber);
+        Task<IndividualAddress[]> ReadAllAddressesAsync();
+        Task WriteAddressAsync(SerialNumber serialNumber, IndividualAddress address);
+
+
+        Task<byte[]> ReadDomainAddressAsync();
+        Task<IList<byte[]>> ReadDomainAddressesAsync(byte[] domainaddress, IndividualAddress startAddress, int range);
+        Task<IList<byte[]>> ReadAllDomainAddressAsync();
+        Task WriteDomainAddressAsync(byte[] domainAddress);
+        Task WriteDomainAddressAsync(SerialNumber serialNumber, byte[] domainAddress);
+    }
+
+    public enum ManagementConnectionState
+    {
+        Closed,
+        OpenIdle,
+        OpenWait,
+        Connecting
     }
 }

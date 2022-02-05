@@ -39,7 +39,7 @@ namespace Tiveria.Home.Knx.Datapoint
         {
             var bytes = System.Text.Encoding.UTF8.GetBytes(value);
             if (bytes.Length > MaxLength)
-                throw new TranslationException("String to long");
+                throw new KnxTranslationException("String to long");
             var result = new byte[bytes.Length + 1];
             bytes.CopyTo(result, 0);
             result[result.Length - 1] = 0;
@@ -49,7 +49,7 @@ namespace Tiveria.Home.Knx.Datapoint
         public override string Decode(byte[] dptData, int offset = 0)
         {
             if (dptData.Length - offset < 1)
-                throw BufferSizeException.TooSmall("DPType28/String");
+                throw KnxBufferSizeException.TooSmall("DPType28/String");
             var len = 0;
             for (var i = offset; (i < dptData.Length) && (dptData[i] != 0); i++)
                 len++;

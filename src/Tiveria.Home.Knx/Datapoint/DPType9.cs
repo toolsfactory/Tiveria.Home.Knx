@@ -28,6 +28,7 @@ namespace Tiveria.Home.Knx.Datapoint
     {
         protected DPType9(string id, string name, double min, double max, string unit = "", string description = "") : base(id, name, min, max, unit, description)
         {
+            DataSize = 2;
         }
 
         public override double Decode(byte[] dptData, int offset = 0)

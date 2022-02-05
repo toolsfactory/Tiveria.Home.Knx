@@ -22,30 +22,26 @@
     combination.
 */
 
-using Tiveria.Common.IO;
-using Tiveria.Home.Knx.Exceptions;
+using System.Runtime.Serialization;
 
-namespace Tiveria.Home.Knx
+namespace Tiveria.Home.Knx.Exceptions
 {
-    public static class BigEndianBinaryReaderExtensions
+    public class KnxConnectionException : KnxCommunicationException
     {
-        public static T ReadByteEnum<T>(this BigEndianBinaryReader reader, string structure) where T : Enum
+        public KnxConnectionException()
         {
-            var value = reader.ReadByte();
-            if (!Enum.IsDefined(typeof(T), value))
-                throw KnxBufferFieldException.TypeUnknown($"{structure}-{nameof(T)}", value);
-            return (T)Enum.ToObject(typeof(T), value);
         }
 
-        public static byte ReadSizeAndCheck(this BigEndianBinaryReader reader, string structure, int expected)
+        public KnxConnectionException(string message) : base(message)
         {
-            var size = reader.ReadByte();
-            if (size != expected)
-                throw KnxBufferFieldException.WrongSize(structure, expected, size);
-            if (reader.Available < (size - 2))
-                throw KnxBufferSizeException.TooSmall(structure);
-            return size;
+        }
+
+        public KnxConnectionException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
+
+        public KnxConnectionException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
         }
     }
-
 }

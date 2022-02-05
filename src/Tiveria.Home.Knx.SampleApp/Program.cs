@@ -30,7 +30,7 @@ namespace Tiveria.Home.Knx
 {
     public class Program
     {
-        public static IPAddress GatewayIPAddress = IPAddress.Parse("192.168.2.154");
+        public static IPAddress GatewayIPAddress = IPAddress.Parse("192.168.2.150");
         public static ushort GatewayPort = 3671;
 
         static void Main(string[] args)

@@ -23,7 +23,7 @@
 */
 
 using System.Net;
-using Tiveria.Home.Knx.Adresses;
+using Tiveria.Home.Knx.BaseTypes;
 using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Home.Knx.IP.Structures;
 using Tiveria.Home.Knx.IP.Services;
@@ -41,7 +41,7 @@ namespace Tiveria.Home.Knx
             {
                 bool on = true;
                 var input = (byte)(on ? 0x01 : 0x00);
-                var apci = new Cemi.Apdu(Cemi.ApciType.GroupValue_Write, new byte[] { input });
+                var apci = new Cemi.Apdu(Cemi.ApduType.GroupValue_Write, new byte[] { input });
                 Console.WriteLine("APCI: " + BitConverter.ToString(apci.ToBytes()));
                 var ctrl1 = new ControlField1();
                 var ctrl2 = new ControlField2();

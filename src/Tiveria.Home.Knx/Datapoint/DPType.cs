@@ -130,32 +130,32 @@ namespace Tiveria.Home.Knx.Datapoint
 
         protected virtual byte[] EncodeFromLong(long value)
         {
-            throw new Exceptions.TranslationException("Translation from long not supported for type " + Id);
+            throw new Exceptions.KnxTranslationException("Translation from long not supported for type " + Id);
         }
 
         protected virtual byte[] EncodeFromULong(long value)
         {
-            throw new Exceptions.TranslationException("Translation from ulong not supported for type " + Id);
+            throw new Exceptions.KnxTranslationException("Translation from ulong not supported for type " + Id);
         }
 
         protected virtual byte[] EncodeFromBool(bool value)
         {
-            throw new Exceptions.TranslationException("Translation from bool not supported for type " + Id);
+            throw new Exceptions.KnxTranslationException("Translation from bool not supported for type " + Id);
         }
 
         protected virtual byte[] EncodeFromDouble(double value)
         {
-            throw new Exceptions.TranslationException("Translation from double not supported for type " + Id);
+            throw new Exceptions.KnxTranslationException("Translation from double not supported for type " + Id);
         }
 
         protected virtual byte[] EncodeFromObject(object value)
         {
-            throw new Exceptions.TranslationException($"Translation from '{value.GetType()}' not supported for type {Id}");
+            throw new Exceptions.KnxTranslationException($"Translation from '{value.GetType()}' not supported for type {Id}");
         }
     
         protected virtual byte[] EncodeFromString(string value)
         {
-            throw new Exceptions.TranslationException("Translation from string not supported for type " + Id);
+            throw new Exceptions.KnxTranslationException("Translation from string not supported for type " + Id);
         }
         #endregion
 
@@ -173,7 +173,7 @@ namespace Tiveria.Home.Knx.Datapoint
         public virtual TValue Decode(byte[] dptData, int offset = 0)
         {
             if (DataSize != -1 && (dptData.Length - offset < DataSize))
-                throw BufferSizeException.TooSmall("DPType");
+                throw KnxBufferSizeException.TooSmall("DPType");
             return default;
         }
         #endregion

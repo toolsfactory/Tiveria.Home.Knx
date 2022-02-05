@@ -101,7 +101,7 @@ namespace Tiveria.Home.Knx.Cemi
         {
             _infoLength = data[0];
             if (_infoLength != data.Length - 1)
-                throw BufferFieldException.WrongValue("AdditionalInfo - Data", data.Length - 1, _infoLength);
+                throw KnxBufferFieldException.WrongValue("AdditionalInfo - Data", data.Length - 1, _infoLength);
             VerifyLength(_infoType, _infoLength);
             Array.Copy(data, 1, _information, 0, _infoLength);
         }
@@ -117,7 +117,7 @@ namespace Tiveria.Home.Knx.Cemi
             ParseType(br);
             ParseLength(br);
             if (br.Available < _infoLength)
-                throw BufferSizeException.TooSmall("AdditionalInformationField");
+                throw KnxBufferSizeException.TooSmall("AdditionalInformationField");
             ParseInfo(br);
             VerifyLength(_infoType, _infoLength);
             _size = 2 + _infoLength;
@@ -131,14 +131,14 @@ namespace Tiveria.Home.Knx.Cemi
                 _infoType = (AdditionalInfoType)infotype;
             }
             else
-                throw BufferFieldException.TypeUnknown("AdditionalInfoType", infotype);
+                throw KnxBufferFieldException.TypeUnknown("AdditionalInfoType", infotype);
         }
 
         private void ParseLength(BigEndianBinaryReader br)
         {
             _infoLength = br.ReadByte();
             if (br.Available < _infoLength)
-                throw BufferSizeException.TooSmall("AdditionalFieldInfo");
+                throw KnxBufferSizeException.TooSmall("AdditionalFieldInfo");
         }
 
         private void ParseInfo(BigEndianBinaryReader br)
@@ -160,7 +160,7 @@ namespace Tiveria.Home.Knx.Cemi
             {
                 if (length != TypeSizes[type])
                 {
-                    throw BufferFieldException.WrongValue($"AdditionalInfo ({type}) length", TypeSizes[type], length);
+                    throw KnxBufferFieldException.WrongValue($"AdditionalInfo ({type}) length", TypeSizes[type], length);
                 }
             }
         }
@@ -184,7 +184,7 @@ namespace Tiveria.Home.Knx.Cemi
         public static AdditionalInformationField Parse(BigEndianBinaryReader br)
         {
             if (br.Available < 2)
-                throw BufferSizeException.TooSmall("AdditionalInformationField");
+                throw KnxBufferSizeException.TooSmall("AdditionalInformationField");
             return new AdditionalInformationField(br);
         }
         #endregion

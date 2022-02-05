@@ -33,6 +33,6 @@ namespace Tiveria.Home.Knx.IP
 
         IPEndPoint RemoteEndpoint { get; }
 
-        Task <bool> SendAsync(IKnxNetIPService service);
+        Task SendAsync(IKnxNetIPService service);
     }
 }

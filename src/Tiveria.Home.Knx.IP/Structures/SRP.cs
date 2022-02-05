@@ -102,7 +102,7 @@ namespace Tiveria.Home.Knx.IP.Structures
             var mandatory = (type & 0x80) == 0x80;
             type = (byte)(type & 0x7f);
             if (!Enum.IsDefined(typeof(SrpType), type))
-                throw BufferFieldException.TypeUnknown($"SRP.Type", type);
+                throw KnxBufferFieldException.TypeUnknown($"SRP.Type", type);
             var data = reader.ReadBytes(size-2);
             return new SRP((SrpType) type, data, mandatory);
         }

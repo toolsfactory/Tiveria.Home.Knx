@@ -33,7 +33,7 @@ namespace Tiveria.Home.Knx.Tests.IP
             var data = "0810020500180801c0a80278e1f60801c0a80278e1f70203".ToByteArray();
 
             var reader = new BigEndianBinaryReader(new MemoryStream(data));
-            Assert.Catch(typeof(BufferFieldException), () => FrameHeader.Parse(reader));
+            Assert.Catch(typeof(KnxBufferFieldException), () => FrameHeader.Parse(reader));
         }
 
         [Test]
@@ -42,7 +42,7 @@ namespace Tiveria.Home.Knx.Tests.IP
             //Standard body for Connection_Request but Version changed from 0x10 to 0x20
             var data = "0630020500180801c0a80278e1f60801c0a80278e1f70203".ToByteArray();
             var reader = new BigEndianBinaryReader(new MemoryStream(data));
-            Assert.Catch(typeof(BufferFieldException), () => FrameHeader.Parse(reader));
+            Assert.Catch(typeof(KnxBufferFieldException), () => FrameHeader.Parse(reader));
         }
 
         [Test]
@@ -51,7 +51,7 @@ namespace Tiveria.Home.Knx.Tests.IP
             //Standard body for Connection_Request but totallength set wrong 0x20 instead of 0x18
             var data = "0610020500200801c0a80278e1f60801c0a80278e1f70203".ToByteArray();
             var reader = new BigEndianBinaryReader(new MemoryStream(data));
-            Assert.Catch(typeof(BufferSizeException), () => FrameHeader.Parse(reader));
+            Assert.Catch(typeof(KnxBufferSizeException), () => FrameHeader.Parse(reader));
         }
 
         [Test]

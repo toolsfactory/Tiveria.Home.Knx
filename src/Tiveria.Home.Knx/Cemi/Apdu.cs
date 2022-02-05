@@ -62,30 +62,30 @@ namespace Tiveria.Home.Knx.Cemi
         #region public properties
         public int Size { get; private set; } = 2;
         public byte[] Data { get; private set; } = Array.Empty<byte>();
-        public int Type { get; private set; } = ApciType.GroupValue_Read;
+        public int ApduType { get; private set; } = Cemi.ApduType.GroupValue_Read;
         #endregion
 
         #region constructors
 
         /// <summary>
-        /// Create a new APCI structure from an <see cref="ApciType"/> wit attached data.
+        /// Create a new APCI structure from an <see cref="Cemi.ApduType"/> wit attached data.
         /// </summary>
         /// <param name="type">The Apci service type</param>
         /// <param name="data">Data to be inserted. In case the Apci Service has a 4 bit identifier and the lower 6 bits are used for data already, this information has to be the first byte in this parameter</param>
         /// <exception cref="ArgumentException">Thrown in case the Apci Type is out of range or data size doesnt fit the type</exception>
         public Apdu(int type, byte[] data)
         {
-            if (Type < 0 || Type > 0b1111111111)
+            if (ApduType < 0 || ApduType > 0b1111111111)
                 throw new ArgumentException("Apci type out of range!");
 
-            Type = type;
+            ApduType = type;
             Data = data ?? Array.Empty<byte>();
             ValidateDataSize();
             CalculateSize();
         }
 
         /// <summary>
-        /// Create a new APCI structure from an <see cref="ApciType"/> wit enpty data.
+        /// Create a new APCI structure from an <see cref="Cemi.ApduType"/> wit enpty data.
         /// </summary>
         /// <param name="type">The Apci service type</param>
         /// <exception cref="ArgumentException">Thrown in case the Apci Type is out of range or data size doesnt fit the type</exception>
@@ -104,7 +104,7 @@ namespace Tiveria.Home.Knx.Cemi
             if (buffer == null)
                 throw new ArgumentNullException("data");
             if (buffer.Length < 2)
-                throw BufferSizeException.TooSmall("Apci");
+                throw KnxBufferSizeException.TooSmall("Apci");
 
             Size = buffer.Length;
             ParseApci(buffer);
@@ -124,18 +124,17 @@ namespace Tiveria.Home.Knx.Cemi
 
         public override string? ToString()
         {
-            return $"APCI: Size {Size} / Type {Type} / Data {BitConverter.ToString(Data)}";
+            return $"APCI: Size {Size} / Type {Cemi.ApduType.ToString(ApduType)} / Data {BitConverter.ToString(Data)}";
         }
         #endregion
 
         #region private implementation
-
         private void ParseApci(Span<byte> buffer)
         {
             var apci4 = ((buffer[0] & 0b000000_11) << 2) | (buffer[1] >> 6);
             var apci6 = (buffer[1] & 0b00_111111);
-            Type = ApciType.GetApciType((apci4, apci6, buffer.Length));
-            var loc = ApciType.GetASDUMaskAndOffset((Type, buffer.Length));
+            ApduType = Cemi.ApduType.GetApduType((apci4, apci6, buffer.Length));
+            var loc = Cemi.ApduType.GetASDUMaskAndOffset((ApduType, buffer.Length));
             Data = buffer.Slice(loc.offset).ToArray();
             if (Data.Length > 0)
                 Data[0] &= (byte)loc.mask;
@@ -143,46 +142,46 @@ namespace Tiveria.Home.Knx.Cemi
 
         private void ValidateDataSize()
         {
-            if (ApciType.IsKnown(Type))
+            if (Cemi.ApduType.IsKnown(ApduType))
             {
-                var details = ApciType.GetRequiredDataDetails(Type);
+                var details = Cemi.ApduType.GetRequiredDataDetails(ApduType);
                 if ((details.Mode == DataMode.None) && Data.Length > 0)
-                    throw new ArgumentException($"Data must empty for APCI Type {ApciType.ToString(Type)}");
+                    throw new ArgumentException($"Data must empty for APCI Type {Cemi.ApduType.ToString(ApduType)}");
                 if (details.Mode != DataMode.None && details.Mode != DataMode.Unknown)
                 {
                     if ((details.Mode == DataMode.Exact) && Data.Length != details.MinOrExact)
-                        throw new ArgumentException($"Data too small for APCI Type {ApciType.ToString(Type)}");
+                        throw new ArgumentException($"Data too small for APCI Type {Cemi.ApduType.ToString(ApduType)}. Was {Data.Length} but should be exactly {details.MinOrExact}");
                     if (Data.Length < details.MinOrExact)
-                        throw new ArgumentException($"Data too small for APCI Type {ApciType.ToString(Type)}");
+                        throw new ArgumentException($"Data too small for APCI Type {Cemi.ApduType.ToString(ApduType)}. Was {Data.Length} but should be at least {details.MinOrExact}");
                     if ((details.Mode == DataMode.MinMax) && Data.Length > details.Max)
-                        throw new ArgumentException($"Data too big for APCI Type {ApciType.ToString(Type)}");
+                        throw new ArgumentException($"Data too big for APCI Type {Cemi.ApduType.ToString(ApduType)}. Was {Data.Length} but should {details.Max} at maximum");
                 }
             }
         }
         private void CalculateSize()
         {
-            if (Type == ApciType.GroupValue_Write || Type == ApciType.GroupValue_Response)
+            if (ApduType == Cemi.ApduType.GroupValue_Write || ApduType == Cemi.ApduType.GroupValue_Response)
                 Size = ((Data.Length == 1) && (Data[0] <= 63)) ? 2 : Data.Length + 2;
             else
-                if (Type == ApciType.ADC_Read || Type == ApciType.ADC_Response ||
-                Type == ApciType.Memory_Read || Type == ApciType.Memory_Response || Type == ApciType.Memory_Write ||
-                Type == ApciType.DeviceDescriptor_Read || Type == ApciType.DeviceDescriptor_Response)
-                    Size = Data.Length + 1;
+                if (ApduType == Cemi.ApduType.ADC_Read || ApduType == Cemi.ApduType.ADC_Response ||
+                ApduType == Cemi.ApduType.Memory_Read || ApduType == Cemi.ApduType.Memory_Response || ApduType == Cemi.ApduType.Memory_Write ||
+                ApduType == Cemi.ApduType.DeviceDescriptor_Read || ApduType == Cemi.ApduType.DeviceDescriptor_Response)
+                Size = Data.Length + 1;
             else
                 Size = Data.Length + 2;
         }
         private byte[] BuildRaw()
         {
             var raw = new byte[Size];
-            raw[0] = (byte) ((Type <= 0b1111) ? Type >> 2 : Type >> 8 );
-            raw[1] = (byte) ((Type <= 0b1111) ? (Type & 0b0011) << 6 : Type & 0b11111111);
+            raw[0] = (byte) ((ApduType <= 0b1111) ? ApduType >> 2 : ApduType >> 8 );
+            raw[1] = (byte) ((ApduType <= 0b1111) ? (ApduType & 0b0011) << 6 : ApduType & 0b11111111);
 
-            if((Type == ApciType.GroupValue_Write || Type == ApciType.GroupValue_Response) 
+            if((ApduType == Cemi.ApduType.GroupValue_Write || ApduType == Cemi.ApduType.GroupValue_Response) 
                 && Data.Length == 1 && Data[0] <= 63)
                 raw[1] |= Data[0];
-            else if (Type == ApciType.ADC_Read || Type == ApciType.ADC_Response || 
-                Type == ApciType.Memory_Read ||Type == ApciType.Memory_Response || Type == ApciType.Memory_Write ||
-                Type == ApciType.DeviceDescriptor_Read || Type == ApciType.DeviceDescriptor_Response)
+            else if (ApduType == Cemi.ApduType.ADC_Read || ApduType == Cemi.ApduType.ADC_Response ||
+                ApduType == Cemi.ApduType.Memory_Read || ApduType == Cemi.ApduType.Memory_Response || ApduType == Cemi.ApduType.Memory_Write ||
+                ApduType == Cemi.ApduType.DeviceDescriptor_Read || ApduType == Cemi.ApduType.DeviceDescriptor_Response)
             {
                 raw[1] |= Data[0];
                 if (Data.Length > 1)

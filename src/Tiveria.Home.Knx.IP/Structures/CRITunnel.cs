@@ -82,7 +82,7 @@ namespace Tiveria.Home.Knx.IP.Structures
             reader.ReadByte(); // reserved Byte
 
             if (contype != ConnectionType.Tunnel)
-                throw BufferFieldException.WrongValue("CRITunnel.ConnectionType", (byte)ConnectionType.Tunnel, (byte)contype);
+                throw KnxBufferFieldException.WrongValue("CRITunnel.ConnectionType", (byte)ConnectionType.Tunnel, (byte)contype);
 
             return new CRITunnel(layer);
         }

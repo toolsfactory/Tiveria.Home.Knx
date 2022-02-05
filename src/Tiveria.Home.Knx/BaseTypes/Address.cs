@@ -24,7 +24,7 @@
 
 using Tiveria.Common.IO;
 
-namespace Tiveria.Home.Knx.Adresses
+namespace Tiveria.Home.Knx.BaseTypes
 {
     public abstract class Address : KnxDataElement, IKnxAddress, IEquatable<Address>
     {
@@ -53,7 +53,7 @@ namespace Tiveria.Home.Knx.Adresses
         public int WriteBytes(Span<byte> buffer)
         {
             if (buffer.Length < 2)
-                throw Exceptions.BufferSizeException.TooSmall(nameof(buffer));
+                throw Exceptions.KnxBufferSizeException.TooSmall(nameof(buffer));
             buffer[0] = (byte)(RawAddress >> 8);
             buffer[1] = (byte)RawAddress;
             return 2;
