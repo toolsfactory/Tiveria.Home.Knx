@@ -22,16 +22,18 @@
     combination.
 */
 
-namespace Tiveria.Home.Knx
+namespace Tiveria.Home.Knx.DeviceManagement
 {
-    public static class KnxConstants
+    /// <summary>
+    /// see Chapter 5.1 of 3.3.4 Transport Layer Communication in Knx Specs
+    /// </summary>
+    public enum ManagementConnectionState
     {
-        /// <summary>
-        /// Timeout of transport layer stateful connections to devices
-        /// </summary>
-        public const int DeviceConnectionTimeout = 6000;
-        public const int ExtMemoryAccess_MaxStartAddress = 0xff_ffff;
-        public const int ExtMemoryAccess_MemoryMaxBytes = 248;
-        public const int ResponseTimeoutMS = 3000;
+        Closed,
+        OpenIdle,
+        OpenWait,
+        Connecting
     }
+
+
 }

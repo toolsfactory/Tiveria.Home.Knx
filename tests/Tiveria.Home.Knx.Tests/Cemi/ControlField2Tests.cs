@@ -51,7 +51,7 @@ namespace Tiveria.Home.Knx.Tests
         {
             var ctrl2 = new ControlField2((byte)expected);
             var data = ctrl2.ToByte();
-            Assert.AreEqual(groupadd, ctrl2.DestinationAddressType == BaseTypes.AddressType.GroupAddress);
+            Assert.AreEqual(groupadd, ctrl2.DestinationAddressType == Primitives.AddressType.GroupAddress);
             Assert.AreEqual(ext, ctrl2.ExtendedFrameFormat);
             Assert.AreEqual(hops, ctrl2.HopCount);
             Assert.AreEqual((byte)expected, data);
@@ -73,7 +73,7 @@ namespace Tiveria.Home.Knx.Tests
         {
             var ctrl2 = new ControlField2();
             var data = ctrl2.ToByte();
-            Assert.AreEqual(BaseTypes.AddressType.GroupAddress, ctrl2.DestinationAddressType);
+            Assert.AreEqual(Primitives.AddressType.GroupAddress, ctrl2.DestinationAddressType);
             Assert.AreEqual(0, ctrl2.ExtendedFrameFormat);
             Assert.AreEqual(6, ctrl2.HopCount);
             Assert.AreEqual(0b1_110_0000, data);

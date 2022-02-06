@@ -23,12 +23,24 @@
 */
 
 
-namespace Tiveria.Home.Knx.BaseTypes
+namespace Tiveria.Home.Knx.Primitives
 {
+    /// <summary>
+    /// Style or mode the <see cref="GroupAddress"/> is used in the Knx Project.
+    /// </summary>
     public enum GroupAddressStyle
     {
+        /// <summary>
+        /// Group addresses use a three level style with Main, Middle and Sub groups. Most common.
+        /// </summary>
         ThreeLevel,
+        /// <summary>
+        /// Two levels are used for the group addresses - Main and Sub groups.
+        /// </summary>
         TwoLevel,
+        /// <summary>
+        /// No levels at all. Should normally be avoided as difficult to structure knx projects.
+        /// </summary>
         Free
     }
 }

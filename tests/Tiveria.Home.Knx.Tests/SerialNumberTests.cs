@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using Tiveria.Home.Knx.BaseTypes;
+using Tiveria.Home.Knx.Primitives;
 
 namespace Tiveria.Home.Knx.Tests
 {

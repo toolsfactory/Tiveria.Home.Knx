@@ -22,7 +22,7 @@
     combination.
 */
 
-namespace Tiveria.Home.Knx.BaseTypes
+namespace Tiveria.Home.Knx.Primitives
 {
     /// <summary>
     /// Class representing an individual device address
@@ -30,16 +30,36 @@ namespace Tiveria.Home.Knx.BaseTypes
     public class IndividualAddress : Address
     {
         #region Public properties
+        /// <summary>
+        /// The area the device belongs to
+        /// </summary>
         public int Area  => RawAddress >> 12;
+        /// <summary>
+        /// The line the device belongs to
+        /// </summary>
         public int Line  => RawAddress >> 8 & 0x0F; 
+        /// <summary>
+        /// The individual device id in the line
+        /// </summary>
         public int Device => RawAddress & 0xFF; 
         #endregion
 
         #region Constructors
+        /// <summary>
+        /// Initializes a new instence of the <see cref="IndividualAddress"/> object with a raw address
+        /// </summary>
+        /// <param name="address">The raw address</param>
         public IndividualAddress(ushort address)
            : base(AddressType.IndividualAddress, address)
         { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IndividualAddress"/> object with values for area, line and device
+        /// </summary>
+        /// <param name="area">The area (0-15)</param>
+        /// <param name="line">The line (0-15)</param>
+        /// <param name="device">The device (0-255)</param>
+        /// <exception cref="ArgumentOutOfRangeException">Throw one of the parameters is not in the specified range</exception>
         public IndividualAddress(int area, int line, int device)
             : this((ushort) (area << 12 | line << 8 | device))
         {
@@ -54,6 +74,10 @@ namespace Tiveria.Home.Knx.BaseTypes
             return $"{Area}.{Line}.{Device}";
         }
 
+        /// <summary>
+        /// Creates a new copy of the <see cref="IndividualAddress"/>
+        /// </summary>
+        /// <returns>the new <see cref="IndividualAddress"/> with idlentical Area, Line and Device values</returns>
         public override object Clone()
         {
             return new IndividualAddress(RawAddress);
@@ -61,25 +85,38 @@ namespace Tiveria.Home.Knx.BaseTypes
         #endregion
 
         #region Static parsing
-        public static bool TryParse(string text, out IndividualAddress address)
+        /// <summary>
+        /// Tries to convert the string represenation of an individual address to the equivalent <see cref="IndividualAddress"/> object.
+        /// </summary>
+        /// <param name="input">The string to convert</param>
+        /// <param name="result">When this method returns, contains the parsed value. If the method returns true, result contains a valid <see cref="GroupAddress"/>. If the method returns false, result equals Empty.</param>
+        /// <returns>true if the parse operation was successful; otherwise, false.</returns>
+        public static bool TryParse(string input, out IndividualAddress result)
         {
             try
             {
-                address = Parse(text);
+                result = Parse(input);
                 return true;
             }
             catch
             {
-                address = IndividualAddress.Empty();
+                result = IndividualAddress.Empty();
                 return false;
             }
         }
 
-        public static IndividualAddress Parse(string address)
+        /// <summary>
+        /// Converts the string represenation of an individual address to the equivalent <see cref="IndividualAddress"/> object.
+        /// </summary>
+        /// <param name="input">The string to convert</param>
+        /// <returns>The resulting GroupAddress object</returns>
+        /// <exception cref="ArgumentNullException">input is null</exception>
+        /// <exception cref="FormatException">input is not in a recognized format.</exception>
+        public static IndividualAddress Parse(string input)
         {
-            if (address == null)
+            if (input == null)
                 throw new ArgumentNullException("address string is null");
-            var elements = address.Split('.');
+            var elements = input.Split('.');
             if (elements == null || elements.Length != 3)
                 throw new ArgumentException("address string has wrong format");
             var area = int.Parse(elements[0]);
@@ -90,11 +127,21 @@ namespace Tiveria.Home.Knx.BaseTypes
         #endregion
 
         #region Static helpers
+        /// <summary>
+        /// Checks if values for area, line and device are in the allowed ranges
+        /// </summary>
+        /// <param name="area">The area (0-15)</param>
+        /// <param name="line">The line (0-15)</param>
+        /// <param name="device">The device (0-255)</param>
         public static bool IsValidAddressTriple(int area, int line, int device)
         {
             return (area & ~0x0f) == 0 && (line & ~0x0f) == 0 && ((device & ~0xff) == 0);
         }
 
+        /// <summary>
+        /// Returns a static <see cref="IndividualAddress"/> with area, line and device set to 0
+        /// </summary>
+        /// <returns>The <see cref="IndividualAddress"/> 0.0.0</returns>
         public static IndividualAddress Empty() => new IndividualAddress(0);
         #endregion
     }

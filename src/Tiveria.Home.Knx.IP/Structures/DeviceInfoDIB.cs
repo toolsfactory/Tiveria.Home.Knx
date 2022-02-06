@@ -24,7 +24,7 @@
 
 using System.Net;
 using Tiveria.Home.Knx.IP.Enums;
-using Tiveria.Home.Knx.BaseTypes;
+using Tiveria.Home.Knx.Primitives;
 using Tiveria.Common.IO;
 using Tiveria.Home.Knx.Exceptions;
 

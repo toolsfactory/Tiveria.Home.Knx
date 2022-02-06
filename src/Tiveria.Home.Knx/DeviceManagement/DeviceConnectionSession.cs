@@ -23,35 +23,39 @@
 */
 
 using Tiveria.Home.Knx.Primitives;
-using Tiveria.Home.Knx.Cemi;
 
-namespace Tiveria.Home.Knx
+
+namespace Tiveria.Home.Knx.DeviceManagement
 {
-    public interface IKnxClient : IDisposable
+    public class DeviceConnectionSession
     {
-        bool IsConnected  => ConnectionState == ConnectionState.Open;
+        public DeviceConnectionSession(IndividualAddress address, bool keepAlive)
+        {
+            Address = address;
+            KeepAlive = keepAlive;
 
-        ConnectionState ConnectionState { get; }
-        String ConnectionName { get; }
+            _timer = new System.Timers.Timer(KnxConstants.DeviceConnectionTimeout);
+            _timer.AutoReset = false;
+            _timer.Elapsed += _timer_Elapsed;
+        }
 
-        event EventHandler<ConnectionStateChangedEventArgs>? ConnectionStateChanged;
-        event EventHandler<DataReceivedArgs>? DataReceived;
-        event EventHandler? Connected;
-        event EventHandler? DisConnected;
+        public int SeqNoSend { get; private set; } = 0;
+        public int SeqNoReceive { get; private set; } = 0;
+        public IndividualAddress Address { get; }
+        public bool KeepAlive { get; }
+        public ManagementConnectionState State { get; private set; } = ManagementConnectionState.Closed;
 
-        Task<bool> ConnectAsync();
-        Task DisconnectAsync();
+        public void IncSeqNoSend() => SeqNoSend = ++SeqNoSend & 0x0f;
+        public void IncSeqNoReceive() => SeqNoReceive = ++SeqNoReceive & 0x0f;
 
-        Task SendCemiAsync(ICemiMessage message);
+        private System.Timers.Timer _timer;
+
+        private void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 
-    public enum ConnectionState
-    {
-        Initialized,
-        Opening,
-        Open,
-        Closing,
-        Closed,
-        Invalid
-    }
+
 }

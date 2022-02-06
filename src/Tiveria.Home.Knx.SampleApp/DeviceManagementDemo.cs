@@ -24,7 +24,7 @@
 
 using System.Net;
 using System.Net.Sockets;
-using Tiveria.Home.Knx.BaseTypes;
+using Tiveria.Home.Knx.Primitives;
 using Tiveria.Home.Knx.Cemi;
 using Tiveria.Home.Knx.IP.Services;
 using Tiveria.Home.Knx.IP.Structures;
@@ -33,14 +33,33 @@ namespace Tiveria.Home.Knx
 {
     public class DeviceManagementDemo
     {
+        #region Private Fields
+
         private IP.Connections.TunnelingConnection? Con;
+
+        #endregion Private Fields
+
+        #region Public Methods
+
+        public IPAddress GetLocalIPAddress()
+        {
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return ip;
+                }
+            }
+            throw new Exception("No network adapters with an IPv4 address in the system!");
+        }
 
         public async Task RunAsync()
         {
             Con = new IP.Connections.TunnelingConnection(Program.GatewayIPAddress, Program.GatewayPort, GetLocalIPAddress(), 55555);
             await Con.ConnectAsync();
 
-            var mngt = new IP.DeviceManagement.ManagementClient(Con, IndividualAddress.Parse("1.1.3"));
+            var mngt = new IP.DeviceManagement.TunnelingManagementClient(Con, IndividualAddress.Parse("1.1.3"));
             await mngt.ConnectAsync();
             await mngt.ReadDeviceDescriptorAsync();
             await mngt.ReadPropertyAsync(5, 1);
@@ -67,18 +86,6 @@ namespace Tiveria.Home.Knx
             Console.ReadLine();
         }
 
-        public IPAddress GetLocalIPAddress()
-        {
-            var host = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (var ip in host.AddressList)
-            {
-                if (ip.AddressFamily == AddressFamily.InterNetwork)
-                {
-                    return ip;
-                }
-            }
-            throw new Exception("No network adapters with an IPv4 address in the system!");
-        }
-
+        #endregion Public Methods
     }
 }

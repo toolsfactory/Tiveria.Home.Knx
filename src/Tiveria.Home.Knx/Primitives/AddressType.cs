@@ -23,11 +23,20 @@
 */
 
 
-namespace Tiveria.Home.Knx.BaseTypes
+namespace Tiveria.Home.Knx.Primitives
 {
+    /// <summary>
+    /// Knx Address Type
+    /// </summary>
     public enum AddressType
     {
+        /// <summary>
+        /// Individual or physical address of a device. Used to directly interact with a device.
+        /// </summary>
         IndividualAddress,
+        /// <summary>
+        /// Address of a virtual group. Used to exchange group messages.
+        /// </summary>
         GroupAddress
     }
 }

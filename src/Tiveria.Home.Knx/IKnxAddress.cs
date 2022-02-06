@@ -22,7 +22,7 @@
     combination.
 */
 
-using Tiveria.Home.Knx.BaseTypes;
+using Tiveria.Home.Knx.Primitives;
 
 namespace Tiveria.Home.Knx
 {
@@ -34,8 +34,7 @@ namespace Tiveria.Home.Knx
         ushort RawAddress { get; }
         AddressType AddressType { get; }
 
-        int WriteBytes(Span<byte> buffer);
         bool IsGroupAddress();
-        bool IsPhysicalAddress();
+        bool IsIndividualAddress();
     }
 }

@@ -5,7 +5,7 @@ using Tiveria.Home.Knx.Cemi;
 using Tiveria.Common.Extensions;
 using Tiveria.Common.IO;
 using Tiveria.Home.Knx.Datapoint;
-using Tiveria.Home.Knx.BaseTypes;
+using Tiveria.Home.Knx.Primitives;
 using Tiveria.Home.Knx.Cemi.Serializers;
 using Tiveria.Home.Knx.IP.Services;
 using Tiveria.Home.Knx.IP;

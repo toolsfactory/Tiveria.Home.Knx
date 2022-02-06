@@ -23,7 +23,7 @@
 */
 
 using System.Net;
-using Tiveria.Home.Knx.BaseTypes;
+using Tiveria.Home.Knx.Primitives;
 using Tiveria.Home.Knx.IP;
 using Tiveria.Common.Extensions;
 using Tiveria.Home.Knx.IP.Enums;

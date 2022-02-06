@@ -67,7 +67,7 @@ namespace Tiveria.Home.Knx.Cemi.Serializers
             var controlField1 = new ControlField1(msgCode, reader.ReadByte());
             var controlField2 = new ControlField2(reader.ReadByte());
             var srcAddr = ReadSourceAddress(reader);
-            var dstAddr = ReadDestinationAddress(reader, controlField2.DestinationAddressType == BaseTypes.AddressType.GroupAddress);
+            var dstAddr = ReadDestinationAddress(reader, controlField2.DestinationAddressType == Primitives.AddressType.GroupAddress);
             var npduLength = reader.ReadByte();
             var data = reader.ReadBytes(npduLength + 1); // TPCI Octet not included in length field!
             var tpci = Tpci.Parse(data[0]);

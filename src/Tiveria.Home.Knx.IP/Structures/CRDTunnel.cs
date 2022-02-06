@@ -22,7 +22,7 @@
     combination.
 */
 
-using Tiveria.Home.Knx.BaseTypes;
+using Tiveria.Home.Knx.Primitives;
 using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Home.Knx.Exceptions;
 using Tiveria.Common.IO;

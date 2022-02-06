@@ -24,7 +24,7 @@
 
 using System.Text;
 using Tiveria.Common.Extensions;
-using Tiveria.Home.Knx.BaseTypes;
+using Tiveria.Home.Knx.Primitives;
 
 namespace Tiveria.Home.Knx.Cemi
 {

@@ -22,8 +22,11 @@
     combination.
 */
 
-using Tiveria.Home.Knx.BaseTypes;
+using Tiveria.Home.Knx.Primitives;
 using Tiveria.Home.Knx.Cemi;
+using Tiveria.Common;
+using Tiveria.Home.Knx.Exceptions;
+
 
 namespace Tiveria.Home.Knx.DeviceManagement
 {
@@ -61,13 +64,5 @@ namespace Tiveria.Home.Knx.DeviceManagement
         Task<IList<byte[]>> ReadAllDomainAddressAsync();
         Task WriteDomainAddressAsync(byte[] domainAddress);
         Task WriteDomainAddressAsync(SerialNumber serialNumber, byte[] domainAddress);
-    }
-
-    public enum ManagementConnectionState
-    {
-        Closed,
-        OpenIdle,
-        OpenWait,
-        Connecting
     }
 }

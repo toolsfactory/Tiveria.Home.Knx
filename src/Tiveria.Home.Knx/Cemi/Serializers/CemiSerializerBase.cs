@@ -1,5 +1,5 @@
 ﻿using Tiveria.Common.IO;
-using Tiveria.Home.Knx.BaseTypes;
+using Tiveria.Home.Knx.Primitives;
 /*
 Tiveria.Home.Knx - a .Net Core base KNX library
 Copyright (c) 2018 M. Geissler

@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using Tiveria.Home.Knx.BaseTypes;
+using Tiveria.Home.Knx.Primitives;
 using Tiveria.Home.Knx.IP.Structures;
 using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Common.Extensions;
