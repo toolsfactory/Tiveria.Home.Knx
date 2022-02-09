@@ -26,10 +26,26 @@ using Tiveria.Common.IO;
 
 namespace Tiveria.Home.Knx
 {
+    /// <summary>
+    /// Baseline interface for all elements of a Knx message
+    /// </summary>
     public interface IKnxDataElement
     {
+        /// <summary>
+        /// Size of the data element in its binary representation of the Knx protocol
+        /// </summary>
         int Size { get; }
+
+        /// <summary>
+        /// Converts the data element to a byte array
+        /// </summary>
+        /// <returns>The byte array</returns>
         byte[] ToBytes();
+
+        /// <summary>
+        /// Writes the data element to a <see cref="MemoryStream"/> using the provided <see cref="BigEndianBinaryWriter"/>
+        /// </summary>
+        /// <param name="writer">The writer</param>
         void Write(BigEndianBinaryWriter writer);
     }
 }

@@ -24,17 +24,40 @@
 
 namespace Tiveria.Home.Knx
 {
+
     /// <summary>
-    /// Typical constants used in the Knx context
+    /// Enumeration of the different states a connection to the Knx bus can be in
     /// </summary>
-    public static class KnxConstants
+    public enum KnxConnectionState
     {
         /// <summary>
-        /// Timeout of transport layer stateful connections to devices
+        /// Initialized and ready to be opened
         /// </summary>
-        public const int DeviceConnectionTimeout = 6000;
-        public const int ExtMemoryAccess_MaxStartAddress = 0xff_ffff;
-        public const int ExtMemoryAccess_MemoryMaxBytes = 248;
-        public const int ResponseTimeoutMS = 3000;
+        Initialized,
+
+        /// <summary>
+        /// Being opened at the moment
+        /// </summary>
+        Opening,
+
+        /// <summary>
+        /// Open and ready to be used
+        /// </summary>
+        Open,
+
+        /// <summary>
+        /// About to close
+        /// </summary>
+        Closing,
+
+        /// <summary>
+        /// Closed and not usable at the moment
+        /// </summary>
+        Closed,
+
+        /// <summary>
+        /// Something went wrong and the connection cannot be used anymore
+        /// </summary>
+        Invalid
     }
 }

@@ -27,31 +27,63 @@ using Tiveria.Home.Knx.Cemi;
 
 namespace Tiveria.Home.Knx
 {
+    /// <summary>
+    /// Baseline interface for all clients used to connect to the Knx bus
+    /// </summary>
     public interface IKnxClient : IDisposable
     {
-        bool IsConnected  => ConnectionState == ConnectionState.Open;
+        /// <summary>
+        /// Shows if the client is currently connected to the Knx bus
+        /// </summary>
+        bool IsConnected  => ConnectionState == KnxConnectionState.Open;
 
-        ConnectionState ConnectionState { get; }
+        /// <summary>
+        /// The detailed connection status
+        /// </summary>
+        KnxConnectionState ConnectionState { get; }
+
+        /// <summary>
+        /// Human readable name of the connection
+        /// </summary>
         String ConnectionName { get; }
 
+        /// <summary>
+        /// Occurs when the <see cref="ConnectionState"/> changes
+        /// </summary>
         event EventHandler<ConnectionStateChangedEventArgs>? ConnectionStateChanged;
+
+        /// <summary>
+        /// Occurs when data is received from the Knx bus
+        /// </summary>
         event EventHandler<DataReceivedArgs>? DataReceived;
+
+        /// <summary>
+        /// Triggered when a connection to the Knx bus was established
+        /// </summary>
         event EventHandler? Connected;
+
+        /// <summary>
+        /// Triggered when the connection to the Knx bus is closed
+        /// </summary>
         event EventHandler? DisConnected;
 
+        /// <summary>
+        /// Asynchronously connects to the Knx bus.
+        /// </summary>
+        /// <returns>True if sucessfully connected, otherwise false</returns>
         Task<bool> ConnectAsync();
+
+        /// <summary>
+        /// Closes the connection to the Knx bus.
+        /// </summary>
+        /// <returns>The awaitable task</returns>
         Task DisconnectAsync();
 
+        /// <summary>
+        /// Sends a Cemi message to the Knx bus
+        /// </summary>
+        /// <param name="message">The message</param>
+        /// <returns>The awaitable task</returns>
         Task SendCemiAsync(ICemiMessage message);
-    }
-
-    public enum ConnectionState
-    {
-        Initialized,
-        Opening,
-        Open,
-        Closing,
-        Closed,
-        Invalid
     }
 }

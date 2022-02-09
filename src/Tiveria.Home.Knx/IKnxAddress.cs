@@ -31,10 +31,26 @@ namespace Tiveria.Home.Knx
     /// </summary>
     public interface IKnxAddress : ICloneable, IKnxDataElement
     {
+        /// <summary>
+        /// Raw representation of the address
+        /// </summary>
         ushort RawAddress { get; }
+
+        /// <summary>
+        /// Type of the address
+        /// </summary>
         AddressType AddressType { get; }
 
+        /// <summary>
+        /// Checks if an address is a <see cref="GroupAddress"/> or a <see cref="IndividualAddress"/>
+        /// </summary>
+        /// <returns>True in case of a <see cref="GroupAddress"/></returns>
         bool IsGroupAddress();
+
+        /// <summary>
+        /// Checks if an address is a <see cref="GroupAddress"/> or a <see cref="IndividualAddress"/>
+        /// </summary>
+        /// <returns>True in case of a <see cref="IndividualAddress"/></returns>
         bool IsIndividualAddress();
     }
 }

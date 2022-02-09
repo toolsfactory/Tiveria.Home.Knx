@@ -91,7 +91,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         /// <exception cref="KnxCommunicationException">Thrown when sending the message failed</exception>
         public override async Task SendAsync(IKnxNetIPService service)
         {
-            if (ConnectionState != ConnectionState.Open)
+            if (ConnectionState != KnxConnectionState.Open)
                 throw new KnxCommunicationException("Connection is not open");
 
             var frame = new KnxNetIPFrame(service);
@@ -106,7 +106,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             }
             catch (SocketException se)
             {
-                ConnectionState = ConnectionState.Invalid;
+                ConnectionState = KnxConnectionState.Invalid;
                 throw new KnxCommunicationException("sending data failed", se);
             }
         }
@@ -216,9 +216,9 @@ namespace Tiveria.Home.Knx.IP.Connections
         {
             lock (_lock)
             {
-                if (ConnectionState == ConnectionState.Closing || ConnectionState == ConnectionState.Closed)
+                if (ConnectionState == KnxConnectionState.Closing || ConnectionState == KnxConnectionState.Closed)
                     return;
-                ConnectionState = ConnectionState.Closing;
+                ConnectionState = KnxConnectionState.Closing;
             }
             //_logger.Info("Closing connection. " + reason);
             _heartbeatMonitor?.Stop();
@@ -228,7 +228,7 @@ namespace Tiveria.Home.Knx.IP.Connections
                 _closeEvent.WaitOne(1000);
             }
             await Task.Run(() => _packetReceiver.Stop()).ConfigureAwait(false);
-            ConnectionState = ConnectionState.Closed;
+            ConnectionState = KnxConnectionState.Closed;
             _cancellationTokenSource.Cancel();
             _udpClient.Close();
         }
@@ -247,7 +247,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             {
                 lock (_lock)
                 {
-                    if (ConnectionState == ConnectionState.Closed)
+                    if (ConnectionState == KnxConnectionState.Closed)
                         return;
                     var frame = CreateDisconnectFrame();
                     _udpClient.Send(frame, frame.Length, _remoteControlEndpoint);
@@ -267,7 +267,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         public override async Task<bool> ConnectAsync()
         {
             _connectEvent.Reset();
-            ConnectionState = ConnectionState.Opening;
+            ConnectionState = KnxConnectionState.Opening;
             var data = CreateConnectionRequestFrame();
             try
             {
@@ -275,16 +275,16 @@ namespace Tiveria.Home.Knx.IP.Connections
                 var bytessent = await _udpClient.SendAsync(data, data.Length, _remoteControlEndpoint).ConfigureAwait(false);
                 if (bytessent == 0)
                 {
-                    ConnectionState = ConnectionState.Invalid;
+                    ConnectionState = KnxConnectionState.Invalid;
                     return false;
                 }
                 var result = _connectEvent.WaitOne(_config.ConnectTimeout);
-                if (!result) ConnectionState = ConnectionState.Invalid;
+                if (!result) ConnectionState = KnxConnectionState.Invalid;
                 return result;
             }
             catch
             {
-                ConnectionState = ConnectionState.Invalid;
+                ConnectionState = KnxConnectionState.Invalid;
                 return false;
             }
         }
@@ -315,13 +315,13 @@ namespace Tiveria.Home.Knx.IP.Connections
                 var ep = response.DataEndpoint;
                 VerifyRemoteDataEndpointforNAT(ep, remoteEndpoint);
                 _channelId = response.ChannelId;
-                ConnectionState = ConnectionState.Open;
+                ConnectionState = KnxConnectionState.Open;
                 SetupHeartbeatMonitor();
             }
             else
             {
                 _channelId = 0;
-                ConnectionState = ConnectionState.Invalid;
+                ConnectionState = KnxConnectionState.Invalid;
             }
             _connectEvent.Set();
         }

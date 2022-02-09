@@ -27,12 +27,18 @@ using Tiveria.Home.Knx.Cemi.Serializers;
 
 namespace Tiveria.Home.Knx
 {
+    /// <summary>
+    /// Factory class used to access all registered serializers for sepcific cemi messages
+    /// </summary>
     public class KnxCemiSerializerFactory
     {
         #region Static Singleton
         private static KnxCemiSerializerFactory? _Instance = null;
         private static readonly object lockobj = new object();
 
+        /// <summary>
+        /// Property exposing the single instance of this factory
+        /// </summary>
         public static KnxCemiSerializerFactory Instance
         {
             get
@@ -54,8 +60,7 @@ namespace Tiveria.Home.Knx
         }
         #endregion
 
-        private Dictionary<MessageCode, Type> _serializersByMessageCode = new();
-
+        #region Static Constructor
         KnxCemiSerializerFactory()
         {
             _serializersByMessageCode.Clear();
@@ -63,13 +68,25 @@ namespace Tiveria.Home.Knx
             Register<CemiLDataSerializer>(MessageCode.LDATA_IND);
             Register<CemiLDataSerializer>(MessageCode.LDATA_REQ);
         }
+        #endregion Static Constructor
 
+        #region Public Methods
+        /// <summary>
+        /// Registers a new <see cref="IKnxCemiSerializer"/> based type to de/serialize Cemi messages with a specific <see cref="MessageCode"/>
+        /// </summary>
+        /// <typeparam name="T">The type to register</typeparam>
+        /// <param name="messageCode">The <see cref="MessageCode"/> to register the serializer for</param>
         public void Register<T>(MessageCode messageCode) where T : IKnxCemiSerializer, new()
         {
             _serializersByMessageCode.Remove(messageCode);
             _serializersByMessageCode.Add(messageCode, typeof(T));
         }
 
+        /// <summary>
+        /// Creates a new instance of a <see cref="IKnxCemiSerializer"/> based on the provided <see cref="MessageCode"/>
+        /// </summary>
+        /// <param name="messageCode">The messagecode</param>
+        /// <returns>A new instance of an <see cref="IKnxCemiSerializer"/></returns>
         public IKnxCemiSerializer Create(MessageCode messageCode)
         {
             if (_serializersByMessageCode.TryGetValue(messageCode, out var parserType))
@@ -77,11 +94,8 @@ namespace Tiveria.Home.Knx
 
             return new CemiRawSerializer();
         }
+        #endregion Public Methods
 
-        public IKnxCemiSerializer<T> Create<T>() where T : class, ICemiMessage
-        {
-            throw new InvalidCastException();
-        }
+        private Dictionary<MessageCode, Type> _serializersByMessageCode = new();
     }
-
 }

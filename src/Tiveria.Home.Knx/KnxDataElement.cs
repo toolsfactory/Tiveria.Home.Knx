@@ -26,10 +26,15 @@ using Tiveria.Common.IO;
 
 namespace Tiveria.Home.Knx
 {
+    /// <summary>
+    /// Abstract base class for all data elements
+    /// </summary>
     public abstract class KnxDataElement : IKnxDataElement
     {
+        /// <inheritdoc/>
         public int Size { get; init; }
 
+        /// <inheritdoc/>
         public virtual byte[] ToBytes()
         {
             byte[] bytes = new byte[Size];
@@ -39,6 +44,7 @@ namespace Tiveria.Home.Knx
             return bytes;
         }
 
+        /// <inheritdoc/>
         public abstract void Write(BigEndianBinaryWriter writer);
     }
 }

@@ -55,7 +55,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         /// <summary>
         /// State of the connection
         /// </summary>
-        public ConnectionState ConnectionState
+        public KnxConnectionState ConnectionState
         {
             get => _connectionState;
             set
@@ -148,11 +148,11 @@ namespace Tiveria.Home.Knx.IP.Connections
         private byte _rcvSeqCounter = 0;
         private byte _sndSeqCounter = 0;
         private object _seqLock = new object();
-        private ConnectionState _connectionState = ConnectionState.Initialized;
+        private KnxConnectionState _connectionState = KnxConnectionState.Initialized;
         #endregion
 
         #region internal event handlers
-        protected void OnStateChanged(ConnectionState state)
+        protected void OnStateChanged(KnxConnectionState state)
         {
             var args = new ConnectionStateChangedEventArgs(state);
             ConnectionStateChanged?.Invoke(this, args);

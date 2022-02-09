@@ -26,7 +26,7 @@ namespace Tiveria.Home.Knx.Tests
         [Test]
         public void Zero()
         {
-            var data = SerialNumber.Zero;
+            var data = SerialNumber.Zero();
             Assert.AreEqual(0, data.Value);
             Assert.AreEqual("0000:00000000", data.ToString());
         }

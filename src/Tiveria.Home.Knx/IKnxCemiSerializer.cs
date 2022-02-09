@@ -27,12 +27,38 @@ using Tiveria.Home.Knx.Cemi;
 
 namespace Tiveria.Home.Knx
 {
+    /// <summary>
+    /// Provides standard capabilities to serialize and deserialize Cemi messages
+    /// </summary>
     public interface IKnxCemiSerializer
     {
+        /// <summary>
+        /// Deserializes a byte array into a <see cref="ICemiMessage"/>
+        /// </summary>
+        /// <param name="buffer">The binary representation of the Cemi message as byte array</param>
+        /// <returns>the cemi messages as object of type <see cref="ICemiMessage"/></returns>
         ICemiMessage Deserialize(byte[] buffer);
+
+        /// <summary>
+        /// Deserializes a <see cref="ICemiMessage"/> by reading the data using the provided <see cref="BigEndianBinaryReader"/>
+        /// </summary>
+        /// <param name="reader">The reader</param>
+        /// <param name="size">maximum amount of data to read</param>
+        /// <returns></returns>
         ICemiMessage Deserialize(BigEndianBinaryReader reader, int size = -1);
 
+        /// <summary>
+        /// Serialize an <see cref="ICemiMessage"/> into a byte array
+        /// </summary>
+        /// <param name="cemiMessage">The message to serialize</param>
+        /// <returns>The resulting byte array</returns>
         byte[] Serialize(ICemiMessage cemiMessage);
+
+        /// <summary>
+        /// Serialize a <see cref="ICemiMessage"/> using a <see cref="BigEndianBinaryWriter"/>
+        /// </summary>
+        /// <param name="cemiMessage">The message to serialize</param>
+        /// <param name="writer">The writer used for serialization</param>
         void Serialize(ICemiMessage cemiMessage, BigEndianBinaryWriter writer);
     }
 }

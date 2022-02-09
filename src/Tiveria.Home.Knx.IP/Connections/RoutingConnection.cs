@@ -70,20 +70,20 @@ namespace Tiveria.Home.Knx.IP.Connections
         {
             return Task.Run(() =>
             {
-                ConnectionState = ConnectionState.Opening;
+                ConnectionState = KnxConnectionState.Opening;
                 //_logger.Trace("ConnectAsync: Sending connection request to " + _remoteControlEndpoint + " with data " + data.ToHex());
                 try
                 {
                     _udpClient.Client.Bind(_localEndPoint);
                     _udpClient.JoinMulticastGroup(RemoteEndpoint.Address, _localEndPoint.Address);
                     _packetReceiver.Start();
-                    ConnectionState = ConnectionState.Open;
+                    ConnectionState = KnxConnectionState.Open;
                     return true;
                 }
                 catch (SocketException se)
                 {
                     //_logger.Error("ConnectAsync: SocketException raised", se);
-                    ConnectionState = ConnectionState.Invalid;
+                    ConnectionState = KnxConnectionState.Invalid;
                     return false;
                 }
             });
@@ -99,7 +99,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         /// <inheritdoc/>
         public async override Task SendAsync(IKnxNetIPService service)
         {
-            if (ConnectionState != ConnectionState.Open)
+            if (ConnectionState != KnxConnectionState.Open)
                 throw new KnxCommunicationException("Connection is not open");
 
             var frame = new KnxNetIPFrame(service);
@@ -112,7 +112,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             }
             catch (SocketException se)
             {
-                ConnectionState = ConnectionState.Invalid;
+                ConnectionState = KnxConnectionState.Invalid;
                 throw new KnxCommunicationException("sending data failed", se);
             }
         }

@@ -29,10 +29,10 @@ namespace Tiveria.Home.Knx
 
     public class ConnectionStateChangedEventArgs : EventArgs
     {
-        private ConnectionState _connectionState;
-        public ConnectionState ConnectionState { get => _connectionState; }
+        private KnxConnectionState _connectionState;
+        public KnxConnectionState ConnectionState { get => _connectionState; }
 
-        public ConnectionStateChangedEventArgs(ConnectionState state)
+        public ConnectionStateChangedEventArgs(KnxConnectionState state)
         {
             _connectionState = state;
         }
