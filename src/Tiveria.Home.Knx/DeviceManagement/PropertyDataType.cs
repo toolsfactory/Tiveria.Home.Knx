@@ -141,5 +141,6 @@ namespace Tiveria.Home.Knx.DeviceManagement
     }
 
     public record PropertyDataTypeDetails(byte Id, string Name, IDatapointType? DatapointType);
+
 }
 

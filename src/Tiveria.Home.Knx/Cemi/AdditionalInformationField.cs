@@ -67,7 +67,7 @@ namespace Tiveria.Home.Knx.Cemi
         #endregion
 
         #region private fields
-        private byte[] _information;
+        private byte[] _information = Array.Empty<byte>();
         private int _infoLength;
         private AdditionalInfoType _infoType;
         #endregion

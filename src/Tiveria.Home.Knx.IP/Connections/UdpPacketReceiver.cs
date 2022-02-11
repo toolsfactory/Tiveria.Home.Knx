@@ -31,7 +31,6 @@ namespace Tiveria.Home.Knx.IP.Connections
 {
     public class UdpPacketReceiver
     {
-//        private readonly Tiveria.Common.Logging.ILogger _logger = Tiveria.Home.Knx.Utils.LogFactory.GetLogger("Tiveria.Home.Knx.UdpPacketReceiver");
         private readonly UdpClient _client;
         private readonly CancellationTokenSource _cancellationTokenSource;
         private readonly PacketReceivedDelegate? _packetReceived;
@@ -39,8 +38,6 @@ namespace Tiveria.Home.Knx.IP.Connections
         private bool _running;
 
         public bool Running => _running;
-        public PacketReceivedDelegate? PacketReceived => _packetReceived;
-        public KnxFrameReceivedDelegate? KnxFrameReceived => _knxFrameReceived;
 
         public UdpPacketReceiver(UdpClient client, PacketReceivedDelegate packetReceived, KnxFrameReceivedDelegate? knxFrameReceived)
         {
@@ -53,12 +50,12 @@ namespace Tiveria.Home.Knx.IP.Connections
 
         private void OnPacketReceived(IPEndPoint source, IPEndPoint receiver, byte[] data)
         {
-            PacketReceived?.Invoke(DateTime.Now, source, receiver, data);
+            _packetReceived?.Invoke(DateTime.UtcNow, source, receiver, data);
         }
 
         private void OnKnxFrameReceived(IPEndPoint source, IPEndPoint receiver, IKnxNetIPFrame frame)
         {
-            KnxFrameReceived?.Invoke(DateTime.Now, source, receiver, frame);
+            _knxFrameReceived?.Invoke(DateTime.UtcNow, source, receiver, frame);
         }
 
         public bool Start()
@@ -73,7 +70,6 @@ namespace Tiveria.Home.Knx.IP.Connections
         {
             if (!_running)
                 return;
-            _client.Close();
             _cancellationTokenSource.Cancel();
             _running=false;
         }
@@ -89,10 +85,10 @@ namespace Tiveria.Home.Knx.IP.Connections
                         var receivedResults = await _client.ReceiveAsync()
                                                            .WithCancellation(_cancellationTokenSource.Token)
                                                            .ConfigureAwait(false);
-                        OnPacketReceived(receivedResults.RemoteEndPoint, (IPEndPoint)_client.Client.LocalEndPoint, receivedResults.Buffer);
-                        TryParseKnxFrame(receivedResults.RemoteEndPoint, (IPEndPoint)_client.Client.LocalEndPoint, receivedResults.Buffer);
+                        OnPacketReceived(receivedResults.RemoteEndPoint, (IPEndPoint)_client.Client.LocalEndPoint!, receivedResults.Buffer);
+                        TryParseKnxFrame(receivedResults.RemoteEndPoint, (IPEndPoint)_client.Client.LocalEndPoint!, receivedResults.Buffer);
                     }
-                    catch (OperationCanceledException ex)
+                    catch
                     { }
                 }
                 _running = false;

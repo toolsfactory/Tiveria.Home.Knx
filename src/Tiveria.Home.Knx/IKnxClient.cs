@@ -53,9 +53,14 @@ namespace Tiveria.Home.Knx
         event EventHandler<ConnectionStateChangedEventArgs>? ConnectionStateChanged;
 
         /// <summary>
-        /// Occurs when data is received from the Knx bus
+        /// Occurs when any kind of data is received from the Knx bus
         /// </summary>
         event EventHandler<DataReceivedArgs>? DataReceived;
+
+        /// <summary>
+        /// Occurs when a cEMI message received on the Knx bus
+        /// </summary>
+        event EventHandler<CemiReceivedArgs>? CemiReceived;
 
         /// <summary>
         /// Triggered when a connection to the Knx bus was established

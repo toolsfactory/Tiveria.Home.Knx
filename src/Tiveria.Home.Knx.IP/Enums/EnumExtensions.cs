@@ -34,89 +34,55 @@ namespace Tiveria.Home.Knx.IP.Enums
         /// </summary>
         /// <returns>the string representation of the enum value</returns>
         public static String ToDescription(this HPAIEndpointType hpaiEndpointType)
-        {
-            switch(hpaiEndpointType)
+            => hpaiEndpointType switch
             {
-                case HPAIEndpointType.IPV4_TCP:
-                    return "IPv4 / TCP";
-                case HPAIEndpointType.IPV4_UDP:
-                    return "IPv4 / UDP";
-                default:
-                    return "Unknown";
-            }
-        }
+                HPAIEndpointType.IPV4_TCP => "IPv4 / TCP",
+                HPAIEndpointType.IPV4_UDP => "IPv4 / UDP",
+                _                         => "Unknown"
+            };
 
         /// <summary>
         /// translate <see cref="TunnelingLayer"/> to a readable string
         /// </summary>
         /// <returns>the string representation of the enum value</returns>
-        public static String ToDescription(this TunnelingLayer tunnelingLayer)
-        {
-            switch (tunnelingLayer)
+        public static String ToDescription(this TunnelingLayer tunnelingLayer) 
+            => tunnelingLayer switch
             {
-                case TunnelingLayer.TUNNEL_BUSMONITOR:
-                    return "Busmonitor";
-                case TunnelingLayer.TUNNEL_LINKLAYER:
-                    return "Linklayer";
-                case TunnelingLayer.TUNNEL_RAW:
-                    return "RAW";
-                default:
-                    return "Unknown";
-            }
-        }
+                TunnelingLayer.TUNNEL_BUSMONITOR => "Busmonitor",
+                TunnelingLayer.TUNNEL_LINKLAYER  => "Linklayer",
+                TunnelingLayer.TUNNEL_RAW        => "RAW",
+                _                                => "Unknown"
+            };
 
         /// <summary>
         /// translate <see cref="ConnectionType"/> to a readable string
         /// </summary>
         /// <returns>the string representation of the enum value</returns>
         public static String ToDescription(this ConnectionType connectionType)
-        {
-            switch (connectionType)
+            => connectionType switch
             {
-                case ConnectionType.DeviceManagement:
-                    return "Device Management";
-                case ConnectionType.RemConf:
-                    return "Remote Configuration";
-                case ConnectionType.RemLog:
-                    return "Remote Logging";
-                case ConnectionType.Tunnel:
-                    return "Tunneling";
-                default:
-                    return "Unknown";
-            }
-        }
+                ConnectionType.DeviceManagement => "Device Management",
+                ConnectionType.RemConf          => "Remote Configuration",
+                ConnectionType.RemLog           => "Remote Logging",
+                ConnectionType.Tunnel           => "Tunneling",
+                _                               => "Unknown"
+            };
 
         public static string ToDescription(this ErrorCodes ec)
-        {
-            switch (ec)
+            => ec switch
             {
-                case ErrorCodes.NoError: return "Success";
-                // common error codes
-                case ErrorCodes.HostProtocolType:
-                    return "Host protocol not supported";
-                case ErrorCodes.VersionNotSupported:
-                    return "Protocol version not supported";
-                case ErrorCodes.SequenceNumber:
-                    return "Sequence number out of order";
-                // connect response error codes
-                case ErrorCodes.ConnectionType:
-                    return "Connection type not supported by server";
-                case ErrorCodes.ConnectionOption:
-                    return "One or more connection options not supported by server";
-                case ErrorCodes.NoMoreConnections:
-                    return "Server cannot accept new connections. Concurrency maximum reached.";
-                case ErrorCodes.TunnelingLayer:
-                    return "Requested tunneling layer not supported by server";
-                // connection state response error codes
-                case ErrorCodes.ConnectionId:
-                    return "No active connection with specified ID found by server";
-                case ErrorCodes.DataConnection:
-                    return "Error in data connection";
-                case ErrorCodes.KnxConnection:
-                    return "Error in KNX connection";
-                default:
-                    return "Unknown";
-            }
-        }
+                ErrorCodes.NoError             => "Success",
+                ErrorCodes.HostProtocolType    => "Host protocol not supported",
+                ErrorCodes.VersionNotSupported => "Protocol version not supported",
+                ErrorCodes.SequenceNumber      => "Sequence number out of order",
+                ErrorCodes.ConnectionType      => "Connection type not supported by server",
+                ErrorCodes.ConnectionOption    => "One or more connection options not supported by server",
+                ErrorCodes.NoMoreConnections   => "Server cannot accept new connections. Concurrency maximum reached.",
+                ErrorCodes.TunnelingLayer      => "Requested tunneling layer not supported by server",
+                ErrorCodes.ConnectionId        => "No active connection with specified ID found by server",
+                ErrorCodes.DataConnection      => "Error in data connection",
+                ErrorCodes.KnxConnection       => "Error in KNX connection",
+                _                              => "Unknown"
+            };
     }
 }

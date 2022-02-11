@@ -22,20 +22,35 @@
     combination.
 */
 
-namespace Tiveria.Home.Knx.Cemi
+namespace Tiveria.Home.Knx.DeviceManagement
 {
     /// <summary>
     /// Erase codes used when sending a master reset restart apci code. <see cref="ApduType.RestartMasterReset_Request"/>
     /// </summary>
     public enum EraseCode : byte
     {
-        ConfirmedRestart = 0x01,
-        FactoryReset = 0x02,
-        ResetIA = 0x03,
-        ResetAP = 0x04,
-        ResetParam = 0x05,
-        ResetLinks = 0x06,
+        ConfirmedRestart      = 0x01,
+        FactoryReset          = 0x02,
+        ResetIA               = 0x03,
+        ResetAP               = 0x04,
+        ResetParam            = 0x05,
+        ResetLinks            = 0x06,
         FactoryResetwithoutIA = 0x07
+    }
+
+    public static class EraseCodeExtensions
+    {
+        public static string ToDescription(this EraseCode code) => code switch
+        {
+            EraseCode.ConfirmedRestart      => "Confirmed restart. No reset.",
+            EraseCode.FactoryReset          => "Reset the device to the initialy factory state.",
+            EraseCode.ResetIA               => "Reset the device individual adress to the default value.",
+            EraseCode.ResetAP               => "Reset the application program memory of the device.",
+            EraseCode.ResetParam            => "Reset application parameter memory to its defaults.",
+            EraseCode.ResetLinks            => "Reset link information for group objects.",
+            EraseCode.FactoryResetwithoutIA => "Reset the device to the initialy factory state keeping the current individual address.",
+            _                               => throw new NotImplementedException()
+        };
     }
 
 }

@@ -87,6 +87,11 @@ namespace Tiveria.Home.Knx.Primitives
             return RawAddress.GetHashCode() * (AddressType == AddressType.IndividualAddress ? 3 : 94);
         }
 
+        public bool IsBroadcast()
+        {
+            return IsIndividualAddress() && RawAddress == 0;
+        }
+
         /// <summary>
         /// Checks if an address is a <see cref="GroupAddress"/> or a <see cref="IndividualAddress"/>
         /// </summary>

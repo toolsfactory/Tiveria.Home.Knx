@@ -36,7 +36,9 @@ namespace Tiveria.Home.Knx.Datapoint
             {
                 if (element.FieldType == typeof(Int32))
                 {
-                    _values.Add((int)element.GetValue(null), element.Name);
+                    var item = element.GetValue(null);
+                    if (item !=null)
+                        _values.Add((int) item, element.Name);
                 }
             }
         }

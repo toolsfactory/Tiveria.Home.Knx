@@ -23,6 +23,7 @@
 */
 
 using System.Net;
+using Tiveria.Home.Knx.Cemi;
 
 namespace Tiveria.Home.Knx
 {
@@ -46,6 +47,18 @@ namespace Tiveria.Home.Knx
         {
             Timestamp = timestamp;
             Data = data;
+        }
+    }
+
+    public class CemiReceivedArgs : EventArgs
+    {
+        public ICemiMessage Message { get; init; }
+
+        public DateTime Timestamp { get; init; }
+        public CemiReceivedArgs(DateTime timestamp, ICemiMessage message)
+        {
+            Timestamp = timestamp;
+            Message = message;
         }
     }
 }

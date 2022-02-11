@@ -37,7 +37,7 @@ namespace Tiveria.Home.Knx.Datapoint
             _list.Add(dptype.Id, dptype);
         }
 
-        public static IDatapointType GetTypeById(string id)
+        public static IDatapointType? GetTypeById(string id)
         {
             return _list.GetValueOrDefault(id);
         }

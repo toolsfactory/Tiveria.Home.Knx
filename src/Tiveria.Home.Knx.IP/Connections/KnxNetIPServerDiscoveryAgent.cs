@@ -162,7 +162,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             _Servers.Clear();
             foreach (var client in _udpClients)
             {
-                SendSearchMessageAsync(client, generator);
+                _ = SendSearchMessageAsync(client, generator);
             }
         }
 

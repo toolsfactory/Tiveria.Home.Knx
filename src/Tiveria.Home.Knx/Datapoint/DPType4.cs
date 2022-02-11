@@ -46,11 +46,8 @@ namespace Tiveria.Home.Knx.Datapoint
         #region Encoding DPT
         public override byte[] Encode(char value)
         {
-            byte[] bytes = null;
-            if (this == DPT_ASCII)
-                bytes = System.Text.Encoding.ASCII.GetBytes(new char[] { value });
-            else
-                bytes = System.Text.Encoding.GetEncoding("iso-8859-1").GetBytes(new char[] { value });
+            byte[] bytes = (this == DPT_ASCII) ?
+                System.Text.Encoding.ASCII.GetBytes(new char[] { value }) :  System.Text.Encoding.GetEncoding("iso-8859-1").GetBytes(new char[] { value });
 
             if (bytes == null || bytes.Length != 1)
                 throw new ArgumentException();

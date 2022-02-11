@@ -74,7 +74,7 @@ namespace Tiveria.Home.Knx.IP.Structures
         /// Parses the referenced buffer and creates a new CRITunnel Structure from the information.
         /// </summary>
         /// <returns>New instance of CRITunnel</returns>
-        public static CRITunnel Parse(BigEndianBinaryReader reader)
+        public new static CRITunnel Parse(BigEndianBinaryReader reader)
         {
             reader.ReadSizeAndCheck("CRITunnel", STRUCTURE_SIZE);
             var contype = reader.ReadByteEnum<ConnectionType>("CRITunnel.ConnectionType");

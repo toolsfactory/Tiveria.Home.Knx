@@ -35,7 +35,7 @@ namespace Tiveria.Home.Knx.Datapoint
 
         byte[] Encode(object value);
         string DecodeString(byte[] dptData, int offset = 0, bool withUnit = false);
-        object DecodeObject(byte[] dptData, int offset = 0);
+        object? DecodeObject(byte[] dptData, int offset = 0);
 
         bool IsMainCategory(int category);
     }

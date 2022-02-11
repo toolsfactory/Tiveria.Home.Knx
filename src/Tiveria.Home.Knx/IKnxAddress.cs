@@ -52,5 +52,11 @@ namespace Tiveria.Home.Knx
         /// </summary>
         /// <returns>True in case of a <see cref="IndividualAddress"/></returns>
         bool IsIndividualAddress();
+
+        /// <summary>
+        /// Checks whether the provided Address is an <see cref="IndividualAddress"/> for broadcast
+        /// </summary>
+        /// <returns>True in case of a broadcast message</returns>
+        bool IsBroadcast();
     }
 }

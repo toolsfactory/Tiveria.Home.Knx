@@ -74,15 +74,16 @@ namespace Tiveria.Home.Knx.Datapoint
         #endregion
 
         #region standard overwrites
-        public override bool Equals(object obj)
+
+        public override bool Equals(object? obj)
         {
             return Equals(obj as DPType<TValue>);
         }
 
-        public bool Equals(IDatapointType other)
+        public bool Equals(IDatapointType? other)
         {
-            var typedother = (DPType<TValue>)other;
-            return typedother != null && Id == other.Id;
+            var typedother = (DPType<TValue>?)other;
+            return (typedother is not null) && (Id == typedother.Id);
         }
 
         public override int GetHashCode()
@@ -165,12 +166,12 @@ namespace Tiveria.Home.Knx.Datapoint
             return Decode(dptData, offset) + ((withUnit & !String.IsNullOrEmpty(Unit)) ? " " + Unit : "");
         }
 
-        public virtual object DecodeObject(byte[] dptData, int offset = 0)
+        public virtual object? DecodeObject(byte[] dptData, int offset = 0)
         {
             return Decode(dptData, offset);
         }
 
-        public virtual TValue Decode(byte[] dptData, int offset = 0)
+        public virtual TValue? Decode(byte[] dptData, int offset = 0)
         {
             if (DataSize != -1 && (dptData.Length - offset < DataSize))
                 throw KnxBufferSizeException.TooSmall("DPType");
