@@ -24,6 +24,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiveria.Home.Knx.ObjectServ
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{14DE20B1-7238-45B5-8432-A96D825E6447}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tiveria.Home.Knx.DocumentationGenerator", "tools\Tiveria.Home.Knx.DocumentationGenerator\Tiveria.Home.Knx.DocumentationGenerator.csproj", "{30672748-0989-4FC5-8345-5555EA66E40F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,10 @@ Global
 		{14EE05E1-652C-4DB7-AA82-B88B4F4189B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14EE05E1-652C-4DB7-AA82-B88B4F4189B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14EE05E1-652C-4DB7-AA82-B88B4F4189B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30672748-0989-4FC5-8345-5555EA66E40F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30672748-0989-4FC5-8345-5555EA66E40F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30672748-0989-4FC5-8345-5555EA66E40F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30672748-0989-4FC5-8345-5555EA66E40F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

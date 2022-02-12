@@ -42,7 +42,7 @@ namespace Tiveria.Home.Knx
         // replace the IP Address below with your specific router or tunnel interface IP Address.
         // Port should be correct assuming you have a standard setup
 
-        private IP.Connections.RoutingConnection? Con;
+        private IP.Connections.RoutingConnection Con = new IP.Connections.RoutingConnection(new IPEndPoint(Program.LocalIPAddress, KnxNetIPConstants.DefaultPort)) ;
 
         public async Task RunAsync()
          {
@@ -52,8 +52,6 @@ namespace Tiveria.Home.Knx
             Console.TreatControlCAsInput = true;
             ConfigureLogging();
 
-
-            Con = new IP.Connections.RoutingConnection(new IPEndPoint(Program.LocalIPAddress, KnxNetIPConstants.DefaultPort)) ;
             Con.DataReceived += Con_DataReceived;
             Con.FrameReceived += Con_FrameReceived;
             Con.ConnectionStateChanged += Con_StateChanged;
@@ -101,12 +99,12 @@ namespace Tiveria.Home.Knx
 //            await Con.SendCemiFrameAsync(cemi, true);
         }
 
-        private void Con_StateChanged(object sender, ConnectionStateChangedEventArgs e)
+        private void Con_StateChanged(object? sender, ConnectionStateChangedEventArgs e)
         {
             Console.WriteLine(" == Connection state changed == " + e.ConnectionState.ToString());
         }
 
-        private void Con_FrameReceived(object sender, FrameReceivedEventArgs e)
+        private void Con_FrameReceived(object? sender, FrameReceivedEventArgs e)
         {
             //            Console.WriteLine($"Frame received. Type: {e.Frame.ServiceType}");
             if (e.Frame.FrameHeader.ServiceTypeIdentifier == ServiceTypeIdentifier.RoutingIndication)
@@ -173,9 +171,9 @@ namespace Tiveria.Home.Knx
             }
         }
 
-        private void Con_DataReceived(object sender, DataReceivedArgs e)
+        private void Con_DataReceived(object? sender, DataReceivedArgs e)
         {
-//            Console.WriteLine(e.Data.ToHexString());
+            Console.WriteLine("Received: " + BitConverter.ToString(e.Data));
         }
 
         public IPAddress GetLocalIPAddress()

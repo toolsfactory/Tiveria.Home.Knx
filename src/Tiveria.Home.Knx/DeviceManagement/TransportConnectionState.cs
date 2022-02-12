@@ -22,28 +22,18 @@
     combination.
 */
 
-using System.Net;
-
-namespace Tiveria.Home.Knx.IP.Connections
+namespace Tiveria.Home.Knx.DeviceManagement
 {
     /// <summary>
-    /// Arguments class used by <see cref="KnxNetIPServerDiscoveryAgent"/> in case a server responded
+    /// see Chapter 5.1 of 3.3.4 Transport Layer Communication in Knx Specs
     /// </summary>
-    public class ServerRespondedEventArgs : EventArgs
+    public enum TransportConnectionState
     {
-        /// <summary>
-        /// Details about the server
-        /// </summary>
-        public KnxNetIPServerDescription Server { get; init; }
-        /// <summary>
-        /// The local IP endpoint where the discovery message was sent and the server responded
-        /// </summary>
-        public IPEndPoint ReceivingEndpoint { get; init; }
-        public ServerRespondedEventArgs(IPEndPoint receivingEndpoint, KnxNetIPServerDescription server)
-        {
-            ReceivingEndpoint = receivingEndpoint;
-            Server = server;
-        }
+        Closed,
+        OpenIdle,
+        OpenWait,
+        Connecting
     }
+
 
 }

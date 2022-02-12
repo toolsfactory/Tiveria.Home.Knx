@@ -33,6 +33,6 @@ namespace Tiveria.Home.Knx.IP.Connections
     /// <param name="ServiceEndpoint">The IP Endpoint at which the server can be reached</param>
     /// <param name="DeviceInfoDIB">Detailed device informations</param>
     /// <param name="ServiceFamiliesDIB">Supported service families</param>
-    public record KnxNetIPServer (IPEndPoint ServiceEndpoint, DeviceInfoDIB DeviceInfoDIB, ServiceFamiliesDIB ServiceFamiliesDIB);
+    public record KnxNetIPServerDescription (IPEndPoint ServiceEndpoint, DeviceInfoDIB DeviceInfoDIB, ServiceFamiliesDIB ServiceFamiliesDIB);
 
 }

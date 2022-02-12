@@ -99,6 +99,7 @@ namespace Tiveria.Home.Knx.IP.Connections
                     ConnectionState = KnxConnectionState.Invalid;
                     return false;
                 }
+                _localEndpoint = (IPEndPoint) _udpClient.Client.LocalEndPoint!;
                 var result = _connectEvent.WaitOne(_config.ConnectTimeout);
                 if (!result) ConnectionState = KnxConnectionState.Invalid;
                 return result;
@@ -176,7 +177,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         private readonly ManualResetEvent _closeEvent = new ManualResetEvent(false);
         private readonly ManualResetEventSlim _ackEvent = new ManualResetEventSlim(false);
         private readonly ManualResetEvent _connectEvent = new ManualResetEvent(false);
-        private readonly IPEndPoint _localEndpoint;
+        private IPEndPoint _localEndpoint;
         private readonly IPEndPoint _remoteControlEndpoint;
         private readonly ILogger<TunnelingConnection> _logger;
         private readonly UdpClient _udpClient;

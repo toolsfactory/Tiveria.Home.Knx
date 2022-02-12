@@ -41,7 +41,7 @@ namespace Tiveria.Home.Knx
     {
         // replace the IP Address below with your specific router or tunnel interface IP Address.
         // Port should be correct assuming you have a standard setup
-        private IP.Connections.TunnelingConnection? Con;
+        private IP.Connections.TunnelingConnection Con = new IP.Connections.TunnelingConnectionBuilder(Program.LocalIPAddress, Program.GatewayIPAddress, Program.GatewayPort).Build();
 
         public async Task RunAsync()
         {
@@ -51,7 +51,6 @@ namespace Tiveria.Home.Knx
             Console.TreatControlCAsInput = true;
             ConfigureLogging();
 
-            Con = new IP.Connections.TunnelingConnectionBuilder(Program.LocalIPAddress, Program.GatewayIPAddress, Program.GatewayPort).Build();
             Con.DataReceived += Con_DataReceived!;
             Con.FrameReceived += Con_FrameReceived!;
             Con.ConnectionStateChanged += Con_StateChanged!;
@@ -178,7 +177,7 @@ namespace Tiveria.Home.Knx
 
         private void Con_DataReceived(object sender, DataReceivedArgs e)
         {
-            Console.WriteLine(BitConverter.ToString(e.Data));
+            Console.WriteLine("Received: " + BitConverter.ToString(e.Data));
         }
 
         public IPAddress GetLocalIPAddress()

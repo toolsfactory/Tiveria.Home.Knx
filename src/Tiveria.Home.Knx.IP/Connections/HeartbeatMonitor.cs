@@ -122,12 +122,14 @@ namespace Tiveria.Home.Knx.IP.Connections
                         break;
                     for (var i = 0; i < _retries; i++)
                     {
+                        Console.WriteLine($"Sending Heartbeat. Try {i + 1} of {_retries}.");
                         SendHeartbeat();
+                        Console.WriteLine("Sent.");
                         int waitResult = WaitForHearbeat();
+                        Console.WriteLine($"WaitResult: {waitResult}.");
                         receivedFlag = waitResult == 0;
                         if (waitResult == WaitHandle.WaitTimeout)
                         { }
-                            //_logger.Debug("Hartbeat not received in retry " + i);
                         else
                             break;
                     }

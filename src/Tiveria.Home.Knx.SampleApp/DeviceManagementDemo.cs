@@ -28,16 +28,12 @@ using Tiveria.Home.Knx.Primitives;
 using Tiveria.Home.Knx.Cemi;
 using Tiveria.Home.Knx.IP.Services;
 using Tiveria.Home.Knx.IP.Structures;
+using Spectre.Console;
 
 namespace Tiveria.Home.Knx
 {
     public class DeviceManagementDemo
     {
-        #region Private Fields
-
-        private IP.Connections.TunnelingConnection? Con;
-
-        #endregion Private Fields
 
         #region Public Methods
 
@@ -56,33 +52,59 @@ namespace Tiveria.Home.Knx
 
         public async Task RunAsync()
         {
-            Con = new IP.Connections.TunnelingConnection(Program.GatewayIPAddress, Program.GatewayPort, GetLocalIPAddress(), 55555);
+            Console.Clear();
+            AnsiConsole.MarkupLine("[underline green]  DeviceManagement Demo  [/]");
+            Console.WriteLine();
+            Console.WriteLine("Begin.");
+
+            Console.WriteLine("Connecting to IP Interface.");
+            var Con = new IP.Connections.TunnelingConnectionBuilder(Program.LocalIPAddress, Program.GatewayIPAddress, Program.GatewayPort).Build();
             await Con.ConnectAsync();
 
+            Console.WriteLine("Connecting to device.");
             var mngt = new IP.DeviceManagement.TunnelingManagementClient(Con, IndividualAddress.Parse("1.1.3"));
             await mngt.ConnectAsync();
-            await mngt.ReadDeviceDescriptorAsync();
-            await mngt.ReadPropertyAsync(5, 1);
-            await mngt.ReadPropertyAsync(6, 1);
-            await mngt.ReadPropertyAsync(0, 15);
-            var mem = await mngt.ReadMemoryAsync(0x170, 12);
-            Console.WriteLine("Memory read: {0}", mem != null ? BitConverter.ToString(mem) : "none");
 
-            var data = await mngt.ReadPropertyAsync(0, 56);
-            if (data != null)
-                Console.WriteLine("zz: " + BitConverter.ToString(data));
-            else
-                Console.WriteLine("zz: Null returned");
+            Console.WriteLine("Reading device descriptor.");
+            var desc = await mngt.ReadDeviceDescriptorAsync();
+            Console.WriteLine("* Device Descriptor read: {0}", desc != null ? BitConverter.ToString(desc) : "none");
 
+            Console.WriteLine("Reading property description (APDULength).");
             var propdesc = await mngt.ReadPropertyDescriptionAsync(0, 56);
             if (propdesc != null)
-                Console.WriteLine($"Type: {propdesc.PropertyType}, Writeable: {propdesc.WriteEnabled}, WriteLevel: {propdesc.WriteLevel}, ReadLevel: {propdesc.ReadLevel}");
+                Console.WriteLine($"* Type: {propdesc.PropertyType}, Writeable: {propdesc.WriteEnabled}, WriteLevel: {propdesc.WriteLevel}, ReadLevel: {propdesc.ReadLevel}");
             else
-                Console.WriteLine("**: Null returned");
+                Console.WriteLine("* Null returned");
+
+
+            Console.WriteLine("Reading property 0-56 (APDULength).");
+            var data = await mngt.ReadPropertyAsync(0, 56);
+            Console.WriteLine("* Prop 0-56: " + data != null ? BitConverter.ToString(data) : "Null returned");
+
+            /*
+            Console.WriteLine("Reading property 5-1.");
+            data = await mngt.ReadPropertyAsync(5, 1);
+            Console.WriteLine("* Prop 5-1: " + data != null ? BitConverter.ToString(data) : "Null returned");
+
+            Console.WriteLine("Reading property 6-1.");
+            data = await mngt.ReadPropertyAsync(6, 1);
+            Console.WriteLine("* Prop 6-1: " + data != null ? BitConverter.ToString(data) : "Null returned");
+
+            Console.WriteLine("Reading property 0-15.");
+            data = await mngt.ReadPropertyAsync(0, 15);
+            Console.WriteLine("* Prop 0-15: " + data != null ? BitConverter.ToString(data) : "Null returned");
+            */
+            
+            Console.WriteLine("Reading Memory.");
+            var mem = await mngt.ReadMemoryAsync(0x170, 12);
+            Console.WriteLine("* Memory read: {0}", mem != null ? BitConverter.ToString(mem) : "none");
 
             await Task.Delay(1000);
+
+            Console.WriteLine("Disconnecting.");
             await mngt.DisconnectAsync();
             await Con.DisconnectAsync();
+            Console.WriteLine("Done.");
             Console.ReadLine();
         }
 

@@ -80,16 +80,23 @@ namespace Tiveria.Home.Knx.IP.Connections
             {
                 while (!_cancellationTokenSource.Token.IsCancellationRequested)
                 {
-                    try
-                    {
-                        var receivedResults = await _client.ReceiveAsync()
+                try
+                {
+                    var receivedResults = await _client.ReceiveAsync()
                                                            .WithCancellation(_cancellationTokenSource.Token)
                                                            .ConfigureAwait(false);
+                    if ((receivedResults.Buffer[2] == 0x02) && (receivedResults.Buffer[3] == 0x08))
+                    {
+                            Console.WriteLine("*************StatusResponse");
+                    }
+
                         OnPacketReceived(receivedResults.RemoteEndPoint, (IPEndPoint)_client.Client.LocalEndPoint!, receivedResults.Buffer);
                         TryParseKnxFrame(receivedResults.RemoteEndPoint, (IPEndPoint)_client.Client.LocalEndPoint!, receivedResults.Buffer);
                     }
-                    catch
-                    { }
+                    catch (Exception ex)
+                    { 
+                        Console.WriteLine(ex);
+                    }
                 }
                 _running = false;
             });
@@ -100,6 +107,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             if (!KnxNetIPFrame.TryParse(buffer, out var frame))
             {
                 // ToDo: Add errorhandling for frames that could not be parsed
+                Console.WriteLine("Parsing of packet failed: "+ BitConverter.ToString(buffer));
                 return;
             }
             OnKnxFrameReceived(remoteEndPoint, receiver, frame!);

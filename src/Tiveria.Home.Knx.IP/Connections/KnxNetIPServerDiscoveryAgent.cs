@@ -42,7 +42,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         /// <summary>
         /// List of Knx interfaces and routers that responded on which IP interface
         /// </summary>
-        public IReadOnlyList<KeyValuePair<IPAddress, KnxNetIPServer>> Servers => _Servers;
+        public IReadOnlyList<KeyValuePair<IPAddress, KnxNetIPServerDescription>> Servers => _Servers;
 
         /// <summary>
         /// Occurs when a SearchResponse Frame is received
@@ -121,7 +121,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         #region private members
         private readonly List<UdpClient> _udpClients = new();
         private readonly List<UdpPacketReceiver> _udpReceivers = new();
-        private readonly List<KeyValuePair<IPAddress, KnxNetIPServer>> _Servers = new();
+        private readonly List<KeyValuePair<IPAddress, KnxNetIPServerDescription>> _Servers = new();
         #endregion
 
         #region private implementations
@@ -221,12 +221,12 @@ namespace Tiveria.Home.Knx.IP.Connections
                 return;
 
             var sf = ((SearchResponseService)frame!.Service);
-            var intf = new KnxNetIPServer(new IPEndPoint(sf.ServiceEndpoint.Ip, sf.ServiceEndpoint.Port), sf.DeviceInfoDIB, sf.ServiceFamiliesDIB);
-            _Servers.Add(new KeyValuePair<IPAddress, KnxNetIPServer>(receiver.Address, intf));
+            var intf = new KnxNetIPServerDescription(new IPEndPoint(sf.ServiceEndpoint.Ip, sf.ServiceEndpoint.Port), sf.DeviceInfoDIB, sf.ServiceFamiliesDIB);
+            _Servers.Add(new KeyValuePair<IPAddress, KnxNetIPServerDescription>(receiver.Address, intf));
             OnServerResponded(receiver, intf);
         }
 
-        protected void OnServerResponded(IPEndPoint receiver, KnxNetIPServer server)
+        protected void OnServerResponded(IPEndPoint receiver, KnxNetIPServerDescription server)
         {
             ServerResponded?.Invoke(this, new ServerRespondedEventArgs(receiver, server));
         }
