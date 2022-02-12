@@ -1,0 +1,1135 @@
+﻿toc:
+  - name: Tiveria.Home.Knx.IP
+    link: toc_/Tiveria.Home.Knx.IP
+    subfolderitems:
+    - name: Tiveria.Home.Knx.IP
+      link: toc_/Tiveria.Home.Knx.IPNamespace
+      subfolderitems:
+      - name: PacketReceivedDelegate
+        link: toc_/Tiveria.Home.Knx.IP/PacketReceivedDelegate
+      - name: KnxFrameReceivedDelegate
+        link: toc_/Tiveria.Home.Knx.IP/KnxFrameReceivedDelegate
+      - name: FrameReceivedEventArgs
+        link: toc_/Tiveria.Home.Knx.IP/FrameReceivedEventArgs
+        subfolderitems:
+        - name: FrameReceivedEventArgs
+          link: toc_/Tiveria.Home.Knx.IP/FrameReceivedEventArgs/FrameReceivedEventArgs
+        - name: Frame
+          link: toc_/Tiveria.Home.Knx.IP/FrameReceivedEventArgs/Frame
+        - name: TimeStamp
+          link: toc_/Tiveria.Home.Knx.IP/FrameReceivedEventArgs/TimeStamp
+        - name: Handled
+          link: toc_/Tiveria.Home.Knx.IP/FrameReceivedEventArgs/Handled
+      - name: IKnxNetIPConnection
+        link: toc_/Tiveria.Home.Knx.IP/IKnxNetIPConnection
+        subfolderitems:
+        - name: SendAsync
+          link: toc_/Tiveria.Home.Knx.IP/IKnxNetIPConnection/SendAsync
+        - name: RemoteEndpoint
+          link: toc_/Tiveria.Home.Knx.IP/IKnxNetIPConnection/RemoteEndpoint
+        - name: FrameReceived
+          link: toc_/Tiveria.Home.Knx.IP/IKnxNetIPConnection/FrameReceived
+      - name: IKnxNetIPFrame
+        link: toc_/Tiveria.Home.Knx.IP/IKnxNetIPFrame
+        subfolderitems:
+        - name: FrameHeader
+          link: toc_/Tiveria.Home.Knx.IP/IKnxNetIPFrame/FrameHeader
+        - name: Service
+          link: toc_/Tiveria.Home.Knx.IP/IKnxNetIPFrame/Service
+      - name: IKnxNetIPService
+        link: toc_/Tiveria.Home.Knx.IP/IKnxNetIPService
+        subfolderitems:
+        - name: Size
+          link: toc_/Tiveria.Home.Knx.IP/IKnxNetIPService/Size
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP/IKnxNetIPService/ServiceTypeIdentifier
+      - name: IKnxNetIPServiceSerializer
+        link: toc_/Tiveria.Home.Knx.IP/IKnxNetIPServiceSerializer
+        subfolderitems:
+        - name: Deserialize
+          link: toc_/Tiveria.Home.Knx.IP/IKnxNetIPServiceSerializer/Deserialize
+        - name: Serialize
+          link: toc_/Tiveria.Home.Knx.IP/IKnxNetIPServiceSerializer/Serialize
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP/IKnxNetIPServiceSerializer/ServiceTypeIdentifier
+        - name: ServiceType
+          link: toc_/Tiveria.Home.Knx.IP/IKnxNetIPServiceSerializer/ServiceType
+      - name: IKnxNetIPServiceSerializer<T>
+        link: toc_/Tiveria.Home.Knx.IP/IKnxNetIPServiceSerializer-1
+        subfolderitems:
+        - name: TryDeserialize
+          link: toc_/Tiveria.Home.Knx.IP/IKnxNetIPServiceSerializer-1/TryDeserialize
+        - name: Deserialize
+          link: toc_/Tiveria.Home.Knx.IP/IKnxNetIPServiceSerializer-1/Deserialize
+        - name: Serialize
+          link: toc_/Tiveria.Home.Knx.IP/IKnxNetIPServiceSerializer-1/Serialize
+      - name: KnxNetIPConstants
+        link: toc_/Tiveria.Home.Knx.IP/KnxNetIPConstants
+        subfolderitems:
+        - name: DefaultBroadcastAddress
+          link: toc_/Tiveria.Home.Knx.IP/KnxNetIPConstants/DefaultBroadcastAddress
+        - name: DefaultBroadcastEndpoint
+          link: toc_/Tiveria.Home.Knx.IP/KnxNetIPConstants/DefaultBroadcastEndpoint
+        - name: DefaultBroadcastPort
+          link: toc_/Tiveria.Home.Knx.IP/KnxNetIPConstants/DefaultBroadcastPort
+        - name: DefaultPort
+          link: toc_/Tiveria.Home.Knx.IP/KnxNetIPConstants/DefaultPort
+        - name: ResponseTimeoutMS
+          link: toc_/Tiveria.Home.Knx.IP/KnxNetIPConstants/ResponseTimeoutMS
+      - name: KnxNetIPFrame
+        link: toc_/Tiveria.Home.Knx.IP/KnxNetIPFrame
+        subfolderitems:
+        - name: ToBytes
+          link: toc_/Tiveria.Home.Knx.IP/KnxNetIPFrame/ToBytes
+        - name: Write
+          link: toc_/Tiveria.Home.Knx.IP/KnxNetIPFrame/Write
+        - name: Parse
+          link: toc_/Tiveria.Home.Knx.IP/KnxNetIPFrame/Parse
+        - name: TryParse
+          link: toc_/Tiveria.Home.Knx.IP/KnxNetIPFrame/TryParse
+        - name: KnxNetIPFrame
+          link: toc_/Tiveria.Home.Knx.IP/KnxNetIPFrame/KnxNetIPFrame
+        - name: Size
+          link: toc_/Tiveria.Home.Knx.IP/KnxNetIPFrame/Size
+        - name: FrameHeader
+          link: toc_/Tiveria.Home.Knx.IP/KnxNetIPFrame/FrameHeader
+        - name: Service
+          link: toc_/Tiveria.Home.Knx.IP/KnxNetIPFrame/Service
+      - name: KnxNetIPServiceSerializerFactory
+        link: toc_/Tiveria.Home.Knx.IP/KnxNetIPServiceSerializerFactory
+        subfolderitems:
+        - name: Register
+          link: toc_/Tiveria.Home.Knx.IP/KnxNetIPServiceSerializerFactory/Register
+        - name: Create
+          link: toc_/Tiveria.Home.Knx.IP/KnxNetIPServiceSerializerFactory/Create
+        - name: Instance
+          link: toc_/Tiveria.Home.Knx.IP/KnxNetIPServiceSerializerFactory/Instance
+      - name: KnxNetIPVersion
+        link: toc_/Tiveria.Home.Knx.IP/KnxNetIPVersion
+        subfolderitems:
+        - name: IsSupportedVersion
+          link: toc_/Tiveria.Home.Knx.IP/KnxNetIPVersion/IsSupportedVersion
+        - name: FindSupportedVersion
+          link: toc_/Tiveria.Home.Knx.IP/KnxNetIPVersion/FindSupportedVersion
+        - name: KnxNetIPVersion
+          link: toc_/Tiveria.Home.Knx.IP/KnxNetIPVersion/KnxNetIPVersion
+        - name: Name
+          link: toc_/Tiveria.Home.Knx.IP/KnxNetIPVersion/Name
+        - name: Identifier
+          link: toc_/Tiveria.Home.Knx.IP/KnxNetIPVersion/Identifier
+        - name: HeaderLength
+          link: toc_/Tiveria.Home.Knx.IP/KnxNetIPVersion/HeaderLength
+        - name: VersionMajor
+          link: toc_/Tiveria.Home.Knx.IP/KnxNetIPVersion/VersionMajor
+        - name: VersionMinor
+          link: toc_/Tiveria.Home.Knx.IP/KnxNetIPVersion/VersionMinor
+        - name: VersionString
+          link: toc_/Tiveria.Home.Knx.IP/KnxNetIPVersion/VersionString
+        - name: Version10
+          link: toc_/Tiveria.Home.Knx.IP/KnxNetIPVersion/Version10
+        - name: Version20
+          link: toc_/Tiveria.Home.Knx.IP/KnxNetIPVersion/Version20
+        - name: SupportedVersions
+          link: toc_/Tiveria.Home.Knx.IP/KnxNetIPVersion/SupportedVersions
+        - name: DefaultVersion
+          link: toc_/Tiveria.Home.Knx.IP/KnxNetIPVersion/DefaultVersion
+    - name: Tiveria.Home.Knx.IP.Connections
+      link: toc_/Tiveria.Home.Knx.IP.ConnectionsNamespace
+      subfolderitems:
+      - name: IPConnectionBase
+        link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase
+        subfolderitems:
+        - name: Finalize
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/Finalize
+        - name: ConnectAsync
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/ConnectAsync
+        - name: DisconnectAsync
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/DisconnectAsync
+        - name: SendAsync
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/SendAsync
+        - name: SendCemiAsync
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/SendCemiAsync
+        - name: OnStateChanged
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/OnStateChanged
+        - name: OnFrameReceived
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/OnFrameReceived
+        - name: OnCemiReceived
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/OnCemiReceived
+        - name: OnDataReceived
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/OnDataReceived
+        - name: OnConnected
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/OnConnected
+        - name: OnDisConnected
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/OnDisConnected
+        - name: ResetRcvSeqCounter
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/ResetRcvSeqCounter
+        - name: IncRcvSeqCounter
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/IncRcvSeqCounter
+        - name: ResetSndSeqCounter
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/ResetSndSeqCounter
+        - name: IncSndSeqCounter
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/IncSndSeqCounter
+        - name: Dispose
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/Dispose
+        - name: GetConnectionName
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/GetConnectionName
+        - name: IPConnectionBase
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/IPConnectionBase
+        - name: RemoteEndpoint
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/RemoteEndpoint
+        - name: ConnectionName
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/ConnectionName
+        - name: ChannelId
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/ChannelId
+        - name: ConnectionState
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/ConnectionState
+        - name: RcvSeqCounter
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/RcvSeqCounter
+        - name: SndSeqCounter
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/SndSeqCounter
+        - name: ConnectionStateChanged
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/ConnectionStateChanged
+        - name: FrameReceived
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/FrameReceived
+        - name: DataReceived
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/DataReceived
+        - name: Connected
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/Connected
+        - name: DisConnected
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/DisConnected
+        - name: CemiReceived
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/CemiReceived
+        - name: _channelId
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionBase/_channelId
+      - name: IPConnectionConfiguration
+        link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionConfiguration
+        subfolderitems:
+        - name: IPConnectionConfiguration
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionConfiguration/IPConnectionConfiguration
+        - name: ResyncSequenceNumbers
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionConfiguration/ResyncSequenceNumbers
+        - name: NatAware
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionConfiguration/NatAware
+        - name: SendRepeats
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionConfiguration/SendRepeats
+        - name: AcknowledgeTimeout
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionConfiguration/AcknowledgeTimeout
+        - name: SendTimeout
+          link: toc_/Tiveria.Home.Knx.IP.Connections/IPConnectionConfiguration/SendTimeout
+      - name: KnxNetIPServerDescription
+        link: toc_/Tiveria.Home.Knx.IP.Connections/KnxNetIPServerDescription
+        subfolderitems:
+        - name: KnxNetIPServerDescription
+          link: toc_/Tiveria.Home.Knx.IP.Connections/KnxNetIPServerDescription/KnxNetIPServerDescription
+        - name: ServiceEndpoint
+          link: toc_/Tiveria.Home.Knx.IP.Connections/KnxNetIPServerDescription/ServiceEndpoint
+        - name: DeviceInfoDIB
+          link: toc_/Tiveria.Home.Knx.IP.Connections/KnxNetIPServerDescription/DeviceInfoDIB
+        - name: ServiceFamiliesDIB
+          link: toc_/Tiveria.Home.Knx.IP.Connections/KnxNetIPServerDescription/ServiceFamiliesDIB
+      - name: KnxNetIPServerDiscoveryAgent
+        link: toc_/Tiveria.Home.Knx.IP.Connections/KnxNetIPServerDiscoveryAgent
+        subfolderitems:
+        - name: DiscoverAsync
+          link: toc_/Tiveria.Home.Knx.IP.Connections/KnxNetIPServerDiscoveryAgent/DiscoverAsync
+        - name: DiscoverByMacAsync
+          link: toc_/Tiveria.Home.Knx.IP.Connections/KnxNetIPServerDiscoveryAgent/DiscoverByMacAsync
+        - name: DiscoverInProgrammingModeAsync
+          link: toc_/Tiveria.Home.Knx.IP.Connections/KnxNetIPServerDiscoveryAgent/DiscoverInProgrammingModeAsync
+        - name: DiscoverByServiceAsync
+          link: toc_/Tiveria.Home.Knx.IP.Connections/KnxNetIPServerDiscoveryAgent/DiscoverByServiceAsync
+        - name: DiscoverByDIBFilterAsync
+          link: toc_/Tiveria.Home.Knx.IP.Connections/KnxNetIPServerDiscoveryAgent/DiscoverByDIBFilterAsync
+        - name: OnServerResponded
+          link: toc_/Tiveria.Home.Knx.IP.Connections/KnxNetIPServerDiscoveryAgent/OnServerResponded
+        - name: KnxNetIPServerDiscoveryAgent
+          link: toc_/Tiveria.Home.Knx.IP.Connections/KnxNetIPServerDiscoveryAgent/KnxNetIPServerDiscoveryAgent
+        - name: Servers
+          link: toc_/Tiveria.Home.Knx.IP.Connections/KnxNetIPServerDiscoveryAgent/Servers
+        - name: ServerResponded
+          link: toc_/Tiveria.Home.Knx.IP.Connections/KnxNetIPServerDiscoveryAgent/ServerResponded
+      - name: RoutingConnection
+        link: toc_/Tiveria.Home.Knx.IP.Connections/RoutingConnection
+        subfolderitems:
+        - name: ConnectAsync
+          link: toc_/Tiveria.Home.Knx.IP.Connections/RoutingConnection/ConnectAsync
+        - name: DisconnectAsync
+          link: toc_/Tiveria.Home.Knx.IP.Connections/RoutingConnection/DisconnectAsync
+        - name: SendAsync
+          link: toc_/Tiveria.Home.Knx.IP.Connections/RoutingConnection/SendAsync
+        - name: SendCemiAsync
+          link: toc_/Tiveria.Home.Knx.IP.Connections/RoutingConnection/SendCemiAsync
+        - name: Dispose
+          link: toc_/Tiveria.Home.Knx.IP.Connections/RoutingConnection/Dispose
+        - name: GetConnectionName
+          link: toc_/Tiveria.Home.Knx.IP.Connections/RoutingConnection/GetConnectionName
+        - name: RoutingConnection
+          link: toc_/Tiveria.Home.Knx.IP.Connections/RoutingConnection/RoutingConnection
+      - name: ServerRespondedEventArgs
+        link: toc_/Tiveria.Home.Knx.IP.Connections/ServerRespondedEventArgs
+        subfolderitems:
+        - name: ServerRespondedEventArgs
+          link: toc_/Tiveria.Home.Knx.IP.Connections/ServerRespondedEventArgs/ServerRespondedEventArgs
+        - name: Server
+          link: toc_/Tiveria.Home.Knx.IP.Connections/ServerRespondedEventArgs/Server
+        - name: ReceivingEndpoint
+          link: toc_/Tiveria.Home.Knx.IP.Connections/ServerRespondedEventArgs/ReceivingEndpoint
+      - name: TunnelingConnection
+        link: toc_/Tiveria.Home.Knx.IP.Connections/TunnelingConnection
+        subfolderitems:
+        - name: ConnectAsync
+          link: toc_/Tiveria.Home.Knx.IP.Connections/TunnelingConnection/ConnectAsync
+        - name: DisconnectAsync
+          link: toc_/Tiveria.Home.Knx.IP.Connections/TunnelingConnection/DisconnectAsync
+        - name: SendAsync
+          link: toc_/Tiveria.Home.Knx.IP.Connections/TunnelingConnection/SendAsync
+        - name: SendCemiAsync
+          link: toc_/Tiveria.Home.Knx.IP.Connections/TunnelingConnection/SendCemiAsync
+        - name: GetConnectionName
+          link: toc_/Tiveria.Home.Knx.IP.Connections/TunnelingConnection/GetConnectionName
+        - name: Dispose
+          link: toc_/Tiveria.Home.Knx.IP.Connections/TunnelingConnection/Dispose
+        - name: TunnelingConnection
+          link: toc_/Tiveria.Home.Knx.IP.Connections/TunnelingConnection/TunnelingConnection
+        - name: ConnectionType
+          link: toc_/Tiveria.Home.Knx.IP.Connections/TunnelingConnection/ConnectionType
+      - name: TunnelingConnectionBuilder
+        link: toc_/Tiveria.Home.Knx.IP.Connections/TunnelingConnectionBuilder
+        subfolderitems:
+        - name: WithSendTimeout
+          link: toc_/Tiveria.Home.Knx.IP.Connections/TunnelingConnectionBuilder/WithSendTimeout
+        - name: WithAcknowledgeTimeout
+          link: toc_/Tiveria.Home.Knx.IP.Connections/TunnelingConnectionBuilder/WithAcknowledgeTimeout
+        - name: WithSendRepeats
+          link: toc_/Tiveria.Home.Knx.IP.Connections/TunnelingConnectionBuilder/WithSendRepeats
+        - name: WithNatAwareness
+          link: toc_/Tiveria.Home.Knx.IP.Connections/TunnelingConnectionBuilder/WithNatAwareness
+        - name: WithResyncSequenceNumbers
+          link: toc_/Tiveria.Home.Knx.IP.Connections/TunnelingConnectionBuilder/WithResyncSequenceNumbers
+        - name: WithBusMonitorMode
+          link: toc_/Tiveria.Home.Knx.IP.Connections/TunnelingConnectionBuilder/WithBusMonitorMode
+        - name: WithNormalMode
+          link: toc_/Tiveria.Home.Knx.IP.Connections/TunnelingConnectionBuilder/WithNormalMode
+        - name: WithLogger
+          link: toc_/Tiveria.Home.Knx.IP.Connections/TunnelingConnectionBuilder/WithLogger
+        - name: Build
+          link: toc_/Tiveria.Home.Knx.IP.Connections/TunnelingConnectionBuilder/Build
+        - name: TunnelingConnectionBuilder
+          link: toc_/Tiveria.Home.Knx.IP.Connections/TunnelingConnectionBuilder/TunnelingConnectionBuilder
+      - name: TunnelingConnectionConfiguration
+        link: toc_/Tiveria.Home.Knx.IP.Connections/TunnelingConnectionConfiguration
+        subfolderitems:
+        - name: TunnelingConnectionConfiguration
+          link: toc_/Tiveria.Home.Knx.IP.Connections/TunnelingConnectionConfiguration/TunnelingConnectionConfiguration
+        - name: UseBusMonitorMode
+          link: toc_/Tiveria.Home.Knx.IP.Connections/TunnelingConnectionConfiguration/UseBusMonitorMode
+        - name: ConnectTimeout
+          link: toc_/Tiveria.Home.Knx.IP.Connections/TunnelingConnectionConfiguration/ConnectTimeout
+      - name: UdpPacketReceiver
+        link: toc_/Tiveria.Home.Knx.IP.Connections/UdpPacketReceiver
+        subfolderitems:
+        - name: Start
+          link: toc_/Tiveria.Home.Knx.IP.Connections/UdpPacketReceiver/Start
+        - name: Stop
+          link: toc_/Tiveria.Home.Knx.IP.Connections/UdpPacketReceiver/Stop
+        - name: UdpPacketReceiver
+          link: toc_/Tiveria.Home.Knx.IP.Connections/UdpPacketReceiver/UdpPacketReceiver
+        - name: Running
+          link: toc_/Tiveria.Home.Knx.IP.Connections/UdpPacketReceiver/Running
+    - name: Tiveria.Home.Knx.IP.DeviceManagement
+      link: toc_/Tiveria.Home.Knx.IP.DeviceManagementNamespace
+      subfolderitems:
+      - name: TunnelingManagementClient
+        link: toc_/Tiveria.Home.Knx.IP.DeviceManagement/TunnelingManagementClient
+        subfolderitems:
+        - name: TunnelingManagementClient
+          link: toc_/Tiveria.Home.Knx.IP.DeviceManagement/TunnelingManagementClient/TunnelingManagementClient
+      - name: TransportLayer
+        link: toc_/Tiveria.Home.Knx.IP.DeviceManagement/TransportLayer
+        subfolderitems:
+        - name: BroadcastAsync
+          link: toc_/Tiveria.Home.Knx.IP.DeviceManagement/TransportLayer/BroadcastAsync
+        - name: ConnectAsync
+          link: toc_/Tiveria.Home.Knx.IP.DeviceManagement/TransportLayer/ConnectAsync
+        - name: DisconnectAsync
+          link: toc_/Tiveria.Home.Knx.IP.DeviceManagement/TransportLayer/DisconnectAsync
+        - name: InitConnection
+          link: toc_/Tiveria.Home.Knx.IP.DeviceManagement/TransportLayer/InitConnection
+        - name: SendControlCemiAsync
+          link: toc_/Tiveria.Home.Knx.IP.DeviceManagement/TransportLayer/SendControlCemiAsync
+        - name: SendAsync
+          link: toc_/Tiveria.Home.Knx.IP.DeviceManagement/TransportLayer/SendAsync
+        - name: GetNextSequenceNumber
+          link: toc_/Tiveria.Home.Knx.IP.DeviceManagement/TransportLayer/GetNextSequenceNumber
+        - name: SendTpciAckFrameAsync
+          link: toc_/Tiveria.Home.Knx.IP.DeviceManagement/TransportLayer/SendTpciAckFrameAsync
+        - name: TransportLayer
+          link: toc_/Tiveria.Home.Knx.IP.DeviceManagement/TransportLayer/TransportLayer
+        - name: IsConnected
+          link: toc_/Tiveria.Home.Knx.IP.DeviceManagement/TransportLayer/IsConnected
+        - name: SeqNoSend
+          link: toc_/Tiveria.Home.Knx.IP.DeviceManagement/TransportLayer/SeqNoSend
+        - name: SeqNoReceive
+          link: toc_/Tiveria.Home.Knx.IP.DeviceManagement/TransportLayer/SeqNoReceive
+        - name: Address
+          link: toc_/Tiveria.Home.Knx.IP.DeviceManagement/TransportLayer/Address
+        - name: State
+          link: toc_/Tiveria.Home.Knx.IP.DeviceManagement/TransportLayer/State
+        - name: MaxApduFrameLength
+          link: toc_/Tiveria.Home.Knx.IP.DeviceManagement/TransportLayer/MaxApduFrameLength
+        - name: Connected
+          link: toc_/Tiveria.Home.Knx.IP.DeviceManagement/TransportLayer/Connected
+        - name: Disconnected
+          link: toc_/Tiveria.Home.Knx.IP.DeviceManagement/TransportLayer/Disconnected
+        - name: BroadcastReceived
+          link: toc_/Tiveria.Home.Knx.IP.DeviceManagement/TransportLayer/BroadcastReceived
+        - name: GroupReceived
+          link: toc_/Tiveria.Home.Knx.IP.DeviceManagement/TransportLayer/GroupReceived
+        - name: IndividualReceived
+          link: toc_/Tiveria.Home.Knx.IP.DeviceManagement/TransportLayer/IndividualReceived
+        - name: _incLock
+          link: toc_/Tiveria.Home.Knx.IP.DeviceManagement/TransportLayer/_incLock
+        - name: _disconnectCTS
+          link: toc_/Tiveria.Home.Knx.IP.DeviceManagement/TransportLayer/_disconnectCTS
+    - name: Tiveria.Home.Knx.IP.Enums
+      link: toc_/Tiveria.Home.Knx.IP.EnumsNamespace
+      subfolderitems:
+      - name: ConnectionState
+        link: toc_/Tiveria.Home.Knx.IP.Enums/ConnectionState
+      - name: ConnectionType
+        link: toc_/Tiveria.Home.Knx.IP.Enums/ConnectionType
+      - name: DeviceStatus
+        link: toc_/Tiveria.Home.Knx.IP.Enums/DeviceStatus
+      - name: EnumExtensions
+        link: toc_/Tiveria.Home.Knx.IP.Enums/EnumExtensions
+        subfolderitems:
+        - name: ToDescription
+          link: toc_/Tiveria.Home.Knx.IP.Enums/EnumExtensions/ToDescription
+      - name: ErrorCodes
+        link: toc_/Tiveria.Home.Knx.IP.Enums/ErrorCodes
+      - name: HPAIEndpointType
+        link: toc_/Tiveria.Home.Knx.IP.Enums/HPAIEndpointType
+      - name: KnxMediumType
+        link: toc_/Tiveria.Home.Knx.IP.Enums/KnxMediumType
+      - name: ServiceTypeIdentifier
+        link: toc_/Tiveria.Home.Knx.IP.Enums/ServiceTypeIdentifier
+        subfolderitems:
+        - name: Register
+          link: toc_/Tiveria.Home.Knx.IP.Enums/ServiceTypeIdentifier/Register
+        - name: IsKnown
+          link: toc_/Tiveria.Home.Knx.IP.Enums/ServiceTypeIdentifier/IsKnown
+        - name: ToDescription
+          link: toc_/Tiveria.Home.Knx.IP.Enums/ServiceTypeIdentifier/ToDescription
+        - name: SearchRequest
+          link: toc_/Tiveria.Home.Knx.IP.Enums/ServiceTypeIdentifier/SearchRequest
+        - name: SearchResponse
+          link: toc_/Tiveria.Home.Knx.IP.Enums/ServiceTypeIdentifier/SearchResponse
+        - name: DescriptionRequest
+          link: toc_/Tiveria.Home.Knx.IP.Enums/ServiceTypeIdentifier/DescriptionRequest
+        - name: DescriptionResponse
+          link: toc_/Tiveria.Home.Knx.IP.Enums/ServiceTypeIdentifier/DescriptionResponse
+        - name: ConnectRequest
+          link: toc_/Tiveria.Home.Knx.IP.Enums/ServiceTypeIdentifier/ConnectRequest
+        - name: ConnectResponse
+          link: toc_/Tiveria.Home.Knx.IP.Enums/ServiceTypeIdentifier/ConnectResponse
+        - name: ConnectionStateRequest
+          link: toc_/Tiveria.Home.Knx.IP.Enums/ServiceTypeIdentifier/ConnectionStateRequest
+        - name: ConnectionStateResponse
+          link: toc_/Tiveria.Home.Knx.IP.Enums/ServiceTypeIdentifier/ConnectionStateResponse
+        - name: DisconnectRequest
+          link: toc_/Tiveria.Home.Knx.IP.Enums/ServiceTypeIdentifier/DisconnectRequest
+        - name: DisconnectResponse
+          link: toc_/Tiveria.Home.Knx.IP.Enums/ServiceTypeIdentifier/DisconnectResponse
+        - name: ExtendedSearchRequest
+          link: toc_/Tiveria.Home.Knx.IP.Enums/ServiceTypeIdentifier/ExtendedSearchRequest
+        - name: DeviceConfigurationRequest
+          link: toc_/Tiveria.Home.Knx.IP.Enums/ServiceTypeIdentifier/DeviceConfigurationRequest
+        - name: DeviceConfigurationResponse
+          link: toc_/Tiveria.Home.Knx.IP.Enums/ServiceTypeIdentifier/DeviceConfigurationResponse
+        - name: TunnelingRequest
+          link: toc_/Tiveria.Home.Knx.IP.Enums/ServiceTypeIdentifier/TunnelingRequest
+        - name: TunnelingAcknowledge
+          link: toc_/Tiveria.Home.Knx.IP.Enums/ServiceTypeIdentifier/TunnelingAcknowledge
+        - name: RoutingIndication
+          link: toc_/Tiveria.Home.Knx.IP.Enums/ServiceTypeIdentifier/RoutingIndication
+        - name: RoutingLostMessage
+          link: toc_/Tiveria.Home.Knx.IP.Enums/ServiceTypeIdentifier/RoutingLostMessage
+        - name: RoutingBusy
+          link: toc_/Tiveria.Home.Knx.IP.Enums/ServiceTypeIdentifier/RoutingBusy
+        - name: ObjectServer
+          link: toc_/Tiveria.Home.Knx.IP.Enums/ServiceTypeIdentifier/ObjectServer
+      - name: SrpType
+        link: toc_/Tiveria.Home.Knx.IP.Enums/SrpType
+      - name: TunnelingLayer
+        link: toc_/Tiveria.Home.Knx.IP.Enums/TunnelingLayer
+    - name: Tiveria.Home.Knx.IP.Services
+      link: toc_/Tiveria.Home.Knx.IP.ServicesNamespace
+      subfolderitems:
+      - name: ConnectionRequestService
+        link: toc_/Tiveria.Home.Knx.IP.Services/ConnectionRequestService
+        subfolderitems:
+        - name: ConnectionRequestService
+          link: toc_/Tiveria.Home.Knx.IP.Services/ConnectionRequestService/ConnectionRequestService
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services/ConnectionRequestService/ServiceTypeIdentifier
+        - name: ControlEndpoint
+          link: toc_/Tiveria.Home.Knx.IP.Services/ConnectionRequestService/ControlEndpoint
+        - name: DataEndpoint
+          link: toc_/Tiveria.Home.Knx.IP.Services/ConnectionRequestService/DataEndpoint
+        - name: Cri
+          link: toc_/Tiveria.Home.Knx.IP.Services/ConnectionRequestService/Cri
+      - name: ConnectionResponseService
+        link: toc_/Tiveria.Home.Knx.IP.Services/ConnectionResponseService
+        subfolderitems:
+        - name: ConnectionResponseService
+          link: toc_/Tiveria.Home.Knx.IP.Services/ConnectionResponseService/ConnectionResponseService
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services/ConnectionResponseService/ServiceTypeIdentifier
+        - name: DataEndpoint
+          link: toc_/Tiveria.Home.Knx.IP.Services/ConnectionResponseService/DataEndpoint
+        - name: Crd
+          link: toc_/Tiveria.Home.Knx.IP.Services/ConnectionResponseService/Crd
+        - name: Status
+          link: toc_/Tiveria.Home.Knx.IP.Services/ConnectionResponseService/Status
+        - name: ChannelId
+          link: toc_/Tiveria.Home.Knx.IP.Services/ConnectionResponseService/ChannelId
+      - name: ConnectionStateRequestService
+        link: toc_/Tiveria.Home.Knx.IP.Services/ConnectionStateRequestService
+        subfolderitems:
+        - name: ConnectionStateRequestService
+          link: toc_/Tiveria.Home.Knx.IP.Services/ConnectionStateRequestService/ConnectionStateRequestService
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services/ConnectionStateRequestService/ServiceTypeIdentifier
+        - name: ControlEndpoint
+          link: toc_/Tiveria.Home.Knx.IP.Services/ConnectionStateRequestService/ControlEndpoint
+        - name: ChannelId
+          link: toc_/Tiveria.Home.Knx.IP.Services/ConnectionStateRequestService/ChannelId
+      - name: ConnectionStateResponseService
+        link: toc_/Tiveria.Home.Knx.IP.Services/ConnectionStateResponseService
+        subfolderitems:
+        - name: ConnectionStateResponseService
+          link: toc_/Tiveria.Home.Knx.IP.Services/ConnectionStateResponseService/ConnectionStateResponseService
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services/ConnectionStateResponseService/ServiceTypeIdentifier
+        - name: Status
+          link: toc_/Tiveria.Home.Knx.IP.Services/ConnectionStateResponseService/Status
+        - name: ChannelId
+          link: toc_/Tiveria.Home.Knx.IP.Services/ConnectionStateResponseService/ChannelId
+        - name: STRUCTURE_SIZE
+          link: toc_/Tiveria.Home.Knx.IP.Services/ConnectionStateResponseService/STRUCTURE_SIZE
+      - name: DescriptionRequestService
+        link: toc_/Tiveria.Home.Knx.IP.Services/DescriptionRequestService
+        subfolderitems:
+        - name: DescriptionRequestService
+          link: toc_/Tiveria.Home.Knx.IP.Services/DescriptionRequestService/DescriptionRequestService
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services/DescriptionRequestService/ServiceTypeIdentifier
+        - name: ControlEndpoint
+          link: toc_/Tiveria.Home.Knx.IP.Services/DescriptionRequestService/ControlEndpoint
+      - name: DescriptionResponseService
+        link: toc_/Tiveria.Home.Knx.IP.Services/DescriptionResponseService
+        subfolderitems:
+        - name: DescriptionResponseService
+          link: toc_/Tiveria.Home.Knx.IP.Services/DescriptionResponseService/DescriptionResponseService
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services/DescriptionResponseService/ServiceTypeIdentifier
+        - name: DeviceInfoDIB
+          link: toc_/Tiveria.Home.Knx.IP.Services/DescriptionResponseService/DeviceInfoDIB
+        - name: ServiceFamiliesDIB
+          link: toc_/Tiveria.Home.Knx.IP.Services/DescriptionResponseService/ServiceFamiliesDIB
+        - name: OtherDIB
+          link: toc_/Tiveria.Home.Knx.IP.Services/DescriptionResponseService/OtherDIB
+      - name: DeviceConfigurationAcknowledgeService
+        link: toc_/Tiveria.Home.Knx.IP.Services/DeviceConfigurationAcknowledgeService
+        subfolderitems:
+        - name: DeviceConfigurationAcknowledgeService
+          link: toc_/Tiveria.Home.Knx.IP.Services/DeviceConfigurationAcknowledgeService/DeviceConfigurationAcknowledgeService
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services/DeviceConfigurationAcknowledgeService/ServiceTypeIdentifier
+        - name: Status
+          link: toc_/Tiveria.Home.Knx.IP.Services/DeviceConfigurationAcknowledgeService/Status
+        - name: ChannelId
+          link: toc_/Tiveria.Home.Knx.IP.Services/DeviceConfigurationAcknowledgeService/ChannelId
+        - name: SequenceCounter
+          link: toc_/Tiveria.Home.Knx.IP.Services/DeviceConfigurationAcknowledgeService/SequenceCounter
+        - name: STRUCTURE_SIZE
+          link: toc_/Tiveria.Home.Knx.IP.Services/DeviceConfigurationAcknowledgeService/STRUCTURE_SIZE
+      - name: DeviceConfigurationRequestService
+        link: toc_/Tiveria.Home.Knx.IP.Services/DeviceConfigurationRequestService
+        subfolderitems:
+        - name: DeviceConfigurationRequestService
+          link: toc_/Tiveria.Home.Knx.IP.Services/DeviceConfigurationRequestService/DeviceConfigurationRequestService
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services/DeviceConfigurationRequestService/ServiceTypeIdentifier
+      - name: DisconnectRequestService
+        link: toc_/Tiveria.Home.Knx.IP.Services/DisconnectRequestService
+        subfolderitems:
+        - name: DisconnectRequestService
+          link: toc_/Tiveria.Home.Knx.IP.Services/DisconnectRequestService/DisconnectRequestService
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services/DisconnectRequestService/ServiceTypeIdentifier
+        - name: ControlEndpoint
+          link: toc_/Tiveria.Home.Knx.IP.Services/DisconnectRequestService/ControlEndpoint
+        - name: ChannelId
+          link: toc_/Tiveria.Home.Knx.IP.Services/DisconnectRequestService/ChannelId
+      - name: DisconnectResponseService
+        link: toc_/Tiveria.Home.Knx.IP.Services/DisconnectResponseService
+        subfolderitems:
+        - name: DisconnectResponseService
+          link: toc_/Tiveria.Home.Knx.IP.Services/DisconnectResponseService/DisconnectResponseService
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services/DisconnectResponseService/ServiceTypeIdentifier
+        - name: Status
+          link: toc_/Tiveria.Home.Knx.IP.Services/DisconnectResponseService/Status
+        - name: ChannelId
+          link: toc_/Tiveria.Home.Knx.IP.Services/DisconnectResponseService/ChannelId
+        - name: STRUCTURE_SIZE
+          link: toc_/Tiveria.Home.Knx.IP.Services/DisconnectResponseService/STRUCTURE_SIZE
+      - name: EMIServiceBase
+        link: toc_/Tiveria.Home.Knx.IP.Services/EMIServiceBase
+        subfolderitems:
+        - name: EMIServiceBase
+          link: toc_/Tiveria.Home.Knx.IP.Services/EMIServiceBase/EMIServiceBase
+        - name: ConnectionHeader
+          link: toc_/Tiveria.Home.Knx.IP.Services/EMIServiceBase/ConnectionHeader
+        - name: CemiMessage
+          link: toc_/Tiveria.Home.Knx.IP.Services/EMIServiceBase/CemiMessage
+      - name: ExtendedSearchRequestService
+        link: toc_/Tiveria.Home.Knx.IP.Services/ExtendedSearchRequestService
+        subfolderitems:
+        - name: ExtendedSearchRequestService
+          link: toc_/Tiveria.Home.Knx.IP.Services/ExtendedSearchRequestService/ExtendedSearchRequestService
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services/ExtendedSearchRequestService/ServiceTypeIdentifier
+        - name: DiscoveryEndpoint
+          link: toc_/Tiveria.Home.Knx.IP.Services/ExtendedSearchRequestService/DiscoveryEndpoint
+        - name: SearchRequestParameter
+          link: toc_/Tiveria.Home.Knx.IP.Services/ExtendedSearchRequestService/SearchRequestParameter
+      - name: RawService
+        link: toc_/Tiveria.Home.Knx.IP.Services/RawService
+        subfolderitems:
+        - name: RawService
+          link: toc_/Tiveria.Home.Knx.IP.Services/RawService/RawService
+        - name: Size
+          link: toc_/Tiveria.Home.Knx.IP.Services/RawService/Size
+        - name: Payload
+          link: toc_/Tiveria.Home.Knx.IP.Services/RawService/Payload
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services/RawService/ServiceTypeIdentifier
+      - name: RoutingBusyService
+        link: toc_/Tiveria.Home.Knx.IP.Services/RoutingBusyService
+        subfolderitems:
+        - name: RoutingBusyService
+          link: toc_/Tiveria.Home.Knx.IP.Services/RoutingBusyService/RoutingBusyService
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services/RoutingBusyService/ServiceTypeIdentifier
+        - name: BusyInfo
+          link: toc_/Tiveria.Home.Knx.IP.Services/RoutingBusyService/BusyInfo
+      - name: RoutingIndicationService
+        link: toc_/Tiveria.Home.Knx.IP.Services/RoutingIndicationService
+        subfolderitems:
+        - name: RoutingIndicationService
+          link: toc_/Tiveria.Home.Knx.IP.Services/RoutingIndicationService/RoutingIndicationService
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services/RoutingIndicationService/ServiceTypeIdentifier
+        - name: CemiMessage
+          link: toc_/Tiveria.Home.Knx.IP.Services/RoutingIndicationService/CemiMessage
+      - name: RoutingLostMessageService
+        link: toc_/Tiveria.Home.Knx.IP.Services/RoutingLostMessageService
+        subfolderitems:
+        - name: RoutingLostMessageService
+          link: toc_/Tiveria.Home.Knx.IP.Services/RoutingLostMessageService/RoutingLostMessageService
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services/RoutingLostMessageService/ServiceTypeIdentifier
+        - name: LostMessageInfo
+          link: toc_/Tiveria.Home.Knx.IP.Services/RoutingLostMessageService/LostMessageInfo
+      - name: SearchRequestService
+        link: toc_/Tiveria.Home.Knx.IP.Services/SearchRequestService
+        subfolderitems:
+        - name: SearchRequestService
+          link: toc_/Tiveria.Home.Knx.IP.Services/SearchRequestService/SearchRequestService
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services/SearchRequestService/ServiceTypeIdentifier
+        - name: DiscoveryEndpoint
+          link: toc_/Tiveria.Home.Knx.IP.Services/SearchRequestService/DiscoveryEndpoint
+      - name: SearchResponseService
+        link: toc_/Tiveria.Home.Knx.IP.Services/SearchResponseService
+        subfolderitems:
+        - name: SearchResponseService
+          link: toc_/Tiveria.Home.Knx.IP.Services/SearchResponseService/SearchResponseService
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services/SearchResponseService/ServiceTypeIdentifier
+        - name: ServiceEndpoint
+          link: toc_/Tiveria.Home.Knx.IP.Services/SearchResponseService/ServiceEndpoint
+        - name: DeviceInfoDIB
+          link: toc_/Tiveria.Home.Knx.IP.Services/SearchResponseService/DeviceInfoDIB
+        - name: ServiceFamiliesDIB
+          link: toc_/Tiveria.Home.Knx.IP.Services/SearchResponseService/ServiceFamiliesDIB
+      - name: ServiceBase
+        link: toc_/Tiveria.Home.Knx.IP.Services/ServiceBase
+        subfolderitems:
+        - name: ServiceBase
+          link: toc_/Tiveria.Home.Knx.IP.Services/ServiceBase/ServiceBase
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services/ServiceBase/ServiceTypeIdentifier
+        - name: Size
+          link: toc_/Tiveria.Home.Knx.IP.Services/ServiceBase/Size
+      - name: TunnelingAcknowledgeService
+        link: toc_/Tiveria.Home.Knx.IP.Services/TunnelingAcknowledgeService
+        subfolderitems:
+        - name: TunnelingAcknowledgeService
+          link: toc_/Tiveria.Home.Knx.IP.Services/TunnelingAcknowledgeService/TunnelingAcknowledgeService
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services/TunnelingAcknowledgeService/ServiceTypeIdentifier
+        - name: ConnectionHeader
+          link: toc_/Tiveria.Home.Knx.IP.Services/TunnelingAcknowledgeService/ConnectionHeader
+      - name: TunnelingRequestService
+        link: toc_/Tiveria.Home.Knx.IP.Services/TunnelingRequestService
+        subfolderitems:
+        - name: TunnelingRequestService
+          link: toc_/Tiveria.Home.Knx.IP.Services/TunnelingRequestService/TunnelingRequestService
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services/TunnelingRequestService/ServiceTypeIdentifier
+    - name: Tiveria.Home.Knx.IP.Services.Serializers
+      link: toc_/Tiveria.Home.Knx.IP.Services.SerializersNamespace
+      subfolderitems:
+      - name: ConnectionRequestServiceSerializer
+        link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ConnectionRequestServiceSerializer
+        subfolderitems:
+        - name: Deserialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ConnectionRequestServiceSerializer/Deserialize
+        - name: Serialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ConnectionRequestServiceSerializer/Serialize
+        - name: ConnectionRequestServiceSerializer
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ConnectionRequestServiceSerializer/ConnectionRequestServiceSerializer
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ConnectionRequestServiceSerializer/ServiceTypeIdentifier
+      - name: ConnectionResponseServiceSerializer
+        link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ConnectionResponseServiceSerializer
+        subfolderitems:
+        - name: Deserialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ConnectionResponseServiceSerializer/Deserialize
+        - name: Serialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ConnectionResponseServiceSerializer/Serialize
+        - name: ConnectionResponseServiceSerializer
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ConnectionResponseServiceSerializer/ConnectionResponseServiceSerializer
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ConnectionResponseServiceSerializer/ServiceTypeIdentifier
+      - name: ConnectionStateRequestServiceSerializer
+        link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ConnectionStateRequestServiceSerializer
+        subfolderitems:
+        - name: Deserialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ConnectionStateRequestServiceSerializer/Deserialize
+        - name: Serialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ConnectionStateRequestServiceSerializer/Serialize
+        - name: ConnectionStateRequestServiceSerializer
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ConnectionStateRequestServiceSerializer/ConnectionStateRequestServiceSerializer
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ConnectionStateRequestServiceSerializer/ServiceTypeIdentifier
+      - name: ConnectionStateResponseServiceSerializer
+        link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ConnectionStateResponseServiceSerializer
+        subfolderitems:
+        - name: Deserialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ConnectionStateResponseServiceSerializer/Deserialize
+        - name: Serialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ConnectionStateResponseServiceSerializer/Serialize
+        - name: ConnectionStateResponseServiceSerializer
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ConnectionStateResponseServiceSerializer/ConnectionStateResponseServiceSerializer
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ConnectionStateResponseServiceSerializer/ServiceTypeIdentifier
+      - name: DescriptionRequestServiceSerializer
+        link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/DescriptionRequestServiceSerializer
+        subfolderitems:
+        - name: Deserialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/DescriptionRequestServiceSerializer/Deserialize
+        - name: Serialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/DescriptionRequestServiceSerializer/Serialize
+        - name: DescriptionRequestServiceSerializer
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/DescriptionRequestServiceSerializer/DescriptionRequestServiceSerializer
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/DescriptionRequestServiceSerializer/ServiceTypeIdentifier
+      - name: DescriptionResponseServiceSerializer
+        link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/DescriptionResponseServiceSerializer
+        subfolderitems:
+        - name: Deserialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/DescriptionResponseServiceSerializer/Deserialize
+        - name: Serialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/DescriptionResponseServiceSerializer/Serialize
+        - name: DescriptionResponseServiceSerializer
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/DescriptionResponseServiceSerializer/DescriptionResponseServiceSerializer
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/DescriptionResponseServiceSerializer/ServiceTypeIdentifier
+      - name: DeviceConfigurationAcknowledgeServiceSerializer
+        link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/DeviceConfigurationAcknowledgeServiceSerializer
+        subfolderitems:
+        - name: Deserialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/DeviceConfigurationAcknowledgeServiceSerializer/Deserialize
+        - name: Serialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/DeviceConfigurationAcknowledgeServiceSerializer/Serialize
+        - name: DeviceConfigurationAcknowledgeServiceSerializer
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/DeviceConfigurationAcknowledgeServiceSerializer/DeviceConfigurationAcknowledgeServiceSerializer
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/DeviceConfigurationAcknowledgeServiceSerializer/ServiceTypeIdentifier
+      - name: DeviceConfigurationRequestServiceSerializer
+        link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/DeviceConfigurationRequestServiceSerializer
+        subfolderitems:
+        - name: Deserialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/DeviceConfigurationRequestServiceSerializer/Deserialize
+        - name: Serialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/DeviceConfigurationRequestServiceSerializer/Serialize
+        - name: DeviceConfigurationRequestServiceSerializer
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/DeviceConfigurationRequestServiceSerializer/DeviceConfigurationRequestServiceSerializer
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/DeviceConfigurationRequestServiceSerializer/ServiceTypeIdentifier
+      - name: DisconnectRequestServiceSerializer
+        link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/DisconnectRequestServiceSerializer
+        subfolderitems:
+        - name: Deserialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/DisconnectRequestServiceSerializer/Deserialize
+        - name: Serialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/DisconnectRequestServiceSerializer/Serialize
+        - name: DisconnectRequestServiceSerializer
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/DisconnectRequestServiceSerializer/DisconnectRequestServiceSerializer
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/DisconnectRequestServiceSerializer/ServiceTypeIdentifier
+      - name: DisconnectResponseServiceSerializer
+        link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/DisconnectResponseServiceSerializer
+        subfolderitems:
+        - name: Deserialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/DisconnectResponseServiceSerializer/Deserialize
+        - name: Serialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/DisconnectResponseServiceSerializer/Serialize
+        - name: DisconnectResponseServiceSerializer
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/DisconnectResponseServiceSerializer/DisconnectResponseServiceSerializer
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/DisconnectResponseServiceSerializer/ServiceTypeIdentifier
+      - name: ExtendedSearchRequestServiceSerializer
+        link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ExtendedSearchRequestServiceSerializer
+        subfolderitems:
+        - name: Deserialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ExtendedSearchRequestServiceSerializer/Deserialize
+        - name: Serialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ExtendedSearchRequestServiceSerializer/Serialize
+        - name: ExtendedSearchRequestServiceSerializer
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ExtendedSearchRequestServiceSerializer/ExtendedSearchRequestServiceSerializer
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ExtendedSearchRequestServiceSerializer/ServiceTypeIdentifier
+      - name: RawServiceSerializer
+        link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/RawServiceSerializer
+        subfolderitems:
+        - name: Deserialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/RawServiceSerializer/Deserialize
+        - name: Serialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/RawServiceSerializer/Serialize
+        - name: RawServiceSerializer
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/RawServiceSerializer/RawServiceSerializer
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/RawServiceSerializer/ServiceTypeIdentifier
+      - name: RoutingBusyServiceSerializer
+        link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/RoutingBusyServiceSerializer
+        subfolderitems:
+        - name: Deserialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/RoutingBusyServiceSerializer/Deserialize
+        - name: Serialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/RoutingBusyServiceSerializer/Serialize
+        - name: RoutingBusyServiceSerializer
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/RoutingBusyServiceSerializer/RoutingBusyServiceSerializer
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/RoutingBusyServiceSerializer/ServiceTypeIdentifier
+      - name: RoutingIndicationServiceSerializer
+        link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/RoutingIndicationServiceSerializer
+        subfolderitems:
+        - name: Deserialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/RoutingIndicationServiceSerializer/Deserialize
+        - name: Serialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/RoutingIndicationServiceSerializer/Serialize
+        - name: RoutingIndicationServiceSerializer
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/RoutingIndicationServiceSerializer/RoutingIndicationServiceSerializer
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/RoutingIndicationServiceSerializer/ServiceTypeIdentifier
+      - name: RoutingLostMessageServiceSerializer
+        link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/RoutingLostMessageServiceSerializer
+        subfolderitems:
+        - name: Deserialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/RoutingLostMessageServiceSerializer/Deserialize
+        - name: Serialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/RoutingLostMessageServiceSerializer/Serialize
+        - name: RoutingLostMessageServiceSerializer
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/RoutingLostMessageServiceSerializer/RoutingLostMessageServiceSerializer
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/RoutingLostMessageServiceSerializer/ServiceTypeIdentifier
+      - name: SearchRequestServiceSerializer
+        link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/SearchRequestServiceSerializer
+        subfolderitems:
+        - name: Deserialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/SearchRequestServiceSerializer/Deserialize
+        - name: Serialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/SearchRequestServiceSerializer/Serialize
+        - name: SearchRequestServiceSerializer
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/SearchRequestServiceSerializer/SearchRequestServiceSerializer
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/SearchRequestServiceSerializer/ServiceTypeIdentifier
+      - name: SearchResponseServiceSerializer
+        link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/SearchResponseServiceSerializer
+        subfolderitems:
+        - name: Deserialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/SearchResponseServiceSerializer/Deserialize
+        - name: Serialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/SearchResponseServiceSerializer/Serialize
+        - name: SearchResponseServiceSerializer
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/SearchResponseServiceSerializer/SearchResponseServiceSerializer
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/SearchResponseServiceSerializer/ServiceTypeIdentifier
+      - name: ServiceSerializerBase<T>
+        link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ServiceSerializerBase-1
+        subfolderitems:
+        - name: Deserialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ServiceSerializerBase-1/Deserialize
+        - name: Serialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ServiceSerializerBase-1/Serialize
+        - name: TryDeserialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ServiceSerializerBase-1/TryDeserialize
+        - name: ServiceSerializerBase
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ServiceSerializerBase-1/ServiceSerializerBase
+        - name: ServiceType
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ServiceSerializerBase-1/ServiceType
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/ServiceSerializerBase-1/ServiceTypeIdentifier
+      - name: TunnelingAcknowledgeServiceSerializer
+        link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/TunnelingAcknowledgeServiceSerializer
+        subfolderitems:
+        - name: Deserialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/TunnelingAcknowledgeServiceSerializer/Deserialize
+        - name: Serialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/TunnelingAcknowledgeServiceSerializer/Serialize
+        - name: TunnelingAcknowledgeServiceSerializer
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/TunnelingAcknowledgeServiceSerializer/TunnelingAcknowledgeServiceSerializer
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/TunnelingAcknowledgeServiceSerializer/ServiceTypeIdentifier
+      - name: TunnelingRequestServiceSerializer
+        link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/TunnelingRequestServiceSerializer
+        subfolderitems:
+        - name: Deserialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/TunnelingRequestServiceSerializer/Deserialize
+        - name: Serialize
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/TunnelingRequestServiceSerializer/Serialize
+        - name: TunnelingRequestServiceSerializer
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/TunnelingRequestServiceSerializer/TunnelingRequestServiceSerializer
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Services.Serializers/TunnelingRequestServiceSerializer/ServiceTypeIdentifier
+    - name: Tiveria.Home.Knx.IP.Structures
+      link: toc_/Tiveria.Home.Knx.IP.StructuresNamespace
+      subfolderitems:
+      - name: BusyInfo
+        link: toc_/Tiveria.Home.Knx.IP.Structures/BusyInfo
+        subfolderitems:
+        - name: Write
+          link: toc_/Tiveria.Home.Knx.IP.Structures/BusyInfo/Write
+        - name: Parse
+          link: toc_/Tiveria.Home.Knx.IP.Structures/BusyInfo/Parse
+        - name: BusyInfo
+          link: toc_/Tiveria.Home.Knx.IP.Structures/BusyInfo/BusyInfo
+        - name: DeviceStatus
+          link: toc_/Tiveria.Home.Knx.IP.Structures/BusyInfo/DeviceStatus
+        - name: RoutingBusyWaitTime
+          link: toc_/Tiveria.Home.Knx.IP.Structures/BusyInfo/RoutingBusyWaitTime
+        - name: RoutingBusyControlField
+          link: toc_/Tiveria.Home.Knx.IP.Structures/BusyInfo/RoutingBusyControlField
+        - name: STRUCTURE_SIZE
+          link: toc_/Tiveria.Home.Knx.IP.Structures/BusyInfo/STRUCTURE_SIZE
+      - name: ConnectionHeader
+        link: toc_/Tiveria.Home.Knx.IP.Structures/ConnectionHeader
+        subfolderitems:
+        - name: Write
+          link: toc_/Tiveria.Home.Knx.IP.Structures/ConnectionHeader/Write
+        - name: ToString
+          link: toc_/Tiveria.Home.Knx.IP.Structures/ConnectionHeader/ToString
+        - name: Parse
+          link: toc_/Tiveria.Home.Knx.IP.Structures/ConnectionHeader/Parse
+        - name: ConnectionHeader
+          link: toc_/Tiveria.Home.Knx.IP.Structures/ConnectionHeader/ConnectionHeader
+        - name: ChannelId
+          link: toc_/Tiveria.Home.Knx.IP.Structures/ConnectionHeader/ChannelId
+        - name: SequenceCounter
+          link: toc_/Tiveria.Home.Knx.IP.Structures/ConnectionHeader/SequenceCounter
+        - name: STRUCTURE_SIZE
+          link: toc_/Tiveria.Home.Knx.IP.Structures/ConnectionHeader/STRUCTURE_SIZE
+      - name: CRD
+        link: toc_/Tiveria.Home.Knx.IP.Structures/CRD
+        subfolderitems:
+        - name: Write
+          link: toc_/Tiveria.Home.Knx.IP.Structures/CRD/Write
+        - name: CRD
+          link: toc_/Tiveria.Home.Knx.IP.Structures/CRD/CRD
+        - name: ConnectionType
+          link: toc_/Tiveria.Home.Knx.IP.Structures/CRD/ConnectionType
+        - name: OptionalData
+          link: toc_/Tiveria.Home.Knx.IP.Structures/CRD/OptionalData
+      - name: CRDTunnel
+        link: toc_/Tiveria.Home.Knx.IP.Structures/CRDTunnel
+        subfolderitems:
+        - name: Parse
+          link: toc_/Tiveria.Home.Knx.IP.Structures/CRDTunnel/Parse
+        - name: CRDTunnel
+          link: toc_/Tiveria.Home.Knx.IP.Structures/CRDTunnel/CRDTunnel
+        - name: AssignedAddress
+          link: toc_/Tiveria.Home.Knx.IP.Structures/CRDTunnel/AssignedAddress
+        - name: STRUCTURE_SIZE
+          link: toc_/Tiveria.Home.Knx.IP.Structures/CRDTunnel/STRUCTURE_SIZE
+      - name: CRI
+        link: toc_/Tiveria.Home.Knx.IP.Structures/CRI
+        subfolderitems:
+        - name: Write
+          link: toc_/Tiveria.Home.Knx.IP.Structures/CRI/Write
+        - name: Parse
+          link: toc_/Tiveria.Home.Knx.IP.Structures/CRI/Parse
+        - name: CRI
+          link: toc_/Tiveria.Home.Knx.IP.Structures/CRI/CRI
+        - name: ConnectionType
+          link: toc_/Tiveria.Home.Knx.IP.Structures/CRI/ConnectionType
+        - name: OptionalData
+          link: toc_/Tiveria.Home.Knx.IP.Structures/CRI/OptionalData
+      - name: CRITunnel
+        link: toc_/Tiveria.Home.Knx.IP.Structures/CRITunnel
+        subfolderitems:
+        - name: Write
+          link: toc_/Tiveria.Home.Knx.IP.Structures/CRITunnel/Write
+        - name: Parse
+          link: toc_/Tiveria.Home.Knx.IP.Structures/CRITunnel/Parse
+        - name: CRITunnel
+          link: toc_/Tiveria.Home.Knx.IP.Structures/CRITunnel/CRITunnel
+        - name: Layer
+          link: toc_/Tiveria.Home.Knx.IP.Structures/CRITunnel/Layer
+        - name: STRUCTURE_SIZE
+          link: toc_/Tiveria.Home.Knx.IP.Structures/CRITunnel/STRUCTURE_SIZE
+      - name: DeviceInfoDIB
+        link: toc_/Tiveria.Home.Knx.IP.Structures/DeviceInfoDIB
+        subfolderitems:
+        - name: Write
+          link: toc_/Tiveria.Home.Knx.IP.Structures/DeviceInfoDIB/Write
+        - name: Parse
+          link: toc_/Tiveria.Home.Knx.IP.Structures/DeviceInfoDIB/Parse
+        - name: DeviceInfoDIB
+          link: toc_/Tiveria.Home.Knx.IP.Structures/DeviceInfoDIB/DeviceInfoDIB
+        - name: MediumType
+          link: toc_/Tiveria.Home.Knx.IP.Structures/DeviceInfoDIB/MediumType
+        - name: Status
+          link: toc_/Tiveria.Home.Knx.IP.Structures/DeviceInfoDIB/Status
+        - name: IndividualAddress
+          link: toc_/Tiveria.Home.Knx.IP.Structures/DeviceInfoDIB/IndividualAddress
+        - name: ProjectInstallerId
+          link: toc_/Tiveria.Home.Knx.IP.Structures/DeviceInfoDIB/ProjectInstallerId
+        - name: SerialNumber
+          link: toc_/Tiveria.Home.Knx.IP.Structures/DeviceInfoDIB/SerialNumber
+        - name: RoutingMulticastIP
+          link: toc_/Tiveria.Home.Knx.IP.Structures/DeviceInfoDIB/RoutingMulticastIP
+        - name: MAC
+          link: toc_/Tiveria.Home.Knx.IP.Structures/DeviceInfoDIB/MAC
+        - name: FriendlyName
+          link: toc_/Tiveria.Home.Knx.IP.Structures/DeviceInfoDIB/FriendlyName
+        - name: DEVICEINFODIB_SIZE
+          link: toc_/Tiveria.Home.Knx.IP.Structures/DeviceInfoDIB/DEVICEINFODIB_SIZE
+        - name: DIB_TYPE
+          link: toc_/Tiveria.Home.Knx.IP.Structures/DeviceInfoDIB/DIB_TYPE
+      - name: FrameHeader
+        link: toc_/Tiveria.Home.Knx.IP.Structures/FrameHeader
+        subfolderitems:
+        - name: Write
+          link: toc_/Tiveria.Home.Knx.IP.Structures/FrameHeader/Write
+        - name: ToString
+          link: toc_/Tiveria.Home.Knx.IP.Structures/FrameHeader/ToString
+        - name: Parse
+          link: toc_/Tiveria.Home.Knx.IP.Structures/FrameHeader/Parse
+        - name: TryParse
+          link: toc_/Tiveria.Home.Knx.IP.Structures/FrameHeader/TryParse
+        - name: IsValidHeader
+          link: toc_/Tiveria.Home.Knx.IP.Structures/FrameHeader/IsValidHeader
+        - name: IsValidHeaderV10
+          link: toc_/Tiveria.Home.Knx.IP.Structures/FrameHeader/IsValidHeaderV10
+        - name: FrameHeader
+          link: toc_/Tiveria.Home.Knx.IP.Structures/FrameHeader/FrameHeader
+        - name: Version
+          link: toc_/Tiveria.Home.Knx.IP.Structures/FrameHeader/Version
+        - name: ServiceTypeIdentifier
+          link: toc_/Tiveria.Home.Knx.IP.Structures/FrameHeader/ServiceTypeIdentifier
+        - name: TotalLength
+          link: toc_/Tiveria.Home.Knx.IP.Structures/FrameHeader/TotalLength
+        - name: ThrowExceptionOnUnknownVersion
+          link: toc_/Tiveria.Home.Knx.IP.Structures/FrameHeader/ThrowExceptionOnUnknownVersion
+      - name: Hpai
+        link: toc_/Tiveria.Home.Knx.IP.Structures/Hpai
+        subfolderitems:
+        - name: Write
+          link: toc_/Tiveria.Home.Knx.IP.Structures/Hpai/Write
+        - name: ToString
+          link: toc_/Tiveria.Home.Knx.IP.Structures/Hpai/ToString
+        - name: Parse
+          link: toc_/Tiveria.Home.Knx.IP.Structures/Hpai/Parse
+        - name: Hpai
+          link: toc_/Tiveria.Home.Knx.IP.Structures/Hpai/Hpai
+        - name: Ip
+          link: toc_/Tiveria.Home.Knx.IP.Structures/Hpai/Ip
+        - name: Port
+          link: toc_/Tiveria.Home.Knx.IP.Structures/Hpai/Port
+        - name: EndpointType
+          link: toc_/Tiveria.Home.Knx.IP.Structures/Hpai/EndpointType
+        - name: STRUCTURE_SIZE
+          link: toc_/Tiveria.Home.Knx.IP.Structures/Hpai/STRUCTURE_SIZE
+      - name: LostMessageInfo
+        link: toc_/Tiveria.Home.Knx.IP.Structures/LostMessageInfo
+        subfolderitems:
+        - name: Write
+          link: toc_/Tiveria.Home.Knx.IP.Structures/LostMessageInfo/Write
+        - name: Parse
+          link: toc_/Tiveria.Home.Knx.IP.Structures/LostMessageInfo/Parse
+        - name: LostMessageInfo
+          link: toc_/Tiveria.Home.Knx.IP.Structures/LostMessageInfo/LostMessageInfo
+        - name: DeviceStatus
+          link: toc_/Tiveria.Home.Knx.IP.Structures/LostMessageInfo/DeviceStatus
+        - name: NumberOfLostMessages
+          link: toc_/Tiveria.Home.Knx.IP.Structures/LostMessageInfo/NumberOfLostMessages
+        - name: STRUCTURE_SIZE
+          link: toc_/Tiveria.Home.Knx.IP.Structures/LostMessageInfo/STRUCTURE_SIZE
+      - name: OtherDIB
+        link: toc_/Tiveria.Home.Knx.IP.Structures/OtherDIB
+        subfolderitems:
+        - name: Write
+          link: toc_/Tiveria.Home.Knx.IP.Structures/OtherDIB/Write
+        - name: Parse
+          link: toc_/Tiveria.Home.Knx.IP.Structures/OtherDIB/Parse
+        - name: OtherDIB
+          link: toc_/Tiveria.Home.Knx.IP.Structures/OtherDIB/OtherDIB
+        - name: DIBType
+          link: toc_/Tiveria.Home.Knx.IP.Structures/OtherDIB/DIBType
+        - name: Data
+          link: toc_/Tiveria.Home.Knx.IP.Structures/OtherDIB/Data
+      - name: ServiceFamiliesDIB
+        link: toc_/Tiveria.Home.Knx.IP.Structures/ServiceFamiliesDIB
+        subfolderitems:
+        - name: Write
+          link: toc_/Tiveria.Home.Knx.IP.Structures/ServiceFamiliesDIB/Write
+        - name: Parse
+          link: toc_/Tiveria.Home.Knx.IP.Structures/ServiceFamiliesDIB/Parse
+        - name: ServiceFamiliesDIB
+          link: toc_/Tiveria.Home.Knx.IP.Structures/ServiceFamiliesDIB/ServiceFamiliesDIB
+        - name: ServiceFamilies
+          link: toc_/Tiveria.Home.Knx.IP.Structures/ServiceFamiliesDIB/ServiceFamilies
+        - name: DIB_TYPE
+          link: toc_/Tiveria.Home.Knx.IP.Structures/ServiceFamiliesDIB/DIB_TYPE
+      - name: SRP
+        link: toc_/Tiveria.Home.Knx.IP.Structures/SRP
+        subfolderitems:
+        - name: Write
+          link: toc_/Tiveria.Home.Knx.IP.Structures/SRP/Write
+        - name: Parse
+          link: toc_/Tiveria.Home.Knx.IP.Structures/SRP/Parse
+        - name: CreateWithMacAddress
+          link: toc_/Tiveria.Home.Knx.IP.Structures/SRP/CreateWithMacAddress
+        - name: SRP
+          link: toc_/Tiveria.Home.Knx.IP.Structures/SRP/SRP
+        - name: Data
+          link: toc_/Tiveria.Home.Knx.IP.Structures/SRP/Data
+        - name: Type
+          link: toc_/Tiveria.Home.Knx.IP.Structures/SRP/Type
+        - name: Mandatory
+          link: toc_/Tiveria.Home.Knx.IP.Structures/SRP/Mandatory
