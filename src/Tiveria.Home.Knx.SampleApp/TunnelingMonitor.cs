@@ -51,11 +51,10 @@ namespace Tiveria.Home.Knx
             Console.TreatControlCAsInput = true;
             ConfigureLogging();
 
-
-            Con = new IP.Connections.TunnelingConnection(Program.GatewayIPAddress, Program.GatewayPort, GetLocalIPAddress(), 55555);
-            Con.DataReceived += Con_DataReceived;
-            Con.FrameReceived += Con_FrameReceived;
-            Con.ConnectionStateChanged += Con_StateChanged;
+            Con = new IP.Connections.TunnelingConnectionBuilder(Program.LocalIPAddress, Program.GatewayIPAddress, Program.GatewayPort).Build();
+            Con.DataReceived += Con_DataReceived!;
+            Con.FrameReceived += Con_FrameReceived!;
+            Con.ConnectionStateChanged += Con_StateChanged!;
             Console.WriteLine("Hello World!");
 
             Con.ConnectAsync().Wait();

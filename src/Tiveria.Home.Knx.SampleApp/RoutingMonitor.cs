@@ -53,7 +53,7 @@ namespace Tiveria.Home.Knx
             ConfigureLogging();
 
 
-            Con = new IP.Connections.RoutingConnection(new IPEndPoint(IPAddress.Parse("192.168.2.107"), KnxNetIPConstants.DefaultPort)) ;
+            Con = new IP.Connections.RoutingConnection(new IPEndPoint(Program.LocalIPAddress, KnxNetIPConstants.DefaultPort)) ;
             Con.DataReceived += Con_DataReceived;
             Con.FrameReceived += Con_FrameReceived;
             Con.ConnectionStateChanged += Con_StateChanged;

@@ -84,6 +84,39 @@ namespace Tiveria.Home.Knx.IP.Connections
         #endregion
 
         #region public methods
+        /// <inheritdoc/>
+        public override async Task<bool> ConnectAsync()
+        {
+            _connectEvent.Reset();
+            ConnectionState = KnxConnectionState.Opening;
+            var data = CreateConnectionRequestFrame();
+            try
+            {
+                _packetReceiver.Start();
+                var bytessent = await _udpClient.SendAsync(data, data.Length, _remoteControlEndpoint).ConfigureAwait(false);
+                if (bytessent == 0)
+                {
+                    ConnectionState = KnxConnectionState.Invalid;
+                    return false;
+                }
+                var result = _connectEvent.WaitOne(_config.ConnectTimeout);
+                if (!result) ConnectionState = KnxConnectionState.Invalid;
+                return result;
+            }
+            catch
+            {
+                ConnectionState = KnxConnectionState.Invalid;
+                return false;
+            }
+        }
+
+        /// <inheritdoc/>
+        public async override Task DisconnectAsync()
+        {
+            await InternalCloseAsync("User triggered.", false);
+        }
+
+
         /// <summary>
         /// Send a generic IKnxNetIPService (potentially raw payload)
         /// </summary>
@@ -207,11 +240,6 @@ namespace Tiveria.Home.Knx.IP.Connections
         }
 
         #region closing connection
-        public async override Task DisconnectAsync()
-        {
-            await InternalCloseAsync("User triggered.", false);
-        }
-
         private async Task InternalCloseAsync(string reason, bool external)
         {
             lock (_lock)
@@ -264,31 +292,6 @@ namespace Tiveria.Home.Knx.IP.Connections
         #endregion
 
         #region sending connection request
-        public override async Task<bool> ConnectAsync()
-        {
-            _connectEvent.Reset();
-            ConnectionState = KnxConnectionState.Opening;
-            var data = CreateConnectionRequestFrame();
-            try
-            {
-                _packetReceiver.Start();
-                var bytessent = await _udpClient.SendAsync(data, data.Length, _remoteControlEndpoint).ConfigureAwait(false);
-                if (bytessent == 0)
-                {
-                    ConnectionState = KnxConnectionState.Invalid;
-                    return false;
-                }
-                var result = _connectEvent.WaitOne(_config.ConnectTimeout);
-                if (!result) ConnectionState = KnxConnectionState.Invalid;
-                return result;
-            }
-            catch
-            {
-                ConnectionState = KnxConnectionState.Invalid;
-                return false;
-            }
-        }
-
         private byte[] CreateConnectionRequestFrame()
         {
             var cri     = new CRITunnel(_config.UseBusMonitorMode ? TunnelingLayer.TUNNEL_BUSMONITOR : TunnelingLayer.TUNNEL_LINKLAYER);
@@ -345,7 +348,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             {
                 //_logger.Info("Heartbeat failed. " + message);
             }
-            InternalCloseAsync("Hartbeat failed - " + message, false);
+            _ = InternalCloseAsync("Hartbeat failed - " + message, false);
         }
 
         private void HeartbeatOk()
@@ -375,7 +378,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             var data = frame.ToBytes();
             _udpClient.Send(data, data.Length, _remoteDataEndpoint);
 
-            InternalCloseAsync("External request received.", true);
+            _ = InternalCloseAsync("External request received.", true);
         }
 
         #endregion
@@ -401,6 +404,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             var frame = new KnxNetIPFrame(service);
             var data = frame.ToBytes();
             _udpClient.Send(data, data.Length, _remoteDataEndpoint);
+            OnCemiReceived(DateTime.UtcNow, request.CemiMessage) ;
         }
 
         private bool ValidateReqSequenceCounter(byte rcvSeq)

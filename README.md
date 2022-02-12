@@ -13,13 +13,14 @@ Currently there are two packages available at NuGet:
     * DPT types
     * anything else that is media agnostic
     * Interfaces for clients
+    * Device management
 * [Tiveria.Home.Knx.IP](https://www.nuget.org/packages/Tiveria.Home.Knx.IP/)
     * All KnxNetIP frame types supported
     * Routing client implementation
-    * Tunneling client impementation
+    * Tunneling client implementation
+    * Device management client implementation
     * Helpers
 
- `./gradlew build`
 
 Supported Features
 --------
@@ -27,7 +28,7 @@ Supported Features
     * Tunneling
     * Routing
     * Busmonitor
-* KNX IP
+* Device Management
 * DPT encoding/decoding 
     * 1.* - Boolean (Switch, Alarm, ..)
     * 2.* - Boolean controlled (Switch, Enable, ..)

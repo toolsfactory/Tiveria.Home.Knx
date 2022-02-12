@@ -95,6 +95,9 @@ namespace Tiveria.Home.Knx.IP.Connections
         /// Occurs when the connection is closed
         /// </summary>
         public event EventHandler? DisConnected;
+
+        /// <inheritdoc/>
+        public event EventHandler<CemiReceivedArgs>? CemiReceived;
         #endregion
 
         #region constructor
@@ -161,6 +164,11 @@ namespace Tiveria.Home.Knx.IP.Connections
         protected void OnFrameReceived(DateTime timestamp, IKnxNetIPFrame frame, bool handled)
         {
             FrameReceived?.Invoke(this, new FrameReceivedEventArgs(timestamp, frame, handled));
+        }
+
+        protected void OnCemiReceived(DateTime timestamp, ICemiMessage message)
+        {
+            CemiReceived?.Invoke(this, new CemiReceivedArgs(timestamp, message));
         }
 
         protected void OnDataReceived(DateTime timestamp, byte[] data)

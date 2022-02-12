@@ -80,7 +80,7 @@ namespace Tiveria.Home.Knx.IP.Connections
                     ConnectionState = KnxConnectionState.Open;
                     return true;
                 }
-                catch (SocketException se)
+                catch 
                 {
                     //_logger.Error("ConnectAsync: SocketException raised", se);
                     ConnectionState = KnxConnectionState.Invalid;
@@ -159,18 +159,9 @@ namespace Tiveria.Home.Knx.IP.Connections
 
         private void KnxFrameReceivedDelegate(DateTime timestamp, IPEndPoint source, IPEndPoint receiver, IKnxNetIPFrame frame)
         {
-            /*
-            switch (frame.FrameHeader.ServiceTypeIdentifier)
-            {
-                case ServiceTypeIdentifier.RoutingIndication:
-                    HandleConnectionStateResponse((ConnectionStateResponseFrame)frame);
-                    break;
-                case ServiceTypeIdentifier.UNKNOWN:
-                    HandleUnknownServiceType((UnknownService)frame);
-                    break;
-                }
-            */
             OnFrameReceived(timestamp, frame, true);
+            if (frame is RoutingIndicationService)
+                OnCemiReceived(DateTime.UtcNow, (frame as RoutingIndicationService)!.CemiMessage);
         }
         #endregion
 
