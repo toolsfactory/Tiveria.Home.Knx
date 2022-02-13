@@ -55,7 +55,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             _remoteControlEndpoint = remoteEndpoint;
             _logger = logger ?? NullLogger<TunnelingConnection>.Instance;
             _config = configuration ?? new TunnelingConnectionConfiguration();
-            _udpClient = new UdpClient(_localEndpoint);
+            _udpClient = UdpClientFactory.GetInstanceWithEP(_localEndpoint);
             _packetReceiver = new UdpPacketReceiver(_udpClient, PacketReceivedDelegate, KnxFrameReceivedDelegate);
         }
 
@@ -88,18 +88,19 @@ namespace Tiveria.Home.Knx.IP.Connections
         public override async Task<bool> ConnectAsync()
         {
             _connectEvent.Reset();
+            _udpClient.Connect(RemoteEndpoint);
             ConnectionState = KnxConnectionState.Opening;
             var data = CreateConnectionRequestFrame();
             try
             {
                 _packetReceiver.Start();
-                var bytessent = await _udpClient.SendAsync(data, data.Length, _remoteControlEndpoint).ConfigureAwait(false);
+                var bytessent = await _udpClient.SendAsync(data).ConfigureAwait(false);
                 if (bytessent == 0)
                 {
                     ConnectionState = KnxConnectionState.Invalid;
                     return false;
                 }
-                _localEndpoint = (IPEndPoint) _udpClient.Client.LocalEndPoint!;
+                _localEndpoint = (IPEndPoint) _udpClient.LocalEndPoint!;
                 var result = _connectEvent.WaitOne(_config.ConnectTimeout);
                 if (!result) ConnectionState = KnxConnectionState.Invalid;
                 return result;
@@ -180,7 +181,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         private IPEndPoint _localEndpoint;
         private readonly IPEndPoint _remoteControlEndpoint;
         private readonly ILogger<TunnelingConnection> _logger;
-        private readonly UdpClient _udpClient;
+        private readonly IUdpClient _udpClient;
         private IPEndPoint? _remoteDataEndpoint;
         private UdpPacketReceiver _packetReceiver;
         private HeartbeatMonitor? _heartbeatMonitor;
@@ -207,7 +208,7 @@ namespace Tiveria.Home.Knx.IP.Connections
                         InitAckReceiving();
                         for (var i = 0; i < _config.SendRepeats; i++)
                         {
-                            _udpClient.SendAsync(data, data.Length, _remoteControlEndpoint);
+                            _udpClient.SendAsync(data, data.Length);
                             ackReceived = _ackEvent.Wait(_config.AcknowledgeTimeout, _cancellationTokenSource.Token);
                             if (ackReceived)
                                 break;
@@ -279,7 +280,7 @@ namespace Tiveria.Home.Knx.IP.Connections
                     if (ConnectionState == KnxConnectionState.Closed)
                         return;
                     var frame = CreateDisconnectFrame();
-                    _udpClient.Send(frame, frame.Length, _remoteControlEndpoint);
+                    _udpClient.SendAsync(frame).Wait();
                     var remaining = 1000 * 10;
                     while (remaining > 0)
                     {
@@ -377,8 +378,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             var service = new DisconnectResponseService(request.ChannelId);
             var frame = new KnxNetIPFrame(service);
             var data = frame.ToBytes();
-            _udpClient.Send(data, data.Length, _remoteDataEndpoint);
-
+            _udpClient.SendAsync(data).Wait();
             _ = InternalCloseAsync("External request received.", true);
         }
 
@@ -404,7 +404,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             var service = new TunnelingAcknowledgeService(request.ConnectionHeader);
             var frame = new KnxNetIPFrame(service);
             var data = frame.ToBytes();
-            _udpClient.Send(data, data.Length, _remoteDataEndpoint);
+            _udpClient.SendAsync(data).Wait();
             OnCemiReceived(DateTime.UtcNow, request.CemiMessage) ;
         }
 

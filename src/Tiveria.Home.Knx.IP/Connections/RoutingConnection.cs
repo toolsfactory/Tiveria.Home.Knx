@@ -54,11 +54,10 @@ namespace Tiveria.Home.Knx.IP.Connections
         {
             _localEndPoint = localEndpoint;
             RemoteEndpoint = remoteEndpoint;
-            _udpClient = new UdpClient() { 
-                MulticastLoopback = true,
-                ExclusiveAddressUse = false, 
-                DontFragment = true
-            };
+            _udpClient = UdpClientFactory.GetInstance();
+            _udpClient.MulticastLoopback = true;
+            _udpClient.ExclusiveAddressUse = false;
+            _udpClient.DontFragment = true;            
 
             _packetReceiver = new UdpPacketReceiver(_udpClient, PacketReceivedDelegate, KnxFrameReceivedDelegate);
         }
@@ -74,7 +73,7 @@ namespace Tiveria.Home.Knx.IP.Connections
                 //_logger.Trace("ConnectAsync: Sending connection request to " + _remoteControlEndpoint + " with data " + data.ToHex());
                 try
                 {
-                    _udpClient.Client.Bind(_localEndPoint);
+                    _udpClient.BindSocket(_localEndPoint);
                     _udpClient.JoinMulticastGroup(RemoteEndpoint.Address, _localEndPoint.Address);
                     _packetReceiver.Start();
                     ConnectionState = KnxConnectionState.Open;
@@ -106,7 +105,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             var data = frame.ToBytes();
             try
             {
-                var bytessent = await _udpClient.SendAsync(data, data.Length, RemoteEndpoint);
+                var bytessent = await _udpClient.SendAsync(data, RemoteEndpoint);
                 if (bytessent == 0)
                     throw new KnxCommunicationException("sending data failed");
             }
@@ -126,7 +125,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         #endregion
 
         #region private members
-        private readonly UdpClient _udpClient;
+        private readonly IUdpClient _udpClient;
         private UdpPacketReceiver _packetReceiver;
         private bool disposedValue = false;
         private readonly IPEndPoint _localEndPoint;

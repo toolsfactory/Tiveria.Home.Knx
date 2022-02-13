@@ -25,7 +25,7 @@
 using Tiveria.Common.IO;
 using Tiveria.Home.Knx.Exceptions;
 
-namespace Tiveria.Home.Knx
+namespace Tiveria.Home.Knx.Extensions
 {
     public static class BigEndianBinaryReaderExtensions
     {

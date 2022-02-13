@@ -22,30 +22,31 @@
     combination.
 */
 
-using Microsoft.Extensions.Logging;
 using System.Net;
+using System.Net.Sockets;
 
-namespace Tiveria.Home.Knx.Extensions
+namespace Tiveria.Home.Knx.IP.Extensions
 {
-    internal static class LoggerExtensions
+    /// <summary>
+    /// Static factory class encapsulating <see cref="IUdpClient"/> implementations.
+    /// Goal is to be able to mock <see cref="UdpClient"/>
+    /// </summary>
+    public static class UdpClientFactory
     {
-        private static readonly Action<ILogger, Exception?> startReceive = LoggerMessage.Define(LogLevel.Information, new EventId(100001), "");
-        private static readonly Action<ILogger, Exception?> connectingFailed = LoggerMessage.Define(LogLevel.Error, new EventId(100002), "Connecting to MQTT broker failed");
+        /// <summary>
+        /// Exchangeable creator function. 
+        /// </summary>
+        public static Func<IUdpClient> GetInstance;
 
-        public static void XLogStartReceive(this ILogger logger)
+        /// <summary>
+        /// Exchangeable creator function. 
+        /// </summary>
+        public static Func<IPEndPoint, IUdpClient> GetInstanceWithEP;
+
+        static UdpClientFactory()
         {
-            startReceive(logger, null);
+            GetInstance = () => new UdpClientWrapper();
+            GetInstanceWithEP = localEP => new UdpClientWrapper(localEP);
         }
-
-        public static void XLogConnectingFailed(this ILogger logger, Exception ex)
-        {
-            connectingFailed(logger, ex);
-        }
-    }
-
-    internal static class LogEvents
-    {
-        private const int IDBase = 50000;
-        internal static readonly EventId event1 = new(IDBase + 0, "first");
     }
 }

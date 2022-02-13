@@ -27,7 +27,6 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Home.Knx.IP.Services;
-using Tiveria.Home.Knx.IP.Services.Serializers;
 using Tiveria.Home.Knx.IP.Structures;
 
 namespace Tiveria.Home.Knx.IP.Connections
@@ -119,7 +118,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         #endregion
 
         #region private members
-        private readonly List<UdpClient> _udpClients = new();
+        private readonly List<IUdpClient> _udpClients = new();
         private readonly List<UdpPacketReceiver> _udpReceivers = new();
         private readonly List<KeyValuePair<IPAddress, KnxNetIPServerDescription>> _Servers = new();
         #endregion
@@ -166,9 +165,9 @@ namespace Tiveria.Home.Knx.IP.Connections
             }
         }
 
-        private async Task SendSearchMessageAsync(UdpClient client, Func<IPEndPoint, IKnxNetIPService> generator)
+        private async Task SendSearchMessageAsync(IUdpClient client, Func<IPEndPoint, IKnxNetIPService> generator)
         {
-            var endpoint = client.Client.LocalEndPoint;
+            var endpoint = client.LocalEndPoint;
             if (endpoint == null) return;
 
             var ipendpoint = (IPEndPoint)endpoint;
@@ -176,7 +175,7 @@ namespace Tiveria.Home.Knx.IP.Connections
             var frame = new KnxNetIPFrame(service);
             var data = frame.ToBytes();
 
-            await client.SendAsync(data, data.Length, KnxNetIPConstants.DefaultBroadcastEndpoint);
+            await client.SendAsync(data, KnxNetIPConstants.DefaultBroadcastEndpoint);
         }
         #endregion
 
@@ -206,8 +205,8 @@ namespace Tiveria.Home.Knx.IP.Connections
 
         private void CreateUdpClientForIP(IPAddress addr, int nicIndex)
         {
-            var _udpClient = new UdpClient(new IPEndPoint(addr, 0)); // Port 0 should trigger the system to select a free one
-            _udpClient.Client.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.MulticastInterface, IPAddress.HostToNetworkOrder(nicIndex));
+            var _udpClient = UdpClientFactory.GetInstanceWithEP(new IPEndPoint(addr, 0)); // Port 0 should trigger the system to select a free one
+            _udpClient.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.MulticastInterface, IPAddress.HostToNetworkOrder(nicIndex));
             _udpClients.Add(_udpClient);
         }
         #endregion
