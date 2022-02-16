@@ -124,7 +124,7 @@ namespace Tiveria.Home.Knx.Cemi
 
         public override string? ToString()
         {
-            return $"APCI: Size {Size} / Type {Cemi.ApduType.ToString(ApduType)} / Data {BitConverter.ToString(Data)}";
+            return $"(Len {Size}, {Cemi.ApduType.ToString(ApduType)}, {BitConverter.ToString(Data)})";
         }
         #endregion
 

@@ -40,5 +40,10 @@ namespace Tiveria.Home.Knx.IP.Services
             ConnectionHeader = connectionHeader;
             CemiMessage = cemi;
         }
+
+        public override string ToString()
+        {
+            return $"{Enums.ServiceTypeIdentifier.ToString(ServiceTypeIdentifier)}, {ConnectionHeader}, {CemiMessage}";
+        }
     }
 }

@@ -107,7 +107,7 @@ namespace Tiveria.Home.Knx.Cemi
                 }
             }
 
-            return $"CemiLData: MC: {MessageCode}, {fields}, Ctrl1_ {ControlField1}, Ctrl2_ {ControlField2}, Src:{SourceAddress}, Dst: {DestinationAddress}, Tpci: {Tpci}, Apdu: {Apdu}";
+            return $"MC {MessageCode}, {fields}, C1 {ControlField1}, C2 {ControlField2}, Src {SourceAddress}, Dst {DestinationAddress}, Tpci {Tpci}, Apdu {Apdu}";
         }
     }
 }

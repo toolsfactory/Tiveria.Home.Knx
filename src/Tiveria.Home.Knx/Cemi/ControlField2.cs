@@ -96,12 +96,11 @@ namespace Tiveria.Home.Knx.Cemi
             return raw;
         }
 
-        public string ToDescription(int padding)
+        public override string ToString()
         {
             var effbin = ("0000" + Convert.ToString(ExtendedFrameFormat, 2));
             effbin = effbin.Substring(effbin.Length - 5);
-            var spaces = new String(' ', padding);
-            return $"{spaces}Ctrl2: DestinationAddressType = {DestinationAddressType}, HopCount = {HopCount}, ExtendedFrameFormat = {effbin}";
+            return $"({DestinationAddressType}, Hop {HopCount}, EFF {effbin})";
         }
         #endregion
     }

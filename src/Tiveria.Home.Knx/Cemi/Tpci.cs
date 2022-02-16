@@ -84,5 +84,10 @@ namespace Tiveria.Home.Knx.Cemi
         {
             return new Tpci(data);
         }
+
+        public override string ToString()
+        {
+            return $"({this.PacketType}, {this.SequenceType}, {SequenceNumber}, {this.ControlType})";
+        }
     }
 }

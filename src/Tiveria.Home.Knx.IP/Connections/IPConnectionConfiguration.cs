@@ -27,17 +27,17 @@ using System.Net;
 namespace Tiveria.Home.Knx.IP.Connections
 {
     /// <summary>
-    /// Configuration options for a kinds of KnxNetIP connections
+    /// Configuration options for all kinds of KnxNetIP connections
     /// </summary>
     public record IPConnectionConfiguration
     {
         /// <summary>
-        /// >Enable/Disable automatic resynchronization of sequence number
+        /// Enable/Disable automatic resynchronization of sequence number
         /// </summary>
         public bool ResyncSequenceNumbers { get; set; } = false;
 
         /// <summary>
-        /// Switch NAT Awarenes of the cennection initiation
+        /// Switch to control the NAT awarenes of the connection initiation
         /// </summary>
         public bool NatAware { get; set; } = false;
 
@@ -47,12 +47,12 @@ namespace Tiveria.Home.Knx.IP.Connections
         public ushort SendRepeats { get; set; } = 3;
 
         /// <summary>
-        /// Timeout after the achnowledge is deemed to not happen anymore
+        /// Timeout in milliseconds after the achnowledge is deemed to not happen anymore
         /// </summary>
         public ushort AcknowledgeTimeout { get; set; } = 500;
 
         /// <summary>
-        /// maximum time a send can take before it is timed out
+        /// Maximum time in milliseconds a send can take before it is considered as failed
         /// </summary>
         public ushort SendTimeout { get; set; } = 500;
     }

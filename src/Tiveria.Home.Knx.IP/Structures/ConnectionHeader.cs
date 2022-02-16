@@ -27,6 +27,8 @@ using Tiveria.Common.IO;
 namespace Tiveria.Home.Knx.IP.Structures
 {
     /// <summary>
+    /// Class representing the KnxNetIP ConnectionHeader used to indicate the channelID and sequenceNo when communication via Tunneling with a Knx Interface.
+    /// This class allows changing its properties as both values are only set moments before the message is sent.
     /// <code>
     /// +--------+--------+--------+--------+
     /// | byte 1 | byte 2 | byte 3 | byte 4 |
@@ -36,22 +38,42 @@ namespace Tiveria.Home.Knx.IP.Structures
     /// +--------+--------+--------+--------+
     /// | 0x04   |        |        | 0x00   |
     /// +--------+--------+-----------------+
-    ///
-    /// Serice Type:  <see cref="Tiveria.Home.Knx.IP.Enums.ServiceTypeIdentifier"/>
     /// </code>
     /// </summary>
     public class ConnectionHeader : KnxDataElement
     {
         #region Constants
+        /// <summary>
+        /// Size of the structure when serialized to its binary representation
+        /// </summary>
         public static readonly byte STRUCTURE_SIZE = 0x04;
         #endregion
 
         #region public properties
-        public byte ChannelId { get; init; }
-        public byte SequenceCounter { get; init; }
+        /// <summary>
+        /// The ID of the channel used for communication with the Knx Interface.
+        /// </summary>
+        public byte ChannelId { get; set; } = 0;
+
+        /// <summary>
+        /// The message sequence number
+        /// </summary>
+        public byte SequenceCounter { get; set; } = 0;
         #endregion
 
         #region Constructors
+
+        /// <summary>
+        /// Creates a new instance of the ConnectionHeader class.
+        /// </summary>
+        public ConnectionHeader()
+        { }
+
+        /// <summary>
+        /// Creates a new instance of the ConnectionHeader class.
+        /// </summary>
+        /// <param name="channelId">The initial channel id</param>
+        /// <param name="sequenceCounter">The initial sequence Counter</param>
         public ConnectionHeader(byte channelId, byte sequenceCounter)
         {
             Size = STRUCTURE_SIZE;
@@ -61,6 +83,7 @@ namespace Tiveria.Home.Knx.IP.Structures
         #endregion
 
         #region Public Methods
+        /// <inheritdoc/>
         public override void Write(BigEndianBinaryWriter writer)
         {
             writer.Write(STRUCTURE_SIZE);
@@ -69,13 +92,19 @@ namespace Tiveria.Home.Knx.IP.Structures
             writer.Write((byte)0x00);
         }
 
+        /// <inheritdoc/>
         public override String ToString()
         {
-            return String.Format($"ConnectionHeader: Size={Size}, ChannelId={ChannelId}, SequenceCounter={SequenceCounter}");
+            return String.Format($"(Len {Size}, ChId {ChannelId}, SeqCnt {SequenceCounter})");
         }
         #endregion
 
         #region Static Parsing
+        /// <summary>
+        /// Parses a binary representation and creates a matching instance of the <see cref="ConnectionHeader"/> class
+        /// </summary>
+        /// <param name="reader">The binary reader to use for parsing</param>
+        /// <returns>Instance of <see cref="ConnectionHeader"/></returns>
         public static ConnectionHeader Parse(BigEndianBinaryReader reader)
         {
             reader.ReadSizeAndCheck("ConnectionHeader", STRUCTURE_SIZE);

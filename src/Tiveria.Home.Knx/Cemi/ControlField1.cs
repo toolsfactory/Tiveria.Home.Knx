@@ -130,10 +130,9 @@ namespace Tiveria.Home.Knx.Cemi
             return raw;
         }
 
-        public string ToDescription(int padding)
+        public override string ToString()
         {
-            var spaces = new String(' ', padding);
-            return $"{spaces}Ctrl1: ExtendedFrame = {ExtendedFrame}, Repeat = {Repeat}, Broadcast = {Broadcast}, Priority = {Priority}, Acknowledge = {AcknowledgeRequest}, Confirm = {Confirm}";
+            return $"(Ext {ExtendedFrame}, Rep {Repeat}, BCast {Broadcast}, Prio {Priority}, Ack {AcknowledgeRequest}, C {Confirm})";
         }
     }
 }
