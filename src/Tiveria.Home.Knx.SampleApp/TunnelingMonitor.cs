@@ -22,18 +22,16 @@
     combination.
 */
 
+using Microsoft.Extensions.Logging;
 using System.Net;
-using Tiveria.Home.Knx.Primitives;
-using Tiveria.Home.Knx.IP;
-using Tiveria.Common.Extensions;
-using Tiveria.Home.Knx.IP.Enums;
-using Tiveria.Home.Knx.Datapoint;
 using System.Net.Sockets;
-using NLog;
-using NLog.Config;
-using NLog.Targets;
+using Tiveria.Common.Extensions;
 using Tiveria.Home.Knx.Cemi;
+using Tiveria.Home.Knx.Datapoint;
+using Tiveria.Home.Knx.IP;
+using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Home.Knx.IP.Services;
+using Tiveria.Home.Knx.Primitives;
 
 namespace Tiveria.Home.Knx
 {
@@ -41,7 +39,16 @@ namespace Tiveria.Home.Knx
     {
         // replace the IP Address below with your specific router or tunnel interface IP Address.
         // Port should be correct assuming you have a standard setup
-        private IP.Connections.TunnelingConnection Con = new IP.Connections.TunnelingConnectionBuilder(Program.LocalIPAddress, Program.GatewayIPAddress, Program.GatewayPort).Build();
+        private readonly IP.Connections.TunnelingConnection _connection;
+        private readonly ILoggerFactory _loggerFactory;
+        private readonly ILogger<TunnelingMonitor> _logger;
+
+        public TunnelingMonitor(ILoggerFactory loggerFactory)
+        {
+            _loggerFactory = loggerFactory;
+            _connection = new IP.Connections.TunnelingConnectionBuilder(Program.LocalIPAddress, Program.GatewayIPAddress, Program.GatewayPort).WithLogger(_loggerFactory.CreateLogger<IP.Connections.TunnelingConnection>()).Build();
+            _logger = _loggerFactory.CreateLogger<TunnelingMonitor>();
+        }
 
         public async Task RunAsync()
         {
@@ -49,14 +56,14 @@ namespace Tiveria.Home.Knx
             ConsoleKeyInfo cki;
             // Prevent example from ending if CTL+C is pressed.
             Console.TreatControlCAsInput = true;
-            ConfigureLogging();
 
-            Con.DataReceived += Con_DataReceived!;
-            Con.FrameReceived += Con_FrameReceived!;
-            Con.ConnectionStateChanged += Con_StateChanged!;
+            _logger.LogInformation("RunAsync - Start");
+            _connection.DataReceived += Con_DataReceived!;
+            _connection.FrameReceived += Con_FrameReceived!;
+            _connection.ConnectionStateChanged += Con_StateChanged!;
             Console.WriteLine("Hello World!");
 
-            Con.ConnectAsync().Wait();
+            _connection.ConnectAsync().Wait();
             do
             {
                 cki = Console.ReadKey(false);
@@ -68,12 +75,12 @@ namespace Tiveria.Home.Knx
                 switch (cki.Key)
                 {
                     case ConsoleKey.A: SendReadRequestAsync().Wait(); break;
-                    case ConsoleKey.Escape: Con.DisconnectAsync().Wait(); break;
+                    case ConsoleKey.Escape: _connection.DisconnectAsync().Wait(); break;
                     case ConsoleKey.D0: SendWriteRequestAsync(false).Wait(); break;
                     case ConsoleKey.D1: SendWriteRequestAsync(true).Wait(); break;
                 }
             } while (cki.Key != ConsoleKey.Enter);
-            await Con.DisconnectAsync();
+            await _connection.DisconnectAsync();
         }
 
 
@@ -84,7 +91,7 @@ namespace Tiveria.Home.Knx
             var ctrl1 = new ControlField1();
             var ctrl2 = new ControlField2(groupAddress: true);
             var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_REQ, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 0), GroupAddress.Parse("4/0/0"), ctrl1, ctrl2, new Tpci(), apdu);
-            await Con.SendCemiAsync(cemi, true);
+            await _connection.SendCemiAsync(cemi);
         }
 
         private async Task SendReadRequestAsync()
@@ -191,38 +198,6 @@ namespace Tiveria.Home.Knx
                 }
             }
             throw new Exception("No network adapters with an IPv4 address in the system!");
-        }
-
-        private void ConfigureLogging()
-        {
-            var config = new LoggingConfiguration();
-
-            // Step 2. Create targets, configure and add them to the configuration 
-            var consoleTarget = new ColoredConsoleTarget();
-            consoleTarget.Layout = @"${date:format=HH\:mm\:ss} ${logger} ${message}";
-            config.AddTarget("console", consoleTarget);
-
-            var fileTarget = new FileTarget();
-            fileTarget.FileName = "${basedir}/file.txt";
-            fileTarget.Layout = "${message}";
-            config.AddTarget("file", fileTarget);
-
-            var logViewerTarget = new NLogViewerTarget();
-            logViewerTarget.Address = "tcp://127.0.0.1:878";
-            config.AddTarget("viewer", logViewerTarget);
-
-            // Step 3. Define rules
-            var rule1 = new LoggingRule("*", LogLevel.Debug, consoleTarget);
-            config.LoggingRules.Add(rule1);
-            var rule2 = new LoggingRule("*", LogLevel.Debug, fileTarget);
-            config.LoggingRules.Add(rule2);
-            var rule3 = new LoggingRule("*", LogLevel.Trace, logViewerTarget);
-            config.LoggingRules.Add(rule3);
-
-            // Step 5. Activate the configuration
-            LogManager.Configuration = config;
-            //            Tiveria.Home.Knx.Utils.LogFactory.LogManager = new NLogLogManager();
-
         }
     }
 }

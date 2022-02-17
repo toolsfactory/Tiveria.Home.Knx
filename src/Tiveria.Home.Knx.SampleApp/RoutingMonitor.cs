@@ -34,6 +34,7 @@ using NLog.Config;
 using NLog.Targets;
 using Tiveria.Home.Knx.Cemi;
 using Tiveria.Home.Knx.IP.Services;
+using Microsoft.Extensions.Logging;
 
 namespace Tiveria.Home.Knx
 {
@@ -42,7 +43,15 @@ namespace Tiveria.Home.Knx
         // replace the IP Address below with your specific router or tunnel interface IP Address.
         // Port should be correct assuming you have a standard setup
 
-        private IP.Connections.RoutingConnection Con = new IP.Connections.RoutingConnection(new IPEndPoint(Program.LocalIPAddress, KnxNetIPConstants.DefaultPort)) ;
+        private readonly IP.Connections.RoutingConnection _connection;
+
+        private readonly ILoggerFactory _loggerFactory;
+
+        public RoutingMonitor(ILoggerFactory loggerFactory)
+        {
+            _connection = new IP.Connections.RoutingConnection(new IPEndPoint(Program.LocalIPAddress, KnxNetIPConstants.DefaultPort));
+            _loggerFactory = loggerFactory;
+        }
 
         public async Task RunAsync()
          {
@@ -50,13 +59,12 @@ namespace Tiveria.Home.Knx
             ConsoleKeyInfo cki;
             // Prevent example from ending if CTL+C is pressed.
             Console.TreatControlCAsInput = true;
-            ConfigureLogging();
 
-            Con.DataReceived += Con_DataReceived;
-            Con.FrameReceived += Con_FrameReceived;
-            Con.ConnectionStateChanged += Con_StateChanged;
+            _connection.DataReceived += Con_DataReceived;
+            _connection.FrameReceived += Con_FrameReceived;
+            _connection.ConnectionStateChanged += Con_StateChanged;
 
-            Con.ConnectAsync().Wait();
+            _connection.ConnectAsync().Wait();
 
             do
             {
@@ -69,7 +77,7 @@ namespace Tiveria.Home.Knx
                 }
 
             } while (cki.Key != ConsoleKey.Escape);
-            await Con.DisconnectAsync();
+            await _connection.DisconnectAsync();
         }
 
 
@@ -81,7 +89,7 @@ namespace Tiveria.Home.Knx
             var ctrl1 = new ControlField1(priority: Priority.Normal, ack: false, repeat: false, confirm: ConfirmType.NoError);
             var ctrl2 = new ControlField2();
             var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_IND, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 1), GroupAddress.Parse("4/0/0"), ctrl1, ctrl2, default(Tpci), tpdu);
-            await Con.SendCemiAsync(cemi);
+            await _connection.SendCemiAsync(cemi);
         }
 
         private async Task SendReadRequestAsync()
@@ -187,38 +195,6 @@ namespace Tiveria.Home.Knx
                 }
             }
             throw new Exception("No network adapters with an IPv4 address in the system!");
-        }
-
-        private void ConfigureLogging()
-        {
-            var config = new LoggingConfiguration();
-
-            // Step 2. Create targets, configure and add them to the configuration 
-            var consoleTarget = new ColoredConsoleTarget();
-            consoleTarget.Layout = @"${date:format=HH\:mm\:ss} ${logger} ${message}";
-            config.AddTarget("console", consoleTarget);
-
-            var fileTarget = new FileTarget();
-            fileTarget.FileName = "${basedir}/file.txt";
-            fileTarget.Layout = "${message}";
-            config.AddTarget("file", fileTarget);
-
-            var logViewerTarget = new NLogViewerTarget();
-            logViewerTarget.Address = "tcp://127.0.0.1:878";
-            config.AddTarget("viewer", logViewerTarget);
-
-            // Step 3. Define rules
-            var rule1 = new LoggingRule("*", LogLevel.Debug, consoleTarget);
-            config.LoggingRules.Add(rule1);
-            var rule2 = new LoggingRule("*", LogLevel.Debug, fileTarget);
-            config.LoggingRules.Add(rule2);
-            var rule3 = new LoggingRule("*", LogLevel.Trace, logViewerTarget);
-            config.LoggingRules.Add(rule3);
-
-            // Step 5. Activate the configuration
-            LogManager.Configuration = config;
-//            Tiveria.Home.Knx.Utils.LogFactory.LogManager = new NLogLogManager();
-
         }
     }
 }

@@ -99,7 +99,7 @@ namespace Tiveria.Home.Knx.IP.Structures
 
         public override String ToString()
         {
-            return String.Format($"KNXnet/IP {Version.VersionString} - {Enums.ServiceTypeIdentifier.ToDescription(ServiceTypeIdentifier)} ({(byte)ServiceTypeIdentifier:x}0x) - {Size} bytes / {TotalLength} bytes");
+            return String.Format($"KNXnet/IP {Version.VersionString} - {Enums.ServiceTypeIdentifier.ToString(ServiceTypeIdentifier)} ({(byte)ServiceTypeIdentifier:x}0x) - {Size} bytes / {TotalLength} bytes");
         }
         #endregion
 

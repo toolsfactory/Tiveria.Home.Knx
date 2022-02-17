@@ -34,6 +34,9 @@ namespace Tiveria.Home.Knx.IP.Connections
         /// </summary>
         public bool UseBusMonitorMode { get; set; } = false;
 
+        /// <summary>
+        /// Timeout in milliseconds for receiving the connect confirmation from the Knx interface
+        /// </summary>
         public ushort ConnectTimeout { get; set; } = 500;
 
     }

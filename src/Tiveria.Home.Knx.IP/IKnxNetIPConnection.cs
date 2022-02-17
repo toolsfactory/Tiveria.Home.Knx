@@ -23,16 +23,32 @@
 */
 
 using System.Net;
+using Tiveria.Home.Knx.Cemi;
 using Tiveria.Home.Knx.IP.Enums;
 
 namespace Tiveria.Home.Knx.IP
 {
+    /// <summary>
+    /// Interface for all IP based connections ot the Knx bus
+    /// </summary>
     public interface IKnxNetIPConnection : IKnxClient
     {
+        /// <summary>
+        /// Triggered each time a Knx frame is received
+        /// </summary>
         event EventHandler<FrameReceivedEventArgs> FrameReceived;
 
+        /// <summary>
+        /// IP Address and port of the remote endpoint
+        /// </summary>
         IPEndPoint RemoteEndpoint { get; }
 
-        Task SendAsync(IKnxNetIPService service);
+        
+        /// <summary>
+        /// Build a <see cref="ICemiMessage"/>Cemi frame based on the provided service and send it in blocking mode and with automatic state management
+        /// </summary>
+        /// <param name="service">The <see cref="IKnxNetIPService"/> that should be put in the frame</param>
+        /// <returns>The awaitable task</returns>
+        Task SendServiceAsync(IKnxNetIPService service);
     }
 }

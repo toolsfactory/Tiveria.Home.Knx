@@ -48,7 +48,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         /// <summary>
         /// Create a routing connection client that connects to the multicast endpoint provided as parameter
         /// </summary>
-        /// <param name="localEndPoint">The local endpoint from which to connect.</param>
+        /// <param name="localEndpoint">The local endpoint from which to connect.</param>
         /// <param name="remoteEndpoint">The multicast group address to join</param>
         public RoutingConnection(IPEndPoint localEndpoint, IPEndPoint remoteEndpoint) : base(remoteEndpoint)
         {
@@ -65,7 +65,7 @@ namespace Tiveria.Home.Knx.IP.Connections
 
         #region public methods
         /// <inheritdoc/>
-        public override Task<bool> ConnectAsync()
+        public override Task ConnectAsync()
         {
             return Task.Run(() =>
             {
@@ -77,13 +77,13 @@ namespace Tiveria.Home.Knx.IP.Connections
                     _udpClient.JoinMulticastGroup(RemoteEndpoint.Address, _localEndPoint.Address);
                     _packetReceiver.Start();
                     ConnectionState = KnxConnectionState.Open;
-                    return true;
+                    return;
                 }
                 catch 
                 {
                     //_logger.Error("ConnectAsync: SocketException raised", se);
                     ConnectionState = KnxConnectionState.Invalid;
-                    return false;
+                    throw;
                 }
             });
         }
@@ -96,7 +96,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         }
 
         /// <inheritdoc/>
-        public async override Task SendAsync(IKnxNetIPService service)
+        public async override Task SendServiceAsync(IKnxNetIPService service)
         {
             if (ConnectionState != KnxConnectionState.Open)
                 throw new KnxCommunicationException("Connection is not open");
@@ -119,8 +119,8 @@ namespace Tiveria.Home.Knx.IP.Connections
         /// <inheritdoc/>
         public override Task SendCemiAsync(ICemiMessage message)
         {
-            var frame = new RoutingIndicationService(message);
-            return SendAsync(frame);
+            var service = new RoutingIndicationService(message);
+            return SendServiceAsync(service);
         }
         #endregion
 

@@ -24,6 +24,7 @@
 
 using Tiveria.Home.Knx.Primitives;
 using Tiveria.Home.Knx.Cemi;
+using Tiveria.Home.Knx.Exceptions;
 
 namespace Tiveria.Home.Knx
 {
@@ -75,8 +76,8 @@ namespace Tiveria.Home.Knx
         /// <summary>
         /// Asynchronously connects to the Knx bus.
         /// </summary>
-        /// <returns>True if sucessfully connected, otherwise false</returns>
-        Task<bool> ConnectAsync();
+        /// <exception cref="KnxCommunicationException">In case the connection could not be established, one of the <see cref="KnxCommunicationException"/> subtypes are fired</exception>
+        Task ConnectAsync();
 
         /// <summary>
         /// Closes the connection to the Knx bus.

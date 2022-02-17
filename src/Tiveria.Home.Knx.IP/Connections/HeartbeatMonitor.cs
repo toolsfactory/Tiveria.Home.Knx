@@ -35,72 +35,82 @@ namespace Tiveria.Home.Knx.IP.Connections
     /// </summary>
     /// <param name="severe"><c>true</c> if an exception caused the failure, otherwise <c>false</c>.</param>
     /// <param name="message">Text message describing the failure</param>
-    internal delegate void HeartbeatFailedDelegate(bool severe, string message);
-    internal delegate void HeartbeatOkDelegate();
+    public delegate void HeartbeatFailedDelegate(bool severe, string message);
+
+    /// <summary>
+    /// Delegate definition used by HeartbeatMonitor to inform owner about a successful beat
+    /// </summary>
+    public delegate void HeartbeatOkDelegate();
 
     /// <summary>
     /// Internal class that helps monitoring the connection state of a KNXNetIP tunneling connection
     /// </summary>
-    internal class HeartbeatMonitor
+    public class HeartbeatMonitor
     {
-        #region private fields
-        private readonly int _intervalMS;
-        private readonly int _timeoutMS;
-        private readonly int _retries;
-        private readonly UdpClient _udpClient;
-        private readonly IPEndPoint _remoteEndpoint;
-        private readonly byte[] _rawPacket;
-        private readonly AutoResetEvent _ReceivedEvent = new AutoResetEvent(false);
-        private readonly CancellationTokenSource _cancelSource = new CancellationTokenSource();
-//        private readonly ILogger _logger = LogFactory.GetLogger("Tiveria.Home.Knx.IP.HeartbeatMonitor");
-        #endregion
+        #region public static behaviour configuration
+        /// <summary>
+        /// Defines how often the heartbeat signal is sent
+        /// </summary>
+        public static ushort IntervalSeconds { get; set; } = 10;
 
-        #region public events
-        public HeartbeatFailedDelegate HeartbeatFailed;
-        private void OnHeartbeatFailed(bool severe, string message)
-        {
-            HeartbeatFailed?.Invoke(severe, message);
-        }
+        /// <summary>
+        /// Sets the maximum time the monitor waits for a response
+        /// </summary>
+        public static ushort TimeoutSeconds { get; set; } = 3;
 
-        public HeartbeatOkDelegate HeartbeatOk;
-        private void OnHeartbeatOk()
-        {
-            HeartbeatOk?.Invoke();
-        }
-        #endregion
+        /// <summary>
+        /// Defines how many retries are done before the monitor assumes a connection loss
+        /// </summary>
+        public static ushort Retries { get; set; } = 3;
+        #endregion public static behaviour configuration
 
-        #region constructor
-        public HeartbeatMonitor(IPEndPoint remoteEndpoint, Hpai endpointHpai, byte channelId, int intervalSeconds, int timeoutSeconds, int retries)
+        #region public constructor
+
+        /// <summary>
+        /// Creates a new heartbeat monitor
+        /// </summary>
+        /// <param name="udpClient">The udp client to use for sending messages</param>
+        /// <param name="endpointHpai">The knx endpoint information to be sent with the heartbeats</param>
+        /// <param name="channelId">The knx channel id to be sent with the heartbeats </param>
+        /// <param name="hmOkDel">Delegate </param>
+        /// <param name="hbFailDel"></param>
+        public HeartbeatMonitor(IUdpClient udpClient, Hpai endpointHpai, byte channelId, HeartbeatOkDelegate hmOkDel, HeartbeatFailedDelegate hbFailDel)
         {
             // As this is an internal class, no validation of parameters is performed
-            _udpClient = new UdpClient();
-            _remoteEndpoint = remoteEndpoint;
-            _intervalMS = intervalSeconds * 1000;
-            _timeoutMS = timeoutSeconds * 1000;
-            _retries = retries;
+            _udpClient = udpClient;
+            _heartbeatFailed = hbFailDel;
+            _heartbeatOk = hmOkDel;
             var service = new ConnectionStateRequestService(channelId, endpointHpai);
             _rawPacket = new KnxNetIPFrame(service).ToBytes();
         }
+
         #endregion
 
+        #region public implementation
+        /// <summary>
+        /// Start sending heartbeats
+        /// </summary>
         public void Start()
         {
-//            _logger.Trace("Starting heartbeats");
             Task.Run(() => InternalTask());
         }
 
+        /// <summary>
+        /// Stop sending heartbeats
+        /// </summary>
         public void Stop()
         {
             _cancelSource.Cancel();
         }
 
+        /// <summary>
+        /// called from external when a connection state response was received
+        /// </summary>
+        /// <param name="response">The reponse details</param>
         public void HandleResponse(ConnectionStateResponseService response)
         {
             if (response.Status == Enums.ErrorCodes.NoError)
             {
-                #if DEBUG
-//                _logger.Trace($"ConnectionStateResponse OK. ChannelId: {response.ChannelId}");
-                #endif
                 _ReceivedEvent.Set();
             }
             else
@@ -108,25 +118,46 @@ namespace Tiveria.Home.Knx.IP.Connections
                 Console.WriteLine($"ConnectionStateResponse. ChannelId: {response.ChannelId}, Status: {response.Status}");
             }
         }
+        #endregion public implementation
 
+        #region private implementation
+
+        #region private members
+        private readonly IUdpClient _udpClient;
+        private readonly byte[] _rawPacket;
+        private readonly AutoResetEvent _ReceivedEvent = new AutoResetEvent(false);
+        private readonly CancellationTokenSource _cancelSource = new CancellationTokenSource();
+        private readonly HeartbeatFailedDelegate _heartbeatFailed;
+        private readonly HeartbeatOkDelegate _heartbeatOk;
+        #endregion private members
+
+        #region private delegate handlers
+        private void OnHeartbeatFailed(bool severe, string message)
+        {
+            _heartbeatFailed?.Invoke(severe, message);
+        }
+
+        private void OnHeartbeatOk()
+        {
+            _heartbeatOk?.Invoke();
+        }
+        #endregion private delegate handlers
+        
         private void InternalTask()
         {
             var receivedFlag = false;
             var cancelToken = _cancelSource.Token;
             try
             {
-                while (true)
+                while (!cancelToken.IsCancellationRequested)
                 {
                     receivedFlag = false;
-                    if (cancelToken.WaitHandle.WaitOne(_intervalMS))
+                    if (cancelToken.WaitHandle.WaitOne(IntervalSeconds * 1000))
                         break;
-                    for (var i = 0; i < _retries; i++)
+                    for (var i = 0; i < Retries; i++)
                     {
-                        Console.WriteLine($"Sending Heartbeat. Try {i + 1} of {_retries}.");
                         SendHeartbeat();
-                        Console.WriteLine("Sent.");
                         int waitResult = WaitForHearbeat();
-                        Console.WriteLine($"WaitResult: {waitResult}.");
                         receivedFlag = waitResult == 0;
                         if (waitResult == WaitHandle.WaitTimeout)
                         { }
@@ -155,22 +186,16 @@ namespace Tiveria.Home.Knx.IP.Connections
 
         private int WaitForHearbeat()
         {
-            #if DEBUG
-//            _logger.Trace($"Waiting heartbeat");
-            #endif
-            var result =  WaitHandle.WaitAny(new WaitHandle[] { _ReceivedEvent, _cancelSource.Token.WaitHandle }, _timeoutMS);
-            #if DEBUG
-            //_logger.Trace($"Wait result: " + result);
-            #endif
+            var result =  WaitHandle.WaitAny(new WaitHandle[] { _ReceivedEvent, _cancelSource.Token.WaitHandle }, TimeoutSeconds * 1000);
             return result;
         }
 
         private void SendHeartbeat()
         {
-            #if DEBUG
-//            _logger.Trace($"Sending heartbeat now");
-            #endif
-            _udpClient.Send(_rawPacket, _rawPacket.Length, _remoteEndpoint);
+            _udpClient.SendAsync(_rawPacket);
         }
+
+        #endregion private implementation
+
     }
 }

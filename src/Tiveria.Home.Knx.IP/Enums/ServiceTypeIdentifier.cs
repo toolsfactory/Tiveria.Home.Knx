@@ -67,9 +67,9 @@ namespace Tiveria.Home.Knx.IP.Enums
         /// translate <see cref="ServiceTypeIdentifier"/> to a readable string
         /// </summary>
         /// <returns>the string representation of the ServiceTypeIdentifer</returns>
-        public static string ToDescription(ushort id)
+        public static string ToString(ushort id)
         {
-            return IsKnown(id) ? _knownServiceTypeIdentifiers[id] : "Unknown";
+            return IsKnown(id) ? _knownServiceTypeIdentifiers[id] : $"Unknown {id:x4}";
         }
         #endregion
 

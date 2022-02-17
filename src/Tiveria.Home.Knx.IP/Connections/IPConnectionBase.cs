@@ -48,11 +48,6 @@ namespace Tiveria.Home.Knx.IP.Connections
         public string ConnectionName => GetConnectionName();
 
         /// <summary>
-        /// Channel id used between the two endpoints
-        /// </summary>
-        public byte ChannelId => _channelId;
-
-        /// <summary>
         /// State of the connection
         /// </summary>
         public KnxConnectionState ConnectionState
@@ -101,14 +96,19 @@ namespace Tiveria.Home.Knx.IP.Connections
         #endregion
 
         #region constructor
+
+        /// <summary>
+        /// Base constructor
+        /// </summary>
+        /// <param name="remoteEndpoint">The remote <see cref="IPEndPoint"/> the connection talks to</param>
         protected IPConnectionBase(IPEndPoint remoteEndpoint)
         {
-            //            _logger = Tiveria.Home.Knx.Utils.LogFactory.GetLogger("Tiveria.Home.Knx.IP." + ConnectionName);
             RemoteEndpoint = remoteEndpoint;
-            ResetRcvSeqCounter();
-            ResetSndSeqCounter();
         }
 
+        /// <summary>
+        /// tbd
+        /// </summary>
         ~IPConnectionBase()
         {
             // Dont change this code. Only change the Dispose(bool disposing) one.
@@ -121,8 +121,8 @@ namespace Tiveria.Home.Knx.IP.Connections
         /// <summary>
         /// Establish a connection to the remote endpoint
         /// </summary>
-        /// <returns>true in case connection was established, otherwise false</returns>
-        public abstract Task<bool> ConnectAsync();
+        /// <exception cref="KnxCommunicationException">In case the connection could not be established, one of the <see cref="KnxCommunicationException"/> subtypes are fired</exception>
+        public abstract Task ConnectAsync();
 
         /// <summary>
         /// Shutdown the current connection
@@ -133,9 +133,9 @@ namespace Tiveria.Home.Knx.IP.Connections
         /// <summary>
         /// Send an <see cref="IKnxNetIPFrame"/> via the IP connection to the remote endpoint
         /// </summary>
-        /// <param name="frame">The frame to send</param>
+        /// <param name="service">The KnxNetIP service to send</param>
         /// <exception cref="KnxCommunicationException">Thrown when sending the message failed</exception>
-        public abstract Task SendAsync(IKnxNetIPService service);
+        public abstract Task SendServiceAsync(IKnxNetIPService service);
 
         /// <summary>
         /// Send a Cemi frame to the Knx infrastructure
@@ -146,11 +146,6 @@ namespace Tiveria.Home.Knx.IP.Connections
         #endregion
 
         #region private members
-        //        protected readonly ILogger _logger;
-        protected byte _channelId;
-        private byte _rcvSeqCounter = 0;
-        private byte _sndSeqCounter = 0;
-        private object _seqLock = new object();
         private KnxConnectionState _connectionState = KnxConnectionState.Initialized;
         #endregion
 
@@ -188,64 +183,6 @@ namespace Tiveria.Home.Knx.IP.Connections
         #endregion
 
         #region internal implementations
-        #region Sequence Counters
-        protected void ResetRcvSeqCounter()
-        {
-            lock (_seqLock)
-            {
-                _rcvSeqCounter = 0;
-            }
-        }
-
-        protected byte IncRcvSeqCounter()
-        {
-            byte result = 0;
-            lock (_seqLock)
-            {
-                _rcvSeqCounter++;
-                result = _rcvSeqCounter;
-            }
-            return result;
-        }
-
-        protected byte RcvSeqCounter => _rcvSeqCounter;
-
-        protected void ResetSndSeqCounter()
-        {
-            lock (_seqLock)
-            {
-                _sndSeqCounter = 0;
-            }
-        }
-
-        protected byte IncSndSeqCounter()
-        {
-            byte result = 0;
-            lock (_seqLock)
-            {
-                _sndSeqCounter++;
-                result = _sndSeqCounter;
-            }
-            return result;
-        }
-
-        protected byte SndSeqCounter => _sndSeqCounter;
-
-/*
-        protected bool isCorrectChannelID(byte channelId)
-        {
-            if (channelId == _channelId)
-            {
-                return true;
-            }
-            else
-            {
-//                _logger.Warn($"Wrong channelID {channelId} received for service {serviceType}. Expected: {_channelId}");
-                return false;
-            }
-        }
-*/
-        #endregion
 
         #region Disposable Pattern
         protected abstract void Dispose(bool disposing);

@@ -24,36 +24,109 @@
 
 using Spectre.Console;
 using System.Net;
-using Tiveria.Home.Knx.IP;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using NLog;
+using NLog.Extensions.Logging;
+using NLog.Config;
+using NLog.Targets;
 
 namespace Tiveria.Home.Knx
 {
     public class Program
     {
-        public static IPAddress LocalIPAddress = IPAddress.Parse("192.168.2.146");
+        public static IPAddress LocalIPAddress = IPAddress.Parse("192.168.2.107");
         public static IPAddress GatewayIPAddress = IPAddress.Parse("192.168.2.150");
         public static ushort GatewayPort = 3671;
 
+        private static ServiceProvider? _serviceProvider;
+        private static Logger? _logger;
+
         static void Main(string[] args)
         {
-            bool exit = false;
-            while (!exit)
+            try
             {
-                Console.Clear();
-                AnsiConsole.MarkupLine("[underline green]  KnxNetIP Demo  [/]");
-                Console.WriteLine();
+                Init();
+                bool exit = false;
+                while (!exit)
+                {
+                    Console.Clear();
+                    AnsiConsole.MarkupLine("[underline green]  KnxNetIP Demo  [/]");
+                    Console.WriteLine();
 
-                var menu = new EasyConsole.Menu()
-                  .Add("Search KnxNetIP Routers/Tunnels", () => new SearchInterfacesDemo().RunAsync().Wait())
-                  .Add("Build some structures", () => new StructureBuildDemo().RunAsync().Wait())
-                  .Add("Tunneling Connection Tests", () => new TunnelingMonitor().RunAsync().Wait())
-                  .Add("Routing Connection Tests", () => new RoutingMonitor().RunAsync().Wait())
-                  .Add("DescriptionReq sample", () => new DescriptionRequestDemo().SendDescriptionRequest())
-                  .Add("Busmonitor", () => new BusmonitorDemo().RunAsync().Wait())
-                  .Add("DeviceManagement", () => new DeviceManagementDemo().RunAsync().Wait())
-                  .Add("Exit", () => exit = true);
-                menu.Display();
+                    var menu = new EasyConsole.Menu()
+                      .Add("Search KnxNetIP Routers/Tunnels", () => _serviceProvider!.GetService<SearchInterfacesDemo>()!.RunAsync().Wait())
+                      .Add("Build some structures", () => _serviceProvider!.GetService<StructureBuildDemo>()!.RunAsync().Wait())
+                      .Add("Tunneling Connection Tests", () => _serviceProvider!.GetService<TunnelingMonitor>()!.RunAsync().Wait())
+                      .Add("Routing Connection Tests", () => _serviceProvider!.GetService<RoutingMonitor>()!.RunAsync().Wait())
+                      .Add("DescriptionReq sample", () => _serviceProvider!.GetService<DescriptionRequestDemo>()!.SendDescriptionRequest())
+                      .Add("Busmonitor", () => _serviceProvider!.GetService<BusmonitorDemo>()!.RunAsync().Wait())
+                      .Add("DeviceManagement", () => _serviceProvider!.GetService<DeviceManagementDemo>()!.RunAsync().Wait())
+                      .Add("Exit", () => exit = true);
+                    menu.Display();
+                }
+
             }
+            catch (Exception ex)
+            {
+                // NLog: catch any exception and log it.
+                _logger!.Error(ex, "Stopped program because of exception");
+                throw;
+            }
+            finally
+            {
+                // Ensure to flush and stop internal timers/threads before application-exit (Avoid segmentation fault on Linux)
+                LogManager.Shutdown();
+            }
+
         }
+
+        private static void Init()
+        {
+            var config = new ConfigurationBuilder().Build();
+
+            _logger = LogManager.Setup()
+                                   .SetupExtensions(ext => ext.RegisterConfigSettings(config))
+                                   .GetCurrentClassLogger();
+
+            _serviceProvider = new ServiceCollection()
+                    .AddTransient<SearchInterfacesDemo>()
+                    .AddTransient<StructureBuildDemo>()
+                    .AddTransient<TunnelingMonitor>()
+                    .AddTransient<RoutingMonitor>()
+                    .AddTransient<DescriptionRequestDemo>()
+                    .AddTransient<BusmonitorDemo>()
+                    .AddTransient<DeviceManagementDemo>()
+                    .AddLogging(loggingBuilder =>
+                    {
+                        // configure Logging with NLog
+                        loggingBuilder.ClearProviders();
+                        loggingBuilder.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+                        loggingBuilder.AddNLog(ConfigureLogging());
+                    }).BuildServiceProvider();
+        }
+
+        private static LoggingConfiguration ConfigureLogging()
+        {
+            var config = new LoggingConfiguration();
+
+            var debugTarget = new DebugTarget();
+            debugTarget.Layout = @"${date:format=HH\:mm\:ss} ${logger} ${message}";
+            config.AddTarget("debug", debugTarget);
+
+            var logViewerTarget = new NLogViewerTarget();
+            logViewerTarget.Address = "udp://127.0.0.1:878";
+            config.AddTarget("viewer", logViewerTarget);
+
+            var rule1 = new LoggingRule("*", NLog.LogLevel.Debug, debugTarget);
+            config.LoggingRules.Add(rule1);
+            var rule3 = new LoggingRule("*", NLog.LogLevel.Trace, logViewerTarget);
+            config.LoggingRules.Add(rule3);
+
+            return config;
+
+        }
+
     }
 }

@@ -1,49 +1,49 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	    <TargetFrameworks>net6.0;netstandard2.1;</TargetFrameworks>
-    	<ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Authors>Michael Geissler</Authors>
-        <Company>Tiveria Embedded Solutions GmbH</Company>
-        <Description>A small KNX library inspired by the Calimero and many other KNX solutions out there.</Description>
-        <Copyright>Michael Geissler</Copyright>
-        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-        <PackageProjectUrl>https://github.com/toolsfactory/Tiveria.Home.Knx</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/toolsfactory/Tiveria.Home.Knx</RepositoryUrl>
-        <RepositoryType>GIT</RepositoryType>
-        <LangVersion>latest</LangVersion>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
-        <GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<TargetFrameworks>net6.0;netstandard2.1;</TargetFrameworks>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Authors>Michael Geissler</Authors>
+		<Company>Tiveria Embedded Solutions GmbH</Company>
+		<Description>A small KNX library inspired by the Calimero and many other KNX solutions out there.</Description>
+		<Copyright>Michael Geissler</Copyright>
+		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<PackageProjectUrl>https://github.com/toolsfactory/Tiveria.Home.Knx</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/toolsfactory/Tiveria.Home.Knx</RepositoryUrl>
+		<RepositoryType>GIT</RepositoryType>
+		<LangVersion>latest</LangVersion>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <LangVersion>latest</LangVersion>
-    <OutputPath>..\..\bin</OutputPath>
-    <DefineConstants>$(DefineConstants)</DefineConstants>
+	<LangVersion>latest</LangVersion>
+	<OutputPath>..\..\bin</OutputPath>
+	<DefineConstants>$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <LangVersion>latest</LangVersion>
-    <OutputPath>..\..\bin</OutputPath>
-    <DefineConstants>$(DefineConstants)</DefineConstants>
+	<LangVersion>latest</LangVersion>
+	<OutputPath>..\..\bin</OutputPath>
+	<DefineConstants>$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\README.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
+	<None Include="..\..\README.md">
+	  <Pack>True</Pack>
+	  <PackagePath>\</PackagePath>
+	</None>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Tiveria.Common" Version="1.3.2" />
+	<PackageReference Include="Tiveria.Common" Version="1.3.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Tiveria.Home.Knx\Tiveria.Home.Knx.csproj" />
+	<ProjectReference Include="..\Tiveria.Home.Knx\Tiveria.Home.Knx.csproj" />
   </ItemGroup>
 
   <ItemGroup>

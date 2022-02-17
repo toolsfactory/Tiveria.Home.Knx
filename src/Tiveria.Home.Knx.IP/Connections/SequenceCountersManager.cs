@@ -24,32 +24,15 @@
 
 namespace Tiveria.Home.Knx.IP.Connections
 {
-    internal class LockManager
+    internal class SequenceCountersManager
     {
-        private readonly SemaphoreSlim _lock = new SemaphoreSlim(1,1);
         private byte _rcvSeqCounter = 0;
         private byte _sndSeqCounter = 0;
         private object _seqLock = new object();
 
-        internal async Task<bool> WaitForLockAsync(CancellationToken token)
-        {
-            try
-            {
-                await _lock.WaitAsync(token);
-                return true;
+        internal byte RcvSeqCounter => _rcvSeqCounter;
 
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        internal void ReleaseLock()
-        {
-            _lock.Release();
-        }
-
+        internal byte SndSeqCounter => _sndSeqCounter;
 
         #region Sequence Counters
         internal void ResetCounters()
@@ -84,9 +67,24 @@ namespace Tiveria.Home.Knx.IP.Connections
             return result;
         }
 
-        internal byte RcvSeqCounter => _rcvSeqCounter;
+        internal bool ValidateReqSequenceCounter(byte rcvSeq, bool resyncCounters)
+        {
+            // copied from Calimero
+            // Workaround for missed request problem (not part of the knxnet/ip tunneling spec):
+            // we missed a single request, hence, the receive sequence is one behind. If the remote
+            // endpoint didn't terminate the connection, but continues to send requests, this workaround
+            // re-syncs with the sequence of the sender.
+            var expSeq = _rcvSeqCounter;
+            var missed = (expSeq - 1 == expSeq);
+            if (missed && resyncCounters)
+            {
+                IncRcvSeqCounter();
+                expSeq++;
+            }
+            IncRcvSeqCounter();
+            return (rcvSeq == expSeq) || (rcvSeq == ++expSeq);
+        }
 
-        internal byte SndSeqCounter => _sndSeqCounter;
         #endregion
     }
 }

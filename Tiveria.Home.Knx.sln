@@ -22,9 +22,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiveria.Home.Knx.IP", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiveria.Home.Knx.ObjectServer", "src\Tiveria.Home.Knx.ObjectServer\Tiveria.Home.Knx.ObjectServer.csproj", "{14EE05E1-652C-4DB7-AA82-B88B4F4189B0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{14DE20B1-7238-45B5-8432-A96D825E6447}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples + tools", "samples + tools", "{14DE20B1-7238-45B5-8432-A96D825E6447}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tiveria.Home.Knx.DocumentationGenerator", "tools\Tiveria.Home.Knx.DocumentationGenerator\Tiveria.Home.Knx.DocumentationGenerator.csproj", "{30672748-0989-4FC5-8345-5555EA66E40F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiveria.Home.Knx.DocumentationGenerator", "tools\Tiveria.Home.Knx.DocumentationGenerator\Tiveria.Home.Knx.DocumentationGenerator.csproj", "{30672748-0989-4FC5-8345-5555EA66E40F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +59,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{88D14116-4455-4374-9FA2-5AE3556CDF2F} = {14DE20B1-7238-45B5-8432-A96D825E6447}
+		{30672748-0989-4FC5-8345-5555EA66E40F} = {14DE20B1-7238-45B5-8432-A96D825E6447}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {84BA5D2F-7CE3-451C-9F74-5CFA244C810E}

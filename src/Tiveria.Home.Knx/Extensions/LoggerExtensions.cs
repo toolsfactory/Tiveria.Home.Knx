@@ -48,4 +48,14 @@ namespace Tiveria.Home.Knx.Extensions
         private const int IDBase = 50000;
         internal static readonly EventId event1 = new(IDBase + 0, "first");
     }
+
+    public static partial class Log
+    {
+        [LoggerMessage(
+            EventId = 0,
+            Level = LogLevel.Critical,
+            Message = "Could not open socket to `{hostName}`")]
+        static partial void CouldNotOpenSocket(
+            this ILogger logger, string hostName);
+    }
 }

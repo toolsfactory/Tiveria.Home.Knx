@@ -28,6 +28,7 @@ using Tiveria.Home.Knx.Cemi;
 using Tiveria.Home.Knx.IP;
 using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Home.Knx.IP.Services;
+using Tiveria.Home.Knx.IP.Connections;
 
 namespace Tiveria.Home.Knx
 {
@@ -36,7 +37,7 @@ namespace Tiveria.Home.Knx
         private IPAddress _gatewayIPAddress;
         private ushort _gatewayPort;
 
-        private IP.Connections.TunnelingConnection? Con;
+        private IP.Connections.TunnelingConnection Con = new TunnelingConnectionBuilder(Program.LocalIPAddress, Program.GatewayIPAddress, Program.GatewayPort).Build();
         public BusmonitorDemo()
         {
             _gatewayIPAddress = Program.GatewayIPAddress;
@@ -52,7 +53,6 @@ namespace Tiveria.Home.Knx
             // Prevent example from ending if CTL+C is pressed.
             Console.TreatControlCAsInput = true;
 
-            Con = new Tiveria.Home.Knx.IP.Connections.TunnelingConnection(_gatewayIPAddress, _gatewayPort, GetLocalIPAddress(), 55555,true);
             Con.DataReceived += Con_DataReceived;
             Con.FrameReceived += Con_FrameReceived;
             Con.ConnectionStateChanged += Con_StateChanged;
