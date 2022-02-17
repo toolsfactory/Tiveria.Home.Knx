@@ -328,7 +328,11 @@ namespace Tiveria.Home.Knx.IP.Connections
                     }
                     HandleAckNotReceived();
                 }
-                finally { }
+                catch (SocketException se)
+                {
+                    ConnectionState = KnxConnectionState.Invalid;
+                    throw new KnxCommunicationException("sending data failed", se);
+                }
             });
         }
 
@@ -366,6 +370,18 @@ namespace Tiveria.Home.Knx.IP.Connections
             _ackState = AckState.Error;
             InternalCloseAsync("Ack not received", false).Wait();
         }
+        private void HandleTunnelingAck(TunnelingAcknowledgeService serviceType)
+        {
+            if (_ackState != AckState.Pending)
+                return;
+            if (serviceType.ConnectionHeader.ChannelId != ChannelId)
+                return;
+            if (SendSequenceCounter != serviceType.ConnectionHeader.SequenceCounter)
+                return;
+            _ackState = AckState.Received;
+            _ackEvent.Set();
+        }
+
         #endregion sending in blocked mode
 
         #region handling disconnect request
@@ -399,18 +415,6 @@ namespace Tiveria.Home.Knx.IP.Connections
             _udpClient.SendAsync(data);
         }
 
-        private void HandleTunnelingAck(TunnelingAcknowledgeService serviceType)
-        {
-            if (_ackState != AckState.Pending)
-                return;
-            if (serviceType.ConnectionHeader.ChannelId != ChannelId)
-                return;
-            if (SendSequenceCounter != serviceType.ConnectionHeader.SequenceCounter)
-                return;
-            _ackState = AckState.Received;
-            _ackEvent.Set();
-        }
-
         #endregion
 
         #region handling ConnectionState response
@@ -421,13 +425,11 @@ namespace Tiveria.Home.Knx.IP.Connections
         }
         #endregion
 
-        #region handling unknown servicetype
-/*
-        private void HandleUnknownServiceType(UnknownService serviceType)
+        #region handling unknown servicetype request
+        private void HandleUnknownServiceType(RawService serviceType)
         {
-            _logger.Warn($"Unknown Servicetype: {serviceType.ServiceTypeRaw:x2}. Data: " + serviceType.FrameRaw.ToHex());
+            _logger.LogWarning($"Unknown Servicetype: {serviceType.ServiceTypeIdentifier:x2}. Data: " + BitConverter.ToString(serviceType.Payload));
         }
-*/
         #endregion
 
         #region packet and knx frame receive delegates
@@ -438,34 +440,38 @@ namespace Tiveria.Home.Knx.IP.Connections
 
         private void KnxFrameReceivedDelegate(DateTime timestamp, IPEndPoint source, IPEndPoint receiver, IKnxNetIPFrame frame)
         {
+            HandleFrameTypes(source, frame);
+            OnFrameReceived(timestamp, frame, true);
+        }
+
+        private void HandleFrameTypes(IPEndPoint source, IKnxNetIPFrame frame)
+        {
             switch (frame.FrameHeader.ServiceTypeIdentifier)
             {
                 case ServiceTypeIdentifier.ConnectResponse:
-                    HandleConnectResponse((ConnectionResponseService)frame.Service, source);
+                    HandleConnectResponse((ConnectionResponseService) frame.Service, source);
                     break;
                 case ServiceTypeIdentifier.DisconnectRequest:
-                    HandleDisconnectRequest((DisconnectRequestService)frame.Service);
+                    HandleDisconnectRequest((DisconnectRequestService) frame.Service);
                     break;
                 case ServiceTypeIdentifier.DisconnectResponse:
-                    HandleDisconnectResponse((DisconnectResponseService)frame.Service);
+                    HandleDisconnectResponse((DisconnectResponseService) frame.Service);
                     break;
                 case ServiceTypeIdentifier.TunnelingRequest:
-                    HandleTunnelingRequest((TunnelingRequestService)frame.Service);
+                    HandleTunnelingRequest((TunnelingRequestService) frame.Service);
                     break;
                 case ServiceTypeIdentifier.TunnelingAcknowledge:
-                    HandleTunnelingAck((TunnelingAcknowledgeService)frame.Service);
+                    HandleTunnelingAck((TunnelingAcknowledgeService) frame.Service);
                     break;
                 case ServiceTypeIdentifier.ConnectionStateResponse:
-                    HandleConnectionStateResponse((ConnectionStateResponseService)frame.Service);
+                    HandleConnectionStateResponse((ConnectionStateResponseService) frame.Service);
                     break;
-                    /*
-                case ServiceTypeIdentifier.UNKNOWN:
-                    HandleUnknownServiceType((UnknownService)frame);
+                default:
+                    HandleUnknownServiceType((RawService) frame.Service);
                     break;
-                    */
             }
-            OnFrameReceived(timestamp, frame, true);
         }
+
         /// <inheritdoc/>
         #endregion
 
