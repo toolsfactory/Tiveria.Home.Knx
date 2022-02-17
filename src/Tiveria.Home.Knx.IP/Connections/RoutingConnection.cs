@@ -91,6 +91,8 @@ namespace Tiveria.Home.Knx.IP.Connections
         /// <inheritdoc/>
         public override Task DisconnectAsync()
         {
+            ConnectionState = KnxConnectionState.Closed;
+            _packetReceiver?.Stop();
             _udpClient.Close();
             return Task.CompletedTask;
         }
@@ -132,19 +134,20 @@ namespace Tiveria.Home.Knx.IP.Connections
         #endregion
 
         #region private implementations
+        /// <inheritdoc/>
         protected override void Dispose(bool disposing)
         {
             if (!disposedValue)
             {
                 if (disposing)
                 {
-                    // TODO: Verwalteten Zustand (verwaltete Objekte) bereinigen
+                    _udpClient.Dispose();
                 }
-                _udpClient.Dispose();
                 disposedValue = true;
             }
         }
 
+        /// <inheritdoc/>
         protected override string GetConnectionName()
         {
             return "RoutingConnection";
