@@ -10,6 +10,7 @@ public abstract class EMIServiceBase : ServiceBase
 | --- | --- |
 | [CemiMessage](EMIServiceBase/CemiMessage.md) { get; set; } |  |
 | [ConnectionHeader](EMIServiceBase/ConnectionHeader.md) { get; set; } |  |
+| override [ToString](EMIServiceBase/ToString.md)() |  |
 
 ## Protected Members
 

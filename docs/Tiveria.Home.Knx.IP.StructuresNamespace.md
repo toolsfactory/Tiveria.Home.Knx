@@ -3,7 +3,7 @@
 | public type | description |
 | --- | --- |
 | class [BusyInfo](./Tiveria.Home.Knx.IP.Structures/BusyInfo.md) |  |
-| class [ConnectionHeader](./Tiveria.Home.Knx.IP.Structures/ConnectionHeader.md) | +--------+--------+--------+--------+ &#x7C; byte 1 &#x7C; byte 2 &#x7C; byte 3 &#x7C; byte 4 &#x7C; +--------+--------+--------+--------+ &#x7C; Header &#x7C;Channel &#x7C;Sequence&#x7C;Reserved&#x7C; &#x7C; Length &#x7C;ID &#x7C;Counter &#x7C; &#x7C; +--------+--------+--------+--------+ &#x7C; 0x04 &#x7C; &#x7C; &#x7C; 0x00 &#x7C; +--------+--------+-----------------+ Serice Type: |
+| class [ConnectionHeader](./Tiveria.Home.Knx.IP.Structures/ConnectionHeader.md) | Class representing the KnxNetIP ConnectionHeader used to indicate the channelID and sequenceNo when communication via Tunneling with a Knx Interface. This class allows changing its properties as both values are only set moments before the message is sent. |
 | class [CRD](./Tiveria.Home.Knx.IP.Structures/CRD.md) |  |
 | class [CRDTunnel](./Tiveria.Home.Knx.IP.Structures/CRDTunnel.md) | Immutable representation of the connection response data block (CRD) for a tunneling connection. Official KNX Documentation: "03_04_08 Tunneling v01.05.03 AS.pdf" -&gt; 4.4.4.4 |
 | class [CRI](./Tiveria.Home.Knx.IP.Structures/CRI.md) |  |

@@ -8,17 +8,17 @@ public class CemiLData : ICemiMessage
 
 | name | description |
 | --- | --- |
-| [CemiLData](CemiLData/CemiLData.md)(…) |  |
-| [AdditionalInfoFields](CemiLData/AdditionalInfoFields.md) { get; set; } |  |
-| [AdditionalInfoLength](CemiLData/AdditionalInfoLength.md) { get; set; } |  |
-| [Apdu](CemiLData/Apdu.md) { get; set; } |  |
-| [ControlField1](CemiLData/ControlField1.md) { get; set; } |  |
-| [ControlField2](CemiLData/ControlField2.md) { get; set; } |  |
-| [DestinationAddress](CemiLData/DestinationAddress.md) { get; set; } |  |
-| [MessageCode](CemiLData/MessageCode.md) { get; set; } |  |
-| [Size](CemiLData/Size.md) { get; set; } |  |
-| [SourceAddress](CemiLData/SourceAddress.md) { get; set; } |  |
-| [Tpci](CemiLData/Tpci.md) { get; set; } |  |
+| [CemiLData](CemiLData/CemiLData.md)(…) | Creates a new instance and initializes all fields with the provided parameters (2 constructors) |
+| [AdditionalInfoFields](CemiLData/AdditionalInfoFields.md) { get; set; } | The [`AdditionalInformationField`](./AdditionalInformationField.md) list |
+| [AdditionalInfoLength](CemiLData/AdditionalInfoLength.md) { get; set; } | Length of the AdditionalInfo block when serialized |
+| [Apdu](CemiLData/Apdu.md) { get; set; } | The application layer data structure |
+| [ControlField1](CemiLData/ControlField1.md) { get; set; } | Field with the flags for frame type, priority, and so on |
+| [ControlField2](CemiLData/ControlField2.md) { get; set; } | Field with flags for destination address type, hop count and extended frame format |
+| [DestinationAddress](CemiLData/DestinationAddress.md) { get; set; } | Whether an [`IndividualAddress`](../Tiveria.Home.Knx.Primitives/IndividualAddress.md) or a [`GroupAddress`](../Tiveria.Home.Knx.Primitives/GroupAddress.md) as destination |
+| [MessageCode](CemiLData/MessageCode.md) { get; set; } | The [`MessageCode`](./CemiLData/MessageCode.md) of the cEMI message |
+| [Size](CemiLData/Size.md) { get; set; } | Size of the message when serialized to a byte array |
+| [SourceAddress](CemiLData/SourceAddress.md) { get; set; } | Address from where the cEMI message is sent |
+| [Tpci](CemiLData/Tpci.md) { get; set; } | All the TPCI control flags |
 | override [ToString](CemiLData/ToString.md)() |  |
 
 ## See Also

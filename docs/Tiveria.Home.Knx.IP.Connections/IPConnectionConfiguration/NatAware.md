@@ -1,6 +1,6 @@
 # IPConnectionConfiguration.NatAware property
 
-Switch NAT Awarenes of the cennection initiation
+Switch to control the NAT awarenes of the connection initiation
 
 ```csharp
 public bool NatAware { get; set; }

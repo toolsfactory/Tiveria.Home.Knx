@@ -1,5 +1,7 @@
 # CemiLData.SourceAddress property
 
+Address from where the cEMI message is sent
+
 ```csharp
 public IndividualAddress SourceAddress { get; set; }
 ```

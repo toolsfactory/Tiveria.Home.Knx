@@ -10,7 +10,6 @@ public abstract class IPConnectionBase : IKnxNetIPConnection
 
 | name | description |
 | --- | --- |
-| [ChannelId](IPConnectionBase/ChannelId.md) { get; } | Channel id used between the two endpoints |
 | [ConnectionName](IPConnectionBase/ConnectionName.md) { get; } | Descriptive name of the connection |
 | [ConnectionState](IPConnectionBase/ConnectionState.md) { get; set; } | State of the connection |
 | [RemoteEndpoint](IPConnectionBase/RemoteEndpoint.md) { get; protected set; } | IP Endpoint of the remote Knx device |
@@ -23,30 +22,23 @@ public abstract class IPConnectionBase : IKnxNetIPConnection
 | abstract [ConnectAsync](IPConnectionBase/ConnectAsync.md)() | Establish a connection to the remote endpoint |
 | abstract [DisconnectAsync](IPConnectionBase/DisconnectAsync.md)() | Shutdown the current connection |
 | [Dispose](IPConnectionBase/Dispose.md)() |  |
-| abstract [SendAsync](IPConnectionBase/SendAsync.md)(…) | Send an [`IKnxNetIPFrame`](../Tiveria.Home.Knx.IP/IKnxNetIPFrame.md) via the IP connection to the remote endpoint |
 | abstract [SendCemiAsync](IPConnectionBase/SendCemiAsync.md)(…) | Send a Cemi frame to the Knx infrastructure |
+| abstract [SendServiceAsync](IPConnectionBase/SendServiceAsync.md)(…) | Send an [`IKnxNetIPFrame`](../Tiveria.Home.Knx.IP/IKnxNetIPFrame.md) via the IP connection to the remote endpoint |
 
 ## Protected Members
 
 | name | description |
 | --- | --- |
-| [IPConnectionBase](IPConnectionBase/IPConnectionBase.md)(…) |  |
-| [RcvSeqCounter](IPConnectionBase/RcvSeqCounter.md) { get; } |  |
-| [SndSeqCounter](IPConnectionBase/SndSeqCounter.md) { get; } |  |
-| [_channelId](IPConnectionBase/_channelId.md) |  |
+| [IPConnectionBase](IPConnectionBase/IPConnectionBase.md)(…) | Base constructor |
 | abstract [Dispose](IPConnectionBase/Dispose.md)(…) |  |
-| override [Finalize](IPConnectionBase/Finalize.md)() |  |
+| override [Finalize](IPConnectionBase/Finalize.md)() | tbd |
 | abstract [GetConnectionName](IPConnectionBase/GetConnectionName.md)() |  |
-| [IncRcvSeqCounter](IPConnectionBase/IncRcvSeqCounter.md)() |  |
-| [IncSndSeqCounter](IPConnectionBase/IncSndSeqCounter.md)() |  |
 | [OnCemiReceived](IPConnectionBase/OnCemiReceived.md)(…) |  |
 | [OnConnected](IPConnectionBase/OnConnected.md)() |  |
 | [OnDataReceived](IPConnectionBase/OnDataReceived.md)(…) |  |
 | [OnDisConnected](IPConnectionBase/OnDisConnected.md)() |  |
 | [OnFrameReceived](IPConnectionBase/OnFrameReceived.md)(…) |  |
 | [OnStateChanged](IPConnectionBase/OnStateChanged.md)(…) |  |
-| [ResetRcvSeqCounter](IPConnectionBase/ResetRcvSeqCounter.md)() |  |
-| [ResetSndSeqCounter](IPConnectionBase/ResetSndSeqCounter.md)() |  |
 
 ## See Also
 

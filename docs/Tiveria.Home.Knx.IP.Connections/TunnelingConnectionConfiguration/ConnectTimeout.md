@@ -1,5 +1,7 @@
 # TunnelingConnectionConfiguration.ConnectTimeout property
 
+Timeout in milliseconds for receiving the connect confirmation from the Knx interface
+
 ```csharp
 public ushort ConnectTimeout { get; set; }
 ```

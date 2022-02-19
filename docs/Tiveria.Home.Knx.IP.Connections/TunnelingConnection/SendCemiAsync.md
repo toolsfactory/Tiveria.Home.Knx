@@ -1,21 +1,7 @@
-# TunnelingConnection.SendCemiAsync method (1 of 2)
+# TunnelingConnection.SendCemiAsync method
 
 ```csharp
-public override Task SendCemiAsync(ICemiMessage message)
-```
-
-## See Also
-
-* class [TunnelingConnection](../TunnelingConnection.md)
-* namespace [Tiveria.Home.Knx.IP.Connections](../TunnelingConnection.md.md)
-* assembly [Tiveria.Home.Knx.IP](../../Tiveria.Home.Knx.IP.md)
-
----
-
-# TunnelingConnection.SendCemiAsync method (2 of 2)
-
-```csharp
-public Task SendCemiAsync(ICemiMessage cemi, bool blocking = true)
+public override Task SendCemiAsync(ICemiMessage cemi)
 ```
 
 ## See Also

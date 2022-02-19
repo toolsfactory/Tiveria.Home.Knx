@@ -1,5 +1,7 @@
 # CemiLData.DestinationAddress property
 
+Whether an [`IndividualAddress`](../../Tiveria.Home.Knx.Primitives/IndividualAddress.md) or a [`GroupAddress`](../../Tiveria.Home.Knx.Primitives/GroupAddress.md) as destination
+
 ```csharp
 public IKnxAddress DestinationAddress { get; set; }
 ```

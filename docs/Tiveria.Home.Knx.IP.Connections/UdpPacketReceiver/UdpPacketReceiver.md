@@ -1,12 +1,13 @@
 # UdpPacketReceiver constructor
 
 ```csharp
-public UdpPacketReceiver(UdpClient client, PacketReceivedDelegate packetReceived, 
+public UdpPacketReceiver(IUdpClient client, PacketReceivedDelegate packetReceived, 
     KnxFrameReceivedDelegate? knxFrameReceived)
 ```
 
 ## See Also
 
+* interface [IUdpClient](../../Tiveria.Home.Knx.IP.Extensions/IUdpClient.md)
 * delegate [PacketReceivedDelegate](../../Tiveria.Home.Knx.IP/PacketReceivedDelegate.md)
 * delegate [KnxFrameReceivedDelegate](../../Tiveria.Home.Knx.IP/KnxFrameReceivedDelegate.md)
 * class [UdpPacketReceiver](../UdpPacketReceiver.md)

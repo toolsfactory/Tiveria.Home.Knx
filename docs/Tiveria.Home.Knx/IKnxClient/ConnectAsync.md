@@ -3,12 +3,14 @@
 Asynchronously connects to the Knx bus.
 
 ```csharp
-public Task<bool> ConnectAsync()
+public Task ConnectAsync()
 ```
 
-## Return Value
+## Exceptions
 
-True if sucessfully connected, otherwise false
+| exception | condition |
+| --- | --- |
+| [KnxCommunicationException](../../Tiveria.Home.Knx.Exceptions/KnxCommunicationException.md) | In case the connection could not be established, one of the [`KnxCommunicationException`](../../Tiveria.Home.Knx.Exceptions/KnxCommunicationException.md) subtypes are fired |
 
 ## See Also
 

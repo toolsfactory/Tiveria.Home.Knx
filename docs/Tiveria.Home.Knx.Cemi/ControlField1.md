@@ -29,7 +29,7 @@ public class ControlField1
 | [Priority](ControlField1/Priority.md) { get; set; } |  |
 | [Repeat](ControlField1/Repeat.md) { get; set; } |  |
 | [ToByte](ControlField1/ToByte.md)(…) | Convert the properties to the corresponding byte representation |
-| [ToDescription](ControlField1/ToDescription.md)(…) |  |
+| override [ToString](ControlField1/ToString.md)() |  |
 
 ## See Also
 

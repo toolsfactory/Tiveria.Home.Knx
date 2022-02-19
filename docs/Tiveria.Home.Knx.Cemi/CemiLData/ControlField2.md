@@ -1,5 +1,7 @@
 # CemiLData.ControlField2 property
 
+Field with flags for destination address type, hop count and extended frame format
+
 ```csharp
 public ControlField2 ControlField2 { get; set; }
 ```

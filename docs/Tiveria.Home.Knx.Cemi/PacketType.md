@@ -10,8 +10,8 @@ public enum PacketType : byte
 
 | name | value | description |
 | --- | --- | --- |
-| Data | `0` |  |
-| Control | `128` |  |
+| Data | `0` | Packet contains data |
+| Control | `128` | Packet indicates control messages on transport layer |
 
 ## See Also
 

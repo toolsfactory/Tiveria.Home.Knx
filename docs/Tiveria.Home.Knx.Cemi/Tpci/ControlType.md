@@ -1,5 +1,7 @@
 # Tpci.ControlType property
 
+If Control is indicated, this field describes the control type.
+
 ```csharp
 public ControlType ControlType { get; set; }
 ```

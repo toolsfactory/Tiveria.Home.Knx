@@ -1,8 +1,31 @@
-# ConnectionHeader constructor
+# ConnectionHeader constructor (1 of 2)
+
+Creates a new instance of the ConnectionHeader class.
+
+```csharp
+public ConnectionHeader()
+```
+
+## See Also
+
+* class [ConnectionHeader](../ConnectionHeader.md)
+* namespace [Tiveria.Home.Knx.IP.Structures](../ConnectionHeader.md.md)
+* assembly [Tiveria.Home.Knx.IP](../../Tiveria.Home.Knx.IP.md)
+
+---
+
+# ConnectionHeader constructor (2 of 2)
+
+Creates a new instance of the ConnectionHeader class.
 
 ```csharp
 public ConnectionHeader(byte channelId, byte sequenceCounter)
 ```
+
+| parameter | description |
+| --- | --- |
+| channelId | The initial channel id |
+| sequenceCounter | The initial sequence Counter |
 
 ## See Also
 

@@ -1,5 +1,7 @@
 # CemiLData.Tpci property
 
+All the TPCI control flags
+
 ```csharp
 public Tpci Tpci { get; set; }
 ```

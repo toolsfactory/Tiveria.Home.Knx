@@ -1,5 +1,7 @@
 # CemiLData.ControlField1 property
 
+Field with the flags for frame type, priority, and so on
+
 ```csharp
 public ControlField1 ControlField1 { get; set; }
 ```

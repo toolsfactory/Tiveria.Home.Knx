@@ -1,5 +1,7 @@
 # ConnectionHeader.STRUCTURE_SIZE field
 
+Size of the structure when serialized to its binary representation
+
 ```csharp
 public static readonly byte STRUCTURE_SIZE;
 ```

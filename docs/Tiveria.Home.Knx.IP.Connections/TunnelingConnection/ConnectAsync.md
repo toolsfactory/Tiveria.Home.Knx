@@ -1,7 +1,7 @@
 # TunnelingConnection.ConnectAsync method
 
 ```csharp
-public override Task<bool> ConnectAsync()
+public override Task ConnectAsync()
 ```
 
 ## See Also

@@ -52,25 +52,62 @@ namespace Tiveria.Home.Knx.Cemi
     ///                    information (APCI) and data passed as an argument from higher layers of
     ///                    the KNX communication stack
     /// </summary>
-    /// <remarks> 
-    /// This class does NOT support additional info!
-    /// </remarks>    
-
     public class CemiLData : ICemiMessage
     {
         private List<AdditionalInformationField> _additionalInfoFields = new();
 
+        /// <summary>
+        /// Size of the message when serialized to a byte array
+        /// </summary>
         public int Size { get; init; }
+        /// <summary>
+        /// The <see cref="MessageCode"/> of the cEMI message
+        /// </summary>
         public MessageCode MessageCode { get; init; }
+        /// <summary>
+        /// Length of the AdditionalInfo block when serialized
+        /// </summary>
         public byte AdditionalInfoLength { get; init; } = 0;
+        /// <summary>
+        /// The <see cref="AdditionalInformationField"/> list
+        /// </summary>
         public IReadOnlyList<AdditionalInformationField> AdditionalInfoFields { get; init; }
+        /// <summary>
+        /// Address from where the cEMI message is sent
+        /// </summary>
         public IndividualAddress SourceAddress { get; init; }
+        /// <summary>
+        /// Whether an <see cref="IndividualAddress"/> or a <see cref="GroupAddress"/> as destination
+        /// </summary>
         public IKnxAddress DestinationAddress { get; init; }
+        /// <summary>
+        /// Field with the flags for frame type, priority, and so on
+        /// </summary>
         public ControlField1 ControlField1 { get; init; }
+        /// <summary>
+        /// Field with flags for destination address type, hop count and extended frame format
+        /// </summary>
         public ControlField2 ControlField2 { get; init; }
+        /// <summary>
+        /// All the TPCI control flags
+        /// </summary>
         public Tpci Tpci { get; init; }
+        /// <summary>
+        /// The application layer data structure
+        /// </summary>
         public Apdu? Apdu { get; init; }
 
+        /// <summary>
+        /// Creates a new instance and initializes all fields with the provided parameters
+        /// </summary>
+        /// <param name="messageCode"></param>
+        /// <param name="additionalInfoFields"></param>
+        /// <param name="srcAddress"></param>
+        /// <param name="dstAddress"></param>
+        /// <param name="controlField1"></param>
+        /// <param name="controlField2"></param>
+        /// <param name="tpci"></param>
+        /// <param name="apdu"></param>
         public CemiLData(MessageCode messageCode, IReadOnlyList<AdditionalInformationField> additionalInfoFields, IndividualAddress srcAddress, IKnxAddress dstAddress, ControlField1 controlField1,
             ControlField2 controlField2, Tpci tpci, Apdu? apdu)
         {
@@ -89,6 +126,21 @@ namespace Tiveria.Home.Knx.Cemi
             Size = 9 + AdditionalInfoLength + (Apdu!=null ? Apdu.Size : 1);
         }
 
+        /// <summary>
+        /// Creates a new instance of the CemiLData class. The <see cref="AdditionalInfoFields"/> and the <see cref="Tpci"/> property are initilized as 0/empty.
+        /// </summary>
+        /// <param name="messageCode"></param>
+        /// <param name="srcAddress"></param>
+        /// <param name="dstAddress"></param>
+        /// <param name="controlField1"></param>
+        /// <param name="controlField2"></param>
+        /// <param name="apdu"></param>
+        public CemiLData(MessageCode messageCode, IndividualAddress srcAddress, IKnxAddress dstAddress, ControlField1 controlField1,
+            ControlField2 controlField2, Apdu apdu)
+            : this(messageCode, new List<AdditionalInformationField>(), srcAddress, dstAddress, controlField1, controlField2, new Tpci(), apdu)
+        { }
+
+        /// <inheritdoc/>
         public override string ToString()
         {
             StringBuilder fields = new();

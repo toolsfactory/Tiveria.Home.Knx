@@ -14,11 +14,20 @@ public Tpci(byte raw)
 
 # Tpci constructor (2 of 2)
 
+Creates an instance of the [`Tpci`](../Tpci.md) class.
+
 ```csharp
 public Tpci(PacketType packetType = PacketType.Data, 
     SequenceType sequenceType = SequenceType.UnNumbered, byte sequenceNumber = 0, 
     ControlType controlType = ControlType.None)
 ```
+
+| parameter | description |
+| --- | --- |
+| packetType |  |
+| sequenceType |  |
+| sequenceNumber |  |
+| controlType |  |
 
 ## See Also
 

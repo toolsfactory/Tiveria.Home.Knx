@@ -1,6 +1,6 @@
 # IPConnectionConfiguration.SendTimeout property
 
-maximum time a send can take before it is timed out
+Maximum time in milliseconds a send can take before it is considered as failed
 
 ```csharp
 public ushort SendTimeout { get; set; }

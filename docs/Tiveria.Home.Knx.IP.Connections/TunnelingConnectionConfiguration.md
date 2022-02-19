@@ -11,7 +11,7 @@ public record TunnelingConnectionConfiguration : IEquatable<IPConnectionConfigur
 | name | description |
 | --- | --- |
 | [TunnelingConnectionConfiguration](TunnelingConnectionConfiguration/TunnelingConnectionConfiguration.md)() | The default constructor. |
-| [ConnectTimeout](TunnelingConnectionConfiguration/ConnectTimeout.md) { get; set; } |  |
+| [ConnectTimeout](TunnelingConnectionConfiguration/ConnectTimeout.md) { get; set; } | Timeout in milliseconds for receiving the connect confirmation from the Knx interface |
 | [UseBusMonitorMode](TunnelingConnectionConfiguration/UseBusMonitorMode.md) { get; set; } | De/Activeate the bus monitoring mode of Knx |
 
 ## See Also

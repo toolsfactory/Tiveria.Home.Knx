@@ -28,10 +28,10 @@ using Tiveria.Home.Knx.Exceptions;
 namespace Tiveria.Home.Knx.Cemi
 {
     /// <summary>
-    ///
+    /// Class representing the Transport Layer Protocol Control Information
     /// <code>
     /// +-----------------------------------------------------------------------+
-    /// |          NPDU Byte 1: 6 bit TPCI & 2 bit APCI                         |
+    /// |          NPDU Byte 1: 6 bit TPCI and 2 bit APCI                       |
     /// +--------+--------+--------+--------+--------+--------+--------+--------+
     /// | bit 0  | bit 1  | bit 2  | bit 3  | bit 4  | bit 5  | bit 6  | bit 7  |
     /// +--------+--------+--------+--------+--------+--------+--------+--------+
@@ -47,10 +47,30 @@ namespace Tiveria.Home.Knx.Cemi
     /// 
     public class Tpci
     {
+        /// <summary>
+        /// Describes how the packet has to be interpreted. Data or Control
+        /// </summary>
         public PacketType PacketType { get; set; }
+        /// <summary>
+        /// Defines whether the packet has a sequence number or not
+        /// </summary>
         public SequenceType SequenceType { get; set; }
+        /// <summary>
+        /// In case <see cref="SequenceType"/> is <see cref="SequenceType.Numbered"/>, the number. Otherwise 0.
+        /// </summary>
         public byte SequenceNumber { get; set; }
+        /// <summary>
+        /// If <see cref="PacketType.Control"/> is indicated, this field describes the control type.
+        /// </summary>
         public ControlType ControlType { get; set; }
+
+        /// <summary>
+        /// Creates an instance of the <see cref="Tpci"/> class.
+        /// </summary>
+        /// <param name="packetType"></param>
+        /// <param name="sequenceType"></param>
+        /// <param name="sequenceNumber"></param>
+        /// <param name="controlType"></param>
         public Tpci(PacketType packetType = PacketType.Data, SequenceType sequenceType = SequenceType.UnNumbered, byte sequenceNumber = 0, ControlType controlType = ControlType.None)
         {
             PacketType = packetType;

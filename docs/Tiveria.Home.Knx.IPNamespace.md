@@ -3,7 +3,7 @@
 | public type | description |
 | --- | --- |
 | class [FrameReceivedEventArgs](./Tiveria.Home.Knx.IP/FrameReceivedEventArgs.md) |  |
-| interface [IKnxNetIPConnection](./Tiveria.Home.Knx.IP/IKnxNetIPConnection.md) |  |
+| interface [IKnxNetIPConnection](./Tiveria.Home.Knx.IP/IKnxNetIPConnection.md) | Interface for all IP based connections ot the Knx bus |
 | interface [IKnxNetIPFrame](./Tiveria.Home.Knx.IP/IKnxNetIPFrame.md) |  |
 | interface [IKnxNetIPService](./Tiveria.Home.Knx.IP/IKnxNetIPService.md) |  |
 | interface [IKnxNetIPServiceSerializer&lt;T&gt;](./Tiveria.Home.Knx.IP/IKnxNetIPServiceSerializer-1.md) |  |

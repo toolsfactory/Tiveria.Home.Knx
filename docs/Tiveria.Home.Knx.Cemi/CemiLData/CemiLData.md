@@ -1,4 +1,38 @@
-# CemiLData constructor
+# CemiLData constructor (1 of 2)
+
+Creates a new instance of the CemiLData class. The [`AdditionalInfoFields`](./AdditionalInfoFields.md) and the [`Tpci`](./Tpci.md) property are initilized as 0/empty.
+
+```csharp
+public CemiLData(MessageCode messageCode, IndividualAddress srcAddress, IKnxAddress dstAddress, 
+    ControlField1 controlField1, ControlField2 controlField2, Apdu apdu)
+```
+
+| parameter | description |
+| --- | --- |
+| messageCode |  |
+| srcAddress |  |
+| dstAddress |  |
+| controlField1 |  |
+| controlField2 |  |
+| apdu |  |
+
+## See Also
+
+* enum [MessageCode](../MessageCode.md)
+* class [IndividualAddress](../../Tiveria.Home.Knx.Primitives/IndividualAddress.md)
+* interface [IKnxAddress](../../Tiveria.Home.Knx/IKnxAddress.md)
+* class [ControlField1](../ControlField1.md)
+* class [ControlField2](../ControlField2.md)
+* class [Apdu](../Apdu.md)
+* class [CemiLData](../CemiLData.md)
+* namespace [Tiveria.Home.Knx.Cemi](../CemiLData.md.md)
+* assembly [Tiveria.Home.Knx](../../Tiveria.Home.Knx.md)
+
+---
+
+# CemiLData constructor (2 of 2)
+
+Creates a new instance and initializes all fields with the provided parameters
 
 ```csharp
 public CemiLData(MessageCode messageCode, 
@@ -6,6 +40,17 @@ public CemiLData(MessageCode messageCode,
     IKnxAddress dstAddress, ControlField1 controlField1, ControlField2 controlField2, Tpci tpci, 
     Apdu? apdu)
 ```
+
+| parameter | description |
+| --- | --- |
+| messageCode |  |
+| additionalInfoFields |  |
+| srcAddress |  |
+| dstAddress |  |
+| controlField1 |  |
+| controlField2 |  |
+| tpci |  |
+| apdu |  |
 
 ## See Also
 

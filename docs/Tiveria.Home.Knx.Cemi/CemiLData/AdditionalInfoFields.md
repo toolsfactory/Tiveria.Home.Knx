@@ -1,5 +1,7 @@
 # CemiLData.AdditionalInfoFields property
 
+The [`AdditionalInformationField`](../AdditionalInformationField.md) list
+
 ```csharp
 public IReadOnlyList<AdditionalInformationField> AdditionalInfoFields { get; set; }
 ```

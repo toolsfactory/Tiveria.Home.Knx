@@ -1,6 +1,6 @@
 # IPConnectionConfiguration.AcknowledgeTimeout property
 
-Timeout after the achnowledge is deemed to not happen anymore
+Timeout in milliseconds after the achnowledge is deemed to not happen anymore
 
 ```csharp
 public ushort AcknowledgeTimeout { get; set; }

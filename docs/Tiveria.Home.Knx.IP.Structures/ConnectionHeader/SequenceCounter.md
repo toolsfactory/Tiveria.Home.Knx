@@ -1,5 +1,7 @@
 # ConnectionHeader.SequenceCounter property
 
+The message sequence number
+
 ```csharp
 public byte SequenceCounter { get; set; }
 ```

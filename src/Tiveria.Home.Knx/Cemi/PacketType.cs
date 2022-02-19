@@ -29,7 +29,13 @@ namespace Tiveria.Home.Knx.Cemi
     /// </summary>
     public enum PacketType : byte
     {
+        /// <summary>
+        /// Packet contains data
+        /// </summary>
         Data    = 0b0_0000000,
+        /// <summary>
+        /// Packet indicates control messages on transport layer
+        /// </summary>
         Control = 0b1_0000000
     }
 }

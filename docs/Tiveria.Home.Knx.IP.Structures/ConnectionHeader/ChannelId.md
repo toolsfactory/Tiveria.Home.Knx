@@ -1,5 +1,7 @@
 # ConnectionHeader.ChannelId property
 
+The ID of the channel used for communication with the Knx Interface.
+
 ```csharp
 public byte ChannelId { get; set; }
 ```

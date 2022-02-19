@@ -1,5 +1,7 @@
 # IKnxNetIPConnection.FrameReceived event
 
+Triggered each time a Knx frame is received
+
 ```csharp
 public event EventHandler<FrameReceivedEventArgs> FrameReceived;
 ```

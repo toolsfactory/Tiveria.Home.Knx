@@ -1,5 +1,7 @@
 # ConnectionHeader class
 
+Class representing the KnxNetIP ConnectionHeader used to indicate the channelID and sequenceNo when communication via Tunneling with a Knx Interface. This class allows changing its properties as both values are only set moments before the message is sent.
+
 ```csharp
 +--------+--------+--------+--------+
 | byte 1 | byte 2 | byte 3 | byte 4 |
@@ -9,8 +11,6 @@
 +--------+--------+--------+--------+
 | 0x04   |        |        | 0x00   |
 +--------+--------+-----------------+
-
-Serice Type:  
 ```
 
 ```csharp
@@ -21,13 +21,14 @@ public class ConnectionHeader : KnxDataElement
 
 | name | description |
 | --- | --- |
-| [ConnectionHeader](ConnectionHeader/ConnectionHeader.md)(…) |  |
-| static [Parse](ConnectionHeader/Parse.md)(…) |  |
-| [ChannelId](ConnectionHeader/ChannelId.md) { get; set; } |  |
-| [SequenceCounter](ConnectionHeader/SequenceCounter.md) { get; set; } |  |
+| [ConnectionHeader](ConnectionHeader/ConnectionHeader.md)() | Creates a new instance of the ConnectionHeader class. |
+| [ConnectionHeader](ConnectionHeader/ConnectionHeader.md)(…) | Creates a new instance of the ConnectionHeader class. |
+| static [Parse](ConnectionHeader/Parse.md)(…) | Parses a binary representation and creates a matching instance of the [`ConnectionHeader`](./ConnectionHeader.md) class |
+| [ChannelId](ConnectionHeader/ChannelId.md) { get; set; } | The ID of the channel used for communication with the Knx Interface. |
+| [SequenceCounter](ConnectionHeader/SequenceCounter.md) { get; set; } | The message sequence number |
 | override [ToString](ConnectionHeader/ToString.md)() |  |
 | override [Write](ConnectionHeader/Write.md)(…) |  |
-| static readonly [STRUCTURE_SIZE](ConnectionHeader/STRUCTURE_SIZE.md) |  |
+| static readonly [STRUCTURE_SIZE](ConnectionHeader/STRUCTURE_SIZE.md) | Size of the structure when serialized to its binary representation |
 
 ## See Also
 

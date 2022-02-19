@@ -1,5 +1,21 @@
 # Tpci class
 
+Class representing the Transport Layer Protocol Control Information
+
+```csharp
++-----------------------------------------------------------------------+
+|          NPDU Byte 1: 6 bit TPCI and 2 bit APCI                       |
++--------+--------+--------+--------+--------+--------+--------+--------+
+| bit 0  | bit 1  | bit 2  | bit 3  | bit 4  | bit 5  | bit 6  | bit 7  |
++--------+--------+--------+--------+--------+--------+--------+--------+
+|                       TPCI Data                     |    APCI/ TPCI   |
++--------+--------+--------+--------+--------+--------+--------+--------+
+| Packet | Sequ-  |          Sequence Number          |  TPCI:          |
+| Type   | encing |                                   |    ControlType  |
+| Flag   | Flag   |                                   |                 |
++--------+--------+--------+--------+--------+--------+--------+--------+
+```
+
 ```csharp
 public class Tpci
 ```
@@ -8,13 +24,14 @@ public class Tpci
 
 | name | description |
 | --- | --- |
-| [Tpci](Tpci/Tpci.md)(…) |  (2 constructors) |
+| [Tpci](Tpci/Tpci.md)(…) | Creates an instance of the [`Tpci`](./Tpci.md) class. (2 constructors) |
 | static [Parse](Tpci/Parse.md)(…) |  |
-| [ControlType](Tpci/ControlType.md) { get; set; } |  |
-| [PacketType](Tpci/PacketType.md) { get; set; } |  |
-| [SequenceNumber](Tpci/SequenceNumber.md) { get; set; } |  |
-| [SequenceType](Tpci/SequenceType.md) { get; set; } |  |
+| [ControlType](Tpci/ControlType.md) { get; set; } | If Control is indicated, this field describes the control type. |
+| [PacketType](Tpci/PacketType.md) { get; set; } | Describes how the packet has to be interpreted. Data or Control |
+| [SequenceNumber](Tpci/SequenceNumber.md) { get; set; } | In case [`SequenceType`](./Tpci/SequenceType.md) is Numbered, the number. Otherwise 0. |
+| [SequenceType](Tpci/SequenceType.md) { get; set; } | Defines whether the packet has a sequence number or not |
 | [ToByte](Tpci/ToByte.md)() |  |
+| override [ToString](Tpci/ToString.md)() |  |
 
 ## See Also
 

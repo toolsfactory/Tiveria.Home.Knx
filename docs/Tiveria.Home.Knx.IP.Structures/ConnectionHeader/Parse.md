@@ -1,8 +1,18 @@
 # ConnectionHeader.Parse method
 
+Parses a binary representation and creates a matching instance of the [`ConnectionHeader`](../ConnectionHeader.md) class
+
 ```csharp
 public static ConnectionHeader Parse(BigEndianBinaryReader reader)
 ```
+
+| parameter | description |
+| --- | --- |
+| reader | The binary reader to use for parsing |
+
+## Return Value
+
+Instance of [`ConnectionHeader`](../ConnectionHeader.md)
 
 ## See Also
 

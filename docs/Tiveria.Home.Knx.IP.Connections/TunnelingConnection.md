@@ -10,13 +10,16 @@ public class TunnelingConnection : IPConnectionBase
 
 | name | description |
 | --- | --- |
-| [TunnelingConnection](TunnelingConnection/TunnelingConnection.md)(…) | Create a new tunneling connection client (2 constructors) |
+| [TunnelingConnection](TunnelingConnection/TunnelingConnection.md)(…) | Create a new tunneling connection client |
+| [ChannelId](TunnelingConnection/ChannelId.md) { get; } | Channel id used between the two endpoints |
 | [ConnectionType](TunnelingConnection/ConnectionType.md) { get; } | Type of the current connection |
+| [ReceiveSequenceCounter](TunnelingConnection/ReceiveSequenceCounter.md) { get; } | Shows the counter of the last received packet |
+| [SendSequenceCounter](TunnelingConnection/SendSequenceCounter.md) { get; } | Shows the counter used for the next packet to be sent |
 | override [ConnectAsync](TunnelingConnection/ConnectAsync.md)() |  |
 | override [DisconnectAsync](TunnelingConnection/DisconnectAsync.md)() |  |
-| override [SendAsync](TunnelingConnection/SendAsync.md)(…) | Send a generic IKnxNetIPService (potentially raw payload) |
 | override [SendCemiAsync](TunnelingConnection/SendCemiAsync.md)(…) |  |
-| [SendCemiAsync](TunnelingConnection/SendCemiAsync.md)(…) |  |
+| override [SendServiceAsync](TunnelingConnection/SendServiceAsync.md)(…) |  |
+| const [DisconnectConfirmationTimeoutMS](TunnelingConnection/DisconnectConfirmationTimeoutMS.md) | Time in milliseconds the system waits for a disconnect repsonse from the knx interface |
 
 ## Protected Members
 

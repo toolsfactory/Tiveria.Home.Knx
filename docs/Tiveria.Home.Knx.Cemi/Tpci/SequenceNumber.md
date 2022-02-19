@@ -1,5 +1,7 @@
 # Tpci.SequenceNumber property
 
+In case [`SequenceType`](./SequenceType.md) is Numbered, the number. Otherwise 0.
+
 ```csharp
 public byte SequenceNumber { get; set; }
 ```

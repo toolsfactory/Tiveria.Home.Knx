@@ -1,6 +1,6 @@
 # IPConnectionConfiguration record
 
-Configuration options for a kinds of KnxNetIP connections
+Configuration options for all kinds of KnxNetIP connections
 
 ```csharp
 public record IPConnectionConfiguration
@@ -11,11 +11,11 @@ public record IPConnectionConfiguration
 | name | description |
 | --- | --- |
 | [IPConnectionConfiguration](IPConnectionConfiguration/IPConnectionConfiguration.md)() | The default constructor. |
-| [AcknowledgeTimeout](IPConnectionConfiguration/AcknowledgeTimeout.md) { get; set; } | Timeout after the achnowledge is deemed to not happen anymore |
-| [NatAware](IPConnectionConfiguration/NatAware.md) { get; set; } | Switch NAT Awarenes of the cennection initiation |
-| [ResyncSequenceNumbers](IPConnectionConfiguration/ResyncSequenceNumbers.md) { get; set; } | &gt;Enable/Disable automatic resynchronization of sequence number |
+| [AcknowledgeTimeout](IPConnectionConfiguration/AcknowledgeTimeout.md) { get; set; } | Timeout in milliseconds after the achnowledge is deemed to not happen anymore |
+| [NatAware](IPConnectionConfiguration/NatAware.md) { get; set; } | Switch to control the NAT awarenes of the connection initiation |
+| [ResyncSequenceNumbers](IPConnectionConfiguration/ResyncSequenceNumbers.md) { get; set; } | Enable/Disable automatic resynchronization of sequence number |
 | [SendRepeats](IPConnectionConfiguration/SendRepeats.md) { get; set; } | Defines how often a failed send should be repeated |
-| [SendTimeout](IPConnectionConfiguration/SendTimeout.md) { get; set; } | maximum time a send can take before it is timed out |
+| [SendTimeout](IPConnectionConfiguration/SendTimeout.md) { get; set; } | Maximum time in milliseconds a send can take before it is considered as failed |
 
 ## See Also
 

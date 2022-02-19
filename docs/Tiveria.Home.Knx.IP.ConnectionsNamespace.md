@@ -2,8 +2,11 @@
 
 | public type | description |
 | --- | --- |
+| delegate [HeartbeatFailedDelegate](./Tiveria.Home.Knx.IP.Connections/HeartbeatFailedDelegate.md) | Delegate definition used by HeartbeatMonitor to inform owner about a failure |
+| class [HeartbeatMonitor](./Tiveria.Home.Knx.IP.Connections/HeartbeatMonitor.md) | Internal class that helps monitoring the connection state of a KNXNetIP tunneling connection |
+| delegate [HeartbeatOkDelegate](./Tiveria.Home.Knx.IP.Connections/HeartbeatOkDelegate.md) | Delegate definition used by HeartbeatMonitor to inform owner about a successful beat |
 | abstract class [IPConnectionBase](./Tiveria.Home.Knx.IP.Connections/IPConnectionBase.md) | Base class for all ip connections. This clas provides basic shared functionalities and helper functions. |
-| record [IPConnectionConfiguration](./Tiveria.Home.Knx.IP.Connections/IPConnectionConfiguration.md) | Configuration options for a kinds of KnxNetIP connections |
+| record [IPConnectionConfiguration](./Tiveria.Home.Knx.IP.Connections/IPConnectionConfiguration.md) | Configuration options for all kinds of KnxNetIP connections |
 | record [KnxNetIPServerDescription](./Tiveria.Home.Knx.IP.Connections/KnxNetIPServerDescription.md) | This record represents a single KnxNetIP router or interface found via the [`KnxNetIPServerDiscoveryAgent`](./Tiveria.Home.Knx.IP.Connections/KnxNetIPServerDiscoveryAgent.md). |
 | class [KnxNetIPServerDiscoveryAgent](./Tiveria.Home.Knx.IP.Connections/KnxNetIPServerDiscoveryAgent.md) | Provides means to search for KnxNetIP interfaces and routers in the networks the host is connected with. (Even though not fully correct, KnxNetIP iterfaces and routers are called servers in here) |
 | class [RoutingConnection](./Tiveria.Home.Knx.IP.Connections/RoutingConnection.md) | Class for connecting via KnxNetIP Routing to the Knx infrastructure |

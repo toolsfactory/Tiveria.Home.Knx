@@ -13,8 +13,8 @@ public class RoutingConnection : IPConnectionBase
 | [RoutingConnection](RoutingConnection/RoutingConnection.md)(…) | Create a routing connection client that connects to the default multicast endpoint [`DefaultBroadcastEndpoint`](../Tiveria.Home.Knx.IP/KnxNetIPConstants/DefaultBroadcastEndpoint.md) (2 constructors) |
 | override [ConnectAsync](RoutingConnection/ConnectAsync.md)() |  |
 | override [DisconnectAsync](RoutingConnection/DisconnectAsync.md)() |  |
-| override [SendAsync](RoutingConnection/SendAsync.md)(…) |  |
 | override [SendCemiAsync](RoutingConnection/SendCemiAsync.md)(…) |  |
+| override [SendServiceAsync](RoutingConnection/SendServiceAsync.md)(…) |  |
 
 ## Protected Members
 

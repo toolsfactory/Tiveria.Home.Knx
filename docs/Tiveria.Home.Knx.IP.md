@@ -5,7 +5,7 @@
 | public type | description |
 | --- | --- |
 | class [FrameReceivedEventArgs](./Tiveria.Home.Knx.IP/FrameReceivedEventArgs.md) |  |
-| interface [IKnxNetIPConnection](./Tiveria.Home.Knx.IP/IKnxNetIPConnection.md) |  |
+| interface [IKnxNetIPConnection](./Tiveria.Home.Knx.IP/IKnxNetIPConnection.md) | Interface for all IP based connections ot the Knx bus |
 | interface [IKnxNetIPFrame](./Tiveria.Home.Knx.IP/IKnxNetIPFrame.md) |  |
 | interface [IKnxNetIPService](./Tiveria.Home.Knx.IP/IKnxNetIPService.md) |  |
 | interface [IKnxNetIPServiceSerializer&lt;T&gt;](./Tiveria.Home.Knx.IP/IKnxNetIPServiceSerializer-1.md) |  |
@@ -21,8 +21,11 @@
 
 | public type | description |
 | --- | --- |
+| delegate [HeartbeatFailedDelegate](./Tiveria.Home.Knx.IP.Connections/HeartbeatFailedDelegate.md) | Delegate definition used by HeartbeatMonitor to inform owner about a failure |
+| class [HeartbeatMonitor](./Tiveria.Home.Knx.IP.Connections/HeartbeatMonitor.md) | Internal class that helps monitoring the connection state of a KNXNetIP tunneling connection |
+| delegate [HeartbeatOkDelegate](./Tiveria.Home.Knx.IP.Connections/HeartbeatOkDelegate.md) | Delegate definition used by HeartbeatMonitor to inform owner about a successful beat |
 | abstract class [IPConnectionBase](./Tiveria.Home.Knx.IP.Connections/IPConnectionBase.md) | Base class for all ip connections. This clas provides basic shared functionalities and helper functions. |
-| record [IPConnectionConfiguration](./Tiveria.Home.Knx.IP.Connections/IPConnectionConfiguration.md) | Configuration options for a kinds of KnxNetIP connections |
+| record [IPConnectionConfiguration](./Tiveria.Home.Knx.IP.Connections/IPConnectionConfiguration.md) | Configuration options for all kinds of KnxNetIP connections |
 | record [KnxNetIPServerDescription](./Tiveria.Home.Knx.IP.Connections/KnxNetIPServerDescription.md) | This record represents a single KnxNetIP router or interface found via the [`KnxNetIPServerDiscoveryAgent`](./Tiveria.Home.Knx.IP.Connections/KnxNetIPServerDiscoveryAgent.md). |
 | class [KnxNetIPServerDiscoveryAgent](./Tiveria.Home.Knx.IP.Connections/KnxNetIPServerDiscoveryAgent.md) | Provides means to search for KnxNetIP interfaces and routers in the networks the host is connected with. (Even though not fully correct, KnxNetIP iterfaces and routers are called servers in here) |
 | class [RoutingConnection](./Tiveria.Home.Knx.IP.Connections/RoutingConnection.md) | Class for connecting via KnxNetIP Routing to the Knx infrastructure |
@@ -36,7 +39,6 @@
 
 | public type | description |
 | --- | --- |
-| class [TransportLayer](./Tiveria.Home.Knx.IP.DeviceManagement/TransportLayer.md) |  |
 | class [TunnelingManagementClient](./Tiveria.Home.Knx.IP.DeviceManagement/TunnelingManagementClient.md) |  |
 
 ## Tiveria.Home.Knx.IP.Enums namespace
@@ -53,6 +55,15 @@
 | static class [ServiceTypeIdentifier](./Tiveria.Home.Knx.IP.Enums/ServiceTypeIdentifier.md) | Enum with all KNXnet/IP Servicetype Identifiers and their correct hex codes |
 | enum [SrpType](./Tiveria.Home.Knx.IP.Enums/SrpType.md) | List of Search Request Parameter types |
 | enum [TunnelingLayer](./Tiveria.Home.Knx.IP.Enums/TunnelingLayer.md) | Enum with all KNXnet/IP Tunneling Layer Types. |
+
+## Tiveria.Home.Knx.IP.Extensions namespace
+
+| public type | description |
+| --- | --- |
+| interface [IUdpClient](./Tiveria.Home.Knx.IP.Extensions/IUdpClient.md) | Interface for a facade of the standard UdpClient |
+| static class [LoggerExtensions](./Tiveria.Home.Knx.IP.Extensions/LoggerExtensions.md) |  |
+| static class [UdpClientFactory](./Tiveria.Home.Knx.IP.Extensions/UdpClientFactory.md) | Static factory class encapsulating [`IUdpClient`](./Tiveria.Home.Knx.IP.Extensions/IUdpClient.md) implementations. Goal is to be able to mock UdpClient |
+| class [UdpClientWrapper](./Tiveria.Home.Knx.IP.Extensions/UdpClientWrapper.md) |  |
 
 ## Tiveria.Home.Knx.IP.Services namespace
 
@@ -110,7 +121,7 @@
 | public type | description |
 | --- | --- |
 | class [BusyInfo](./Tiveria.Home.Knx.IP.Structures/BusyInfo.md) |  |
-| class [ConnectionHeader](./Tiveria.Home.Knx.IP.Structures/ConnectionHeader.md) | +--------+--------+--------+--------+ &#x7C; byte 1 &#x7C; byte 2 &#x7C; byte 3 &#x7C; byte 4 &#x7C; +--------+--------+--------+--------+ &#x7C; Header &#x7C;Channel &#x7C;Sequence&#x7C;Reserved&#x7C; &#x7C; Length &#x7C;ID &#x7C;Counter &#x7C; &#x7C; +--------+--------+--------+--------+ &#x7C; 0x04 &#x7C; &#x7C; &#x7C; 0x00 &#x7C; +--------+--------+-----------------+ Serice Type: |
+| class [ConnectionHeader](./Tiveria.Home.Knx.IP.Structures/ConnectionHeader.md) | Class representing the KnxNetIP ConnectionHeader used to indicate the channelID and sequenceNo when communication via Tunneling with a Knx Interface. This class allows changing its properties as both values are only set moments before the message is sent. |
 | class [CRD](./Tiveria.Home.Knx.IP.Structures/CRD.md) |  |
 | class [CRDTunnel](./Tiveria.Home.Knx.IP.Structures/CRDTunnel.md) | Immutable representation of the connection response data block (CRD) for a tunneling connection. Official KNX Documentation: "03_04_08 Tunneling v01.05.03 AS.pdf" -&gt; 4.4.4.4 |
 | class [CRI](./Tiveria.Home.Knx.IP.Structures/CRI.md) |  |

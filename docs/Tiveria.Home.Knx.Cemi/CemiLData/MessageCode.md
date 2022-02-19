@@ -1,5 +1,7 @@
 # CemiLData.MessageCode property
 
+The `MessageCode` of the cEMI message
+
 ```csharp
 public MessageCode MessageCode { get; set; }
 ```

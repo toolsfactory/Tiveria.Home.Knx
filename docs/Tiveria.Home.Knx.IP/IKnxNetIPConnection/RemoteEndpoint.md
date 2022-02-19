@@ -1,5 +1,7 @@
 # IKnxNetIPConnection.RemoteEndpoint property
 
+IP Address and port of the remote endpoint
+
 ```csharp
 public IPEndPoint RemoteEndpoint { get; }
 ```

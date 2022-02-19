@@ -3,12 +3,14 @@
 Establish a connection to the remote endpoint
 
 ```csharp
-public abstract Task<bool> ConnectAsync()
+public abstract Task ConnectAsync()
 ```
 
-## Return Value
+## Exceptions
 
-true in case connection was established, otherwise false
+| exception | condition |
+| --- | --- |
+| KnxCommunicationException | In case the connection could not be established, one of the KnxCommunicationException subtypes are fired |
 
 ## See Also
 

@@ -1,5 +1,7 @@
 # Tpci.SequenceType property
 
+Defines whether the packet has a sequence number or not
+
 ```csharp
 public SequenceType SequenceType { get; set; }
 ```

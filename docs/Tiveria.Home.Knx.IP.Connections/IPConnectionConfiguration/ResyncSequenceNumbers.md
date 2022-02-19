@@ -1,6 +1,6 @@
 # IPConnectionConfiguration.ResyncSequenceNumbers property
 
-&gt;Enable/Disable automatic resynchronization of sequence number
+Enable/Disable automatic resynchronization of sequence number
 
 ```csharp
 public bool ResyncSequenceNumbers { get; set; }

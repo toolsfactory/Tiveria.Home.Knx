@@ -4,7 +4,6 @@
 
 | public type | description |
 | --- | --- |
-| static class [BigEndianBinaryReaderExtensions](./Tiveria.Home.Knx/BigEndianBinaryReaderExtensions.md) |  |
 | class [CemiReceivedArgs](./Tiveria.Home.Knx/CemiReceivedArgs.md) |  |
 | class [ConnectionStateChangedEventArgs](./Tiveria.Home.Knx/ConnectionStateChangedEventArgs.md) |  |
 | class [DataReceivedArgs](./Tiveria.Home.Knx/DataReceivedArgs.md) |  |
@@ -44,7 +43,7 @@
 | enum [PacketType](./Tiveria.Home.Knx.Cemi/PacketType.md) | Packet types supported in TCPI Control Flow |
 | enum [Priority](./Tiveria.Home.Knx.Cemi/Priority.md) | Enumeration of all available values for the priority flag in [`ControlField1`](./Tiveria.Home.Knx.Cemi/ControlField1.md) |
 | enum [SequenceType](./Tiveria.Home.Knx.Cemi/SequenceType.md) | TCPI Flag to indicate if the TPDU has sequnce information |
-| class [Tpci](./Tiveria.Home.Knx.Cemi/Tpci.md) |  |
+| class [Tpci](./Tiveria.Home.Knx.Cemi/Tpci.md) | Class representing the Transport Layer Protocol Control Information |
 
 ## Tiveria.Home.Knx.Cemi.Serializers namespace
 
@@ -118,6 +117,13 @@
 | class [KnxConnectionException](./Tiveria.Home.Knx.Exceptions/KnxConnectionException.md) |  |
 | class [KnxTimeoutException](./Tiveria.Home.Knx.Exceptions/KnxTimeoutException.md) |  |
 | class [KnxTranslationException](./Tiveria.Home.Knx.Exceptions/KnxTranslationException.md) |  |
+
+## Tiveria.Home.Knx.Extensions namespace
+
+| public type | description |
+| --- | --- |
+| static class [BigEndianBinaryReaderExtensions](./Tiveria.Home.Knx.Extensions/BigEndianBinaryReaderExtensions.md) |  |
+| static class [Log](./Tiveria.Home.Knx.Extensions/Log.md) |  |
 
 ## Tiveria.Home.Knx.Primitives namespace
 

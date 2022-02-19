@@ -1,5 +1,7 @@
 # CemiLData.Size property
 
+Size of the message when serialized to a byte array
+
 ```csharp
 public int Size { get; set; }
 ```

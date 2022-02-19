@@ -26,7 +26,7 @@ public class ControlField2
 | [ExtendedFrameFormat](ControlField2/ExtendedFrameFormat.md) { get; set; } |  |
 | [HopCount](ControlField2/HopCount.md) { get; set; } |  |
 | [ToByte](ControlField2/ToByte.md)() |  |
-| [ToDescription](ControlField2/ToDescription.md)(…) |  |
+| override [ToString](ControlField2/ToString.md)() |  |
 
 ## See Also
 

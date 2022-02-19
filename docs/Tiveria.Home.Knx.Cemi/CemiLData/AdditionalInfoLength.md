@@ -1,5 +1,7 @@
 # CemiLData.AdditionalInfoLength property
 
+Length of the AdditionalInfo block when serialized
+
 ```csharp
 public byte AdditionalInfoLength { get; set; }
 ```

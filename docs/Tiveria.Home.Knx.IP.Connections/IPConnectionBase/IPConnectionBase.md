@@ -1,8 +1,14 @@
 # IPConnectionBase constructor
 
+Base constructor
+
 ```csharp
 protected IPConnectionBase(IPEndPoint remoteEndpoint)
 ```
+
+| parameter | description |
+| --- | --- |
+| remoteEndpoint | The remote IPEndPoint the connection talks to |
 
 ## See Also
 

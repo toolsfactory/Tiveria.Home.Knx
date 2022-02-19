@@ -2,7 +2,6 @@
 
 | public type | description |
 | --- | --- |
-| static class [BigEndianBinaryReaderExtensions](./Tiveria.Home.Knx/BigEndianBinaryReaderExtensions.md) |  |
 | class [CemiReceivedArgs](./Tiveria.Home.Knx/CemiReceivedArgs.md) |  |
 | class [ConnectionStateChangedEventArgs](./Tiveria.Home.Knx/ConnectionStateChangedEventArgs.md) |  |
 | class [DataReceivedArgs](./Tiveria.Home.Knx/DataReceivedArgs.md) |  |

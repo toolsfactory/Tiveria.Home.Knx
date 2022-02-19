@@ -1,5 +1,7 @@
 # IKnxNetIPConnection interface
 
+Interface for all IP based connections ot the Knx bus
+
 ```csharp
 public interface IKnxNetIPConnection : IKnxClient
 ```
@@ -8,9 +10,9 @@ public interface IKnxNetIPConnection : IKnxClient
 
 | name | description |
 | --- | --- |
-| [RemoteEndpoint](IKnxNetIPConnection/RemoteEndpoint.md) { get; } |  |
-| event [FrameReceived](IKnxNetIPConnection/FrameReceived.md) |  |
-| [SendAsync](IKnxNetIPConnection/SendAsync.md)(…) |  |
+| [RemoteEndpoint](IKnxNetIPConnection/RemoteEndpoint.md) { get; } | IP Address and port of the remote endpoint |
+| event [FrameReceived](IKnxNetIPConnection/FrameReceived.md) | Triggered each time a Knx frame is received |
+| [SendServiceAsync](IKnxNetIPConnection/SendServiceAsync.md)(…) | Build a ICemiMessageCemi frame based on the provided service and send it in blocking mode and with automatic state management |
 
 ## See Also
 

@@ -28,7 +28,7 @@ public RoutingConnection(IPEndPoint localEndpoint, IPEndPoint remoteEndpoint)
 
 | parameter | description |
 | --- | --- |
-| localEndPoint | The local endpoint from which to connect. |
+| localEndpoint | The local endpoint from which to connect. |
 | remoteEndpoint | The multicast group address to join |
 
 ## See Also

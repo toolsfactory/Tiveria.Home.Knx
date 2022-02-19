@@ -1,4 +1,4 @@
-# TunnelingConnection constructor (1 of 2)
+# TunnelingConnection constructor
 
 Create a new tunneling connection client
 
@@ -18,33 +18,6 @@ public TunnelingConnection(IPEndPoint localEndpoint, IPEndPoint remoteEndpoint,
 ## See Also
 
 * record [TunnelingConnectionConfiguration](../TunnelingConnectionConfiguration.md)
-* class [TunnelingConnection](../TunnelingConnection.md)
-* namespace [Tiveria.Home.Knx.IP.Connections](../TunnelingConnection.md.md)
-* assembly [Tiveria.Home.Knx.IP](../../Tiveria.Home.Knx.IP.md)
-
----
-
-# TunnelingConnection constructor (2 of 2)
-
-DEPRECATED
-
-```csharp
-[Obsolete]
-public TunnelingConnection(IPAddress remoteAddress, ushort remotePort, IPAddress localAddress, 
-    ushort localPort, bool busmonitor = false, bool natAware = false)
-```
-
-| parameter | description |
-| --- | --- |
-| remoteAddress |  |
-| remotePort |  |
-| localAddress |  |
-| localPort |  |
-| busmonitor |  |
-| natAware |  |
-
-## See Also
-
 * class [TunnelingConnection](../TunnelingConnection.md)
 * namespace [Tiveria.Home.Knx.IP.Connections](../TunnelingConnection.md.md)
 * assembly [Tiveria.Home.Knx.IP](../../Tiveria.Home.Knx.IP.md)

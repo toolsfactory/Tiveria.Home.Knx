@@ -31,7 +31,7 @@ public static class ServiceTypeIdentifier
 | const [TunnelingRequest](ServiceTypeIdentifier/TunnelingRequest.md) |  |
 | static [IsKnown](ServiceTypeIdentifier/IsKnown.md)(…) |  |
 | static [Register](ServiceTypeIdentifier/Register.md)(…) |  |
-| static [ToDescription](ServiceTypeIdentifier/ToDescription.md)(…) | translate [`ServiceTypeIdentifier`](./ServiceTypeIdentifier.md) to a readable string |
+| static [ToString](ServiceTypeIdentifier/ToString.md)(…) | translate [`ServiceTypeIdentifier`](./ServiceTypeIdentifier.md) to a readable string |
 
 ## See Also
 

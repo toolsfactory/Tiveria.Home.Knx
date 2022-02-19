@@ -1,5 +1,7 @@
 # Tpci.PacketType property
 
+Describes how the packet has to be interpreted. Data or Control
+
 ```csharp
 public PacketType PacketType { get; set; }
 ```
