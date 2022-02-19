@@ -10,7 +10,7 @@
 | struct [ApduTypeDetail](./Tiveria.Home.Knx.Cemi/ApduTypeDetail.md) |  |
 | enum [BroadcastType](./Tiveria.Home.Knx.Cemi/BroadcastType.md) | Enumeration of all specified BroadcastType Flag values |
 | abstract class [CemiBase](./Tiveria.Home.Knx.Cemi/CemiBase.md) | Base class handling the core CEMI Frame structures. For details please read: "03_06_03_EMI_IMI V01.03.03 AS.PDF" chapter 4 from KNX Association |
-| class [CemiLData](./Tiveria.Home.Knx.Cemi/CemiLData.md) |  |
+| class [CemiLData](./Tiveria.Home.Knx.Cemi/CemiLData.md) | Class representing a CEMI Frame for L_Data services. For details please read: "03_06_03_EMI_IMI V01.03.03 AS.PDF" chapter 4 from KNX Association |
 | class [CemiRaw](./Tiveria.Home.Knx.Cemi/CemiRaw.md) | Class representing a CEMI Frame for a service that is not fully implemented here. For details please read: "03_06_03_EMI_IMI V01.03.03 AS.PDF" chapter 4 from KNX Association |
 | enum [ConfirmType](./Tiveria.Home.Knx.Cemi/ConfirmType.md) | Enumeration of the possible values of the ConfirmType Flag in [`ControlField1`](./Tiveria.Home.Knx.Cemi/ControlField1.md) |
 | class [ControlField1](./Tiveria.Home.Knx.Cemi/ControlField1.md) | Represents the Control Field 1 of a cEMI structure. Details can be found in "03_06_03_EMI_IMI V01.03.03 AS.PDF" Chapter 4.1.5.3 |

@@ -36,13 +36,13 @@ namespace Tiveria.Home.Knx.Cemi
     /// | byte 1 | byte 2 | byte 3 - n      | byte   | byte   | byte   | byte   | byte   | byte   | byte   | n bytes         |
     /// +--------+--------+-----------------+--------+--------+--------+--------+--------+--------+--------+-----------------+
     /// |  Msg   |Add.Info|  Additional     |Ctrl 1  | Ctrl 2 | Source Address  | Dest. Address   |  NPDU  |      APDU       |
-    /// | Code   | Length |  Information    |        |        |                 |                 | Length | (TPCI/APCI&data)|
+    /// | Code   | Length |  Information    |        |        |                 |                 | Length | (TPCI/APCI data)|
     /// +--------+--------+-----------------+--------+--------+--------+--------+--------+--------+--------+-----------------+
     /// </code>
     ///
     ///  Add.Info Length = 0x00 - no additional info
-    ///  Control Field 1 = see the bit structure above
-    ///  Control Field 2 = see the bit structure above
+    ///  Control Field 1 = see the bit structure at <see cref="ControlField1"/>
+    ///  Control Field 2 = see the bit structure at <see cref="ControlField2"/>
     ///  Source Address  = 0x0000 - filled in by router/gateway with its source address which is
     ///                    part of the KNX subnet
     ///  Dest. Address   = KNX group or individual address (2 byte)
