@@ -40,17 +40,39 @@ namespace Tiveria.Home.Knx.Cemi
     /// +--------+--------+-----------------+--------+--------+--------+--------+--------+--------+--------+-----------------+
     /// </code>
     ///
-    ///  Add.Info Length = 0x00 - no additional info
-    ///  Control Field 1 = see the bit structure at <see cref="ControlField1"/>
-    ///  Control Field 2 = see the bit structure at <see cref="ControlField2"/>
-    ///  Source Address  = 0x0000 - filled in by router/gateway with its source address which is
-    ///                    part of the KNX subnet
-    ///  Dest. Address   = KNX group or individual address (2 byte)
-    ///  Data Length     = Number of bytes of data in the APDU excluding the TPCI/APCI bits
-    ///  APDU            = Application Protocol Data Unit - the actual payload including transport
-    ///                    protocol control information (TPCI), application protocol control
-    ///                    information (APCI) and data passed as an argument from higher layers of
-    ///                    the KNX communication stack
+    /// <list type="table">
+    /// <listheader>
+    /// <term>Field</term>
+    /// <term>Description</term>
+    /// </listheader>
+    /// <item>
+    /// <term>Add.Info Length</term>
+    /// <term>0x00 - no additional info</term>
+    /// </item>
+    /// <item>
+    /// <term>Control Field 1</term>
+    /// <term>see the bit structure at <see cref="ControlField1"/></term>
+    /// </item>
+    /// <item>
+    /// <term>see the bit structure at <see cref="ControlField1"/></term>
+    /// </item>
+    /// <item>
+    /// <term>Control Field 2</term>
+    /// <term>see the bit structure at <see cref="ControlField2"/></term>
+    /// </item>
+    /// <item>
+    /// <term>Source Address</term>
+    /// <term>0x0000 - filled in by router/gateway with its source address which is part of the KNX subnet</term>
+    /// </item>
+    /// <item>
+    /// <term>Data Length</term>
+    /// <term>Number of bytes of data in the APDU excluding the TPCI/APCI bits</term>
+    /// </item>
+    /// <item>
+    /// <term>APDU</term>
+    /// <term>Application Protocol Data Unit - the actual payload including transport protocol control information (TPCI), application protocol control information (APCI) and data passed as an argument from higher layers of the KNX communication stack</term>
+    /// </item>
+    /// </list>
     /// </summary>
     public class CemiLData : ICemiMessage
     {

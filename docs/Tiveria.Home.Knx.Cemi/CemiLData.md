@@ -11,7 +11,35 @@ Class representing a CEMI Frame for L_Data services. For details please read: "0
 +--------+--------+-----------------+--------+--------+--------+--------+--------+--------+--------+-----------------+
 ```
 
-Add.Info Length = 0x00 - no additional info Control Field 1 = see the bit structure at [`ControlField1`](./CemiLData/ControlField1.md) Control Field 2 = see the bit structure at [`ControlField2`](./CemiLData/ControlField2.md) Source Address = 0x0000 - filled in by router/gateway with its source address which is part of the KNX subnet Dest. Address = KNX group or individual address (2 byte) Data Length = Number of bytes of data in the APDU excluding the TPCI/APCI bits APDU = Application Protocol Data Unit - the actual payload including transport protocol control information (TPCI), application protocol control information (APCI) and data passed as an argument from higher layers of the KNX communication stack
+**Field**
+
+**Description**
+
+**Add.Info Length**
+
+**0x00 - no additional info**
+
+**Control Field 1**
+
+**see the bit structure at [`ControlField1`](./CemiLData/ControlField1.md)**
+
+**see the bit structure at [`ControlField1`](./CemiLData/ControlField1.md)**
+
+**Control Field 2**
+
+**see the bit structure at [`ControlField2`](./CemiLData/ControlField2.md)**
+
+**Source Address**
+
+**0x0000 - filled in by router/gateway with its source address which is part of the KNX subnet**
+
+**Data Length**
+
+**Number of bytes of data in the APDU excluding the TPCI/APCI bits**
+
+**APDU**
+
+**Application Protocol Data Unit - the actual payload including transport protocol control information (TPCI), application protocol control information (APCI) and data passed as an argument from higher layers of the KNX communication stack**
 
 ```csharp
 public class CemiLData : ICemiMessage
