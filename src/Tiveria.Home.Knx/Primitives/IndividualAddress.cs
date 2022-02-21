@@ -144,5 +144,20 @@ namespace Tiveria.Home.Knx.Primitives
         /// <returns>The <see cref="IndividualAddress"/> 0.0.0</returns>
         public static IndividualAddress Empty() => new IndividualAddress(0);
         #endregion
+
+        #region overloaded operators
+        public static bool operator ==(IndividualAddress a, Address b)
+        {
+            if (a is not null)
+                return a.Equals(b);
+            else
+                return b is null;
+        }
+
+        public static bool operator !=(IndividualAddress a, Address b)
+        {
+            return !(a == b);
+        }
+        #endregion overloaded operators
     }
 }

@@ -118,7 +118,7 @@ namespace Tiveria.Home.Knx.Cemi.Serializers
         }
 
 
-        protected virtual IKnxAddress ReadDestinationAddress(BigEndianBinaryReader br, bool isGroupAddress)
+        protected virtual Address ReadDestinationAddress(BigEndianBinaryReader br, bool isGroupAddress)
         {
             var dst = br.ReadUInt16();
             if (isGroupAddress)

@@ -94,7 +94,7 @@ namespace Tiveria.Home.Knx.Cemi
         /// <summary>
         /// Whether an <see cref="IndividualAddress"/> or a <see cref="GroupAddress"/> as destination
         /// </summary>
-        public IKnxAddress DestinationAddress { get; init; }
+        public Address DestinationAddress { get; init; }
         /// <summary>
         /// Field with the flags for frame type, priority, and so on
         /// </summary>
@@ -123,7 +123,7 @@ namespace Tiveria.Home.Knx.Cemi
         /// <param name="controlField2"></param>
         /// <param name="tpci"></param>
         /// <param name="apdu"></param>
-        public CemiLData(MessageCode messageCode, IReadOnlyList<AdditionalInformationField> additionalInfoFields, IndividualAddress srcAddress, IKnxAddress dstAddress, ControlField1 controlField1,
+        public CemiLData(MessageCode messageCode, IReadOnlyList<AdditionalInformationField> additionalInfoFields, IndividualAddress srcAddress, Address dstAddress, ControlField1 controlField1,
             ControlField2 controlField2, Tpci tpci, Apdu? apdu)
         {
             MessageCode = messageCode;
@@ -149,7 +149,7 @@ namespace Tiveria.Home.Knx.Cemi
         /// <param name="controlField1"></param>
         /// <param name="controlField2"></param>
         /// <param name="apdu"></param>
-        public CemiLData(MessageCode messageCode, IKnxAddress dstAddress, ControlField1 controlField1,
+        public CemiLData(MessageCode messageCode, Address dstAddress, ControlField1 controlField1,
             ControlField2 controlField2, Apdu apdu)
             : this(messageCode, new List<AdditionalInformationField>(), IndividualAddress.Empty(), dstAddress, controlField1, controlField2, new Tpci(), apdu)
         { }

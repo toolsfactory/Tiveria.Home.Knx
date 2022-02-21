@@ -25,7 +25,11 @@
 using System.Net;
 using System.Net.Sockets;
 using Tiveria.Common.Extensions;
+using Tiveria.Home.Knx.Cemi;
+using Tiveria.Home.Knx.IP.Enums;
+using Tiveria.Home.Knx.IP.Services;
 using Tiveria.Home.Knx.IP.Structures;
+using Tiveria.Home.Knx.Primitives;
 
 namespace Tiveria.Home.Knx.IP.Connections
 {

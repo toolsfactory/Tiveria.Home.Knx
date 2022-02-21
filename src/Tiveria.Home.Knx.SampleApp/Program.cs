@@ -63,6 +63,7 @@ namespace Tiveria.Home.Knx
                       .Add("DescriptionReq sample", () => _serviceProvider!.GetService<DescriptionRequestDemo>()!.SendDescriptionRequest())
                       .Add("Busmonitor", () => _serviceProvider!.GetService<BusmonitorDemo>()!.RunAsync().Wait())
                       .Add("DeviceManagement", () => _serviceProvider!.GetService<DeviceManagementDemo>()!.RunAsync().Wait())
+                      .Add("GroupClient", () => _serviceProvider!.GetService<GroupClientDemo>()!.RunAsync().Wait())
                       .Add("Exit", () => exit = true);
                     menu.Display();
                 }
@@ -98,6 +99,7 @@ namespace Tiveria.Home.Knx
                     .AddTransient<DescriptionRequestDemo>()
                     .AddTransient<BusmonitorDemo>()
                     .AddTransient<DeviceManagementDemo>()
+                    .AddTransient<GroupClientDemo>()
                     .AddLogging(loggingBuilder =>
                     {
                         // configure Logging with NLog

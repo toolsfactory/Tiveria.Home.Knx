@@ -92,6 +92,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         /// <summary>
         /// Trigger a search for all Knx interfaces and router that are currently in programming mode. The extended SearchRequest Frame with ServiceTypeIdentifier 0x020B is used
         /// </summary>
+        /// <param name="service">Service description</param>
         /// <param name="timeoutms">Time after the async search is canceled</param>
         /// <returns>true in case at least one KNX interface or router was found. Otherwise false </returns>
         public Task<bool> DiscoverByServiceAsync(byte[] service, int timeoutms = 1000)

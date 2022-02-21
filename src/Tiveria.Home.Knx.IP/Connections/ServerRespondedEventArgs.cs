@@ -39,6 +39,12 @@ namespace Tiveria.Home.Knx.IP.Connections
         /// The local IP endpoint where the discovery message was sent and the server responded
         /// </summary>
         public IPEndPoint ReceivingEndpoint { get; init; }
+
+        /// <summary>
+        /// Creates a new typed event args instance for the <see cref="KnxNetIPServerDiscoveryAgent.ServerResponded"/> event
+        /// </summary>
+        /// <param name="receivingEndpoint">The local endpoint on which the answer was received</param>
+        /// <param name="server">Details about the server</param>
         public ServerRespondedEventArgs(IPEndPoint receivingEndpoint, KnxNetIPServerDescription server)
         {
             ReceivingEndpoint = receivingEndpoint;

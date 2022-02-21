@@ -248,5 +248,21 @@ namespace Tiveria.Home.Knx.Primitives
         #endregion Static Group Styling Helpers
 
         #endregion Public Static Methods
+
+        #region overloaded operators
+        public static bool operator == (GroupAddress a, Address b)
+        {
+            if (a is not null)
+                return a.Equals(b);
+            else
+                return b is null;
+        }
+
+        public static bool operator != (GroupAddress a, Address b)
+        {
+            return !(a == b);
+        }
+        #endregion overloaded operators
+
     }
 }

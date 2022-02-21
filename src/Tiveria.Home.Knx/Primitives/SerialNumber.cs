@@ -29,7 +29,7 @@ namespace Tiveria.Home.Knx.Primitives
     /// <summary>
     /// Class representing a Knx device serialnumber
     /// </summary>
-    public class SerialNumber : IKnxDataElement
+    public class SerialNumber : IKnxDataElement, IEquatable<SerialNumber>
     {
 
         #region Public Constructors
@@ -80,6 +80,9 @@ namespace Tiveria.Home.Knx.Primitives
         /// </summary>
         public int Size => 6;
 
+        /// <summary>
+        /// The actual serialnumber
+        /// </summary>
         public ulong Value { get => _value; set => _value = value & Mask; }
         #endregion Public Properties
 
@@ -96,7 +99,7 @@ namespace Tiveria.Home.Knx.Primitives
         /// <returns>The resulting string</returns>
         public override string ToString()
         {
-            return $"{Value>>32:x4}:{Value&0xffff_ffff:x8}";
+            return $"{Value >> 32:x4}:{Value & 0xffff_ffff:x8}";
         }
 
         /// <summary>
@@ -124,11 +127,52 @@ namespace Tiveria.Home.Knx.Primitives
             data.AsSpan().Slice(2).CopyTo(raw);
             return raw;
         }
+
+        public override int GetHashCode()
+        {
+            return Value.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return (obj is SerialNumber) && Equals((SerialNumber)obj);
+        }
+
+        public bool Equals(SerialNumber other)
+        {
+            return other.Value == Value;
+        }
+
         #endregion Public Methods
 
         #region Private Fields
         private const ulong Mask = 0xffff_ffff_ffff;
         private ulong _value = 0;
         #endregion Private Fields    
+
+        #region overloaded operators
+        public static bool operator ==(SerialNumber a, SerialNumber b)
+        {
+            if (a is not null)
+                return a.Equals(b);
+            else
+                return b is null;
+        }
+
+        public static bool operator !=(SerialNumber a, SerialNumber b)
+        {
+            return !(a == b);
+        }
+
+        public static implicit operator ulong(SerialNumber sn) => sn.Value;
+
+        public static explicit operator SerialNumber(long b) => new SerialNumber(b);
+
+        public static explicit operator SerialNumber(ulong b) => new SerialNumber(b);
+
+        public static explicit operator SerialNumber(int b) => new SerialNumber(b);
+
+        #endregion overloaded operators
+
     }
 }

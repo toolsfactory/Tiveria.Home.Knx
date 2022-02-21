@@ -26,7 +26,10 @@ using Tiveria.Common.IO;
 
 namespace Tiveria.Home.Knx.Primitives
 {
-    public abstract class Address : KnxDataElement, IKnxAddress, IEquatable<Address>
+    /// <summary>
+    /// Baseline class for all Knx address types
+    /// </summary>
+    public abstract class Address : KnxDataElement, IEquatable<Address>, ICloneable
     {
         #region Protected Constructors
         protected Address(AddressType addressType, ushort address)
@@ -87,6 +90,10 @@ namespace Tiveria.Home.Knx.Primitives
             return RawAddress.GetHashCode() * (AddressType == AddressType.IndividualAddress ? 3 : 94);
         }
 
+        /// <summary>
+        /// Checks whether the provided Address is an <see cref="IndividualAddress"/> for broadcast
+        /// </summary>
+        /// <returns>True in case of a broadcast message</returns>
         public bool IsBroadcast()
         {
             return IsIndividualAddress() && RawAddress == 0;
@@ -119,5 +126,33 @@ namespace Tiveria.Home.Knx.Primitives
             writer.Write(RawAddress);
         }
         #endregion Public Methods
+
+        #region overloaded operators
+
+        /// <summary>
+        /// Comparison operator checking if the addresses are equal
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool operator == (Address a, Address b)
+        {
+            if (!(a is null))
+                return a.Equals(b);
+            else
+                return b is null;
+        }
+
+        /// <summary>
+        /// Comparison operator checking if the addresses are not equal
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool operator != (Address a, Address b)
+        {
+            return !(a == b);
+        }
+        #endregion
     }
 }
