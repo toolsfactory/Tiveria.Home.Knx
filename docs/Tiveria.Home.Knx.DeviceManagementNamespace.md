@@ -5,9 +5,9 @@
 | class [DeviceConnectionSession](./Tiveria.Home.Knx.DeviceManagement/DeviceConnectionSession.md) |  |
 | enum [EraseCode](./Tiveria.Home.Knx.DeviceManagement/EraseCode.md) | Erase codes used when sending a master reset restart apci code. !:ApduType.RestartMasterReset_Request |
 | static class [EraseCodeExtensions](./Tiveria.Home.Knx.DeviceManagement/EraseCodeExtensions.md) |  |
-| interface [IManagementClient](./Tiveria.Home.Knx.DeviceManagement/IManagementClient.md) |  |
+| interface [IManagementClient](./Tiveria.Home.Knx.DeviceManagement/IManagementClient.md) | Interface describing all capabilities a management client class should expose |
 | interface [ITransportLayer](./Tiveria.Home.Knx.DeviceManagement/ITransportLayer.md) |  |
-| abstract class [ManagementClientBase](./Tiveria.Home.Knx.DeviceManagement/ManagementClientBase.md) |  |
+| abstract class [ManagementClientBase](./Tiveria.Home.Knx.DeviceManagement/ManagementClientBase.md) | Base implementation used in all transport specific [`IManagementClient`](./Tiveria.Home.Knx.DeviceManagement/IManagementClient.md) implementations |
 | enum [ManagementConnectionState](./Tiveria.Home.Knx.DeviceManagement/ManagementConnectionState.md) | see Chapter 5.1 of 3.3.4 Transport Layer Communication in Knx Specs |
 | static class [PropertyDataType](./Tiveria.Home.Knx.DeviceManagement/PropertyDataType.md) |  |
 | record [PropertyDataTypeDetails](./Tiveria.Home.Knx.DeviceManagement/PropertyDataTypeDetails.md) |  |

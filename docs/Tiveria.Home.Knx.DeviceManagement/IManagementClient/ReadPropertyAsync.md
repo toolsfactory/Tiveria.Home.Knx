@@ -1,8 +1,19 @@
 # IManagementClient.ReadPropertyAsync method
 
+Reads the value of a property from the device
+
 ```csharp
 public Task<byte[]> ReadPropertyAsync(byte objIdx, byte propId)
 ```
+
+| parameter | description |
+| --- | --- |
+| objIdx | Index of the object in the device |
+| propId | Id of the property withing the object of the device |
+
+## Return Value
+
+THe property value
 
 ## See Also
 

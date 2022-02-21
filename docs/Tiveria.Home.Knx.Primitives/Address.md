@@ -1,7 +1,9 @@
 # Address class
 
+Baseline class for all Knx address types
+
 ```csharp
-public abstract class Address : KnxDataElement, IEquatable<Address>, IKnxAddress
+public abstract class Address : KnxDataElement, ICloneable, IEquatable<Address>
 ```
 
 ## Public Members
@@ -14,10 +16,12 @@ public abstract class Address : KnxDataElement, IEquatable<Address>, IKnxAddress
 | [Equals](Address/Equals.md)(…) | Compares two addresses on type and value level |
 | override [Equals](Address/Equals.md)(…) | Checks first if the object to compare with is a valid [`Address`](./Address.md) type. Then compares on type and value level. |
 | override [GetHashCode](Address/GetHashCode.md)() | Generates a hashcode that incooperates also the [`AddressType`](./Address/AddressType.md) |
-| [IsBroadcast](Address/IsBroadcast.md)() |  |
+| [IsBroadcast](Address/IsBroadcast.md)() | Checks whether the provided Address is an [`IndividualAddress`](./IndividualAddress.md) for broadcast |
 | [IsGroupAddress](Address/IsGroupAddress.md)() | Checks if an address is a [`GroupAddress`](./GroupAddress.md) or a [`IndividualAddress`](./IndividualAddress.md) |
 | [IsIndividualAddress](Address/IsIndividualAddress.md)() | Checks if an address is a [`GroupAddress`](./GroupAddress.md) or a [`IndividualAddress`](./IndividualAddress.md) |
 | override [Write](Address/Write.md)(…) | Writes the Address in raw format using the provided Writer |
+| [operator ==](Address/op_Equality.md) | Comparison operator checking if the addresses are equal |
+| [operator !=](Address/op_Inequality.md) | Comparison operator checking if the addresses are not equal |
 
 ## Protected Members
 
@@ -28,7 +32,6 @@ public abstract class Address : KnxDataElement, IEquatable<Address>, IKnxAddress
 ## See Also
 
 * class [KnxDataElement](../Tiveria.Home.Knx/KnxDataElement.md)
-* interface [IKnxAddress](../Tiveria.Home.Knx/IKnxAddress.md)
 * namespace [Tiveria.Home.Knx.Primitives](../Tiveria.Home.Knx.PrimitivesNamespace.md.md)
 * assembly [Tiveria.Home.Knx](../Tiveria.Home.Knx.md)
 * [Address.cs](https://github.com/toolsfactory/Tiveria.Home.Knx/tree/main/src/Tiveria.Home.Knx/Primitives/Address.cs)

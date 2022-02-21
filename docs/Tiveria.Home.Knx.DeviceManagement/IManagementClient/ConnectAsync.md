@@ -1,8 +1,14 @@
 # IManagementClient.ConnectAsync method
 
+Establishes the connection to a specific device
+
 ```csharp
 public Task ConnectAsync()
 ```
+
+## Return Value
+
+The awaitable Task
 
 ## See Also
 

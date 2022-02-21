@@ -1,5 +1,7 @@
 # IManagementClient.State property
 
+Detailed connection state
+
 ```csharp
 public ManagementConnectionState State { get; }
 ```

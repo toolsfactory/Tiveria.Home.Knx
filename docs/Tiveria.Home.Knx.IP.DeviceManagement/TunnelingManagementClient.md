@@ -1,5 +1,7 @@
 # TunnelingManagementClient class
 
+Implementation of the IManagementClient interface for tunneling based IP connections.
+
 ```csharp
 public class TunnelingManagementClient : ManagementClientBase
 ```
@@ -8,7 +10,7 @@ public class TunnelingManagementClient : ManagementClientBase
 
 | name | description |
 | --- | --- |
-| [TunnelingManagementClient](TunnelingManagementClient/TunnelingManagementClient.md)(…) |  |
+| [TunnelingManagementClient](TunnelingManagementClient/TunnelingManagementClient.md)(…) | Creates a new instance of the [`TunnelingManagementClient`](./TunnelingManagementClient.md) class |
 
 ## See Also
 

@@ -1,8 +1,15 @@
 # ServerRespondedEventArgs constructor
 
+Creates a new typed event args instance for the [`ServerResponded`](../KnxNetIPServerDiscoveryAgent/ServerResponded.md) event
+
 ```csharp
 public ServerRespondedEventArgs(IPEndPoint receivingEndpoint, KnxNetIPServerDescription server)
 ```
+
+| parameter | description |
+| --- | --- |
+| receivingEndpoint | The local endpoint on which the answer was received |
+| server | Details about the server |
 
 ## See Also
 

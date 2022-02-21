@@ -5,6 +5,12 @@ public Task<IList<byte[]>> ReadDomainAddressesAsync(byte[] domainaddress,
     IndividualAddress startAddress, int range)
 ```
 
+| parameter | description |
+| --- | --- |
+| domainaddress |  |
+| startAddress |  |
+| range |  |
+
 ## See Also
 
 * class [IndividualAddress](../../Tiveria.Home.Knx.Primitives/IndividualAddress.md)

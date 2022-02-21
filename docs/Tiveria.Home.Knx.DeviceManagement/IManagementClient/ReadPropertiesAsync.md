@@ -4,6 +4,13 @@
 public Task<byte[]> ReadPropertiesAsync(byte objIdx, byte propId, int start, int count)
 ```
 
+| parameter | description |
+| --- | --- |
+| objIdx |  |
+| propId |  |
+| start |  |
+| count |  |
+
 ## See Also
 
 * interface [IManagementClient](../IManagementClient.md)

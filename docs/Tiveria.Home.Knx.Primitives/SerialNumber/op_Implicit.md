@@ -1,9 +1,7 @@
-# SerialNumber.Value property
-
-The actual serialnumber
+# SerialNumber Implicit operator
 
 ```csharp
-public ulong Value { get; set; }
+public static implicit operator ulong(SerialNumber sn)
 ```
 
 ## See Also

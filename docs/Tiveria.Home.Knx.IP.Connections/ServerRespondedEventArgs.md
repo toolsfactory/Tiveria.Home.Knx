@@ -10,7 +10,7 @@ public class ServerRespondedEventArgs : EventArgs
 
 | name | description |
 | --- | --- |
-| [ServerRespondedEventArgs](ServerRespondedEventArgs/ServerRespondedEventArgs.md)(…) |  |
+| [ServerRespondedEventArgs](ServerRespondedEventArgs/ServerRespondedEventArgs.md)(…) | Creates a new typed event args instance for the [`ServerResponded`](./KnxNetIPServerDiscoveryAgent/ServerResponded.md) event |
 | [ReceivingEndpoint](ServerRespondedEventArgs/ReceivingEndpoint.md) { get; set; } | The local IP endpoint where the discovery message was sent and the server responded |
 | [Server](ServerRespondedEventArgs/Server.md) { get; set; } | Details about the server |
 

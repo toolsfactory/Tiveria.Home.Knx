@@ -1,8 +1,14 @@
 # IManagementClient.DisconnectAsync method
 
+Disconnects from the specific device
+
 ```csharp
 public Task DisconnectAsync()
 ```
+
+## Return Value
+
+The awaitable Task
 
 ## See Also
 

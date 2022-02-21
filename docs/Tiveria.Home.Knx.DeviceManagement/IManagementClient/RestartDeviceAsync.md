@@ -1,8 +1,14 @@
 # IManagementClient.RestartDeviceAsync method
 
+Sends a restart request to the device
+
 ```csharp
 public Task RestartDeviceAsync()
 ```
+
+## Return Value
+
+The awaitable Task
 
 ## See Also
 

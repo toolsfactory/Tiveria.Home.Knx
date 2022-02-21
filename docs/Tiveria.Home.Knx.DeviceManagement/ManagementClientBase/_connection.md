@@ -1,17 +1,12 @@
-# ManagementClientBase.ConnectAsync method
-
-Initiates the connection to the remote device and reads out the max APDU size from object 0 / property 56.
+# ManagementClientBase._connection field
 
 ```csharp
-public Task ConnectAsync()
+protected IKnxClient _connection;
 ```
-
-## Return Value
-
-The awaitable Task
 
 ## See Also
 
+* interface [IKnxClient](../../Tiveria.Home.Knx/IKnxClient.md)
 * class [ManagementClientBase](../ManagementClientBase.md)
 * namespace [Tiveria.Home.Knx.DeviceManagement](../ManagementClientBase.md.md)
 * assembly [Tiveria.Home.Knx](../../Tiveria.Home.Knx.md)

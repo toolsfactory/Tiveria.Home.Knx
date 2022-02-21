@@ -1,8 +1,19 @@
 # IManagementClient.ReadPropertyDescriptionByIndexAsync method
 
+Read the description for a specific property from the device
+
 ```csharp
 public Task<PropertyDescription> ReadPropertyDescriptionByIndexAsync(byte objIdx, byte index)
 ```
+
+| parameter | description |
+| --- | --- |
+| objIdx | Index of the object in the device |
+| index | Index of the property withing the object of the device |
+
+## Return Value
+
+Description of the property
 
 ## See Also
 

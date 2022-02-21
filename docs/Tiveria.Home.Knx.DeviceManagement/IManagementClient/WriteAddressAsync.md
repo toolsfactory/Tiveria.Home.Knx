@@ -4,6 +4,11 @@
 public Task WriteAddressAsync(SerialNumber serialNumber, IndividualAddress address)
 ```
 
+| parameter | description |
+| --- | --- |
+| serialNumber |  |
+| address |  |
+
 ## See Also
 
 * class [SerialNumber](../../Tiveria.Home.Knx.Primitives/SerialNumber.md)

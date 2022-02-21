@@ -1,9 +1,7 @@
-# SerialNumber.Value property
-
-The actual serialnumber
+# SerialNumber.GetHashCode method
 
 ```csharp
-public ulong Value { get; set; }
+public override int GetHashCode()
 ```
 
 ## See Also

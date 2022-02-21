@@ -1,5 +1,7 @@
 # IManagementClient.IsConnected property
 
+Connection status
+
 ```csharp
 public bool IsConnected { get; }
 ```

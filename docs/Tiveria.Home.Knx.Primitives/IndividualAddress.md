@@ -20,6 +20,8 @@ public class IndividualAddress : Address
 | override [ToString](IndividualAddress/ToString.md)() |  |
 | static [IsValidAddressTriple](IndividualAddress/IsValidAddressTriple.md)(…) | Checks if values for area, line and device are in the allowed ranges |
 | static [TryParse](IndividualAddress/TryParse.md)(…) | Tries to convert the string represenation of an individual address to the equivalent [`IndividualAddress`](./IndividualAddress.md) object. |
+| [operator ==](IndividualAddress/op_Equality.md) |  |
+| [operator !=](IndividualAddress/op_Inequality.md) |  |
 
 ## See Also
 

@@ -4,6 +4,16 @@
 public Task<IndividualAddress> ReadAddressAsync(SerialNumber serialNumber)
 ```
 
+| parameter | description |
+| --- | --- |
+| serialNumber |  |
+
+## Exceptions
+
+| exception | condition |
+| --- | --- |
+| NotImplementedException |  |
+
 ## See Also
 
 * class [IndividualAddress](../../Tiveria.Home.Knx.Primitives/IndividualAddress.md)

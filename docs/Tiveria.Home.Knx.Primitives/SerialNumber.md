@@ -3,7 +3,7 @@
 Class representing a Knx device serialnumber
 
 ```csharp
-public class SerialNumber : IKnxDataElement
+public class SerialNumber : IEquatable<SerialNumber>, IKnxDataElement
 ```
 
 ## Public Members
@@ -13,10 +13,17 @@ public class SerialNumber : IKnxDataElement
 | [SerialNumber](SerialNumber/SerialNumber.md)(…) | Initializes a new instance of [`SerialNumber`](./SerialNumber.md) from an long. (4 constructors) |
 | static [Zero](SerialNumber/Zero.md)() | Creates an serialnumber object equal to 0 |
 | [Size](SerialNumber/Size.md) { get; } | Size of the [`SerialNumber`](./SerialNumber.md) when sent via the KNX protocol |
-| [Value](SerialNumber/Value.md) { get; set; } |  |
+| [Value](SerialNumber/Value.md) { get; set; } | The actual serialnumber |
+| override [Equals](SerialNumber/Equals.md)(…) |  |
+| [Equals](SerialNumber/Equals.md)(…) |  |
+| override [GetHashCode](SerialNumber/GetHashCode.md)() |  |
 | [ToBytes](SerialNumber/ToBytes.md)() | Creates a byte array from the [`SerialNumber`](./SerialNumber.md) |
 | override [ToString](SerialNumber/ToString.md)() | Converts the [`SerialNumber`](./SerialNumber.md) to its string representation following the Knx default format ("a0b0:c0d0e0f0") |
 | [Write](SerialNumber/Write.md)(…) | Writes a [`SerialNumber`](./SerialNumber.md) using the provided writer |
+| [operator ==](SerialNumber/op_Equality.md) |  |
+| [explicit operator](SerialNumber/op_Explicit.md) |  (3 operators) |
+| [implicit operator](SerialNumber/op_Implicit.md) |  |
+| [operator !=](SerialNumber/op_Inequality.md) |  |
 
 ## See Also
 

@@ -1,16 +1,15 @@
 # CemiLData constructor (1 of 2)
 
-Creates a new instance of the CemiLData class. The [`AdditionalInfoFields`](./AdditionalInfoFields.md) and the [`Tpci`](./Tpci.md) property are initilized as 0/empty.
+Creates a new instance of the CemiLData class. The [`AdditionalInfoFields`](./AdditionalInfoFields.md), the source address [`IndividualAddress`](../../Tiveria.Home.Knx.Primitives/IndividualAddress.md) and the [`Tpci`](./Tpci.md) property are initilized as 0/empty.
 
 ```csharp
-public CemiLData(MessageCode messageCode, IndividualAddress srcAddress, IKnxAddress dstAddress, 
-    ControlField1 controlField1, ControlField2 controlField2, Apdu apdu)
+public CemiLData(MessageCode messageCode, Address dstAddress, ControlField1 controlField1, 
+    ControlField2 controlField2, Apdu apdu)
 ```
 
 | parameter | description |
 | --- | --- |
 | messageCode |  |
-| srcAddress |  |
 | dstAddress |  |
 | controlField1 |  |
 | controlField2 |  |
@@ -19,8 +18,7 @@ public CemiLData(MessageCode messageCode, IndividualAddress srcAddress, IKnxAddr
 ## See Also
 
 * enum [MessageCode](../MessageCode.md)
-* class [IndividualAddress](../../Tiveria.Home.Knx.Primitives/IndividualAddress.md)
-* interface [IKnxAddress](../../Tiveria.Home.Knx/IKnxAddress.md)
+* class [Address](../../Tiveria.Home.Knx.Primitives/Address.md)
 * class [ControlField1](../ControlField1.md)
 * class [ControlField2](../ControlField2.md)
 * class [Apdu](../Apdu.md)
@@ -37,7 +35,7 @@ Creates a new instance and initializes all fields with the provided parameters
 ```csharp
 public CemiLData(MessageCode messageCode, 
     IReadOnlyList<AdditionalInformationField> additionalInfoFields, IndividualAddress srcAddress, 
-    IKnxAddress dstAddress, ControlField1 controlField1, ControlField2 controlField2, Tpci tpci, 
+    Address dstAddress, ControlField1 controlField1, ControlField2 controlField2, Tpci tpci, 
     Apdu? apdu)
 ```
 
@@ -57,7 +55,7 @@ public CemiLData(MessageCode messageCode,
 * enum [MessageCode](../MessageCode.md)
 * class [AdditionalInformationField](../AdditionalInformationField.md)
 * class [IndividualAddress](../../Tiveria.Home.Knx.Primitives/IndividualAddress.md)
-* interface [IKnxAddress](../../Tiveria.Home.Knx/IKnxAddress.md)
+* class [Address](../../Tiveria.Home.Knx.Primitives/Address.md)
 * class [ControlField1](../ControlField1.md)
 * class [ControlField2](../ControlField2.md)
 * class [Tpci](../Tpci.md)

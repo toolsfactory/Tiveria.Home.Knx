@@ -1,5 +1,7 @@
 # IManagementClient interface
 
+Interface describing all capabilities a management client class should expose
+
 ```csharp
 public interface IManagementClient
 ```
@@ -8,26 +10,26 @@ public interface IManagementClient
 
 | name | description |
 | --- | --- |
-| [IsConnected](IManagementClient/IsConnected.md) { get; } |  |
-| [RemoteAddress](IManagementClient/RemoteAddress.md) { get; } |  |
-| [State](IManagementClient/State.md) { get; } |  |
-| [ConnectAsync](IManagementClient/ConnectAsync.md)() |  |
-| [DisconnectAsync](IManagementClient/DisconnectAsync.md)() |  |
+| [IsConnected](IManagementClient/IsConnected.md) { get; } | Connection status |
+| [RemoteAddress](IManagementClient/RemoteAddress.md) { get; } | Address of remote device the management client is connected to |
+| [State](IManagementClient/State.md) { get; } | Detailed connection state |
+| [ConnectAsync](IManagementClient/ConnectAsync.md)() | Establishes the connection to a specific device |
+| [DisconnectAsync](IManagementClient/DisconnectAsync.md)() | Disconnects from the specific device |
 | [ReadADCAsync](IManagementClient/ReadADCAsync.md)(…) |  |
 | [ReadAddressAsync](IManagementClient/ReadAddressAsync.md)(…) |  |
 | [ReadAllAddressesAsync](IManagementClient/ReadAllAddressesAsync.md)() |  |
 | [ReadAllDomainAddressAsync](IManagementClient/ReadAllDomainAddressAsync.md)() |  |
-| [ReadDeviceDescriptorAsync](IManagementClient/ReadDeviceDescriptorAsync.md)(…) |  |
+| [ReadDeviceDescriptorAsync](IManagementClient/ReadDeviceDescriptorAsync.md)(…) | Reads Knx Device Descriptor bytes from the device |
 | [ReadDomainAddressAsync](IManagementClient/ReadDomainAddressAsync.md)() |  |
 | [ReadDomainAddressesAsync](IManagementClient/ReadDomainAddressesAsync.md)(…) |  |
 | [ReadIndividualAddressAsync](IManagementClient/ReadIndividualAddressAsync.md)() |  |
 | [ReadMemoryAsync](IManagementClient/ReadMemoryAsync.md)(…) |  |
 | [ReadPropertiesAsync](IManagementClient/ReadPropertiesAsync.md)(…) |  |
-| [ReadPropertyAsync](IManagementClient/ReadPropertyAsync.md)(…) |  |
-| [ReadPropertyDescriptionAsync](IManagementClient/ReadPropertyDescriptionAsync.md)(…) |  |
-| [ReadPropertyDescriptionByIndexAsync](IManagementClient/ReadPropertyDescriptionByIndexAsync.md)(…) |  |
-| [ResetDeviceAsync](IManagementClient/ResetDeviceAsync.md)(…) |  |
-| [RestartDeviceAsync](IManagementClient/RestartDeviceAsync.md)() |  |
+| [ReadPropertyAsync](IManagementClient/ReadPropertyAsync.md)(…) | Reads the value of a property from the device |
+| [ReadPropertyDescriptionAsync](IManagementClient/ReadPropertyDescriptionAsync.md)(…) | Read the description for a specific property from the device |
+| [ReadPropertyDescriptionByIndexAsync](IManagementClient/ReadPropertyDescriptionByIndexAsync.md)(…) | Read the description for a specific property from the device |
+| [ResetDeviceAsync](IManagementClient/ResetDeviceAsync.md)(…) | Sends a reset request to a device. Use with care! |
+| [RestartDeviceAsync](IManagementClient/RestartDeviceAsync.md)() | Sends a restart request to the device |
 | [WriteAddressAsync](IManagementClient/WriteAddressAsync.md)(…) |  |
 | [WriteDomainAddressAsync](IManagementClient/WriteDomainAddressAsync.md)(…) |  (2 methods) |
 | [WriteMemoryAsync](IManagementClient/WriteMemoryAsync.md)(…) |  |

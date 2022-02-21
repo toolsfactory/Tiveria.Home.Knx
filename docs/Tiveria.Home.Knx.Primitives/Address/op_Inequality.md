@@ -1,14 +1,15 @@
-# Address.IsBroadcast method
+# Address Inequality operator
 
-Checks whether the provided Address is an [`IndividualAddress`](../IndividualAddress.md) for broadcast
+Comparison operator checking if the addresses are not equal
 
 ```csharp
-public bool IsBroadcast()
+public static bool operator !=(Address a, Address b)
 ```
 
-## Return Value
-
-True in case of a broadcast message
+| parameter | description |
+| --- | --- |
+| a |  |
+| b |  |
 
 ## See Also
 

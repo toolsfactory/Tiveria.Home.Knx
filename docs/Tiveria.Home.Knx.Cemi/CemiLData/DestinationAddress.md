@@ -3,12 +3,12 @@
 Whether an [`IndividualAddress`](../../Tiveria.Home.Knx.Primitives/IndividualAddress.md) or a [`GroupAddress`](../../Tiveria.Home.Knx.Primitives/GroupAddress.md) as destination
 
 ```csharp
-public IKnxAddress DestinationAddress { get; set; }
+public Address DestinationAddress { get; set; }
 ```
 
 ## See Also
 
-* interface [IKnxAddress](../../Tiveria.Home.Knx/IKnxAddress.md)
+* class [Address](../../Tiveria.Home.Knx.Primitives/Address.md)
 * class [CemiLData](../CemiLData.md)
 * namespace [Tiveria.Home.Knx.Cemi](../CemiLData.md.md)
 * assembly [Tiveria.Home.Knx](../../Tiveria.Home.Knx.md)

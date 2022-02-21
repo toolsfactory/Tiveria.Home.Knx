@@ -1,8 +1,18 @@
 # IManagementClient.ReadDeviceDescriptorAsync method
 
+Reads Knx Device Descriptor bytes from the device
+
 ```csharp
 public Task<byte[]> ReadDeviceDescriptorAsync(byte descriptorType = 0)
 ```
+
+| parameter | description |
+| --- | --- |
+| descriptorType | Which descriptor to read |
+
+## Return Value
+
+The data returned
 
 ## See Also
 

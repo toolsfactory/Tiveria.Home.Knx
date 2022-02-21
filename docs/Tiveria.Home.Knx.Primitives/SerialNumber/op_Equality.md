@@ -1,9 +1,7 @@
-# SerialNumber.Value property
-
-The actual serialnumber
+# SerialNumber Equality operator
 
 ```csharp
-public ulong Value { get; set; }
+public static bool operator ==(SerialNumber a, SerialNumber b)
 ```
 
 ## See Also

@@ -1,12 +1,12 @@
 # CemiSerializerBase&lt;T&gt;.ReadDestinationAddress method
 
 ```csharp
-protected virtual IKnxAddress ReadDestinationAddress(BigEndianBinaryReader br, bool isGroupAddress)
+protected virtual Address ReadDestinationAddress(BigEndianBinaryReader br, bool isGroupAddress)
 ```
 
 ## See Also
 
-* interface [IKnxAddress](../../Tiveria.Home.Knx/IKnxAddress.md)
+* class [Address](../../Tiveria.Home.Knx.Primitives/Address.md)
 * class [CemiSerializerBase&lt;T&gt;](../CemiSerializerBase-1.md)
 * namespace [Tiveria.Home.Knx.Cemi.Serializers](../CemiSerializerBase-1.md.md)
 * assembly [Tiveria.Home.Knx](../../Tiveria.Home.Knx.md)

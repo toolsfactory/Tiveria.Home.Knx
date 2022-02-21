@@ -1,5 +1,7 @@
 # ManagementClientBase class
 
+Base implementation used in all transport specific [`IManagementClient`](./IManagementClient.md) implementations
+
 ```csharp
 public abstract class ManagementClientBase : IManagementClient
 ```
@@ -15,8 +17,8 @@ public abstract class ManagementClientBase : IManagementClient
 | [RemoteAddress](ManagementClientBase/RemoteAddress.md) { get; set; } | Individual address of the remote knx device |
 | [ResponseTimeout](ManagementClientBase/ResponseTimeout.md) { get; set; } | Maximum time the client waits for a response to a request. Timout in milliseconds |
 | [State](ManagementClientBase/State.md) { get; } | State of the current connection |
-| [ConnectAsync](ManagementClientBase/ConnectAsync.md)() |  |
-| [DisconnectAsync](ManagementClientBase/DisconnectAsync.md)() |  |
+| [ConnectAsync](ManagementClientBase/ConnectAsync.md)() | Initiates the connection to the remote device and reads out the max APDU size from object 0 / property 56. |
+| [DisconnectAsync](ManagementClientBase/DisconnectAsync.md)() | Disconnets from the device. The underlying connection to the Knx bus is not closed. |
 | [ReadADCAsync](ManagementClientBase/ReadADCAsync.md)(…) |  |
 | [ReadAddressAsync](ManagementClientBase/ReadAddressAsync.md)(…) |  |
 | [ReadAllAddressesAsync](ManagementClientBase/ReadAllAddressesAsync.md)() |  |
@@ -27,8 +29,8 @@ public abstract class ManagementClientBase : IManagementClient
 | [ReadIndividualAddressAsync](ManagementClientBase/ReadIndividualAddressAsync.md)() |  |
 | [ReadMemoryAsync](ManagementClientBase/ReadMemoryAsync.md)(…) |  |
 | [ReadPropertiesAsync](ManagementClientBase/ReadPropertiesAsync.md)(…) |  |
-| [ReadPropertyAsync](ManagementClientBase/ReadPropertyAsync.md)(…) |  |
-| [ReadPropertyDescriptionAsync](ManagementClientBase/ReadPropertyDescriptionAsync.md)(…) |  |
+| [ReadPropertyAsync](ManagementClientBase/ReadPropertyAsync.md)(…) | Reads the value of a property from the device |
+| [ReadPropertyDescriptionAsync](ManagementClientBase/ReadPropertyDescriptionAsync.md)(…) | Read the description for a specific property from the device |
 | [ReadPropertyDescriptionByIndexAsync](ManagementClientBase/ReadPropertyDescriptionByIndexAsync.md)(…) |  |
 | [ResetDeviceAsync](ManagementClientBase/ResetDeviceAsync.md)(…) |  |
 | [RestartDeviceAsync](ManagementClientBase/RestartDeviceAsync.md)() |  |
@@ -41,8 +43,8 @@ public abstract class ManagementClientBase : IManagementClient
 
 | name | description |
 | --- | --- |
-| [ManagementClientBase](ManagementClientBase/ManagementClientBase.md)(…) |  |
-| [_client](ManagementClientBase/_client.md) |  |
+| [ManagementClientBase](ManagementClientBase/ManagementClientBase.md)(…) | Base constructor |
+| [_connection](ManagementClientBase/_connection.md) |  |
 | [_disconnectCTS](ManagementClientBase/_disconnectCTS.md) |  |
 | [_incLock](ManagementClientBase/_incLock.md) |  |
 | [_list](ManagementClientBase/_list.md) |  |

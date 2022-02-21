@@ -4,6 +4,11 @@
 public Task<byte[]> ReadMemoryAsync(int offset, int count)
 ```
 
+| parameter | description |
+| --- | --- |
+| offset |  |
+| count |  |
+
 ## See Also
 
 * interface [IManagementClient](../IManagementClient.md)

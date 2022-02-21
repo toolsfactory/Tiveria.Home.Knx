@@ -8,6 +8,7 @@ public Task<bool> DiscoverByServiceAsync(byte[] service, int timeoutms = 1000)
 
 | parameter | description |
 | --- | --- |
+| service | Service description |
 | timeoutms | Time after the async search is canceled |
 
 ## Return Value

@@ -1,9 +1,17 @@
 # IManagementClient.ResetDeviceAsync method
 
+Sends a reset request to a device. Use with care!
+
 ```csharp
 public Task<(byte ErrorCode, int ProcessTime)> ResetDeviceAsync(EraseCode code, int channelid, 
     bool areYouSure)
 ```
+
+| parameter | description |
+| --- | --- |
+| code | The erase code to be used |
+| channelid | The channel to be reset |
+| areYouSure | A confirmation flag |
 
 ## See Also
 

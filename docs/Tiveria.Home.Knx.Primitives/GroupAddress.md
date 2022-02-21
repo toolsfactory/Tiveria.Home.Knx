@@ -26,6 +26,8 @@ public class GroupAddress : Address
 | static [IsValidThreeLevelAddress](GroupAddress/IsValidThreeLevelAddress.md)(…) | Checks whether the values provided represent a valid three level address or not |
 | static [IsValidTwoLevelAddress](GroupAddress/IsValidTwoLevelAddress.md)(…) | Checks whether the values provided represent a valid two level address or not |
 | static [TryParse](GroupAddress/TryParse.md)(…) | Tries to convert the string represenation of a GroupAddress to the equivalent [`GroupAddress`](./GroupAddress.md) object. Supports all three [`GroupAddressStyle`](./GroupAddressStyle.md) variants. |
+| [operator ==](GroupAddress/op_Equality.md) |  |
+| [operator !=](GroupAddress/op_Inequality.md) |  |
 
 ## See Also
 

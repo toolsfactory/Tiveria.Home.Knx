@@ -4,6 +4,10 @@
 public Task WriteDomainAddressAsync(byte[] domainAddress)
 ```
 
+| parameter | description |
+| --- | --- |
+| domainAddress |  |
+
 ## See Also
 
 * interface [IManagementClient](../IManagementClient.md)
@@ -17,6 +21,11 @@ public Task WriteDomainAddressAsync(byte[] domainAddress)
 ```csharp
 public Task WriteDomainAddressAsync(SerialNumber serialNumber, byte[] domainAddress)
 ```
+
+| parameter | description |
+| --- | --- |
+| serialNumber |  |
+| domainAddress |  |
 
 ## See Also
 

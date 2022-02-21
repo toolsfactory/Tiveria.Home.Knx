@@ -4,6 +4,14 @@
 public Task WritePropertyAsync(byte objIdx, byte propId, int startIndex, int elements, byte[] data)
 ```
 
+| parameter | description |
+| --- | --- |
+| objIdx |  |
+| propId |  |
+| startIndex |  |
+| elements |  |
+| data |  |
+
 ## See Also
 
 * interface [IManagementClient](../IManagementClient.md)

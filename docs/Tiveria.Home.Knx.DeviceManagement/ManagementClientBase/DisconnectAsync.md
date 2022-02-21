@@ -1,8 +1,14 @@
 # ManagementClientBase.DisconnectAsync method
 
+Disconnets from the device. The underlying connection to the Knx bus is not closed.
+
 ```csharp
 public Task DisconnectAsync()
 ```
+
+## Return Value
+
+The awaitable Task
 
 ## See Also
 

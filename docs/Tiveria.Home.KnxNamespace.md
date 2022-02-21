@@ -5,7 +5,6 @@
 | class [CemiReceivedArgs](./Tiveria.Home.Knx/CemiReceivedArgs.md) |  |
 | class [ConnectionStateChangedEventArgs](./Tiveria.Home.Knx/ConnectionStateChangedEventArgs.md) |  |
 | class [DataReceivedArgs](./Tiveria.Home.Knx/DataReceivedArgs.md) |  |
-| interface [IKnxAddress](./Tiveria.Home.Knx/IKnxAddress.md) | Interface common to both Individual and Group Adresses in Knx. |
 | interface [IKnxCemiSerializer&lt;T&gt;](./Tiveria.Home.Knx/IKnxCemiSerializer-1.md) |  |
 | interface [IKnxCemiSerializer](./Tiveria.Home.Knx/IKnxCemiSerializer.md) | Provides standard capabilities to serialize and deserialize Cemi messages |
 | interface [IKnxClient](./Tiveria.Home.Knx/IKnxClient.md) | Baseline interface for all clients used to connect to the Knx bus |

@@ -1,5 +1,7 @@
 # IManagementClient.RemoteAddress property
 
+Address of remote device the management client is connected to
+
 ```csharp
 public IndividualAddress RemoteAddress { get; }
 ```

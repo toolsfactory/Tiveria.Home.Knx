@@ -1,8 +1,15 @@
 # ManagementClientBase constructor
 
+Base constructor
+
 ```csharp
 protected ManagementClientBase(IKnxClient client, IndividualAddress remoteAddress)
 ```
+
+| parameter | description |
+| --- | --- |
+| client | The knx bus client to be used |
+| remoteAddress | The [`IndividualAddress`](../../Tiveria.Home.Knx.Primitives/IndividualAddress.md) of the device to communicate with |
 
 ## See Also
 

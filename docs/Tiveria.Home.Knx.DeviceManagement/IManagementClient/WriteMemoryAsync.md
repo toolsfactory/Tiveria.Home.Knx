@@ -4,6 +4,11 @@
 public Task WriteMemoryAsync(int offset, byte[] data)
 ```
 
+| parameter | description |
+| --- | --- |
+| offset |  |
+| data |  |
+
 ## See Also
 
 * interface [IManagementClient](../IManagementClient.md)

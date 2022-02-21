@@ -7,7 +7,6 @@
 | class [CemiReceivedArgs](./Tiveria.Home.Knx/CemiReceivedArgs.md) |  |
 | class [ConnectionStateChangedEventArgs](./Tiveria.Home.Knx/ConnectionStateChangedEventArgs.md) |  |
 | class [DataReceivedArgs](./Tiveria.Home.Knx/DataReceivedArgs.md) |  |
-| interface [IKnxAddress](./Tiveria.Home.Knx/IKnxAddress.md) | Interface common to both Individual and Group Adresses in Knx. |
 | interface [IKnxCemiSerializer&lt;T&gt;](./Tiveria.Home.Knx/IKnxCemiSerializer-1.md) |  |
 | interface [IKnxCemiSerializer](./Tiveria.Home.Knx/IKnxCemiSerializer.md) | Provides standard capabilities to serialize and deserialize Cemi messages |
 | interface [IKnxClient](./Tiveria.Home.Knx/IKnxClient.md) | Baseline interface for all clients used to connect to the Knx bus |
@@ -96,9 +95,9 @@
 | class [DeviceConnectionSession](./Tiveria.Home.Knx.DeviceManagement/DeviceConnectionSession.md) |  |
 | enum [EraseCode](./Tiveria.Home.Knx.DeviceManagement/EraseCode.md) | Erase codes used when sending a master reset restart apci code. !:ApduType.RestartMasterReset_Request |
 | static class [EraseCodeExtensions](./Tiveria.Home.Knx.DeviceManagement/EraseCodeExtensions.md) |  |
-| interface [IManagementClient](./Tiveria.Home.Knx.DeviceManagement/IManagementClient.md) |  |
+| interface [IManagementClient](./Tiveria.Home.Knx.DeviceManagement/IManagementClient.md) | Interface describing all capabilities a management client class should expose |
 | interface [ITransportLayer](./Tiveria.Home.Knx.DeviceManagement/ITransportLayer.md) |  |
-| abstract class [ManagementClientBase](./Tiveria.Home.Knx.DeviceManagement/ManagementClientBase.md) |  |
+| abstract class [ManagementClientBase](./Tiveria.Home.Knx.DeviceManagement/ManagementClientBase.md) | Base implementation used in all transport specific [`IManagementClient`](./Tiveria.Home.Knx.DeviceManagement/IManagementClient.md) implementations |
 | enum [ManagementConnectionState](./Tiveria.Home.Knx.DeviceManagement/ManagementConnectionState.md) | see Chapter 5.1 of 3.3.4 Transport Layer Communication in Knx Specs |
 | static class [PropertyDataType](./Tiveria.Home.Knx.DeviceManagement/PropertyDataType.md) |  |
 | record [PropertyDataTypeDetails](./Tiveria.Home.Knx.DeviceManagement/PropertyDataTypeDetails.md) |  |
@@ -125,11 +124,17 @@
 | static class [BigEndianBinaryReaderExtensions](./Tiveria.Home.Knx.Extensions/BigEndianBinaryReaderExtensions.md) |  |
 | static class [Log](./Tiveria.Home.Knx.Extensions/Log.md) |  |
 
+## Tiveria.Home.Knx.GroupManagement namespace
+
+| public type | description |
+| --- | --- |
+| class [GroupClient&lt;T&gt;](./Tiveria.Home.Knx.GroupManagement/GroupClient-1.md) | Class simplifying the work with one [`GroupAddress`](./Tiveria.Home.Knx.Primitives/GroupAddress.md) |
+
 ## Tiveria.Home.Knx.Primitives namespace
 
 | public type | description |
 | --- | --- |
-| abstract class [Address](./Tiveria.Home.Knx.Primitives/Address.md) |  |
+| abstract class [Address](./Tiveria.Home.Knx.Primitives/Address.md) | Baseline class for all Knx address types |
 | enum [AddressType](./Tiveria.Home.Knx.Primitives/AddressType.md) | Knx Address Type |
 | class [GroupAddress](./Tiveria.Home.Knx.Primitives/GroupAddress.md) | Class representing both a 2-level or a 3-level Group Address |
 | enum [GroupAddressStyle](./Tiveria.Home.Knx.Primitives/GroupAddressStyle.md) | Style or mode the [`GroupAddress`](./Tiveria.Home.Knx.Primitives/GroupAddress.md) is used in the Knx Project. |

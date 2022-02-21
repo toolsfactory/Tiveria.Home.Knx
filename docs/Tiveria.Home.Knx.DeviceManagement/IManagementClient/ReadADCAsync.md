@@ -4,6 +4,11 @@
 public Task<int> ReadADCAsync(byte channel, byte repeats)
 ```
 
+| parameter | description |
+| --- | --- |
+| channel |  |
+| repeats |  |
+
 ## See Also
 
 * interface [IManagementClient](../IManagementClient.md)

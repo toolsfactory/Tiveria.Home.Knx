@@ -1,8 +1,15 @@
 # TunnelingManagementClient constructor
 
+Creates a new instance of the [`TunnelingManagementClient`](../TunnelingManagementClient.md) class
+
 ```csharp
-public TunnelingManagementClient(IKnxNetIPConnection client, IndividualAddress remoteAddress)
+public TunnelingManagementClient(IKnxNetIPConnection connection, IndividualAddress remoteAddress)
 ```
+
+| parameter | description |
+| --- | --- |
+| connection | The underlying [`TunnelingConnection`](../../Tiveria.Home.Knx.IP.Connections/TunnelingConnection.md) to be used |
+| remoteAddress | The Knx IndividualAddress of the device to connect to |
 
 ## See Also
 
