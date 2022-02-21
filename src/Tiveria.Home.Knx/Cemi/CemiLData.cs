@@ -142,17 +142,16 @@ namespace Tiveria.Home.Knx.Cemi
         }
 
         /// <summary>
-        /// Creates a new instance of the CemiLData class. The <see cref="AdditionalInfoFields"/> and the <see cref="Tpci"/> property are initilized as 0/empty.
+        /// Creates a new instance of the CemiLData class. The <see cref="AdditionalInfoFields"/>, the source address <see cref="IndividualAddress"/> and the <see cref="Tpci"/> property are initilized as 0/empty.
         /// </summary>
         /// <param name="messageCode"></param>
-        /// <param name="srcAddress"></param>
         /// <param name="dstAddress"></param>
         /// <param name="controlField1"></param>
         /// <param name="controlField2"></param>
         /// <param name="apdu"></param>
-        public CemiLData(MessageCode messageCode, IndividualAddress srcAddress, IKnxAddress dstAddress, ControlField1 controlField1,
+        public CemiLData(MessageCode messageCode, IKnxAddress dstAddress, ControlField1 controlField1,
             ControlField2 controlField2, Apdu apdu)
-            : this(messageCode, new List<AdditionalInformationField>(), srcAddress, dstAddress, controlField1, controlField2, new Tpci(), apdu)
+            : this(messageCode, new List<AdditionalInformationField>(), IndividualAddress.Empty(), dstAddress, controlField1, controlField2, new Tpci(), apdu)
         { }
 
         /// <inheritdoc/>

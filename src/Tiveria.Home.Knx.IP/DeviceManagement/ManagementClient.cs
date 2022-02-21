@@ -22,24 +22,29 @@
     combination.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Tiveria.Common;
-using Tiveria.Home.Knx.Primitives;
 using Tiveria.Home.Knx.Cemi;
 using Tiveria.Home.Knx.DeviceManagement;
-using Tiveria.Home.Knx.Exceptions;
+using Tiveria.Home.Knx.IP.Connections;
 using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Home.Knx.IP.Services;
+using Tiveria.Home.Knx.Primitives;
 
 namespace Tiveria.Home.Knx.IP.DeviceManagement
 {
+    /// <summary>
+    /// Implementation of the <see cref="IManagementClient"/> interface for tunneling based IP connections.
+    /// </summary>
     public class TunnelingManagementClient : ManagementClientBase
     {
-        public TunnelingManagementClient(IKnxNetIPConnection client, IndividualAddress remoteAddress) : base(client, remoteAddress)
+        /// <summary>
+        /// Creates a new instance of the <see cref="TunnelingManagementClient"/> class
+        /// </summary>
+        /// <param name="connection">The underlying <see cref="TunnelingConnection"/> to be used</param>
+        /// <param name="remoteAddress">The Knx <see cref="IndividualAddress"/> of the device to connect to</param>
+        public TunnelingManagementClient(IKnxNetIPConnection connection, IndividualAddress remoteAddress) 
+            : base(connection, remoteAddress)
         {
-            client.FrameReceived += _client_FrameReceived;
+            connection.FrameReceived += _client_FrameReceived;
         }
 
         private void _client_FrameReceived(object? sender, FrameReceivedEventArgs e)

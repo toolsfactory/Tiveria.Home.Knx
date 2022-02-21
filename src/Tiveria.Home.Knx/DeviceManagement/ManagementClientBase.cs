@@ -30,10 +30,13 @@ using Tiveria.Home.Knx.Exceptions;
 
 namespace Tiveria.Home.Knx.DeviceManagement
 {
+    /// <summary>
+    /// Base implementation used in all transport specific <see cref="IManagementClient"/> implementations
+    /// </summary>
     public abstract class ManagementClientBase : IManagementClient
     {
         #region private members
-        protected IKnxClient _client;
+        protected IKnxClient _connection;
         protected CancellationTokenSource _disconnectCTS = new CancellationTokenSource();
         protected object _incLock = new object();
         protected Dictionary<int, Apdu> _list = new Dictionary<int, Apdu>(15);
@@ -80,15 +83,25 @@ namespace Tiveria.Home.Knx.DeviceManagement
         #endregion
 
         #region constructor
+        /// <summary>
+        /// Base constructor
+        /// </summary>
+        /// <param name="client">The knx bus client to be used</param>
+        /// <param name="remoteAddress">The <see cref="IndividualAddress"/> of the device to communicate with</param>
         protected ManagementClientBase(IKnxClient client, IndividualAddress remoteAddress)
         {
-            _client = client;
+            _connection = client;
             RemoteAddress = remoteAddress;
         }
         #endregion
 
         #region public implementatation
+
         #region connection management
+        /// <summary>
+        /// Initiates the connection to the remote device and reads out the max APDU size from object 0 / property 56.
+        /// </summary>
+        /// <returns>The awaitable <see cref="Task"/></returns>
         public async Task ConnectAsync()
         {
             if (IsConnected)
@@ -100,6 +113,10 @@ namespace Tiveria.Home.Knx.DeviceManagement
             await GetMaxApduFrameLength();
         }
 
+        /// <summary>
+        /// Disconnets from the device. The underlying connection to the Knx bus is not closed.
+        /// </summary>
+        /// <returns>The awaitable <see cref="Task"/></returns>
         public async Task DisconnectAsync()
         {
             if (!IsConnected)
@@ -111,6 +128,12 @@ namespace Tiveria.Home.Knx.DeviceManagement
         #endregion
 
         #region property & propertydescription
+        /// <summary>
+        /// Reads the value of a property from the device
+        /// </summary>
+        /// <param name="objIdx">Index of the object in the device</param>
+        /// <param name="propId">Id of the property withing the object of the device</param>
+        /// <returns>THe property value</returns>
         public async Task<byte[]> ReadPropertyAsync(byte objIdx, byte propId)
         {
             var seq = await SendNumberedDataCemiAsync(ApduType.PropertyValue_Read, new byte[] { objIdx, propId, 0x10, 0x01 });
@@ -118,6 +141,12 @@ namespace Tiveria.Home.Knx.DeviceManagement
             return resp.Data;
         }
 
+        /// <summary>
+        /// Read the description for a specific property from the device
+        /// </summary>
+        /// <param name="objIdx">Index of the object in the device</param>
+        /// <param name="propId">Id of the property withing the object of the device</param>
+        /// <returns>Description of the property</returns>
         public async Task<PropertyDescription> ReadPropertyDescriptionAsync(byte objIdx, byte propId)
         {
             var seq = await SendNumberedDataCemiAsync(ApduType.PropertyDescription_Read, new byte[] { objIdx, propId, 0x00 });
@@ -201,6 +230,12 @@ namespace Tiveria.Home.Knx.DeviceManagement
         #endregion
 
         #region other
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="serialNumber"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
         public Task<IndividualAddress> ReadAddressAsync(SerialNumber serialNumber)
         {
             throw new NotImplementedException();
@@ -310,7 +345,7 @@ namespace Tiveria.Home.Knx.DeviceManagement
             var cts = new CancellationTokenSource(2000);
             var tpci = new Tpci(Cemi.PacketType.Control, Cemi.SequenceType.UnNumbered, 0, ctrlType);
             var cemi = BuildRequestCemi(tpci, null);
-            await _client.SendCemiAsync(cemi);
+            await _connection.SendCemiAsync(cemi);
         }
 
         protected async Task<int> SendNumberedDataCemiAsync(int ApduType, byte[] data)
@@ -321,14 +356,14 @@ namespace Tiveria.Home.Knx.DeviceManagement
             var tpci = new Tpci(PacketType.Data, SequenceType.Numbered, (byte)seq, ControlType.None);
             var apdu = new Apdu(ApduType, data);
             var cemi = BuildRequestCemi(tpci, apdu);
-            await _client.SendCemiAsync(cemi);
+            await _connection.SendCemiAsync(cemi);
             return seq;
         }
         protected void SendTpciAckFrameAsync(byte sequenceNumber)
         {
             var tpci = new Tpci(PacketType.Control, SequenceType.Numbered, sequenceNumber, ControlType.Ack);
             var cemi = BuildRequestCemi(tpci, null);
-            _client.SendCemiAsync(cemi);
+            _connection.SendCemiAsync(cemi);
         }
 
         private async Task<Apdu> WaitForSequenceResponseAsync(int ApduType, int sequenceNo)
