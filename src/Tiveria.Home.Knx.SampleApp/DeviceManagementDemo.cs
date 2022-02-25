@@ -34,7 +34,7 @@ namespace Tiveria.Home.Knx
 {
     public class DeviceManagementDemo
     {
-
+        readonly IndividualAddress ADDRESS = IndividualAddress.Parse("1.1.3");
         #region Public Methods
 
         public IPAddress GetLocalIPAddress()
@@ -61,8 +61,21 @@ namespace Tiveria.Home.Knx
             var Con = new IP.Connections.TunnelingConnectionBuilder(Program.LocalIPAddress, Program.GatewayIPAddress, Program.GatewayPort).Build();
             await Con.ConnectAsync();
 
+            Console.WriteLine("Connectionless Client Test");
+            var client = new IP.Management.ConnectionlessDeviceManagementClient(Con);
+            var data = await client.ReadPropertyAsync(ADDRESS, 0, 56);
+            Console.WriteLine("* Prop 0-56: " + data != null ? BitConverter.ToString(data) : "Null returned");
+            Console.WriteLine("Reading property description (APDULength).");
+            var propdesc = await client.ReadPropertyDescriptionAsync(ADDRESS, 0, 56);
+            if (propdesc != null)
+                Console.WriteLine($"* Type: {propdesc.PropertyType}, Writeable: {propdesc.WriteEnabled}, WriteLevel: {propdesc.WriteLevel}, ReadLevel: {propdesc.ReadLevel}");
+            else
+                Console.WriteLine("* Null returned");
+
+
+
             Console.WriteLine("Connecting to device.");
-            var mngt = new IP.DeviceManagement.TunnelingManagementClient(Con, IndividualAddress.Parse("1.1.3"));
+            var mngt = new IP.Management.TunnelingManagementClient(Con, ADDRESS);
             await mngt.ConnectAsync();
 
             Console.WriteLine("Reading device descriptor.");
@@ -70,7 +83,7 @@ namespace Tiveria.Home.Knx
             Console.WriteLine("* Device Descriptor read: {0}", desc != null ? BitConverter.ToString(desc) : "none");
 
             Console.WriteLine("Reading property description (APDULength).");
-            var propdesc = await mngt.ReadPropertyDescriptionAsync(0, 56);
+            propdesc = await mngt.ReadPropertyDescriptionAsync(0, 56);
             if (propdesc != null)
                 Console.WriteLine($"* Type: {propdesc.PropertyType}, Writeable: {propdesc.WriteEnabled}, WriteLevel: {propdesc.WriteLevel}, ReadLevel: {propdesc.ReadLevel}");
             else
@@ -78,7 +91,7 @@ namespace Tiveria.Home.Knx
 
 
             Console.WriteLine("Reading property 0-56 (APDULength).");
-            var data = await mngt.ReadPropertyAsync(0, 56);
+            data = await mngt.ReadPropertyAsync(0, 56);
             Console.WriteLine("* Prop 0-56: " + data != null ? BitConverter.ToString(data) : "Null returned");
 
             /*
@@ -94,7 +107,7 @@ namespace Tiveria.Home.Knx
             data = await mngt.ReadPropertyAsync(0, 15);
             Console.WriteLine("* Prop 0-15: " + data != null ? BitConverter.ToString(data) : "Null returned");
             */
-            
+
             Console.WriteLine("Reading Memory.");
             var mem = await mngt.ReadMemoryAsync(0x170, 12);
             Console.WriteLine("* Memory read: {0}", mem != null ? BitConverter.ToString(mem) : "none");

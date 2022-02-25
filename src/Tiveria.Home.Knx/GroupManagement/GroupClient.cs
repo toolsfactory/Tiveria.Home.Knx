@@ -39,7 +39,7 @@ namespace Tiveria.Home.Knx.GroupManagement
 
         private readonly GroupAddress _address;
         private readonly ManualResetEventSlim _answerEvent = new ManualResetEventSlim(false);
-        private readonly IKnxClient _client;
+        private readonly IKnxConnection _client;
         private readonly DPType<T> _translator;
         private byte[]? _data;
 
@@ -53,7 +53,7 @@ namespace Tiveria.Home.Knx.GroupManagement
         /// <param name="client">The underlying connection client based on <see cref="IKnxClient"/></param>
         /// <param name="address">The <see cref="GroupAddress"/> to work with</param>
         /// <param name="translator">A translator that is used to convert the APDU data from and to target type</param>
-        public GroupClient(IKnxClient client, GroupAddress address, DPType<T> translator)
+        public GroupClient(IKnxConnection client, GroupAddress address, DPType<T> translator)
         {
             _client = client;
             _address = address;

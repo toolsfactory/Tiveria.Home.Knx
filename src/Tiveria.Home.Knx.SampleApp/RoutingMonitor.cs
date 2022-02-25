@@ -22,19 +22,16 @@
     combination.
 */
 
-using System.Net;
-using Tiveria.Home.Knx.Primitives;
-using Tiveria.Home.Knx.IP;
-using Tiveria.Common.Extensions;
-using Tiveria.Home.Knx.IP.Enums;
-using Tiveria.Home.Knx.Datapoint;
-using System.Net.Sockets;
-using NLog;
-using NLog.Config;
-using NLog.Targets;
-using Tiveria.Home.Knx.Cemi;
-using Tiveria.Home.Knx.IP.Services;
 using Microsoft.Extensions.Logging;
+using System.Net;
+using System.Net.Sockets;
+using Tiveria.Common.Extensions;
+using Tiveria.Home.Knx.Cemi;
+using Tiveria.Home.Knx.Datapoint;
+using Tiveria.Home.Knx.IP;
+using Tiveria.Home.Knx.IP.Enums;
+using Tiveria.Home.Knx.IP.Services;
+using Tiveria.Home.Knx.Primitives;
 
 namespace Tiveria.Home.Knx
 {

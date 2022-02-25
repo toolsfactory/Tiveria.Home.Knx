@@ -7,7 +7,7 @@
 | class [DataReceivedArgs](./Tiveria.Home.Knx/DataReceivedArgs.md) |  |
 | interface [IKnxCemiSerializer&lt;T&gt;](./Tiveria.Home.Knx/IKnxCemiSerializer-1.md) |  |
 | interface [IKnxCemiSerializer](./Tiveria.Home.Knx/IKnxCemiSerializer.md) | Provides standard capabilities to serialize and deserialize Cemi messages |
-| interface [IKnxClient](./Tiveria.Home.Knx/IKnxClient.md) | Baseline interface for all clients used to connect to the Knx bus |
+| interface [IKnxConnection](./Tiveria.Home.Knx/IKnxConnection.md) | Baseline interface used to connect to the Knx bus |
 | interface [IKnxDataElement](./Tiveria.Home.Knx/IKnxDataElement.md) | Baseline interface for all elements of a Knx message |
 | class [KnxCemiSerializerFactory](./Tiveria.Home.Knx/KnxCemiSerializerFactory.md) | Factory class used to access all registered serializers for sepcific cemi messages |
 | enum [KnxConnectionState](./Tiveria.Home.Knx/KnxConnectionState.md) | Enumeration of the different states a connection to the Knx bus can be in |

@@ -9,7 +9,7 @@
 | class [DataReceivedArgs](./Tiveria.Home.Knx/DataReceivedArgs.md) |  |
 | interface [IKnxCemiSerializer&lt;T&gt;](./Tiveria.Home.Knx/IKnxCemiSerializer-1.md) |  |
 | interface [IKnxCemiSerializer](./Tiveria.Home.Knx/IKnxCemiSerializer.md) | Provides standard capabilities to serialize and deserialize Cemi messages |
-| interface [IKnxClient](./Tiveria.Home.Knx/IKnxClient.md) | Baseline interface for all clients used to connect to the Knx bus |
+| interface [IKnxConnection](./Tiveria.Home.Knx/IKnxConnection.md) | Baseline interface used to connect to the Knx bus |
 | interface [IKnxDataElement](./Tiveria.Home.Knx/IKnxDataElement.md) | Baseline interface for all elements of a Knx message |
 | class [KnxCemiSerializerFactory](./Tiveria.Home.Knx/KnxCemiSerializerFactory.md) | Factory class used to access all registered serializers for sepcific cemi messages |
 | enum [KnxConnectionState](./Tiveria.Home.Knx/KnxConnectionState.md) | Enumeration of the different states a connection to the Knx bus can be in |
@@ -88,22 +88,6 @@
 | enum [SceneControlMode](./Tiveria.Home.Knx.Datapoint/SceneControlMode.md) |  |
 | struct [TimeOfDay](./Tiveria.Home.Knx.Datapoint/TimeOfDay.md) |  |
 
-## Tiveria.Home.Knx.DeviceManagement namespace
-
-| public type | description |
-| --- | --- |
-| class [DeviceConnectionSession](./Tiveria.Home.Knx.DeviceManagement/DeviceConnectionSession.md) |  |
-| enum [EraseCode](./Tiveria.Home.Knx.DeviceManagement/EraseCode.md) | Erase codes used when sending a master reset restart apci code. !:ApduType.RestartMasterReset_Request |
-| static class [EraseCodeExtensions](./Tiveria.Home.Knx.DeviceManagement/EraseCodeExtensions.md) |  |
-| interface [IManagementClient](./Tiveria.Home.Knx.DeviceManagement/IManagementClient.md) | Interface describing all capabilities a management client class should expose |
-| interface [ITransportLayer](./Tiveria.Home.Knx.DeviceManagement/ITransportLayer.md) |  |
-| abstract class [ManagementClientBase](./Tiveria.Home.Knx.DeviceManagement/ManagementClientBase.md) | Base implementation used in all transport specific [`IManagementClient`](./Tiveria.Home.Knx.DeviceManagement/IManagementClient.md) implementations |
-| enum [ManagementConnectionState](./Tiveria.Home.Knx.DeviceManagement/ManagementConnectionState.md) | see Chapter 5.1 of 3.3.4 Transport Layer Communication in Knx Specs |
-| static class [PropertyDataType](./Tiveria.Home.Knx.DeviceManagement/PropertyDataType.md) |  |
-| record [PropertyDataTypeDetails](./Tiveria.Home.Knx.DeviceManagement/PropertyDataTypeDetails.md) |  |
-| class [PropertyDescription](./Tiveria.Home.Knx.DeviceManagement/PropertyDescription.md) | Contains the property description information in a PropertyDescription_Response service. |
-| enum [TransportConnectionState](./Tiveria.Home.Knx.DeviceManagement/TransportConnectionState.md) | see Chapter 5.1 of 3.3.4 Transport Layer Communication in Knx Specs |
-
 ## Tiveria.Home.Knx.Exceptions namespace
 
 | public type | description |
@@ -129,6 +113,24 @@
 | public type | description |
 | --- | --- |
 | class [GroupClient&lt;T&gt;](./Tiveria.Home.Knx.GroupManagement/GroupClient-1.md) | Class simplifying the work with one [`GroupAddress`](./Tiveria.Home.Knx.Primitives/GroupAddress.md) |
+
+## Tiveria.Home.Knx.Management namespace
+
+| public type | description |
+| --- | --- |
+| class [DeviceConnectionSession](./Tiveria.Home.Knx.Management/DeviceConnectionSession.md) |  |
+| enum [EraseCode](./Tiveria.Home.Knx.Management/EraseCode.md) | Erase codes used when sending a master reset restart apci code. !:ApduType.RestartMasterReset_Request |
+| static class [EraseCodeExtensions](./Tiveria.Home.Knx.Management/EraseCodeExtensions.md) |  |
+| interface [IConnectedDeviceManagement](./Tiveria.Home.Knx.Management/IConnectedDeviceManagement.md) | Interface describing all capabilities a management client class should expose |
+| interface [IConnectionlessDeviceManagement](./Tiveria.Home.Knx.Management/IConnectionlessDeviceManagement.md) |  |
+| interface [INetworkManagement](./Tiveria.Home.Knx.Management/INetworkManagement.md) |  |
+| interface [ITransportLayer](./Tiveria.Home.Knx.Management/ITransportLayer.md) |  |
+| abstract class [ManagementClientBase](./Tiveria.Home.Knx.Management/ManagementClientBase.md) | Base implementation used in all transport specific [`IConnectedDeviceManagement`](./Tiveria.Home.Knx.Management/IConnectedDeviceManagement.md) implementations |
+| enum [ManagementConnectionState](./Tiveria.Home.Knx.Management/ManagementConnectionState.md) | see Chapter 5.1 of 3.3.4 Transport Layer Communication in Knx Specs |
+| static class [PropertyDataType](./Tiveria.Home.Knx.Management/PropertyDataType.md) |  |
+| record [PropertyDataTypeDetails](./Tiveria.Home.Knx.Management/PropertyDataTypeDetails.md) |  |
+| class [PropertyDescription](./Tiveria.Home.Knx.Management/PropertyDescription.md) | Contains the property description information in a PropertyDescription_Response service. |
+| enum [TransportConnectionState](./Tiveria.Home.Knx.Management/TransportConnectionState.md) | see Chapter 5.1 of 3.3.4 Transport Layer Communication in Knx Specs |
 
 ## Tiveria.Home.Knx.Primitives namespace
 

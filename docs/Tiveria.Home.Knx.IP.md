@@ -35,12 +35,6 @@
 | record [TunnelingConnectionConfiguration](./Tiveria.Home.Knx.IP.Connections/TunnelingConnectionConfiguration.md) | Configuration options for a KnxNetIP Tunneling connection |
 | class [UdpPacketReceiver](./Tiveria.Home.Knx.IP.Connections/UdpPacketReceiver.md) |  |
 
-## Tiveria.Home.Knx.IP.DeviceManagement namespace
-
-| public type | description |
-| --- | --- |
-| class [TunnelingManagementClient](./Tiveria.Home.Knx.IP.DeviceManagement/TunnelingManagementClient.md) | Implementation of the IManagementClient interface for tunneling based IP connections. |
-
 ## Tiveria.Home.Knx.IP.Enums namespace
 
 | public type | description |
@@ -64,6 +58,13 @@
 | static class [LoggerExtensions](./Tiveria.Home.Knx.IP.Extensions/LoggerExtensions.md) |  |
 | static class [UdpClientFactory](./Tiveria.Home.Knx.IP.Extensions/UdpClientFactory.md) | Static factory class encapsulating [`IUdpClient`](./Tiveria.Home.Knx.IP.Extensions/IUdpClient.md) implementations. Goal is to be able to mock UdpClient |
 | class [UdpClientWrapper](./Tiveria.Home.Knx.IP.Extensions/UdpClientWrapper.md) |  |
+
+## Tiveria.Home.Knx.IP.Management namespace
+
+| public type | description |
+| --- | --- |
+| class [ConnectionlessDeviceManagementClient](./Tiveria.Home.Knx.IP.Management/ConnectionlessDeviceManagementClient.md) | Class that provide means to manage certain aspects of a device without establishing a direct connection to the device. |
+| class [TunnelingManagementClient](./Tiveria.Home.Knx.IP.Management/TunnelingManagementClient.md) | Implementation of the IConnectedDeviceManagement interface for tunneling based IP connections. |
 
 ## Tiveria.Home.Knx.IP.Services namespace
 

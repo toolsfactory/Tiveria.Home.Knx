@@ -3,18 +3,18 @@
 Creates a new instance of the GroupCLient class
 
 ```csharp
-public GroupClient(IKnxClient client, GroupAddress address, DPType<T> translator)
+public GroupClient(IKnxConnection client, GroupAddress address, DPType<T> translator)
 ```
 
 | parameter | description |
 | --- | --- |
-| client | The underlying connection client based on [`IKnxClient`](../../Tiveria.Home.Knx/IKnxClient.md) |
+| client | The underlying connection client based on !:IKnxClient |
 | address | The [`GroupAddress`](../../Tiveria.Home.Knx.Primitives/GroupAddress.md) to work with |
 | translator | A translator that is used to convert the APDU data from and to target type |
 
 ## See Also
 
-* interface [IKnxClient](../../Tiveria.Home.Knx/IKnxClient.md)
+* interface [IKnxConnection](../../Tiveria.Home.Knx/IKnxConnection.md)
 * class [GroupAddress](../../Tiveria.Home.Knx.Primitives/GroupAddress.md)
 * class [DPType&lt;TValue&gt;](../../Tiveria.Home.Knx.Datapoint/DPType-1.md)
 * class [GroupClient&lt;T&gt;](../GroupClient-1.md)

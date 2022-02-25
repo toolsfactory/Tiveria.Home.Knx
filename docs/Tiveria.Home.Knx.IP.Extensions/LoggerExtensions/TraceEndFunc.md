@@ -1,7 +1,7 @@
 # LoggerExtensions.TraceEndFunc method
 
 ```csharp
-public static void TraceEndFunc(this ILogger logger, string? functionName = null)
+public static void TraceEndFunc(this ILogger logger, [CallerMemberName] string? functionName = null)
 ```
 
 ## See Also

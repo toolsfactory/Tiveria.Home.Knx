@@ -31,7 +31,7 @@ namespace Tiveria.Home.Knx.IP
     /// <summary>
     /// Interface for all IP based connections ot the Knx bus
     /// </summary>
-    public interface IKnxNetIPConnection : IKnxClient
+    public interface IKnxNetIPConnection : IKnxConnection
     {
         /// <summary>
         /// Triggered each time a Knx frame is received

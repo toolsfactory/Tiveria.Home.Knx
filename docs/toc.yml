@@ -349,14 +349,6 @@
           link: toc_/Tiveria.Home.Knx.IP.Connections/UdpPacketReceiver/UdpPacketReceiver
         - name: Running
           link: toc_/Tiveria.Home.Knx.IP.Connections/UdpPacketReceiver/Running
-    - name: Tiveria.Home.Knx.IP.DeviceManagement
-      link: toc_/Tiveria.Home.Knx.IP.DeviceManagementNamespace
-      subfolderitems:
-      - name: TunnelingManagementClient
-        link: toc_/Tiveria.Home.Knx.IP.DeviceManagement/TunnelingManagementClient
-        subfolderitems:
-        - name: TunnelingManagementClient
-          link: toc_/Tiveria.Home.Knx.IP.DeviceManagement/TunnelingManagementClient/TunnelingManagementClient
     - name: Tiveria.Home.Knx.IP.Enums
       link: toc_/Tiveria.Home.Knx.IP.EnumsNamespace
       subfolderitems:
@@ -531,6 +523,33 @@
           link: toc_/Tiveria.Home.Knx.IP.Extensions/UdpClientWrapper/MulticastLoopback
         - name: Ttl
           link: toc_/Tiveria.Home.Knx.IP.Extensions/UdpClientWrapper/Ttl
+    - name: Tiveria.Home.Knx.IP.Management
+      link: toc_/Tiveria.Home.Knx.IP.ManagementNamespace
+      subfolderitems:
+      - name: ConnectionlessDeviceManagementClient
+        link: toc_/Tiveria.Home.Knx.IP.Management/ConnectionlessDeviceManagementClient
+        subfolderitems:
+        - name: ReadPropertyAsync
+          link: toc_/Tiveria.Home.Knx.IP.Management/ConnectionlessDeviceManagementClient/ReadPropertyAsync
+        - name: ReadPropertyDescriptionAsync
+          link: toc_/Tiveria.Home.Knx.IP.Management/ConnectionlessDeviceManagementClient/ReadPropertyDescriptionAsync
+        - name: ResetDeviceAsync
+          link: toc_/Tiveria.Home.Knx.IP.Management/ConnectionlessDeviceManagementClient/ResetDeviceAsync
+        - name: RestartDeviceAsync
+          link: toc_/Tiveria.Home.Knx.IP.Management/ConnectionlessDeviceManagementClient/RestartDeviceAsync
+        - name: WritePropertyAsync
+          link: toc_/Tiveria.Home.Knx.IP.Management/ConnectionlessDeviceManagementClient/WritePropertyAsync
+        - name: ConnectionlessDeviceManagementClient
+          link: toc_/Tiveria.Home.Knx.IP.Management/ConnectionlessDeviceManagementClient/ConnectionlessDeviceManagementClient
+        - name: Priority
+          link: toc_/Tiveria.Home.Knx.IP.Management/ConnectionlessDeviceManagementClient/Priority
+        - name: ResponseTimeout
+          link: toc_/Tiveria.Home.Knx.IP.Management/ConnectionlessDeviceManagementClient/ResponseTimeout
+      - name: TunnelingManagementClient
+        link: toc_/Tiveria.Home.Knx.IP.Management/TunnelingManagementClient
+        subfolderitems:
+        - name: TunnelingManagementClient
+          link: toc_/Tiveria.Home.Knx.IP.Management/TunnelingManagementClient/TunnelingManagementClient
     - name: Tiveria.Home.Knx.IP.Services
       link: toc_/Tiveria.Home.Knx.IP.ServicesNamespace
       subfolderitems:

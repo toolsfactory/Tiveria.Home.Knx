@@ -3,7 +3,7 @@
 Interface for all IP based connections ot the Knx bus
 
 ```csharp
-public interface IKnxNetIPConnection : IKnxClient
+public interface IKnxNetIPConnection : IKnxConnection
 ```
 
 ## Members

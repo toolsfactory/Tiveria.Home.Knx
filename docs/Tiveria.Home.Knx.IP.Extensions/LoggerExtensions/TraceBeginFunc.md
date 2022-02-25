@@ -1,7 +1,8 @@
 # LoggerExtensions.TraceBeginFunc method
 
 ```csharp
-public static void TraceBeginFunc(this ILogger logger, string? functionName = null)
+public static void TraceBeginFunc(this ILogger logger, 
+    [CallerMemberName] string? functionName = null)
 ```
 
 ## See Also
