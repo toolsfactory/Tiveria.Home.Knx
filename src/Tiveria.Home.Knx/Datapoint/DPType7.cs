@@ -22,6 +22,7 @@
     combination.
 */
 
+using System.Globalization;
 using Tiveria.Home.Knx.Exceptions;
 
 namespace Tiveria.Home.Knx.Datapoint
@@ -86,14 +87,15 @@ namespace Tiveria.Home.Knx.Datapoint
             return value;
         }
 
-        public override string DecodeString(byte[] dptData, int offset = 0, bool withUnit = false)
+        public override string DecodeString(byte[] dptData, int offset = 0, bool withUnit = false, bool invariant = false)
         {
             ulong value = Decode(dptData, offset);
             if (this == DPT_TIMEPERIOD_10MS)
                 value = value * 10;
             else if (this == DPT_TIMEPERIOD_100MS)
                 value = value * 100;
-            return withUnit ? $"{value} {Unit}" : value.ToString();
+            var ext = (withUnit & !String.IsNullOrEmpty(Unit)) ? " " + Unit : "";
+            return String.Format(invariant ? CultureInfo.InvariantCulture : CultureInfo.CurrentCulture, "{0}{1}", value, ext);
         }
         #endregion
 

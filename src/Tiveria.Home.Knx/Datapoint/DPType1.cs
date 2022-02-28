@@ -56,7 +56,7 @@ namespace Tiveria.Home.Knx.Datapoint
             return (bool)DecodeObject(dptData, offset);
         }
 
-        public override string DecodeString(byte[] dptData, int offset = 0, bool withUnit = false)
+        public override string DecodeString(byte[] dptData, int offset = 0, bool withUnit = false, bool invariant = false)
         {
             return (bool)DecodeObject(dptData, offset) ? AllowedTrue : AllowedFalse;
         }

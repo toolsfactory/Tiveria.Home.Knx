@@ -22,6 +22,7 @@
     combination.
 */
 
+using System.Globalization;
 using Tiveria.Home.Knx.Exceptions;
 
 namespace Tiveria.Home.Knx.Datapoint
@@ -161,9 +162,12 @@ namespace Tiveria.Home.Knx.Datapoint
         #endregion
 
         #region decoding DPT
-        public virtual string DecodeString(byte[] dptData, int offset = 0, bool withUnit = false)
+        public virtual string DecodeString(byte[] dptData, int offset = 0, bool withUnit = false, bool invariant = false)
         {
-            return Decode(dptData, offset) + ((withUnit & !String.IsNullOrEmpty(Unit)) ? " " + Unit : "");
+            var ext = (withUnit & !String.IsNullOrEmpty(Unit)) ? " " + Unit : "";
+            var obj = Decode(dptData, offset);
+
+            return (!invariant) ? obj + ext : String.Format(CultureInfo.InvariantCulture, "{0}{1}", obj, ext);
         }
 
         public virtual object? DecodeObject(byte[] dptData, int offset = 0)

@@ -22,11 +22,13 @@
     combination.
 */
 
-using Tiveria.Home.Knx.IP.Enums;
 using Tiveria.Home.Knx.IP.Services.Serializers;
 
 namespace Tiveria.Home.Knx.IP
 {
+    /// <summary>
+    /// Factory providing access to all registered <see cref="IKnxNetIPServiceSerializer"/> types
+    /// </summary>
     public class KnxNetIPServiceSerializerFactory
     {
         #region Static Singleton

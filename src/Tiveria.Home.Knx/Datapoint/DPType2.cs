@@ -34,7 +34,7 @@ namespace Tiveria.Home.Knx.Datapoint
         { }
 
         #region decoding
-        public override string DecodeString(byte[] dptData, int offset = 0, bool withUnit = false)
+        public override string DecodeString(byte[] dptData, int offset = 0, bool withUnit = false, bool invariant = false)
         {
             var (Value, Control) = DecodeControlled(dptData, offset);
             string result = Value ? _allowedTrue : _allowedFalse;

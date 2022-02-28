@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Tiveria.Common.IO;
 
 namespace Tiveria.Home.Knx.ObjectServer
 {
     public interface IObjectServerService
     {
+        byte MainService { get; }
+        byte SubService { get; }
         int Size { get; }
-        ushort ServiceIdentifier { get; }
-        byte[] ToBytes();
-        void WriteToBuffer(Span<byte> buffer);
     }
+
 }

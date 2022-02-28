@@ -40,6 +40,7 @@
 
 
 	<ItemGroup>
+    <ProjectReference Include="..\Tiveria.Home.Knx.IP\Tiveria.Home.Knx.IP.csproj" />
     <ProjectReference Include="..\Tiveria.Home.Knx\Tiveria.Home.Knx.csproj" />
   </ItemGroup>
 

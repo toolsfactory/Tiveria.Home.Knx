@@ -22,21 +22,22 @@
     combination.
 */
 
+using Tiveria.Common.IO;
 
-namespace Tiveria.Home.Knx.Datapoint
+namespace Tiveria.Home.Knx.ObjectServer
 {
-    public interface IDatapointType : IEquatable<IDatapointType>
+    public interface IObjectServerServiceSerializer
     {
-        string Description { get; }
-        string Id { get; }
-        string Name { get; }
-        string Unit { get; }
-        int DataSize { get; }
+        byte MainService { get; }
+        byte SubService { get; }
+        IObjectServerService Deserialize(BigEndianBinaryReader reader);
 
-        byte[] Encode(object value);
-        string DecodeString(byte[] dptData, int offset = 0, bool withUnit = false, bool invariant = false);
-        object? DecodeObject(byte[] dptData, int offset = 0);
+        void Serialize(IObjectServerService frame, BigEndianBinaryWriter writer);
 
-        bool IsMainCategory(int category);
+    }
+    public interface IObjectServerServiceSerializer<T> : IObjectServerServiceSerializer where T : class,  IObjectServerService
+    {
+        T Deserialize(BigEndianBinaryReader reader);
+        void Serialize(T service, BigEndianBinaryWriter writer);
     }
 }
