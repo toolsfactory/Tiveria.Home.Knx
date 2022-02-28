@@ -24,6 +24,8 @@ namespace Tiveria.Home.Knx.ObjectServer
         private void Initialize()
         {
             _serializersByServiceIdentifier.Clear();
+            Register<SetDatapointValueReqServiceSerializer>();
+            Register<SetDatapointValueResServiceSerializer>();
         }
 
         public void Register<T>() where T : IObjectServerServiceSerializer, new()
