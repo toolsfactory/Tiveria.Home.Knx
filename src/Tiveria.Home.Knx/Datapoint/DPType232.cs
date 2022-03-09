@@ -46,7 +46,7 @@ namespace Tiveria.Home.Knx.Datapoint
         #region specific xlator instances
         public static DPType232 DPT_RGB = new DPType232("232.600", "RGB", (0,0,0), (255,255,255), "r g b");
 
-        static DPType232()
+        internal static void Init()
         {
             DatapointTypesList.AddOrReplace(DPT_RGB);
         }

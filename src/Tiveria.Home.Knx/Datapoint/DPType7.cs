@@ -113,7 +113,7 @@ namespace Tiveria.Home.Knx.Datapoint
         public static DPType7 DPT_ELECTRICAL_CUR   = new DPType7("7.012", "Electrical current", 0, 65535, "mA");
         public static DPType7 DPT_BRIGHTNESS       = new DPType7("7.013", "Brightness", 0, 65535, "ls");
 
-        static DPType7()
+        internal static void Init()
         {
             DatapointTypesList.AddOrReplace(DPT_VALUE_2_UCOUNT);
             DatapointTypesList.AddOrReplace(DPT_TIMEPERIOD_1MS);

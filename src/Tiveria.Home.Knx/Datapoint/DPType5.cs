@@ -69,7 +69,7 @@ namespace Tiveria.Home.Knx.Datapoint
         public static readonly DPType5 DPT_TARIFF = new DPType5("5.006", "Tariff information", 0, 254);
         public static readonly DPType5 DPT_VALUE_1_UCOUNT = new DPType5("5.010", "Unsigned count", 0, 255, "counter pulses");
 
-        static DPType5()
+        internal static void Init()
         {
             DatapointTypesList.AddOrReplace(DPT_ANGLE);
             DatapointTypesList.AddOrReplace(DPT_SCALING);

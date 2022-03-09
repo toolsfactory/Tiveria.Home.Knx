@@ -23,6 +23,7 @@
 */
 
 using Tiveria.Home.Knx.Exceptions;
+using System.Runtime.CompilerServices;
 
 namespace Tiveria.Home.Knx.Datapoint
 {
@@ -142,7 +143,7 @@ namespace Tiveria.Home.Knx.Datapoint
         public static readonly DPType1 DPT_SBMODE      = new DPType1("1.023", "Shutter/Blinds Mode", "move up/down + step-stop", "only move up/down");
         public static readonly DPType1 DPT_HEAT_COOL   = new DPType1("1.100", "Heat/Cool", "heating", "cooling");
 
-        static DPType1()
+        internal static void Init()
         {
             DatapointTypesList.AddOrReplace(DPT_SWITCH);
             DatapointTypesList.AddOrReplace(DPT_BOOL);

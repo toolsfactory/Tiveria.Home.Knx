@@ -84,7 +84,7 @@ namespace Tiveria.Home.Knx.Datapoint
         public static readonly DPType4 DPT_ASCII = new DPType4("4.001", "ASCII Character", (char) 0, (char) 127);
         public static readonly DPType4 DPT_ISO8859_1 = new DPType4("4.002", "ISO 8859-1 Character", (char)0, (char)255);
 
-        static DPType4()
+        internal static void Init()
         {
             DatapointTypesList.AddOrReplace(DPT_ASCII);
             DatapointTypesList.AddOrReplace(DPT_ISO8859_1);

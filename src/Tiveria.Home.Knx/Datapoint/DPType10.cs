@@ -55,7 +55,7 @@ namespace Tiveria.Home.Knx.Datapoint
         #region specific xlator instances
         public static DPType10 DPT_TIMEOFDAY = new DPType10("10.001", "Time of day", "dow, hh:mm:ss");
 
-        static DPType10()
+        internal static void Init()
         {
             DatapointTypesList.AddOrReplace(DPT_TIMEOFDAY);
         }

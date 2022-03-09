@@ -53,7 +53,7 @@ namespace Tiveria.Home.Knx.Datapoint
         public static DPType13 DPT_REACTIVE_ENERGY_KVARH = new DPType13("13.015", "Reactive energy in kVARh",   "kVARh");
         public static DPType13 DPT_DELTA_TIME = new DPType13("13.100", "Delta time in seconds", "s");
 
-        static DPType13()
+        internal static void Init()
         {
             DatapointTypesList.AddOrReplace(DPT_COUNT);
             DatapointTypesList.AddOrReplace(DPT_FLOWRATE);

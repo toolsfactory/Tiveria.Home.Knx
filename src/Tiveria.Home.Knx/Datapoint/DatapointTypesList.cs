@@ -41,5 +41,30 @@ namespace Tiveria.Home.Knx.Datapoint
         {
             return _list.GetValueOrDefault(id);
         }
+
+        static DatapointTypesList()
+        {
+            _list.Clear();
+            DPType1.Init();
+            DPType10.Init();
+            DPType11.Init();
+            DPType12.Init();
+            DPType13.Init();
+            DPType14.Init();
+            DPType16.Init();
+            DPType17.Init();
+            DPType18.Init();
+            DPType19.Init();
+            DPType2.Init();
+            DPType20.Init();
+            DPType232.Init();
+            DPType28.Init();
+            DPType3.Init();
+            DPType4.Init();
+            DPType5.Init();
+            DPType7.Init();
+            DPType8.Init();
+            DPType9.Init();
+        }
     }
 }

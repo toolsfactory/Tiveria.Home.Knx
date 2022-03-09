@@ -49,7 +49,7 @@ namespace Tiveria.Home.Knx.Datapoint
         #region specific xlator instances
         public static DPType18 DPT_SCENE_CONTROL = new DPType18("18.001", "Scene Control", (SceneControlMode.Learn, 0), (SceneControlMode.Activate, 63));
 
-        static DPType18()
+        internal static void Init()
         {
             DatapointTypesList.AddOrReplace(DPT_SCENE_CONTROL);
         }

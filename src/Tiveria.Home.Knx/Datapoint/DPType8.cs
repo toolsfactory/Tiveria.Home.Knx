@@ -113,7 +113,7 @@ namespace Tiveria.Home.Knx.Datapoint
 
         // Datatype 8.010 not yet implemented
 
-        static DPType8()
+        internal static void Init()
         {
             DatapointTypesList.AddOrReplace(DPT_VALUE_2_COUNT);
             DatapointTypesList.AddOrReplace(DPT_DELTATIME_1MS);

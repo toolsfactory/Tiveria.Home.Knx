@@ -69,7 +69,7 @@ namespace Tiveria.Home.Knx.Datapoint
         public static DPType16 DPT_STRING_ASCII = new DPType16("16.000", "ASCII string");
         public static DPType16 DPT_STRING_8859_1 = new DPType16("16.001", "ISO-8859-1 string (Latin 1)");
 
-        static DPType16()
+        internal static void Init()
         {
             DatapointTypesList.AddOrReplace(DPT_STRING_ASCII);
             DatapointTypesList.AddOrReplace(DPT_STRING_8859_1);

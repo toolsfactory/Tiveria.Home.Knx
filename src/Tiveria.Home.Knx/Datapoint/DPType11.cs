@@ -55,7 +55,7 @@ namespace Tiveria.Home.Knx.Datapoint
         #region specific xlator instances
         public static DPType11 DPT_DATE = new DPType11("11.001", "Date", new DateTime(1990, 1, 1), new DateTime(2089, 12, 31), "yyyy-mm-dd");
 
-        static DPType11()
+        internal static void Init()
         {
             DatapointTypesList.AddOrReplace(DPT_DATE);
         }

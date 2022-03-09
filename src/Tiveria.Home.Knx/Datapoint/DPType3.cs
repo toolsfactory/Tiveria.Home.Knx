@@ -50,7 +50,7 @@ namespace Tiveria.Home.Knx.Datapoint
         public static readonly DPType3 DPT_CONTROL_DIMMING = new DPType3("3.007", "Dimming", -7, 7);
         public static readonly DPType3 DPT_CONTROL_BLINDS = new DPType3("3.008", "Blinds", -7, 7, "intervals");
 
-        static DPType3()
+        internal static void Init()
         {
             DatapointTypesList.AddOrReplace(DPT_CONTROL_DIMMING);
             DatapointTypesList.AddOrReplace(DPT_CONTROL_BLINDS);

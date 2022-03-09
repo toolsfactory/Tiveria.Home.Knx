@@ -62,7 +62,7 @@ namespace Tiveria.Home.Knx.Datapoint
         #region specific xlator instances
         public static DPType28 DTP_UTF8 = new DPType28("28.001", "UTF8 string");
 
-        static DPType28()
+        internal static void Init()
         {
             DatapointTypesList.AddOrReplace(DTP_UTF8);
         }

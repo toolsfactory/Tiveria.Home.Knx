@@ -118,7 +118,7 @@ namespace Tiveria.Home.Knx.Datapoint
         public static readonly DPType2 DPT_STATE_CTRL = new DPType2("2.011", "State Controlled", "Active", "Inactive");
         public static readonly DPType2 DPT_INVERT_CTRL = new DPType2("2.012", "Invert Controlled", "Inverted", "Not inverted");
 
-        static DPType2()
+        internal static void Init()
         {
             DatapointTypesList.AddOrReplace(DPT_SWITCH_CTRL);
             DatapointTypesList.AddOrReplace(DPT_BOOL_CTRL);

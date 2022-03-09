@@ -56,7 +56,7 @@
         #region specific xlator instances
         public static DPType19 DPT_DATETIME = new DPType19("19.001", "Date with time");
 
-        static DPType19()
+        internal static void Init()
         {
             DatapointTypesList.AddOrReplace(DPT_DATETIME);
         }

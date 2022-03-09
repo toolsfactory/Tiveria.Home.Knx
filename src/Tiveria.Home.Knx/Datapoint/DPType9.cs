@@ -77,7 +77,7 @@ namespace Tiveria.Home.Knx.Datapoint
         public static DPType9 DPT_TEMP_F = new DPType9("9.027", "Temperature", -459.6, 670760.96, "°F");
         public static DPType9 DPT_WIND_SPEED_KMH = new DPType9("9.028", "Wind speed", 0, 670760.96, "km/h");
 
-        static DPType9()
+        internal static void Init()
         {
             DatapointTypesList.AddOrReplace(DPT_TEMPERATURE);
             DatapointTypesList.AddOrReplace(DPT_TEMPERATURE_DIFFERENCE);

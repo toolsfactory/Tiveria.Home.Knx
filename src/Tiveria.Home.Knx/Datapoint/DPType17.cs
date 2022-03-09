@@ -47,7 +47,7 @@ namespace Tiveria.Home.Knx.Datapoint
         #region specific xlator instances
         public static DPType17 DPT_SCENE_NUMBER = new DPType17("17.001", "Scene Number");
 
-        static DPType17()
+        internal static void Init()
         {
             DatapointTypesList.AddOrReplace(DPT_SCENE_NUMBER);
         }

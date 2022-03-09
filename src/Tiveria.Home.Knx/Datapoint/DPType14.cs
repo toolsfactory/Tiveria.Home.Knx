@@ -129,7 +129,7 @@ namespace Tiveria.Home.Knx.Datapoint
 
 
         // regex used for transform: "public static DPType14 (DPT_[A-Z0-9_]*).*\;" ==> "DatapointTypesList.AddOrReplace($1);"
-        static DPType14()
+        internal static void Init()
         {
             DatapointTypesList.AddOrReplace(DPT_ACCELERATION);
             DatapointTypesList.AddOrReplace(DPT_ACCELERATION_ANGULAR);

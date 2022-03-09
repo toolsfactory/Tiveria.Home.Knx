@@ -156,7 +156,7 @@ namespace Tiveria.Home.Knx.Datapoint
         }
         public static DPType20 DPT_ApplicationArea = new DPType20("20.006", "Application Arera", 0, 14);
 
-        static DPType20()
+        internal static void Init()
         {
             DatapointTypesList.AddOrReplace(DPT_SCLOMode);
             DatapointTypesList.AddOrReplace(DPT_BuildingMode);
