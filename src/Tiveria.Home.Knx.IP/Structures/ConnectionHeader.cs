@@ -67,7 +67,9 @@ namespace Tiveria.Home.Knx.IP.Structures
         /// Creates a new instance of the ConnectionHeader class.
         /// </summary>
         public ConnectionHeader()
-        { }
+        {
+            Size = STRUCTURE_SIZE;
+        }
 
         /// <summary>
         /// Creates a new instance of the ConnectionHeader class.

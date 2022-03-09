@@ -56,6 +56,14 @@ namespace Tiveria.Home.Knx.Tests.IP
             Assert.AreEqual(1, dp.NumberOfDataPoints);
         }
 
+        [Test]
+        public void SerializeReq()
+        {
+            KnxNetIPServiceSerializerFactory.Instance.Register<ObjectServerProtocolServiceSerializer>();
+            var frame = new KnxNetIPFrame(new ObjectServerProtocolService( new Knx.IP.Structures.ConnectionHeader(), new SetDatapointValueResService(3, 0)));
+            var answer = frame.ToBytes();
+        }
+
         /*
         [Test]
         public void ParseMultiSetDataPointReq()
