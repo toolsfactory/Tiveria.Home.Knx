@@ -8,7 +8,7 @@ namespace Tiveria.Home.Knx.ObjectServer
 {
     public class ObjectServerProtocolServiceSerializer : ServiceSerializerBase<ObjectServerProtocolService>
     {
-        public override ushort ServiceTypeIdentifier => 0xF006;
+        public override ushort ServiceTypeIdentifier => IP.Enums.ServiceTypeIdentifier.ObjectServer;
 
         public override ObjectServerProtocolService Deserialize(BigEndianBinaryReader reader)
         {
