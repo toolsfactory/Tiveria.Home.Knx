@@ -50,12 +50,9 @@ namespace Tiveria.Home.Knx.Management
 
         private System.Timers.Timer _timer;
 
-        private void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        private void _timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
             throw new NotImplementedException();
         }
-
     }
-
-
 }

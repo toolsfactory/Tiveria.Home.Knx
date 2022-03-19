@@ -27,12 +27,41 @@ using Tiveria.Home.Knx.Cemi;
 
 namespace Tiveria.Home.Knx
 {
+    /// <summary>
+    /// Provides standard capabilities to serialize and deserialize typed Cemi messages
+    /// </summary>
     public interface IKnxCemiSerializer<T> : IKnxCemiSerializer where T : class, ICemiMessage
-    {
+    {                                                                                                                                                                                           
+        /// <summary>
+        /// Tries to deserialize a byte array into a <see cref="ICemiMessage"/>
+        /// </summary>
+        /// <param name="buffer">The binary representation of the Cemi message as byte array</param>
+        /// <param name="cemiMessage">Typed response</param>
+        /// <returns><c>True</c> in case the data was sucessfully deserialized</returns>
         bool TryDeserialize(byte[] buffer, out T? cemiMessage);
+
+        /// <summary>
+        /// Tries to deserialize data using a <see cref="BigEndianBinaryReader"/>
+        /// </summary>
+        /// <param name="reader">The <see cref="BigEndianBinaryReader"/> to read thed data from0</param>
+        /// <param name="size"></param>
+        /// <param name="cemiMessage"></param>
+        /// <returns></returns>
         bool TryDeserialize(BigEndianBinaryReader reader, int size, out T? cemiMessage);
 
+        /// <summary>
+        /// Deserializes a byte array into a <see cref="ICemiMessage"/>
+        /// </summary>
+        /// <param name="buffer">The binary representation of the Cemi message as byte array</param>
+        /// <returns>The parsed and typed <see cref="ICemiMessage"/> based implementation class</returns>
         new T Deserialize(byte[] buffer);
+
+        /// <summary>
+        /// Deserializes a <see cref="ICemiMessage"/> by reading the data using the provided <see cref="BigEndianBinaryReader"/>
+        /// </summary>
+        /// <param name="reader">The reader</param>
+        /// <param name="size">maximum amount of data to read</param>
+        /// <returns>the cemi messages as object of a class implementing <see cref="ICemiMessage"/></returns>
         new T Deserialize(BigEndianBinaryReader reader, int size);
 
         void Serialize(T frame, BigEndianBinaryWriter writer);

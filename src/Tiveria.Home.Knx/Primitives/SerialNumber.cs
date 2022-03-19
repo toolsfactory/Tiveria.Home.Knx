@@ -133,14 +133,14 @@ namespace Tiveria.Home.Knx.Primitives
             return Value.GetHashCode();
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return (obj is SerialNumber) && Equals((SerialNumber)obj);
         }
 
-        public bool Equals(SerialNumber other)
+        public bool Equals(SerialNumber? other)
         {
-            return other.Value == Value;
+            return (other != null) && (other.Value == Value);
         }
 
         #endregion Public Methods
@@ -151,7 +151,7 @@ namespace Tiveria.Home.Knx.Primitives
         #endregion Private Fields    
 
         #region overloaded operators
-        public static bool operator ==(SerialNumber a, SerialNumber b)
+        public static bool operator ==(SerialNumber? a, SerialNumber? b)
         {
             if (a is not null)
                 return a.Equals(b);
@@ -159,7 +159,7 @@ namespace Tiveria.Home.Knx.Primitives
                 return b is null;
         }
 
-        public static bool operator !=(SerialNumber a, SerialNumber b)
+        public static bool operator !=(SerialNumber? a, SerialNumber? b)
         {
             return !(a == b);
         }

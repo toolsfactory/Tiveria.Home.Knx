@@ -141,7 +141,7 @@ namespace Tiveria.Home.Knx.IP.Management
         private void _client_FrameReceived(object? sender, FrameReceivedEventArgs e)
         {
             var cemi = GetCemiLDataFromFrame(e.Frame);
-            if (cemi != null && MonitoredApduTypes.Contains(cemi.Apdu.ApduType))
+            if (cemi != null && cemi.Apdu != null && MonitoredApduTypes.Contains(cemi.Apdu.ApduType))
             {
                 _apduCollection.Add(cemi.Apdu);
             }

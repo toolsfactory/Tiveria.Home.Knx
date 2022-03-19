@@ -472,7 +472,6 @@ namespace Tiveria.Home.Knx.IP.Connections
             }
         }
 
-        /// <inheritdoc/>
         #endregion
 
         #region others

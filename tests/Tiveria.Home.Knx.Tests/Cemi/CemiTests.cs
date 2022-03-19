@@ -79,8 +79,10 @@ namespace Tiveria.Home.Knx.Tests
 
             Assert.AreEqual(result.SourceAddress.ToString(), "1.1.205");
             Assert.AreEqual(((GroupAddress) result.DestinationAddress).ToString(), "6/1/47");
-
+            Assert.IsNotNull(result.Apdu);
+#pragma warning disable CS8602 // Dereferenzierung eines möglichen Nullverweises.
             Assert.AreEqual(result.Apdu.Size, 2);
+#pragma warning restore CS8602 // Dereferenzierung eines möglichen Nullverweises.
         }
 
         [Test]
@@ -109,8 +111,10 @@ namespace Tiveria.Home.Knx.Tests
 
             Assert.AreEqual(result.SourceAddress.ToString(), "1.1.205");
             Assert.AreEqual(((GroupAddress)result.DestinationAddress).ToString(), "6/1/47");
-
+            Assert.IsNotNull(result.Apdu);
+#pragma warning disable CS8602 // Dereferenzierung eines möglichen Nullverweises.
             Assert.AreEqual(result.Apdu.Size, 2);
+#pragma warning restore CS8602 // Dereferenzierung eines möglichen Nullverweises.
         }
 
         [Test]

@@ -58,7 +58,7 @@ namespace Tiveria.Home.Knx
             Con.ConnectionStateChanged += Con_StateChanged;
             Console.WriteLine("Hello World!");
 
-            Con.ConnectAsync().Wait();
+            await Con.ConnectAsync();
             do
             {
                 cki = Console.ReadKey(false);
@@ -69,12 +69,12 @@ namespace Tiveria.Home.Knx
         }
 
 
-        private void Con_StateChanged(object sender, ConnectionStateChangedEventArgs e)
+        private void Con_StateChanged(object? sender, ConnectionStateChangedEventArgs e)
         {
             Console.WriteLine(" == Connection state changed == " + e.ConnectionState.ToString());
         }
 
-        private void Con_FrameReceived(object sender, FrameReceivedEventArgs e)
+        private void Con_FrameReceived(object? sender, FrameReceivedEventArgs e)
         {
             //            Console.WriteLine($"Frame received. Type: {e.Frame.ServiceType}");
             if (e.Frame.FrameHeader.ServiceTypeIdentifier == ServiceTypeIdentifier.TunnelingRequest)
@@ -84,7 +84,7 @@ namespace Tiveria.Home.Knx
             }
         }
 
-        private void Con_DataReceived(object sender, DataReceivedArgs e)
+        private void Con_DataReceived(object? sender, DataReceivedArgs e)
         {
              Console.WriteLine(BitConverter.ToString(e.Data));
         }

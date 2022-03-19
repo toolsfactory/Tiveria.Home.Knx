@@ -176,9 +176,9 @@ namespace Tiveria.Home.Knx.IP.Connections
             }
             catch (SocketException ex)
             {
-                OnHeartbeatFailed(true, "Communication error");
+                OnHeartbeatFailed(true, "Communication error. " + ex);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 OnHeartbeatFailed(true, "Unknown error. " + ex);
             }

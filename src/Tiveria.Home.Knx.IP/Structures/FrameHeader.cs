@@ -152,7 +152,6 @@ namespace Tiveria.Home.Knx.IP.Structures
         /// <param name="buffer">The buffer containing the header and the payload</param>
         /// <param name="offset">Position where the KnxNetIP Header is supposed to start</param>
         /// <param name="version">Version</param>
-        /// <param name="size">Header size</param>
         /// <returns>validity of hte buffer</returns>
         /// <remarks>besides knxnetip header version, lenght of header and payload are checked. ServiceType is not checked in detail</remarks>
         public static bool IsValidHeader(byte[] buffer, int offset, KnxNetIPVersion version)

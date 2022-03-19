@@ -135,9 +135,9 @@ namespace Tiveria.Home.Knx.Primitives
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public static bool operator == (Address a, Address b)
+        public static bool operator == (Address? a, Address? b)
         {
-            if (!(a is null))
+            if (a is not null)
                 return a.Equals(b);
             else
                 return b is null;

@@ -90,7 +90,7 @@ namespace Tiveria.Home.Knx.IP.Connections
                     OnPacketReceived(receivedResults.RemoteEndPoint, (IPEndPoint)_udpClient.LocalEndPoint!, receivedResults.Buffer);
                     TryParseKnxFrame(receivedResults.RemoteEndPoint, (IPEndPoint)_udpClient.LocalEndPoint!, receivedResults.Buffer);
                     }
-                    catch (Exception ex)
+                    catch
                     { 
                         //Console.WriteLine(ex);
                     }

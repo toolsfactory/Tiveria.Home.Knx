@@ -124,7 +124,7 @@ namespace Tiveria.Home.Knx.Primitives
 
         #region Public Static Properties
         /// <summary>
-        /// Global <see cref="GroupAddressStyle"/>. Mainly used for <see cref="GroupAddress.ToString"/>.
+        /// Global <see cref="GroupAddressStyle"/>. Mainly used for <see cref="GroupAddress.ToString()"/>.
         /// </summary>
         public static GroupAddressStyle Style { get; set; } = GroupAddressStyle.ThreeLevel;
         #endregion Public Static Properties

@@ -27,22 +27,44 @@ using Tiveria.Home.Knx.Cemi;
 
 namespace Tiveria.Home.Knx
 {
-
+    /// <summary>
+    /// Provides data for the <see cref="IKnxConnection.ConnectionStateChanged"/>
+    /// </summary>
     public class ConnectionStateChangedEventArgs : EventArgs
     {
-        private KnxConnectionState _connectionState;
-        public KnxConnectionState ConnectionState { get => _connectionState; }
+        /// <summary>
+        /// Provides the new state of the connection
+        /// </summary>
+        public KnxConnectionState ConnectionState { get; init; }
 
+        /// <summary>
+        /// Creates a new instance of the <see cref="ConnectionStateChangedEventArgs"/> class
+        /// </summary>
+        /// <param name="state">The new state</param>
         public ConnectionStateChangedEventArgs(KnxConnectionState state)
         {
-            _connectionState = state;
+            ConnectionState = state;
         }
     }
 
+    /// <summary>
+    /// Provides access to data received via a knx bus connection
+    /// </summary>
     public class DataReceivedArgs : EventArgs
     {
+        /// <summary>
+        /// The data received
+        /// </summary>
         public byte[] Data { get; init; }
+        /// <summary>
+        /// Gets the date/time when the data was received
+        /// </summary>
         public DateTime Timestamp { get; init; }
+        /// <summary>
+        /// Creates a new instance of the event data args class
+        /// </summary>
+        /// <param name="timestamp">The Date/Time when the data was received</param>
+        /// <param name="data">THe actual data</param>
         public DataReceivedArgs(DateTime timestamp, byte[] data)
         {
             Timestamp = timestamp;
@@ -50,11 +72,26 @@ namespace Tiveria.Home.Knx
         }
     }
 
+    /// <summary>
+    /// Provides access to parsed Cemi Data as soon as such a packet was received
+    /// </summary>
     public class CemiReceivedArgs : EventArgs
     {
+        /// <summary>
+        /// The received data as parsed cemi message
+        /// </summary>
         public ICemiMessage Message { get; init; }
 
+        /// <summary>
+        /// Gets the date/time when the data was received
+        /// </summary>
         public DateTime Timestamp { get; init; }
+
+        /// <summary>
+        /// Creates a new instance of the event data args class
+        /// </summary>
+        /// <param name="timestamp">The Date/Time when the data was received</param>
+        /// <param name="message">The actual cemi message</param>
         public CemiReceivedArgs(DateTime timestamp, ICemiMessage message)
         {
             Timestamp = timestamp;

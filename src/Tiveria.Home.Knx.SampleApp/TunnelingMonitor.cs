@@ -94,17 +94,19 @@ namespace Tiveria.Home.Knx
             await _connection.SendCemiAsync(cemi);
         }
 
-        private async Task SendReadRequestAsync()
+        private Task SendReadRequestAsync()
         {
             Console.WriteLine("Sending read request to 22/7/0");
+            return Task.CompletedTask;
             //            var cemi = Cemi.CemiLData.CreateReadRequestCemi(new IndividualAddress(1, 1, 206), new GroupAddress(22, 7, 0));
             //            await Con.SendCemiFrameAsync(cemi, true);
         }
 
-        private async Task SendReadAnswerAsync()
+        private Task SendReadAnswerAsync()
         {
             Console.WriteLine("Sending read answer for 29/0/0");
             var data = DPType9.DPT_TEMPERATURE.Encode(12.3);
+            return Task.CompletedTask;
             //            var cemi = Cemi.CemiLData.CreateReadAnswerCemi(new IndividualAddress(1, 1, 206), new GroupAddress(29, 0, 0), data);
             //            await Con.SendCemiFrameAsync(cemi, true);
         }
@@ -126,7 +128,7 @@ namespace Tiveria.Home.Knx
                 if (cemi.DestinationAddress.IsGroupAddress())
                 {
                     var addr = (cemi.DestinationAddress).ToString();
-                    if (cemi.Apdu != null)
+                    if (cemi.Apdu != null && addr != null)
                     {
                         if (cemi.Apdu.ApduType == Cemi.ApduType.GroupValue_Write)
                         {

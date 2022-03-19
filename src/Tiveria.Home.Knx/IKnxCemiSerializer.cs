@@ -44,7 +44,7 @@ namespace Tiveria.Home.Knx
         /// </summary>
         /// <param name="reader">The reader</param>
         /// <param name="size">maximum amount of data to read</param>
-        /// <returns></returns>
+        /// <returns>the cemi messages as object of type <see cref="ICemiMessage"/></returns>
         ICemiMessage Deserialize(BigEndianBinaryReader reader, int size = -1);
 
         /// <summary>

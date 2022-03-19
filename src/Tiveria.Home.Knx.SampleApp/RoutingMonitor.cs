@@ -85,23 +85,27 @@ namespace Tiveria.Home.Knx
 //            var ctrl1 = new ControlField1(MessageCode.LDATA_IND, 0xbc);
             var ctrl1 = new ControlField1(priority: Priority.Normal, ack: false, repeat: false, confirm: ConfirmType.NoError);
             var ctrl2 = new ControlField2();
-            var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_IND, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 1), GroupAddress.Parse("4/0/0"), ctrl1, ctrl2, default(Tpci), tpdu);
+            var cemi = new Cemi.CemiLData(Cemi.MessageCode.LDATA_IND, new List<AdditionalInformationField>(), new IndividualAddress(0, 0, 1), GroupAddress.Parse("4/0/0"), ctrl1, ctrl2, new Tpci(), tpdu);
             await _connection.SendCemiAsync(cemi);
         }
 
-        private async Task SendReadRequestAsync()
+        private Task SendReadRequestAsync()
         {
             Console.WriteLine("Sending read request to 22/7/0");
-//            var cemi = Cemi.CemiLData.CreateReadRequestCemi(new IndividualAddress(1, 1, 206), new GroupAddress(22, 7, 0));
+            return Task.CompletedTask;
+
+            //            var cemi = Cemi.CemiLData.CreateReadRequestCemi(new IndividualAddress(1, 1, 206), new GroupAddress(22, 7, 0));
             //await Con.SendCemiFrameAsync(cemi, true);
         }
 
-        private async Task SendReadAnswerAsync()
+        private Task SendReadAnswerAsync()
         {
             Console.WriteLine("Sending read answer for 29/0/0");
             var data = DPType9.DPT_TEMPERATURE.Encode(12.3);
-//            var cemi = Cemi.CemiLData.CreateReadAnswerCemi(new IndividualAddress(1, 1, 206), new GroupAddress(29, 0, 0), data);
-//            await Con.SendCemiFrameAsync(cemi, true);
+            return Task.CompletedTask;
+
+            //            var cemi = Cemi.CemiLData.CreateReadAnswerCemi(new IndividualAddress(1, 1, 206), new GroupAddress(29, 0, 0), data);
+            //            await Con.SendCemiFrameAsync(cemi, true);
         }
 
         private void Con_StateChanged(object? sender, ConnectionStateChangedEventArgs e)
@@ -120,7 +124,7 @@ namespace Tiveria.Home.Knx
                 if (cemi.DestinationAddress.IsGroupAddress())
                 {
                     var addr = (cemi.DestinationAddress).ToString();
-                    if (cemi.Apdu != null)
+                    if (cemi.Apdu != null && addr != null)
                     {
                         if (cemi.Apdu.ApduType == ApduType.GroupValue_Write)
                         {

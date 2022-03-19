@@ -82,6 +82,8 @@ namespace Tiveria.Home.Knx.GroupManagement
             await _client.SendCemiAsync(cemi);
             if (!_answerEvent.Wait(2000))
                 throw new KnxTimeoutException();
+            if (_data == null)
+                throw new KnxCommunicationException();
             return _translator.Decode(_data);
         }
 
@@ -104,7 +106,7 @@ namespace Tiveria.Home.Knx.GroupManagement
 
         #region Private Methods
 
-        private void _client_CemiReceived(object sender, CemiReceivedArgs e)
+        private void _client_CemiReceived(object? sender, CemiReceivedArgs e)
         {
             var cemi = e.Message as CemiLData;
             if (cemi == null || cemi.DestinationAddress != _address || cemi.Apdu == null || cemi.Apdu.ApduType != ApduType.GroupValue_Response)
