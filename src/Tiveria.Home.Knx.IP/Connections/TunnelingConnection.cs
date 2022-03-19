@@ -126,7 +126,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         }
 
         /// <summary>
-        /// Send a Cemi message to the KnxNetIP server in blocking mode. Version & Connection headers are automatically generated.
+        /// Send a Cemi message to the KnxNetIP server in blocking mode. Version and Connection headers are automatically generated.
         /// </summary>
         /// <param name="cemi">The cemi message to send</param>
         /// <exception cref="KnxCommunicationException">Thrown when sending the message failed</exception>

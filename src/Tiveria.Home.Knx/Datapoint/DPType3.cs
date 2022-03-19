@@ -47,8 +47,8 @@ namespace Tiveria.Home.Knx.Datapoint
             return data;
         }
 
-        public static readonly DPType3 DPT_CONTROL_DIMMING = new DPType3("3.007", "Dimming", -7, 7);
-        public static readonly DPType3 DPT_CONTROL_BLINDS = new DPType3("3.008", "Blinds", -7, 7, "intervals");
+        public static readonly DPType3 DPT_CONTROL_DIMMING = new("3.007", "Dimming", -7, 7);
+        public static readonly DPType3 DPT_CONTROL_BLINDS = new("3.008", "Blinds", -7, 7, "intervals");
 
         internal static void Init()
         {

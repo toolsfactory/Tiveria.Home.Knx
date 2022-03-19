@@ -50,7 +50,7 @@ namespace Tiveria.Home.Knx.GroupManagement
         /// <summary>
         /// Creates a new instance of the GroupCLient class
         /// </summary>
-        /// <param name="client">The underlying connection client based on <see cref="IKnxClient"/></param>
+        /// <param name="client">The underlying connection client based on <see cref="IKnxConnection"/></param>
         /// <param name="address">The <see cref="GroupAddress"/> to work with</param>
         /// <param name="translator">A translator that is used to convert the APDU data from and to target type</param>
         public GroupClient(IKnxConnection client, GroupAddress address, DPType<T> translator)
@@ -107,13 +107,10 @@ namespace Tiveria.Home.Knx.GroupManagement
         private void _client_CemiReceived(object sender, CemiReceivedArgs e)
         {
             var cemi = e.Message as CemiLData;
-            if (cemi == null || cemi.DestinationAddress != _address)
+            if (cemi == null || cemi.DestinationAddress != _address || cemi.Apdu == null || cemi.Apdu.ApduType != ApduType.GroupValue_Response)
                 return;
-            if (cemi.Apdu.ApduType == ApduType.GroupValue_Response)
-            {
-                _data = cemi.Apdu.Data != null ? (byte[])cemi.Apdu.Data.Clone() : Array.Empty<byte>();
-                _answerEvent.Set();
-            }
+            _data = cemi.Apdu.Data != null ? (byte[])cemi.Apdu.Data.Clone() : Array.Empty<byte>();
+            _answerEvent.Set();
         }
 
         #endregion Private Methods

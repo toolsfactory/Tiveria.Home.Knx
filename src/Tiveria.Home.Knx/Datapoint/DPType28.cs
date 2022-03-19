@@ -42,7 +42,7 @@ namespace Tiveria.Home.Knx.Datapoint
                 throw new KnxTranslationException("String to long");
             var result = new byte[bytes.Length + 1];
             bytes.CopyTo(result, 0);
-            result[result.Length - 1] = 0;
+            result[^1] = 0;
             return result;
         }
 
@@ -60,7 +60,7 @@ namespace Tiveria.Home.Knx.Datapoint
         }
 
         #region specific xlator instances
-        public static DPType28 DTP_UTF8 = new DPType28("28.001", "UTF8 string");
+        public static readonly DPType28 DTP_UTF8 = new("28.001", "UTF8 string");
 
         internal static void Init()
         {

@@ -56,26 +56,26 @@ namespace Tiveria.Home.Knx.Datapoint
         }
 
         #region specific xlator instances
-        public static DPType9 DPT_TEMPERATURE = new DPType9("9.001", "Temperature", -273.0, 670760.0, "°C");
-        public static DPType9 DPT_TEMPERATURE_DIFFERENCE = new DPType9("9.002", "Temperature difference", -670760, 670760, "K");
-        public static DPType9 DPT_TEMPERATURE_GRADIENT = new DPType9("9.003", "Temperature gradient", -670760, 670760, "K/h");
-        public static DPType9 DPT_INTENSITY_OF_LIGHT = new DPType9("9.004", "Light intensity", 0, 670760, "lx");
-        public static DPType9 DPT_WIND_SPEED = new DPType9("9.005", "Wind speed", 0, 670760, "m/s");
-        public static DPType9 DPT_AIR_PRESSURE = new DPType9("9.006", "Air pressure", 0, 670760, "Pa");
-        public static DPType9 DPT_HUMIDITY = new DPType9("9.007", "Humidity", 0, 670760, "%");
-        public static DPType9 DPT_AIRQUALITY = new DPType9("9.008", "Air quality", 0, 670760, "ppm");
-        public static DPType9 DPT_AIR_FLOW = new DPType9("9.009", "Air flow", -670760, 670760, "m³/h");
-        public static DPType9 DPT_TIME_DIFFERENCE1 = new DPType9("9.010", "Time difference 1", -670760, 670760, "s");
-        public static DPType9 DPT_TIME_DIFFERENCE2 = new DPType9("9.011", "Time difference 2", -670760, 670760, "ms");
-        public static DPType9 DPT_VOLTAGE = new DPType9("9.020", "Voltage", -670760, 670760, "mV");
-        public static DPType9 DPT_ELECTRICAL_CURRENT = new DPType9("9.021", "Electrical current", -670760, 670760, "mA");
-        public static DPType9 DPT_POWERDENSITY = new DPType9("9.022", "Power density", -670760, 670760, "W/m²");
-        public static DPType9 DPT_KELVIN_PER_PERCENT = new DPType9("9.023", "Kelvin/percent", -670760, 670760, "K/%");
-        public static DPType9 DPT_POWER = new DPType9("9.024", "Power", -670760, 670760, "kW");
-        public static DPType9 DPT_VOLUME_FLOW = new DPType9("9.025", "Volume flow", -670760, 670760, "l/h");
-        public static DPType9 DPT_RAIN_AMOUNT = new DPType9("9.026", "Rain amount", -671088.64, 670760.96, "l/m²");
-        public static DPType9 DPT_TEMP_F = new DPType9("9.027", "Temperature", -459.6, 670760.96, "°F");
-        public static DPType9 DPT_WIND_SPEED_KMH = new DPType9("9.028", "Wind speed", 0, 670760.96, "km/h");
+        public static readonly DPType9 DPT_TEMPERATURE = new("9.001", "Temperature", -273.0, 670760.0, "°C");
+        public static readonly DPType9 DPT_TEMPERATURE_DIFFERENCE = new("9.002", "Temperature difference", -670760, 670760, "K");
+        public static readonly DPType9 DPT_TEMPERATURE_GRADIENT = new("9.003", "Temperature gradient", -670760, 670760, "K/h");
+        public static readonly DPType9 DPT_INTENSITY_OF_LIGHT = new("9.004", "Light intensity", 0, 670760, "lx");
+        public static readonly DPType9 DPT_WIND_SPEED = new("9.005", "Wind speed", 0, 670760, "m/s");
+        public static readonly DPType9 DPT_AIR_PRESSURE = new("9.006", "Air pressure", 0, 670760, "Pa");
+        public static readonly DPType9 DPT_HUMIDITY = new("9.007", "Humidity", 0, 670760, "%");
+        public static readonly DPType9 DPT_AIRQUALITY = new("9.008", "Air quality", 0, 670760, "ppm");
+        public static readonly DPType9 DPT_AIR_FLOW = new("9.009", "Air flow", -670760, 670760, "m³/h");
+        public static readonly DPType9 DPT_TIME_DIFFERENCE1 = new("9.010", "Time difference 1", -670760, 670760, "s");
+        public static readonly DPType9 DPT_TIME_DIFFERENCE2 = new("9.011", "Time difference 2", -670760, 670760, "ms");
+        public static readonly DPType9 DPT_VOLTAGE = new("9.020", "Voltage", -670760, 670760, "mV");
+        public static readonly DPType9 DPT_ELECTRICAL_CURRENT = new("9.021", "Electrical current", -670760, 670760, "mA");
+        public static readonly DPType9 DPT_POWERDENSITY = new("9.022", "Power density", -670760, 670760, "W/m²");
+        public static readonly DPType9 DPT_KELVIN_PER_PERCENT = new("9.023", "Kelvin/percent", -670760, 670760, "K/%");
+        public static readonly DPType9 DPT_POWER = new("9.024", "Power", -670760, 670760, "kW");
+        public static readonly DPType9 DPT_VOLUME_FLOW = new("9.025", "Volume flow", -670760, 670760, "l/h");
+        public static readonly DPType9 DPT_RAIN_AMOUNT = new("9.026", "Rain amount", -671088.64, 670760.96, "l/m²");
+        public static readonly DPType9 DPT_TEMP_F = new("9.027", "Temperature", -459.6, 670760.96, "°F");
+        public static readonly DPType9 DPT_WIND_SPEED_KMH = new("9.028", "Wind speed", 0, 670760.96, "km/h");
 
         internal static void Init()
         {

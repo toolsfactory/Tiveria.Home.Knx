@@ -28,8 +28,8 @@ namespace Tiveria.Home.Knx.Datapoint
 {
     public class DPType16 : DPType<string>
     {
-        public static int StringLength = 14;
-        public static char Replacement = '?';
+        public static readonly int StringLength = 14;
+        public static readonly char Replacement = '?';
 
         public DPType16(string id, string name, string unit = "", string description = "") : base(id, name, "", "", unit, description)
         {
@@ -57,7 +57,7 @@ namespace Tiveria.Home.Knx.Datapoint
             if (dptData.Length - offset < 1)
                 throw KnxBufferSizeException.TooSmall("DPType16/String");
             var characters = new char[StringLength];
-            int i = 0;
+            int i;
             for (i = offset; (i < (offset + StringLength)) & dptData[i] != 0; i++)
             {
                 characters[i - offset] = (char)dptData[i];
@@ -66,8 +66,8 @@ namespace Tiveria.Home.Knx.Datapoint
         }
 
         #region specific xlator instances
-        public static DPType16 DPT_STRING_ASCII = new DPType16("16.000", "ASCII string");
-        public static DPType16 DPT_STRING_8859_1 = new DPType16("16.001", "ISO-8859-1 string (Latin 1)");
+        public static readonly DPType16 DPT_STRING_ASCII = new("16.000", "ASCII string");
+        public static readonly DPType16 DPT_STRING_8859_1 = new("16.001", "ISO-8859-1 string (Latin 1)");
 
         internal static void Init()
         {

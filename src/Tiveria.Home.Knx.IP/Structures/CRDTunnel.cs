@@ -53,6 +53,7 @@ namespace Tiveria.Home.Knx.IP.Structures
         /// <summary>
         /// Create a new CRDTunnel and initialize it with a specific individual address
         /// </summary>
+        /// <param name="connectionType">Connection Type details</param>
         /// <param name="assignedAddress">The knx individual address assigned to the connection</param>
         public CRDTunnel(ConnectionType connectionType, IndividualAddress assignedAddress)
             : base(connectionType, assignedAddress.ToBytes())

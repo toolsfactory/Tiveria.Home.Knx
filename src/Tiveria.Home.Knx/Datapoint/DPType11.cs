@@ -37,23 +37,23 @@ namespace Tiveria.Home.Knx.Datapoint
             var day = dptData[offset];
             var month = dptData[offset + 1];
             int year = dptData[offset + 2];
-            year = year + ((year > 89) ? 1900 : 2000);
+            year += ((year > 89) ? 1900 : 2000);
             return new DateTime(year, month, day);
         }
 
         public override byte[] Encode(DateTime value)
         {
             if (value.Date.Day < 1 || value.Date.Day > 31)
-                throw new ArgumentOutOfRangeException("Day must be in range [1..31]");
+                throw new ArgumentOutOfRangeException("value.Day", "Day must be in range [1..31]");
             if (value.Date.Month < 1 || value.Date.Month > 12)
-                throw new ArgumentOutOfRangeException("Month must be in range [1..12]");
+                throw new ArgumentOutOfRangeException("value.Month", "Month must be in range [1..12]");
             if (value.Date.Year < 1990 || value.Date.Year > 2089)
-                throw new ArgumentOutOfRangeException("Year must be in range [1990..2089]");
+                throw new ArgumentOutOfRangeException("value.Year", "Year must be in range [1990..2089]");
             return new byte[3] { (byte)value.Date.Day, (byte)value.Date.Month, (byte) (value.Date.Year % 100) };
         }
 
         #region specific xlator instances
-        public static DPType11 DPT_DATE = new DPType11("11.001", "Date", new DateTime(1990, 1, 1), new DateTime(2089, 12, 31), "yyyy-mm-dd");
+        public static readonly DPType11 DPT_DATE = new("11.001", "Date", new DateTime(1990, 1, 1), new DateTime(2089, 12, 31), "yyyy-mm-dd");
 
         internal static void Init()
         {

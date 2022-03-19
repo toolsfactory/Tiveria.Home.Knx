@@ -37,7 +37,7 @@ namespace Tiveria.Home.Knx.Datapoint
         #endregion
 
         #region encoding
-        private byte[] InternalEncode(ushort value)
+        private static byte[] InternalEncode(ushort value)
         {
             return new byte[] { (byte)(value >> 8), (byte)(value & 0xff) };
         }
@@ -91,27 +91,27 @@ namespace Tiveria.Home.Knx.Datapoint
         {
             ulong value = Decode(dptData, offset);
             if (this == DPT_TIMEPERIOD_10MS)
-                value = value * 10;
+                value *= 10;
             else if (this == DPT_TIMEPERIOD_100MS)
-                value = value * 100;
+                value *= 100;
             var ext = (withUnit & !String.IsNullOrEmpty(Unit)) ? " " + Unit : "";
             return String.Format(invariant ? CultureInfo.InvariantCulture : CultureInfo.CurrentCulture, "{0}{1}", value, ext);
         }
         #endregion
 
         #region specific xlator instances
-        public static DPType7 DPT_VALUE_2_UCOUNT   = new DPType7("7.001", "16bit Unsigned Counter", 0, 65535, "pulses");
-        public static DPType7 DPT_TIMEPERIOD_1MS   = new DPType7("7.002", "Time Period 1ms resolution", 0, 65535, "ms");
-        public static DPType7 DPT_TIMEPERIOD_10MS  = new DPType7("7.003", "Time Period 10ms resolution", 0, 65535, "ms");
-        public static DPType7 DPT_TIMEPERIOD_100MS = new DPType7("7.004", "Time Period 100ms resolution", 0, 65535, "ms");
-        public static DPType7 DPT_TIMEPERIOD_SEC   = new DPType7("7.005", "Time Period Seconds", 0, 65535, "sec");
-        public static DPType7 DPT_TIMEPERIOD_MIN   = new DPType7("7.006", "Time Period Minutes", 0, 65535, "min");
-        public static DPType7 DPT_TIMEPERIOD_HRS   = new DPType7("7.007", "Time Period Hours", 0, 65535, "hrs");
+        public static readonly DPType7 DPT_VALUE_2_UCOUNT   = new("7.001", "16bit Unsigned Counter", 0, 65535, "pulses");
+        public static readonly DPType7 DPT_TIMEPERIOD_1MS   = new("7.002", "Time Period 1ms resolution", 0, 65535, "ms");
+        public static readonly DPType7 DPT_TIMEPERIOD_10MS  = new("7.003", "Time Period 10ms resolution", 0, 65535, "ms");
+        public static readonly DPType7 DPT_TIMEPERIOD_100MS = new("7.004", "Time Period 100ms resolution", 0, 65535, "ms");
+        public static readonly DPType7 DPT_TIMEPERIOD_SEC   = new("7.005", "Time Period Seconds", 0, 65535, "sec");
+        public static readonly DPType7 DPT_TIMEPERIOD_MIN   = new("7.006", "Time Period Minutes", 0, 65535, "min");
+        public static readonly DPType7 DPT_TIMEPERIOD_HRS   = new("7.007", "Time Period Hours", 0, 65535, "hrs");
 
-        public static DPType7 DPT_PROP_DATATYPE    = new DPType7("7.010", "Interface object property ID", 0, 65535, "");
-        public static DPType7 DPT_LENGTH_MM        = new DPType7("7.011", "Length in mm", 0, 65535, "mm");
-        public static DPType7 DPT_ELECTRICAL_CUR   = new DPType7("7.012", "Electrical current", 0, 65535, "mA");
-        public static DPType7 DPT_BRIGHTNESS       = new DPType7("7.013", "Brightness", 0, 65535, "ls");
+        public static readonly DPType7 DPT_PROP_DATATYPE    = new("7.010", "Interface object property ID", 0, 65535, "");
+        public static readonly DPType7 DPT_LENGTH_MM        = new("7.011", "Length in mm", 0, 65535, "mm");
+        public static readonly DPType7 DPT_ELECTRICAL_CUR   = new("7.012", "Electrical current", 0, 65535, "mA");
+        public static readonly DPType7 DPT_BRIGHTNESS       = new("7.013", "Brightness", 0, 65535, "ls");
 
         internal static void Init()
         {

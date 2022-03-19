@@ -37,7 +37,7 @@ namespace Tiveria.Home.Knx.Datapoint
         #endregion
 
         #region encoding
-        private byte[] InternalEncode(short value)
+        private static byte[] InternalEncode(short value)
         {
             return new byte[] { (byte)(value >> 8), (byte)(value & 0xff) };
         }
@@ -91,9 +91,9 @@ namespace Tiveria.Home.Knx.Datapoint
         {
             var value = Decode(dptData, offset);
             if (this == DPT_DELTATIME_10MS)
-                value = value * 10;
+                value *= 10;
             else if (this == DPT_DELTATIME_100MS)
-                value = value * 100;
+                value *= 100;
             var ext = (withUnit & !String.IsNullOrEmpty(Unit)) ? " " + Unit : "";
             return String.Format(invariant ? CultureInfo.InvariantCulture : CultureInfo.CurrentCulture, "{0}{1}", value, ext);
         }
@@ -102,14 +102,14 @@ namespace Tiveria.Home.Knx.Datapoint
 
 
         #region specific xlator instances
-        public static DPType8 DPT_VALUE_2_COUNT = new DPType8("8.001", "16bit Counter", -32768, 32767, "pulses");
-        public static DPType8 DPT_DELTATIME_1MS = new DPType8("8.002", "Time Delta 1ms resolution", -32768, 32767, "ms");
-        public static DPType8 DPT_DELTATIME_10MS = new DPType8("8.003", "Time Delta 10ms resolution", -327680, 327670, "ms");
-        public static DPType8 DPT_DELTATIME_100MS = new DPType8("8.004", "Time Delta 100ms resolution", -3276800, 3276700, "ms");
-        public static DPType8 DPT_DELTATIME_SEC = new DPType8("8.005", "Time Delta Seconds", -32768, 32767, "sec");
-        public static DPType8 DPT_TIMEPERIOD_MIN = new DPType8("8.006", "Time Delta Minutes", -32768, 32767, "min");
-        public static DPType8 DPT_TIMEPERIOD_HRS = new DPType8("8.007", "Time Delta Hours", -32768, 32767, "hrs");
-        public static DPType8 DPT_ROTATION_ANGLE = new DPType8("8.011", "Rotation Angle", -32768, 32767, "°");
+        public static readonly DPType8 DPT_VALUE_2_COUNT = new("8.001", "16bit Counter", -32768, 32767, "pulses");
+        public static readonly DPType8 DPT_DELTATIME_1MS = new("8.002", "Time Delta 1ms resolution", -32768, 32767, "ms");
+        public static readonly DPType8 DPT_DELTATIME_10MS = new("8.003", "Time Delta 10ms resolution", -327680, 327670, "ms");
+        public static readonly DPType8 DPT_DELTATIME_100MS = new("8.004", "Time Delta 100ms resolution", -3276800, 3276700, "ms");
+        public static readonly DPType8 DPT_DELTATIME_SEC = new("8.005", "Time Delta Seconds", -32768, 32767, "sec");
+        public static readonly DPType8 DPT_TIMEPERIOD_MIN = new("8.006", "Time Delta Minutes", -32768, 32767, "min");
+        public static readonly DPType8 DPT_TIMEPERIOD_HRS = new("8.007", "Time Delta Hours", -32768, 32767, "hrs");
+        public static readonly DPType8 DPT_ROTATION_ANGLE = new("8.011", "Rotation Angle", -32768, 32767, "°");
 
         // Datatype 8.010 not yet implemented
 

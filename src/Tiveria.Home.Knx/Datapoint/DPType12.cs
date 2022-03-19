@@ -43,7 +43,7 @@ namespace Tiveria.Home.Knx.Datapoint
         }
 
         #region specific xlator instances
-        public static DPType12 DPT_VALUE_4_UCOUNT = new DPType12("12.001", "Unsigned count", "counter pulses");
+        public static readonly DPType12 DPT_VALUE_4_UCOUNT = new("12.001", "Unsigned count", "counter pulses");
 
         internal static void Init()
         {

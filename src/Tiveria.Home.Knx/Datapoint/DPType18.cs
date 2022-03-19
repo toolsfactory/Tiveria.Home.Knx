@@ -47,7 +47,7 @@ namespace Tiveria.Home.Knx.Datapoint
         }
 
         #region specific xlator instances
-        public static DPType18 DPT_SCENE_CONTROL = new DPType18("18.001", "Scene Control", (SceneControlMode.Learn, 0), (SceneControlMode.Activate, 63));
+        public static readonly DPType18 DPT_SCENE_CONTROL = new("18.001", "Scene Control", (SceneControlMode.Learn, 0), (SceneControlMode.Activate, 63));
 
         internal static void Init()
         {

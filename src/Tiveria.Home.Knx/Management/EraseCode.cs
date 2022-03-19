@@ -25,7 +25,7 @@
 namespace Tiveria.Home.Knx.Management
 {
     /// <summary>
-    /// Erase codes used when sending a master reset restart apci code. <see cref="ApduType.RestartMasterReset_Request"/>
+    /// Erase codes used when sending a master reset restart apci code. <see cref="Cemi.ApduType.RestartMasterReset_Request"/>
     /// </summary>
     public enum EraseCode : byte
     {

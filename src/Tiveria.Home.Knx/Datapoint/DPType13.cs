@@ -43,15 +43,15 @@ namespace Tiveria.Home.Knx.Datapoint
         }
 
         #region specific xlator instances
-        public static DPType13 DPT_COUNT = new DPType13("13.001", "Counter pulses", "counter pulses");
-        public static DPType13 DPT_FLOWRATE = new DPType13("13.002", "Flow rate", "m3/h");
-        public static DPType13 DPT_ACTIVE_ENERGY = new DPType13("13.010", "Active Energy", "Wh");
-        public static DPType13 DPT_APPARENT_ENERGY = new DPType13("13.011", "Apparent energy", "VAh");
-        public static DPType13 DPT_REACTIVE_ENERGY = new DPType13("13.012", "Reactive energy", "VARh");
-        public static DPType13 DPT_ACTIVE_ENERGY_KWH = new DPType13("13.013", "Active energy in kWh", "kWh");
-        public static DPType13 DPT_APPARENT_ENERGY_KVAH = new DPType13("13.014", "Apparent energy in kVAh", "kVAh");
-        public static DPType13 DPT_REACTIVE_ENERGY_KVARH = new DPType13("13.015", "Reactive energy in kVARh",   "kVARh");
-        public static DPType13 DPT_DELTA_TIME = new DPType13("13.100", "Delta time in seconds", "s");
+        public static readonly DPType13 DPT_COUNT = new("13.001", "Counter pulses", "counter pulses");
+        public static readonly DPType13 DPT_FLOWRATE = new("13.002", "Flow rate", "m3/h");
+        public static readonly DPType13 DPT_ACTIVE_ENERGY = new("13.010", "Active Energy", "Wh");
+        public static readonly DPType13 DPT_APPARENT_ENERGY = new("13.011", "Apparent energy", "VAh");
+        public static readonly DPType13 DPT_REACTIVE_ENERGY = new("13.012", "Reactive energy", "VARh");
+        public static readonly DPType13 DPT_ACTIVE_ENERGY_KWH = new("13.013", "Active energy in kWh", "kWh");
+        public static readonly DPType13 DPT_APPARENT_ENERGY_KVAH = new("13.014", "Apparent energy in kVAh", "kVAh");
+        public static readonly DPType13 DPT_REACTIVE_ENERGY_KVARH = new("13.015", "Reactive energy in kVARh",   "kVARh");
+        public static readonly DPType13 DPT_DELTA_TIME = new("13.100", "Delta time in seconds", "s");
 
         internal static void Init()
         {

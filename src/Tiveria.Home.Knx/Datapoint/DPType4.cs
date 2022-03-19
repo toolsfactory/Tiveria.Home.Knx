@@ -32,10 +32,11 @@ namespace Tiveria.Home.Knx.Datapoint
         }
 
         #region decoding DPT
+        /// <inheritdoc/>
         public override char Decode(byte[] dptData, int offset = 0)
         {
             if (dptData == null || dptData.Length - offset < 1)
-                throw new ArgumentException();
+                throw new ArgumentException("parameter null or too short", nameof(dptData));
             if (this == DPT_ASCII)
                 return System.Text.Encoding.ASCII.GetChars(dptData, offset, 1)[0];
             else
@@ -44,36 +45,41 @@ namespace Tiveria.Home.Knx.Datapoint
         #endregion
 
         #region Encoding DPT
+        /// <inheritdoc/>
         public override byte[] Encode(char value)
         {
             byte[] bytes = (this == DPT_ASCII) ?
                 System.Text.Encoding.ASCII.GetBytes(new char[] { value }) :  System.Text.Encoding.GetEncoding("iso-8859-1").GetBytes(new char[] { value });
 
             if (bytes == null || bytes.Length != 1)
-                throw new ArgumentException();
+                throw new ArgumentException("invalid character", nameof(value));
 
             return bytes;
         }
 
+        /// <inheritdoc/>
         protected override byte[] EncodeFromLong(long value)
         {
             return Encode((char)value);
         }
 
+        /// <inheritdoc/>
         protected override byte[] EncodeFromULong(long value)
         {
             return Encode((char)value);
         }
 
+        /// <inheritdoc/>
         protected override byte[] EncodeFromDouble(double value)
         {
             return Encode((char)value);
         }
 
+        /// <inheritdoc/>
         protected override byte[] EncodeFromString(string value)
         {
             if (String.IsNullOrEmpty(value))
-                throw new ArgumentNullException("value is null or empty");
+                throw new ArgumentNullException(nameof(value), "value is null or empty");
             return Encode(value[0]);
         }
 
@@ -81,8 +87,8 @@ namespace Tiveria.Home.Knx.Datapoint
         #endregion
 
         #region specific xlator instances
-        public static readonly DPType4 DPT_ASCII = new DPType4("4.001", "ASCII Character", (char) 0, (char) 127);
-        public static readonly DPType4 DPT_ISO8859_1 = new DPType4("4.002", "ISO 8859-1 Character", (char)0, (char)255);
+        public static readonly DPType4 DPT_ASCII = new("4.001", "ASCII Character", (char) 0, (char) 127);
+        public static readonly DPType4 DPT_ISO8859_1 = new("4.002", "ISO 8859-1 Character", (char)0, (char)255);
 
         internal static void Init()
         {

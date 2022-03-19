@@ -37,7 +37,7 @@ namespace Tiveria.Home.Knx.ObjectServer
     }
     public interface IObjectServerServiceSerializer<T> : IObjectServerServiceSerializer where T : class,  IObjectServerService
     {
-        T Deserialize(BigEndianBinaryReader reader);
+        new T Deserialize(BigEndianBinaryReader reader);
         void Serialize(T service, BigEndianBinaryWriter writer);
     }
 }

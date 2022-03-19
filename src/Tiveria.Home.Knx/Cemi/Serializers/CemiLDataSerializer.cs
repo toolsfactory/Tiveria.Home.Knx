@@ -35,7 +35,7 @@ namespace Tiveria.Home.Knx.Cemi.Serializers
     /// | byte 1 | byte 2 | byte 3 - n      | byte   | byte   | byte   | byte   | byte   | byte   | byte   | n bytes         |
     /// +--------+--------+-----------------+--------+--------+--------+--------+--------+--------+--------+-----------------+
     /// |  Msg   |Add.Info|  Additional     |Ctrl 1  | Ctrl 2 | Source Address  | Dest. Address   |  NPDU  |      APDU       |
-    /// | Code   | Length |  Information    |        |        |                 |                 | Length | (TPCI/APCI&data)|
+    /// | Code   | Length |  Information    |        |        |                 |                 | Length | (TPCI/APCI data)|
     /// +--------+--------+-----------------+--------+--------+--------+--------+--------+--------+--------+-----------------+
     /// </code>
     ///

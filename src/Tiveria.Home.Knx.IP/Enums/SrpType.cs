@@ -47,7 +47,7 @@ namespace Tiveria.Home.Knx.IP.Enums
         SelectByMacAddress = 0x02,
 
         /// <summary>
-        /// Only KnxNetIP routers supporting the given service family & version combination 
+        /// Only KnxNetIP routers supporting the given service family and version combination 
         /// should answer to the search request.
         /// </summary>
         SelectByService = 0x03,

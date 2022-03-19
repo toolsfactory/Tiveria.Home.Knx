@@ -139,14 +139,6 @@ namespace Tiveria.Home.Knx.Primitives
         #endregion Static Empty
 
 
-        #region Static Byte Converters
-        public static GroupAddress FromReader(BigEndianBinaryReader reader)
-        {
-            return new GroupAddress(reader.ReadUInt16());
-        }
-        #endregion
-
-
         #region Static parsing
         /// <summary>
         /// Converts the string represenation of a GroupAddress to the equivalent <see cref="GroupAddress"/> object.
@@ -245,12 +237,26 @@ namespace Tiveria.Home.Knx.Primitives
             return (main & ~0x1f) == 0 && (sub & ~0x07_ff) == 0;
         }
 
+        /// <inheritdoc/>
+        public override bool Equals(object? obj)
+        {
+            GroupAddress? other = obj as GroupAddress;
+            return (other! != null) && (RawAddress == other.RawAddress);
+        }
+
+        /// <inheritdoc/>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         #endregion Static Group Styling Helpers
 
         #endregion Public Static Methods
 
         #region overloaded operators
-        public static bool operator == (GroupAddress a, Address b)
+        /// <inheritdoc/>
+        public static bool operator == (GroupAddress a, Address? b)
         {
             if (a is not null)
                 return a.Equals(b);
@@ -258,7 +264,8 @@ namespace Tiveria.Home.Knx.Primitives
                 return b is null;
         }
 
-        public static bool operator != (GroupAddress a, Address b)
+        /// <inheritdoc/>
+        public static bool operator != (GroupAddress a, Address? b)
         {
             return !(a == b);
         }

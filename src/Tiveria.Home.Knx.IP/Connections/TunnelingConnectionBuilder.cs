@@ -153,7 +153,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         }
 
         /// <summary>
-        /// Configures the logger used. In case not set, internally a <see cref="NullLogger"/> is used.
+        /// Configures the logger used. In case not set, internally a <see cref="ILogger{TCategoryName}"/> is used.
         /// </summary>
         /// <param name="logger">the logger to use</param>
         /// <returns>The builder</returns>

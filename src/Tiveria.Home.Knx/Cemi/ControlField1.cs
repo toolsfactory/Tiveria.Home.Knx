@@ -54,11 +54,34 @@ namespace Tiveria.Home.Knx.Cemi
     {
 
         #region public properties
+        /// <summary>
+        /// Defines whether the Frame is an extended one (true)  or not (false)
+        /// </summary>
         public bool ExtendedFrame { get; set; }
+
+        /// <summary>
+        /// If set (true), the frame will be repeated in case of an error
+        /// </summary>
         public bool Repeat { get; set; }
+
+        /// <summary>
+        /// The broadcast type to be used <see cref="BroadcastType"/>.
+        /// </summary>
         public BroadcastType Broadcast { get; set; }
+
+        /// <summary>
+        /// Priority <see cref="Priority"/> of the frame
+        /// </summary>
         public Priority Priority { get; set; }
+
+        /// <summary>
+        /// IF true, an acknowledge response is required
+        /// </summary>
         public bool AcknowledgeRequest { get; set; }
+
+        /// <summary>
+        /// If true, an error is indicated for the transmitted frame.
+        /// </summary>
         public ConfirmType Confirm { get; set; }
         #endregion
 
@@ -87,8 +110,9 @@ namespace Tiveria.Home.Knx.Cemi
         }
 
         /// <summary>
-        /// 
+        ///  Creates a ControlField1 class based on the properties provided
         /// </summary>
+        /// <param name="extendedFrame"></param>
         /// <param name="priority"></param>
         /// <param name="repeat"></param>
         /// <param name="broadcast"></param>

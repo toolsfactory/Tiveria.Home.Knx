@@ -39,8 +39,7 @@ namespace Tiveria.Home.Knx
         {
             await Task.Run(() =>
             {
-                bool on = true;
-                var input = (byte)(on ? 0x01 : 0x00);
+                var input = (byte)0x01; //  (on ? 0x01 : 0x00);
                 var apci = new Cemi.Apdu(Cemi.ApduType.GroupValue_Write, new byte[] { input });
                 Console.WriteLine("APCI: " + BitConverter.ToString(apci.ToBytes()));
                 var ctrl1 = new ControlField1();

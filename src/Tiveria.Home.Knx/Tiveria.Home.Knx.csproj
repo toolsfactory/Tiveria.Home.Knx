@@ -31,6 +31,10 @@
     <DefineConstants>$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Include="..\..\README.md">
       <Pack>True</Pack>

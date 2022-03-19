@@ -34,12 +34,13 @@ namespace Tiveria.Home.Knx.Datapoint
         public override TimeOfDay Decode(byte[] dptData, int offset = 0)
         {
             base.Decode(dptData, offset);
-            var result = new TimeOfDay();
-            result.Day = (DayOfWeek)(dptData[offset] >> 5);
-            result.Hour = (byte)(dptData[offset] & 0b0001_1111);
-            result.Minute = (byte)(dptData[offset + 1] & 0b0011_1111);
-            result.Second = (byte)(dptData[offset + 2] & 0b0011_1111);
-            return result;
+            return new TimeOfDay
+            {
+                Day = (DayOfWeek) (dptData[offset] >> 5),
+                Hour = (byte) (dptData[offset] & 0b0001_1111),
+                Minute = (byte) (dptData[offset + 1] & 0b0011_1111),
+                Second = (byte) (dptData[offset + 2] & 0b0011_1111)
+            };
         }
 
         public override byte[] Encode(TimeOfDay value)
@@ -53,7 +54,7 @@ namespace Tiveria.Home.Knx.Datapoint
         }
 
         #region specific xlator instances
-        public static DPType10 DPT_TIMEOFDAY = new DPType10("10.001", "Time of day", "dow, hh:mm:ss");
+        public static readonly DPType10 DPT_TIMEOFDAY = new("10.001", "Time of day", "dow, hh:mm:ss");
 
         internal static void Init()
         {

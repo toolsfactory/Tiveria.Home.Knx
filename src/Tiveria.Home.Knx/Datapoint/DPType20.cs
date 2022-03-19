@@ -29,7 +29,7 @@ namespace Tiveria.Home.Knx.Datapoint
 
     public abstract class KnxEnum
     {
-        internal static System.Collections.Generic.Dictionary<int, string> _values = new Dictionary<int, string>();
+        internal static System.Collections.Generic.Dictionary<int, string> _values = new ();
         internal static void Initialize(Type type)
         {
             foreach (var element in type.GetFields(BindingFlags.Public | BindingFlags.Static))
@@ -72,9 +72,9 @@ namespace Tiveria.Home.Knx.Datapoint
 
     public sealed class DPT_SCLOModes : KnxEnum
     {
-        public static int Autonomous = 0;
-        public static int Slave = 1;
-        public static int Master = 2;
+        public static readonly int Autonomous = 0;
+        public static readonly int Slave = 1;
+        public static readonly int Master = 2;
 
         static DPT_SCLOModes()
         {
@@ -109,7 +109,7 @@ namespace Tiveria.Home.Knx.Datapoint
             Slave = 1,
             Master = 2
         }
-        public static DPType20 DPT_SCLOMode = new DPType20("20.001", "System clock mode", 0, 2);
+        public static readonly DPType20 DPT_SCLOMode = new("20.001", "System clock mode", 0, 2);
 
         public enum BuildingMode : byte
         {
@@ -117,7 +117,7 @@ namespace Tiveria.Home.Knx.Datapoint
             NotUsed = 1,
             Protection = 2
         }
-        public static DPType20 DPT_BuildingMode = new DPType20("20.002", "Building mode", 0, 2);
+        public static readonly DPType20 DPT_BuildingMode = new("20.002", "Building mode", 0, 2);
 
         public enum OccupancyMode : byte
         {
@@ -125,7 +125,7 @@ namespace Tiveria.Home.Knx.Datapoint
             Standby = 1,
             NotOccupied = 2
         }
-        public static DPType20 DPT_OCCMode = new DPType20("20.003", "Occupancy mode", 0, 2);
+        public static readonly DPType20 DPT_OCCMode = new("20.003", "Occupancy mode", 0, 2);
 
         public enum Priority : byte
         {
@@ -134,7 +134,7 @@ namespace Tiveria.Home.Knx.Datapoint
             Low = 2,
             Void = 3
         }
-        public static DPType20 DPT_Priority = new DPType20("20.004", "Priority", 0, 3);
+        public static readonly DPType20 DPT_Priority = new("20.004", "Priority", 0, 3);
 
         public enum LightApplicationMode : byte
         {
@@ -142,7 +142,7 @@ namespace Tiveria.Home.Knx.Datapoint
             PresenceSimulation = 1,
             NightRound = 2
         }
-        public static DPType20 DPT_LightApplicationMode = new DPType20("20.005", "Light application mode", 0, 2);
+        public static readonly DPType20 DPT_LightApplicationMode = new("20.005", "Light application mode", 0, 2);
 
         public enum ApplicationArea : byte
         {
@@ -154,7 +154,7 @@ namespace Tiveria.Home.Knx.Datapoint
             HvacTerminalUnits = 13,
             HvacVac = 14
         }
-        public static DPType20 DPT_ApplicationArea = new DPType20("20.006", "Application Arera", 0, 14);
+        public static readonly DPType20 DPT_ApplicationArea = new("20.006", "Application Arera", 0, 14);
 
         internal static void Init()
         {

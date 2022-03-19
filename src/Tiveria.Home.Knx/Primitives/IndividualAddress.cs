@@ -69,6 +69,7 @@ namespace Tiveria.Home.Knx.Primitives
         #endregion
 
         #region Public Methods
+        /// <inheritdoc/>
         public override string ToString()
         {
             return $"{Area}.{Line}.{Device}";
@@ -143,10 +144,24 @@ namespace Tiveria.Home.Knx.Primitives
         /// </summary>
         /// <returns>The <see cref="IndividualAddress"/> 0.0.0</returns>
         public static IndividualAddress Empty() => new IndividualAddress(0);
+
+        /// <inheritdoc/>
+        public override bool Equals(object? obj)
+        {
+            IndividualAddress? other = obj as IndividualAddress;
+            return (other! != null) && (RawAddress == other.RawAddress);
+        }
+
+        /// <inheritdoc/>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
         #endregion
 
         #region overloaded operators
-        public static bool operator ==(IndividualAddress a, Address b)
+        /// <inheritdoc/>
+        public static bool operator ==(IndividualAddress a, Address? b)
         {
             if (a is not null)
                 return a.Equals(b);
@@ -154,7 +169,8 @@ namespace Tiveria.Home.Knx.Primitives
                 return b is null;
         }
 
-        public static bool operator !=(IndividualAddress a, Address b)
+        /// <inheritdoc/>
+        public static bool operator !=(IndividualAddress a, Address? b)
         {
             return !(a == b);
         }

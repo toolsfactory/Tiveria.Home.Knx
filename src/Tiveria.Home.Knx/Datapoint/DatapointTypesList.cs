@@ -27,7 +27,7 @@ namespace Tiveria.Home.Knx.Datapoint
 {
     public static class DatapointTypesList
     {
-        private static readonly Dictionary<string, IDatapointType> _list = new Dictionary<string, IDatapointType>();
+        private static readonly Dictionary<string, IDatapointType> _list = new ();
 
 
         public static void AddOrReplace(IDatapointType dptype)

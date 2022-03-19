@@ -29,7 +29,7 @@ namespace Tiveria.Home.Knx.IP.Structures
 {
     /// <summary>
     /// Immutable container for a connection response data (CRD).
-    /// The CRI structure is used for the additional information in a connection response.<br>
+    /// The CRI structure is used for the additional information in a connection response.<br/>
     ///
     /// <code>
     /// +--------+--------+--------+--------+

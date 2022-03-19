@@ -41,8 +41,8 @@ namespace Tiveria.Home.Knx.Datapoint
             return new byte[1] { (byte) value };
         }
 
-        public static readonly DPType6 DPT_PERCENT_V8 = new DPType6("6.001", "Percent (8 Bit)", -128, 127, "%");
-        public static readonly DPType6 DPT_VALUE_1_UCOUNT = new DPType6("6.010", "Decimal factor", -128, 127, "pulses");
+        public static readonly DPType6 DPT_PERCENT_V8 = new("6.001", "Percent (8 Bit)", -128, 127, "%");
+        public static readonly DPType6 DPT_VALUE_1_UCOUNT = new("6.010", "Decimal factor", -128, 127, "pulses");
 
         // 6.020 not supported at the moment
 

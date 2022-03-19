@@ -161,7 +161,7 @@ namespace Tiveria.Home.Knx
                         }
                         else if ((cemi.Apdu.ApduType == ApduType.GroupValue_Read) && addr.EndsWith("29/0/0"))
                         {
-                            SendReadAnswerAsync();
+                            SendReadAnswerAsync().Wait();
                         }
                         if (cemi.Apdu.ApduType == ApduType.GroupValue_Response)
                         {

@@ -74,12 +74,11 @@ namespace Tiveria.Home.Knx.Datapoint
 
         protected override byte[] EncodeFromString(string value)
         {
-            bool val, ctrl = false;
             var items = value.ToLower().NormalizeWhiteSpaces().Split(' ');
             if (items.Length > 3 || items.Length < 1)
                 throw new Exceptions.KnxTranslationException("translation error, value not recognized");
-            val = ValueFromString(items[0]);
-            ctrl = CtrlFromItems(items);
+            var val = ValueFromString(items[0]);
+            var ctrl = CtrlFromItems(items);
             return Encode(val, ctrl);
         }
 
@@ -105,20 +104,20 @@ namespace Tiveria.Home.Knx.Datapoint
         #endregion
 
         #region specific xlator instances
-        public static readonly DPType2 DPT_SWITCH_CTRL = new DPType2("2.001", "Switch Controlled", "On", "Off");
-        public static readonly DPType2 DPT_BOOL_CTRL = new DPType2("2.002", "Bool Controlled", "True", "False");
-        public static readonly DPType2 DPT_ENABLE_CTRL = new DPType2("2.003", "Enable Controlled", "Enable", "Disable");
-        public static readonly DPType2 DPT_RAMP_CTRL = new DPType2("2.004", "Ramp Controlled", "Ramp", "No Ramp");
-        public static readonly DPType2 DPT_ALARM_CTRL = new DPType2("2.005", "Alarm Controlled", "Alarm", "No Alarm");
-        public static readonly DPType2 DPT_BINARYVALUE_CTRL = new DPType2("2.006", "BinaryValue Controlled", "High", "Low");
-        public static readonly DPType2 DPT_STEP_CTRL = new DPType2("2.007", "Step Controlled", "Increase", "Decrease");
-        public static readonly DPType2 DPT_UPDOWN_CTRL = new DPType2("2.008", "UpDown Controlled", "Down", "Up");
-        public static readonly DPType2 DPT_OPENCLOSE_CTRL = new DPType2("2.009", "OpenClose Controlled", "Close", "Open");
-        public static readonly DPType2 DPT_START_CTRL = new DPType2("2.010", "Start Controlled", "Start", "Stop");
-        public static readonly DPType2 DPT_STATE_CTRL = new DPType2("2.011", "State Controlled", "Active", "Inactive");
-        public static readonly DPType2 DPT_INVERT_CTRL = new DPType2("2.012", "Invert Controlled", "Inverted", "Not inverted");
+        public static readonly DPType2 DPT_SWITCH_CTRL = new("2.001", "Switch Controlled", "On", "Off");
+        public static readonly DPType2 DPT_BOOL_CTRL = new("2.002", "Bool Controlled", "True", "False");
+        public static readonly DPType2 DPT_ENABLE_CTRL = new("2.003", "Enable Controlled", "Enable", "Disable");
+        public static readonly DPType2 DPT_RAMP_CTRL = new("2.004", "Ramp Controlled", "Ramp", "No Ramp");
+        public static readonly DPType2 DPT_ALARM_CTRL = new("2.005", "Alarm Controlled", "Alarm", "No Alarm");
+        public static readonly DPType2 DPT_BINARYVALUE_CTRL = new("2.006", "BinaryValue Controlled", "High", "Low");
+        public static readonly DPType2 DPT_STEP_CTRL = new("2.007", "Step Controlled", "Increase", "Decrease");
+        public static readonly DPType2 DPT_UPDOWN_CTRL = new("2.008", "UpDown Controlled", "Down", "Up");
+        public static readonly DPType2 DPT_OPENCLOSE_CTRL = new("2.009", "OpenClose Controlled", "Close", "Open");
+        public static readonly DPType2 DPT_START_CTRL = new("2.010", "Start Controlled", "Start", "Stop");
+        public static readonly DPType2 DPT_STATE_CTRL = new("2.011", "State Controlled", "Active", "Inactive");
+        public static readonly DPType2 DPT_INVERT_CTRL = new("2.012", "Invert Controlled", "Inverted", "Not inverted");
 
-        internal static void Init()
+        internal static new void Init()
         {
             DatapointTypesList.AddOrReplace(DPT_SWITCH_CTRL);
             DatapointTypesList.AddOrReplace(DPT_BOOL_CTRL);

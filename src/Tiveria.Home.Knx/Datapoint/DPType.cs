@@ -76,6 +76,7 @@ namespace Tiveria.Home.Knx.Datapoint
 
         #region standard overwrites
 
+        /// <inheritdoc/>
         public override bool Equals(object? obj)
         {
             return Equals(obj as DPType<TValue>);
@@ -87,6 +88,7 @@ namespace Tiveria.Home.Knx.Datapoint
             return (typedother is not null) && (Id == typedother.Id);
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             return 2108858624 + EqualityComparer<string>.Default.GetHashCode(Id);
@@ -94,17 +96,24 @@ namespace Tiveria.Home.Knx.Datapoint
         #endregion
 
         #region operators
+        /// <inheritdoc/>
         public static bool operator ==(DPType<TValue> type1, DPType<TValue> type2)
         {
             return EqualityComparer<DPType<TValue>>.Default.Equals(type1, type2);
         }
 
+        /// <inheritdoc/>
         public static bool operator !=(DPType<TValue> type1, DPType<TValue> type2)
         {
             return !(type1 == type2);
         }
         #endregion
 
+        /// <summary>
+        /// Checks whether the value is equal to the main category of the DPType
+        /// </summary>
+        /// <param name="category"></param>
+        /// <returns></returns>
         public virtual bool IsMainCategory(int category)
         {
             return category == _mainCategory;
@@ -162,6 +171,14 @@ namespace Tiveria.Home.Knx.Datapoint
         #endregion
 
         #region decoding DPT
+        /// <summary>
+        /// Docodes the binary dpt data representation into a string
+        /// </summary>
+        /// <param name="dptData">The binary data</param>
+        /// <param name="offset">position within the byte array where the dpt data starts</param>
+        /// <param name="withUnit">specifies whether the unit is included in the string or not</param>
+        /// <param name="invariant">specifies if the invariant string conversion should be used</param>
+        /// <returns></returns>
         public virtual string DecodeString(byte[] dptData, int offset = 0, bool withUnit = false, bool invariant = false)
         {
             var ext = (withUnit & !String.IsNullOrEmpty(Unit)) ? " " + Unit : "";
@@ -170,11 +187,23 @@ namespace Tiveria.Home.Knx.Datapoint
             return (!invariant) ? obj + ext : String.Format(CultureInfo.InvariantCulture, "{0}{1}", obj, ext);
         }
 
+        /// <summary>
+        /// Decodes the dpt data into an object of the coresponding type
+        /// </summary>
+        /// <param name="dptData">The binary data</param>
+        /// <param name="offset">position within the byte array where the dpt data starts</param>
+        /// <returns></returns>
         public virtual object? DecodeObject(byte[] dptData, int offset = 0)
         {
             return Decode(dptData, offset);
         }
 
+        /// <summary>
+        /// Decodes the dpt data into the type specified
+        /// </summary>
+        /// <param name="dptData">The binary data</param>
+        /// <param name="offset">position within the byte array where the dpt data starts</param>
+        /// <returns></returns>
         public virtual TValue? Decode(byte[] dptData, int offset = 0)
         {
             if (DataSize != -1 && (dptData.Length - offset < DataSize))

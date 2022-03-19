@@ -62,12 +62,12 @@ namespace Tiveria.Home.Knx.Datapoint
             return (ushort)data;
         }
 
-        public static readonly DPType5 DPT_SCALING = new DPType5("5.001", "Scaling", 0, 100, "%");
-        public static readonly DPType5 DPT_ANGLE = new DPType5("5.003", "Angle", 0, 360, "\u00b0");
-        public static readonly DPType5 DPT_PERCENT_U8 = new DPType5("5.004", "Percent (8 Bit)", 0, 255, "%");
-        public static readonly DPType5 DPT_DECIMALFACTOR = new DPType5("5.005", "Decimal factor", 0, 255, "ratio");
-        public static readonly DPType5 DPT_TARIFF = new DPType5("5.006", "Tariff information", 0, 254);
-        public static readonly DPType5 DPT_VALUE_1_UCOUNT = new DPType5("5.010", "Unsigned count", 0, 255, "counter pulses");
+        public static readonly DPType5 DPT_SCALING = new("5.001", "Scaling", 0, 100, "%");
+        public static readonly DPType5 DPT_ANGLE = new("5.003", "Angle", 0, 360, "\u00b0");
+        public static readonly DPType5 DPT_PERCENT_U8 = new("5.004", "Percent (8 Bit)", 0, 255, "%");
+        public static readonly DPType5 DPT_DECIMALFACTOR = new("5.005", "Decimal factor", 0, 255, "ratio");
+        public static readonly DPType5 DPT_TARIFF = new("5.006", "Tariff information", 0, 254);
+        public static readonly DPType5 DPT_VALUE_1_UCOUNT = new("5.010", "Unsigned count", 0, 255, "counter pulses");
 
         internal static void Init()
         {

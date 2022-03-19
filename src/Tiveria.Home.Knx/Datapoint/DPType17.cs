@@ -45,7 +45,7 @@ namespace Tiveria.Home.Knx.Datapoint
         }
 
         #region specific xlator instances
-        public static DPType17 DPT_SCENE_NUMBER = new DPType17("17.001", "Scene Number");
+        public static readonly DPType17 DPT_SCENE_NUMBER = new("17.001", "Scene Number");
 
         internal static void Init()
         {
