@@ -47,7 +47,7 @@ namespace Tiveria.Home.Knx.Cemi
     public class AdditionalInformationField
     {
         #region internal static field with size infos
-        private static readonly Dictionary<AdditionalInfoType, int> TypeSizes = new Dictionary<AdditionalInfoType, int>
+        private static readonly Dictionary<AdditionalInfoType, int> TypeSizes = new() 
         {
             {AdditionalInfoType.RESERVED0,      0 },
             {AdditionalInfoType.PLMEDIUM,       2 },
@@ -88,7 +88,7 @@ namespace Tiveria.Home.Knx.Cemi
         public AdditionalInformationField(AdditionalInfoType infoType, byte[] info)
         {
             if (info == null)
-                throw new ArgumentNullException("data parameter must not be null!");
+                throw new ArgumentNullException(nameof(info), "data parameter must not be null!");
             if (info.Length < 1)
                 throw new ArgumentException("Size of data array to small");
             _infoType = infoType;
@@ -149,7 +149,7 @@ namespace Tiveria.Home.Knx.Cemi
         #endregion
 
         #region other private methods
-        private void VerifyLength(AdditionalInfoType type, int length)
+        private static void VerifyLength(AdditionalInfoType type, int length)
         {
             if (type == AdditionalInfoType.RFFASTACK || type == AdditionalInfoType.MANUFACTURER)
             {

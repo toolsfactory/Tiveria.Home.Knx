@@ -23,13 +23,11 @@
 */
 
 using Microsoft.Extensions.Logging;
-using System.Net;
 using System.Runtime.CompilerServices;
-using Tiveria.Home.Knx.Exceptions;
 
 namespace Tiveria.Home.Knx.IP.Extensions
 {
-#pragma warning disable CS1591 // Missing XML comments
+//#pragma warning disable CS1591 // Missing XML comments
     public static partial class LoggerExtensions
     {
         public const int IDBase = 50000;
@@ -37,25 +35,25 @@ namespace Tiveria.Home.Knx.IP.Extensions
 
         #region Trace logs only active in debug mode
 #if DEBUG
-        [LoggerMessage(Level = LogLevel.Trace, Message = "+ Begin `{functionName}`.")]
+        [LoggerMessage(Level = LogLevel.Trace, Message = "+ Begin `{functionName}`.", EventId = IDBase + 1)]
         public static partial void TraceBeginFunc(this ILogger logger, [CallerMemberName] string? functionName = null);
 
-        [LoggerMessage(Level = LogLevel.Trace, Message = "+ Begin `{functionName}` ({param1}).")]
+        [LoggerMessage(Level = LogLevel.Trace, Message = "+ Begin `{functionName}` ({param1}).", EventId = IDBase + 2)]
         public static partial void TraceBeginFunc1(this ILogger logger, string functionName, object param1);
         
-        [LoggerMessage(Level = LogLevel.Trace, Message = "+ Begin `{functionName}` ({param1}, {param2})")]
+        [LoggerMessage(Level = LogLevel.Trace, Message = "+ Begin `{functionName}` ({param1}, {param2})", EventId = IDBase + 3)]
         public static partial void TraceBeginFunc2(this ILogger logger, string functionName, object param1, object param2);
         
-        [LoggerMessage(Level = LogLevel.Trace, Message = "+ Begin `{functionName}` ({param1}, {param2}, {param3})")]
+        [LoggerMessage(Level = LogLevel.Trace, Message = "+ Begin `{functionName}` ({param1}, {param2}, {param3})", EventId = IDBase + 4)]
         public static partial void TraceBeginFunc3(this ILogger logger, string functionName, object param1, object param2, object param3);
         
-        [LoggerMessage(Level = LogLevel.Trace, Message = "+ Begin `{functionName}` ({param1}, {param2}, {param3}, {param4})")]
+        [LoggerMessage(Level = LogLevel.Trace, Message = "+ Begin `{functionName}` ({param1}, {param2}, {param3}, {param4})", EventId = IDBase + 5)]
         public static partial void TraceBeginFunc4(this ILogger logger, string functionName, object param1, object param2, object param3, object param4);
 
-        [LoggerMessage(Level = LogLevel.Trace, Message = "+ End `{functionName}`.")]
+        [LoggerMessage(Level = LogLevel.Trace, Message = "+ End `{functionName}`.", EventId = IDBase + 6)]
         public static partial void TraceEndFunc(this ILogger logger, [CallerMemberName] string? functionName = null);
 
-        [LoggerMessage(Level = LogLevel.Trace, Message = "+ End `{functionName}`. Returns {param1}.")]
+        [LoggerMessage(Level = LogLevel.Trace, Message = "+ End `{functionName}`. Returns {param1}.", EventId = IDBase + 7)]
         public static partial void TraceEndFuncRet(this ILogger logger, string functionName, object param1);
 #else
         public static void TraceBeginFunc(this ILogger logger, string? functionName = null) {}
@@ -69,7 +67,7 @@ namespace Tiveria.Home.Knx.IP.Extensions
         #endregion
 
         #region TunnelingConnection Logs
-        [LoggerMessage(TunnelingConnectionFailedEvent, LogLevel.Error, "TunnelingConnection could not be set up.")]
+        [LoggerMessage(TunnelingConnectionFailedEvent, LogLevel.Error, "TunnelingConnection could not be set up.", EventId = IDBase + 8)]
         public static partial void LogTunnelingConnectionFailed(this ILogger logger, Exception ex);
 
         #endregion
@@ -80,5 +78,5 @@ namespace Tiveria.Home.Knx.IP.Extensions
         private const int IDBase = 50000;
         internal static readonly EventId TunnelingConnectionFailed = new(IDBase + 0);
     }
-#pragma warning restore CS1591 // Missing XML comments
+//#pragma warning restore CS1591 // Missing XML comments
 }

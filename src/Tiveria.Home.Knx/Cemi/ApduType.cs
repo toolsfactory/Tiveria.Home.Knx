@@ -132,7 +132,7 @@ namespace Tiveria.Home.Knx.Cemi
 
         public static bool IsKnown(int id) => _knowApduType.ContainsKey(id);
 
-        public static bool RequiresData(int id) => IsKnown(id) ? _knowApduType[id].DataMode != DataMode.None : false;
+        public static bool RequiresData(int id) => IsKnown(id) && _knowApduType[id].DataMode != DataMode.None;
 
         public static (DataMode Mode, int MinOrExact, int Max) GetRequiredDataDetails(int id)
             => IsKnown(id) ? (_knowApduType[id].DataMode, _knowApduType[id].ExactOrMin, _knowApduType[id].Max) : (DataMode.Unknown, -1, -1);
@@ -251,7 +251,7 @@ namespace Tiveria.Home.Knx.Cemi
 
         private const int CompressedDataMask = 0b00_111111;
 
-        private static Dictionary<int, ApduTypeDetail> _knowApduType = new Dictionary<int, ApduTypeDetail>(50);
+        private static readonly Dictionary<int, ApduTypeDetail> _knowApduType = new(50);
 
         #endregion
     }

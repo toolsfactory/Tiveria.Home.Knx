@@ -69,8 +69,6 @@ namespace Tiveria.Home.Knx.Cemi
     /// </summary>
     public class CemiLData : ICemiMessage
     {
-        private List<AdditionalInformationField> _additionalInfoFields = new();
-
         /// <summary>
         /// Size of the message when serialized to a byte array
         /// </summary>
@@ -165,9 +163,9 @@ namespace Tiveria.Home.Knx.Cemi
                 fields.Append(", ");
                 foreach (var item in AdditionalInfoFields)
                 {
-                    fields.Append("[");
+                    fields.Append('[');
                     fields.Append(item.InfoType);
-                    fields.Append("/");
+                    fields.Append('/');
                     fields.Append(BitConverter.ToString(item.Information));
                     fields.Append("] ,");
                 }

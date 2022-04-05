@@ -52,6 +52,7 @@ namespace Tiveria.Home.Knx.Cemi
         {
             Payload = payload ?? Array.Empty<byte>();
             Size = 1 + Payload.Length;
+            MessageCode = messageCode;
         }
 
         public string ToDescription(int padding = 4) 

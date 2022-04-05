@@ -99,7 +99,7 @@ namespace Tiveria.Home.Knx.Cemi
         public override string ToString()
         {
             var effbin = ("0000" + Convert.ToString(ExtendedFrameFormat, 2));
-            effbin = effbin.Substring(effbin.Length - 5);
+            effbin = effbin[^5..];
             return $"({DestinationAddressType}, Hop {HopCount}, EFF {effbin})";
         }
         #endregion
