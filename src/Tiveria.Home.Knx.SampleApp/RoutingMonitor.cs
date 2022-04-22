@@ -101,7 +101,7 @@ namespace Tiveria.Home.Knx
         private Task SendReadAnswerAsync()
         {
             Console.WriteLine("Sending read answer for 29/0/0");
-            var data = DPType9.DPT_TEMPERATURE.Encode(12.3);
+            //var data = DPType9.DPT_TEMPERATURE.Encode(12.3);
             return Task.CompletedTask;
 
             //            var cemi = Cemi.CemiLData.CreateReadAnswerCemi(new IndividualAddress(1, 1, 206), new GroupAddress(29, 0, 0), data);

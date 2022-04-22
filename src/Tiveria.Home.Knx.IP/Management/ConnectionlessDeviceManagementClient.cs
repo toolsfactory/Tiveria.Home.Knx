@@ -67,7 +67,7 @@ namespace Tiveria.Home.Knx.IP.Management
         public ConnectionlessDeviceManagementClient(TunnelingConnection connection)
         {
             _connection = connection;
-            connection.FrameReceived += _client_FrameReceived;
+            connection.FrameReceived += Client_FrameReceived;
         }
         #endregion constructor
 
@@ -138,7 +138,7 @@ namespace Tiveria.Home.Knx.IP.Management
         private BlockingCollection<Apdu>_apduCollection = new(25);
         #endregion
 
-        private void _client_FrameReceived(object? sender, FrameReceivedEventArgs e)
+        private void Client_FrameReceived(object? sender, FrameReceivedEventArgs e)
         {
             var cemi = GetCemiLDataFromFrame(e.Frame);
             if (cemi != null && cemi.Apdu != null && MonitoredApduTypes.Contains(cemi.Apdu.ApduType))
@@ -149,8 +149,7 @@ namespace Tiveria.Home.Knx.IP.Management
 
         private CemiLData? GetCemiLDataFromFrame(IKnxNetIPFrame frame)
         {
-            CemiLData? cemi = (frame.Service as TunnelingRequestService)?.CemiMessage as CemiLData;
-            if (cemi == null || cemi.Apdu == null || cemi.MessageCode == MessageCode.LDATA_CON) return null;
+            if ((frame.Service as TunnelingRequestService)?.CemiMessage is not CemiLData cemi || cemi.Apdu == null || cemi.MessageCode == MessageCode.LDATA_CON) return null;
             return cemi;
         }
 

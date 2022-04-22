@@ -34,14 +34,9 @@ namespace Tiveria.Home.Knx
 {
     public class BusmonitorDemo
     {
-        private IPAddress _gatewayIPAddress;
-        private ushort _gatewayPort;
-
         private IP.Connections.TunnelingConnection Con = new TunnelingConnectionBuilder(Program.LocalIPAddress, Program.GatewayIPAddress, Program.GatewayPort).Build();
         public BusmonitorDemo()
         {
-            _gatewayIPAddress = Program.GatewayIPAddress;
-            _gatewayPort = Program.GatewayPort; ;
         }
         // replace the IP Address below with your specific router or tunnel interface IP Address.
         // Port should be correct assuming you have a standard setup
@@ -79,8 +74,8 @@ namespace Tiveria.Home.Knx
             //            Console.WriteLine($"Frame received. Type: {e.Frame.ServiceType}");
             if (e.Frame.FrameHeader.ServiceTypeIdentifier == ServiceTypeIdentifier.TunnelingRequest)
             {
-                var req = ((TunnelingRequestService)e.Frame);
-                //var cemi = (CemiLData)req.CemiMessage;
+                // var req = ((TunnelingRequestService)e.Frame);
+                // var cemi = (CemiLData)req.CemiMessage;
             }
         }
 

@@ -125,8 +125,8 @@ namespace Tiveria.Home.Knx.IP.Connections
         #region private members
         private readonly IUdpClient _udpClient;
         private readonly byte[] _rawPacket;
-        private readonly AutoResetEvent _ReceivedEvent = new AutoResetEvent(false);
-        private readonly CancellationTokenSource _cancelSource = new CancellationTokenSource();
+        private readonly AutoResetEvent _ReceivedEvent = new(false);
+        private readonly CancellationTokenSource _cancelSource = new();
         private readonly HeartbeatFailedDelegate _heartbeatFailed;
         private readonly HeartbeatOkDelegate _heartbeatOk;
         #endregion private members

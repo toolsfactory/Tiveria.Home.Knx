@@ -34,9 +34,11 @@ namespace Tiveria.Home.Knx.Management
             Address = address;
             KeepAlive = keepAlive;
 
-            _timer = new System.Timers.Timer(KnxConstants.DeviceConnectionTimeout);
-            _timer.AutoReset = false;
-            _timer.Elapsed += _timer_Elapsed;
+            _timer = new System.Timers.Timer(KnxConstants.DeviceConnectionTimeout)
+            {
+                AutoReset = false
+            };
+            _timer.Elapsed += Timer_Elapsed;
         }
 
         public int SeqNoSend { get; private set; } = 0;
@@ -48,9 +50,9 @@ namespace Tiveria.Home.Knx.Management
         public void IncSeqNoSend() => SeqNoSend = ++SeqNoSend & 0x0f;
         public void IncSeqNoReceive() => SeqNoReceive = ++SeqNoReceive & 0x0f;
 
-        private System.Timers.Timer _timer;
+        private readonly System.Timers.Timer _timer;
 
-        private void _timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
+        private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
             throw new NotImplementedException();
         }

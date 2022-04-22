@@ -69,7 +69,7 @@ namespace Tiveria.Home.Knx.Primitives
         public SerialNumber(byte[] serno)
         {
             if (serno == null) throw new ArgumentNullException(nameof(serno));
-            if (serno.Length != Size) throw new ArgumentException(nameof(serno));
+            if (serno.Length != Size) throw new ArgumentException("Length and size not fitting", nameof(serno));
             _value = (ulong)((serno[0] << 40) + (serno[1] << 32) + (serno[2] << 24) + (serno[3] << 16) + (serno[4] << 8) + (serno[0] << 40));
         }
         #endregion Public Constructors
@@ -91,7 +91,7 @@ namespace Tiveria.Home.Knx.Primitives
         /// Creates an serialnumber object equal to 0
         /// </summary>
         /// <returns>The new <see cref="SerialNumber"/> object</returns>
-        public static SerialNumber Zero() => new SerialNumber(0);
+        public static SerialNumber Zero() => new(0);
 
         /// <summary>
         /// Converts the <see cref="SerialNumber"/> to its string representation following the Knx default format ("a0b0:c0d0e0f0")
@@ -108,7 +108,6 @@ namespace Tiveria.Home.Knx.Primitives
         /// <param name="writer">The writer</param>
         public void Write(BigEndianBinaryWriter writer)
         {
-            var raw = new byte[Size];
             var data = BitConverter.GetBytes(Value);
             if (BitConverter.IsLittleEndian) Array.Reverse(data);
             for (int i = 0; i < Size; i++)
@@ -124,7 +123,7 @@ namespace Tiveria.Home.Knx.Primitives
             var raw = new byte[Size];
             var data = BitConverter.GetBytes(Value);
             if (BitConverter.IsLittleEndian) Array.Reverse(data);
-            data.AsSpan().Slice(2).CopyTo(raw);
+            data.AsSpan()[2..].CopyTo(raw);
             return raw;
         }
 
@@ -135,7 +134,7 @@ namespace Tiveria.Home.Knx.Primitives
 
         public override bool Equals(object? obj)
         {
-            return (obj is SerialNumber) && Equals((SerialNumber)obj);
+            return (obj is SerialNumber number) && Equals(number);
         }
 
         public bool Equals(SerialNumber? other)
@@ -166,11 +165,11 @@ namespace Tiveria.Home.Knx.Primitives
 
         public static implicit operator ulong(SerialNumber sn) => sn.Value;
 
-        public static explicit operator SerialNumber(long b) => new SerialNumber(b);
+        public static explicit operator SerialNumber(long b) => new(b);
 
-        public static explicit operator SerialNumber(ulong b) => new SerialNumber(b);
+        public static explicit operator SerialNumber(ulong b) => new(b);
 
-        public static explicit operator SerialNumber(int b) => new SerialNumber(b);
+        public static explicit operator SerialNumber(int b) => new(b);
 
         #endregion overloaded operators
 

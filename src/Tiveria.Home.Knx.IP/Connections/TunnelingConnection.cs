@@ -138,10 +138,10 @@ namespace Tiveria.Home.Knx.IP.Connections
         #endregion
 
         #region private fields
-        private readonly object _lock = new object();
-        private readonly ManualResetEvent _closeEvent = new ManualResetEvent(false);
-        private readonly ManualResetEventSlim _ackEvent = new ManualResetEventSlim(false);
-        private readonly ManualResetEvent _connectEvent = new ManualResetEvent(false);
+        private readonly object _lock = new();
+        private readonly ManualResetEvent _closeEvent = new(false);
+        private readonly ManualResetEventSlim _ackEvent = new(false);
+        private readonly ManualResetEvent _connectEvent = new(false);
         private IPEndPoint _localEndpoint;
         private readonly ILogger<TunnelingConnection> _logger;
         private readonly IUdpClient _udpClient;
@@ -149,9 +149,9 @@ namespace Tiveria.Home.Knx.IP.Connections
         private HeartbeatMonitor? _heartbeatMonitor;
         private AckState _ackState = AckState.Ok;
         private readonly TunnelingConnectionConfiguration _config;
-        private readonly CancellationTokenSource _closingCancelationTokenSource = new CancellationTokenSource();
+        private readonly CancellationTokenSource _closingCancelationTokenSource = new();
         private bool disposedValue = false;
-        private SequenceCountersManager _cntManager = new SequenceCountersManager();
+        private SequenceCountersManager _cntManager = new();
         #endregion
 
         #region private implementations
@@ -288,7 +288,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         private void HandleDisconnectResponse(DisconnectResponseService response)
         {
             if (response.Status != ErrorCodes.NoError)
-                _logger.LogWarning($"Connection closed with status code " + response.Status.ToDescription());
+                _logger.LogWarning($"Connection closed with status code {response.Status.ToDescription()}");
             _closeEvent.Set();
         }
         #endregion
@@ -428,7 +428,7 @@ namespace Tiveria.Home.Knx.IP.Connections
         #region handling unknown servicetype request
         private void HandleUnknownServiceType(RawService serviceType)
         {
-            _logger.LogWarning($"Unknown Servicetype: {serviceType.ServiceTypeIdentifier:x2}. Data: " + BitConverter.ToString(serviceType.Payload));
+            _logger.LogWarning($"Unknown Servicetype: {{serviceType.ServiceTypeIdentifier:x2}}. Data: " + BitConverter.ToString(serviceType.Payload));
         }
         #endregion
 

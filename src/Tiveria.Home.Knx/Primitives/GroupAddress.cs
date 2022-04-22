@@ -110,15 +110,12 @@ namespace Tiveria.Home.Knx.Primitives
         /// <returns>formatted string</returns>
         public string ToString(GroupAddressStyle style)
         {
-            switch (style)
+            return style switch
             {
-                case GroupAddressStyle.ThreeLevel:
-                    return $"{ThreeLevelAddress.MainGroup}/{ThreeLevelAddress.MiddleGroup}/{ThreeLevelAddress.SubGroup}";
-                case GroupAddressStyle.TwoLevel:
-                    return $"{TwoLevelAddress.MainGroup}/{TwoLevelAddress.SubGroup}";
-                default:
-                    return RawAddress.ToString();
-            }
+                GroupAddressStyle.ThreeLevel => $"{ThreeLevelAddress.MainGroup}/{ThreeLevelAddress.MiddleGroup}/{ThreeLevelAddress.SubGroup}",
+                GroupAddressStyle.TwoLevel => $"{TwoLevelAddress.MainGroup}/{TwoLevelAddress.SubGroup}",
+                _ => RawAddress.ToString(),
+            };
         }
         #endregion
 
@@ -135,7 +132,7 @@ namespace Tiveria.Home.Knx.Primitives
         /// Returns an empty GroupAddress with all levels being set to 0.
         /// </summary>
         /// <returns>The empty GroupAddress</returns>
-        public static GroupAddress Empty() => new GroupAddress(0);
+        public static GroupAddress Empty() => new(0);
         #endregion Static Empty
 
 
@@ -151,15 +148,15 @@ namespace Tiveria.Home.Knx.Primitives
         public static GroupAddress Parse(string input)
         {
             if (input == null)
-                throw new ArgumentNullException("address string is null");
+                throw new ArgumentNullException(nameof(input), "address string is null");
             var elements = input.Split('/');
-            switch (elements.Length)
+            return elements.Length switch
             {
-                case 1: return new GroupAddress(ushort.Parse(elements[0]));
-                case 2: return new GroupAddress(byte.Parse(elements[0]), ushort.Parse(elements[1]));
-                case 3: return new GroupAddress(byte.Parse(elements[0]), byte.Parse(elements[1]), byte.Parse(elements[2]));
-                default: throw new FormatException($"address string has wrong format: {input}");
-            }
+                1 => new GroupAddress(ushort.Parse(elements[0])),
+                2 => new GroupAddress(byte.Parse(elements[0]), ushort.Parse(elements[1])),
+                3 => new GroupAddress(byte.Parse(elements[0]), byte.Parse(elements[1]), byte.Parse(elements[2])),
+                _ => throw new FormatException($"address string has wrong format: {input}"),
+            };
         }
 
         /// <summary>

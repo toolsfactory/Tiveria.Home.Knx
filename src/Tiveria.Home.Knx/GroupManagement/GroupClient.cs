@@ -38,7 +38,7 @@ namespace Tiveria.Home.Knx.GroupManagement
         #region Private Fields
 
         private readonly GroupAddress _address;
-        private readonly ManualResetEventSlim _answerEvent = new ManualResetEventSlim(false);
+        private readonly ManualResetEventSlim _answerEvent = new (false);
         private readonly IKnxConnection _client;
         private readonly DPType<T> _translator;
         private byte[]? _data;
@@ -58,7 +58,7 @@ namespace Tiveria.Home.Knx.GroupManagement
             _client = client;
             _address = address;
             _translator = translator;
-            _client.CemiReceived += _client_CemiReceived;
+            _client.CemiReceived += Client_CemiReceived;
         }
 
         #endregion Public Constructors
@@ -106,10 +106,9 @@ namespace Tiveria.Home.Knx.GroupManagement
 
         #region Private Methods
 
-        private void _client_CemiReceived(object? sender, CemiReceivedArgs e)
+        private void Client_CemiReceived(object? sender, CemiReceivedArgs e)
         {
-            var cemi = e.Message as CemiLData;
-            if (cemi == null || cemi.DestinationAddress != _address || cemi.Apdu == null || cemi.Apdu.ApduType != ApduType.GroupValue_Response)
+            if (e.Message is not CemiLData cemi || cemi.DestinationAddress != _address || cemi.Apdu == null || cemi.Apdu.ApduType != ApduType.GroupValue_Response)
                 return;
             _data = cemi.Apdu.Data != null ? (byte[])cemi.Apdu.Data.Clone() : Array.Empty<byte>();
             _answerEvent.Set();
