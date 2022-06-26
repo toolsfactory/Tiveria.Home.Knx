@@ -26,10 +26,10 @@ namespace Tiveria.Home.Knx.Cemi
 {
     public enum ControlType : byte
     {
-        None = 0,
         Connect    = 0b000000_00,
         Disconnect = 0b000000_01,
         Ack        = 0b000000_10,
-        NAck       = 0b000000_11
+        NAck       = 0b000000_11,
+        None       = Connect
     }
 }

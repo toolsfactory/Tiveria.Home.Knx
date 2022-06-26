@@ -59,8 +59,8 @@ namespace Tiveria.Home.Knx.ObjectServer.Services.Serializers
 
         public void Serialize(SetDatapointValueResService service, BigEndianBinaryWriter writer)
         {
-            writer.Write(SetDatapointValueResService.MainService);
-            writer.Write(SetDatapointValueResService.SubService);
+            writer.Write(SetDatapointValueResService.MainServiceId);
+            writer.Write(SetDatapointValueResService.SubServiceId);
             writer.Write(service.StartDataPoint);
             writer.Write(service.NumberOfDataPoints);
             writer.Write(service.ErrorCode);

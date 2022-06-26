@@ -43,7 +43,7 @@ namespace Tiveria.Home.Knx.Management
 
         public PropertyDescription(byte[] data)
         {
-            if (data == null) throw new ArgumentNullException("data");
+            if (data == null) throw new ArgumentNullException(nameof(data));
             if(data.Length != Size) throw KnxBufferSizeException.WrongSize("PropertyDescription", Size, data.Length);
             ObjectIndex   = data[0];
             PropertyId    = data[1];

@@ -52,9 +52,9 @@ namespace Tiveria.Home.Knx.ObjectServer.Services.Serializers
             var startDP = reader.ReadUInt16();
             var numOfDP = reader.ReadUInt16();
             if (numOfDP == 0 && reader.Available > 0)
-                KnxBufferSizeException.TooBig("SetDatapointReqService");
+                throw KnxBufferSizeException.TooBig("SetDatapointReqService");
             if (numOfDP > 0 && reader.Available == 0)
-                KnxBufferSizeException.TooSmall("SetDatapointReqService");
+                throw KnxBufferSizeException.TooSmall("SetDatapointReqService");
 
             var dplist = new List<DataPoint>();
             for (int i = 0; i < numOfDP; i++)
@@ -70,8 +70,8 @@ namespace Tiveria.Home.Knx.ObjectServer.Services.Serializers
 
         public void Serialize(SetDatapointValueReqService service, BigEndianBinaryWriter writer)
         {
-            writer.Write(SetDatapointValueReqService.MainService);
-            writer.Write(SetDatapointValueReqService.SubService);
+            writer.Write(SetDatapointValueReqService.MainServiceId);
+            writer.Write(SetDatapointValueReqService.SubServiceId);
             writer.Write(service.StartDataPoint);
             writer.Write((ushort) service.NumberOfDataPoints);
             foreach (var dp in service.DataPoints)

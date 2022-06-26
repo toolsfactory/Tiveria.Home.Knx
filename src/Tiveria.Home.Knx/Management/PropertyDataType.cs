@@ -131,7 +131,7 @@ namespace Tiveria.Home.Knx.Management
             Register(Escape, "Escape", "");
     }
 
-    private static Dictionary<byte, PropertyDataTypeDetails> _list = new(); 
+    private static readonly Dictionary<byte, PropertyDataTypeDetails> _list = new(); 
     
         public static void Register(byte Id, string Name, string? DatapointTypeId)
         {
@@ -141,6 +141,5 @@ namespace Tiveria.Home.Knx.Management
     }
 
     public record PropertyDataTypeDetails(byte Id, string Name, IDatapointType? DatapointType);
-
 }
 

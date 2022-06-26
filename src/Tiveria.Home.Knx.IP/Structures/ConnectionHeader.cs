@@ -112,7 +112,7 @@ namespace Tiveria.Home.Knx.IP.Structures
             reader.ReadSizeAndCheck("ConnectionHeader", STRUCTURE_SIZE);
             var channelId = reader.ReadByte();
             var seqCounter = reader.ReadByte();
-            var dummy = reader.ReadByte();
+            reader.ReadByte(); // reserved
             return new ConnectionHeader(channelId, seqCounter);
         }
         #endregion
