@@ -29,11 +29,11 @@ namespace Tiveria.Home.Knx.Datapoint
 {
     public abstract class DPType<TValue> : IDatapointType
     {
-        protected int _mainCategory;
-        protected int _subCategory;
 
         #region public properties
         public string Id { get; }
+        public int MainCategory { get; private set; }
+        public int SubCategory { get; private set; }
         public string Name { get; }
         public string Description { get; }
         public string Unit { get; }
@@ -66,9 +66,9 @@ namespace Tiveria.Home.Knx.Datapoint
             var segments = id.Split('.');
             if(segments == null || segments.Length != 2)
                 throw new ArgumentException("Id parameter not correct. Must look like xx.yyy");
-            _mainCategory = int.Parse(segments[0]);
-            _subCategory = int.Parse(segments[1]);
-            if (_mainCategory < 0)
+            MainCategory = int.Parse(segments[0]);
+            SubCategory = int.Parse(segments[1]);
+            if (MainCategory < 0)
                 throw new ArgumentOutOfRangeException("Id must not be negative");
             return id.Trim();
         }
@@ -116,7 +116,7 @@ namespace Tiveria.Home.Knx.Datapoint
         /// <returns></returns>
         public virtual bool IsMainCategory(int category)
         {
-            return category == _mainCategory;
+            return category == MainCategory;
         }
 
         #region encoding DPT
