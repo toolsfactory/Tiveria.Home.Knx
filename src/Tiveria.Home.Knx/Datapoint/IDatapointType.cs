@@ -29,6 +29,8 @@ namespace Tiveria.Home.Knx.Datapoint
     {
         string Description { get; }
         string Id { get; }
+        int MainCategory { get; }
+        int SubCategory { get; }
         string Name { get; }
         string Unit { get; }
         int DataSize { get; }
